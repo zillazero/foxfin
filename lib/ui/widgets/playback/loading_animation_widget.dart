@@ -305,8 +305,8 @@ class _MoonfinLogoAnimationState extends State<MoonfinLogoAnimation>
           child: child,
         );
       },
-      child: SvgPicture.asset(
-        'assets/icons/moonfin_logo.svg',
+      child: Image.asset(
+        'assets/icons/moonfin.png',
         width: widget.size,
         height: widget.size,
       ),

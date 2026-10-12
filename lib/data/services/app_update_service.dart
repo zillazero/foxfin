@@ -47,7 +47,7 @@ class AppUpdateService {
   AppUpdateService(this._store, this._userPreferences);
 
   static const _latestReleaseHost = 'api.github.com';
-  static const _latestReleasePath = '/repos/Moonfin-Client/Moonfin-Core/releases/latest';
+  static const _latestReleasePath = '/repos/zillazero/foxfin/releases/latest';
   static const _checkCooldown = Duration(hours: 24);
 
   static const _lastCheckMsKey = 'app_update_last_check_ms';
@@ -64,6 +64,8 @@ class AppUpdateService {
     'com.huawei.appmarket',
     'com.xiaomi.mipicks',
     'org.fdroid.fdroid',
+    // Foxfin is distributed through the FOX Store (apps.pk187.site).
+    'site.pk187.foxstore',
   };
 
   static bool isStoreInstaller(String? installer) {
@@ -203,7 +205,7 @@ class AppUpdateService {
 
   Future<_LatestRelease?> _fetchLatestRelease() async {
     final client = HttpClient()
-      ..userAgent = 'MoonfinUpdateChecker/1.0'
+      ..userAgent = 'FoxfinUpdateChecker/1.0'
       ..connectionTimeout = const Duration(seconds: 10);
 
     try {
@@ -228,7 +230,7 @@ class AppUpdateService {
       }
 
       final htmlUrl = decoded['html_url']?.toString() ??
-          'https://github.com/Moonfin-Client/Moonfin-Core/releases/latest';
+          'https://github.com/zillazero/foxfin/releases/latest';
 
       final assetsJson = decoded['assets'];
       final assets = <_ReleaseAsset>[];

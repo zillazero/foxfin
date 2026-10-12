@@ -1,6 +1,6 @@
 {
     "@@locale": "hu",
-    "appTitle": "Moonfin",
+    "appTitle": "Foxfin",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin verzió {version}",
+    "appVersionFooter": "Foxfin verzió {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "A Moonfin nem tudott hozzáférni a rendszer kulcstartójához. A bejelentkezés folytatódhat, de előfordulhat, hogy a biztonságos tokentároló nem érhető el, amíg a kulcstartót fel nem oldják.",
+    "secureStorageUnavailableMessage": "A Foxfin nem tudott hozzáférni a rendszer kulcstartójához. A bejelentkezés folytatódhat, de előfordulhat, hogy a biztonságos tokentároló nem érhető el, amíg a kulcstartót fel nem oldják.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -172,13 +172,13 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Foxfin",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Foxfin theme"
     },
-    "themeMoonfinSubtitle": "Az eredeti, letisztult Moonfin alapértelmezés.",
+    "themeMoonfinSubtitle": "Az eredeti, letisztult Foxfin alapértelmezés.",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Foxfin theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Kilépsz a Moonfinből?",
+    "exitApp": "Kilépsz a Foxfinből?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Nincs beállítva. A Moonfin megpróbálja az alapértelmezett mpv.conf fájlt az alkalmazás/adat mappákban.",
+    "notSetMpvConf": "Nincs beállítva. A Foxfin megpróbálja az alapértelmezett mpv.conf fájlt az alkalmazás/adat mappákban.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Letöltések/Moonfin – más alkalmazások számára látható",
+    "downloadsVisibleToOtherApps": "Letöltések/Foxfin – más alkalmazások számára látható",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "A letöltött médiát a rendszer a Letöltések/Moonfin mappába menti az eszközödön. Ezeket a fájlokat más alkalmazások is láthatják, például a galéria vagy a zenelejátszó.\n\nA meglévő letöltések a jelenlegi helyükön maradnak.",
+    "saveToDownloadsFolderDescription": "A letöltött médiát a rendszer a Letöltések/Foxfin mappába menti az eszközödön. Ezeket a fájlokat más alkalmazások is láthatják, például a galéria vagy a zenelejátszó.\n\nA meglévő letöltések a jelenlegi helyükön maradnak.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "A kezdőlap láthatóságának váltása könyvtáronként. A módosítások életbe lépéséhez indítsd újra a Moonfin alkalmazást.",
+    "libraryVisibilityDescription": "A kezdőlap láthatóságának váltása könyvtáronként. A módosítások életbe lépéséhez indítsd újra a Foxfin alkalmazást.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Foxfin",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Foxfin"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/zillazero/foxfin",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Lejátszás a Moonfinben",
+    "playInMoonfin": "Lejátszás a Foxfinben",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Foxfin"
     },
     "requestedByName": "Igényelte: {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Az elem nem található a Moonfin-könyvtáradban",
+    "itemNotFoundInLibrary": "Az elem nem található a Foxfin-könyvtáradban",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "A szerver újraindítása folyamatban van",
-    "adminServerRebootMessage": "A szerver újraindítása folyamatban van, kérlek, indítsd újra a Moonfint",
+    "adminServerRebootMessage": "A szerver újraindítása folyamatban van, kérlek, indítsd újra a Foxfint",
     "adminActiveSessions": "Aktív munkamenetek",
     "adminSessionsLoadFailed": "Nem sikerült betölteni a munkameneteket",
     "adminNoActiveSessions": "Nincsenek aktív munkamenetek",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Műfajok gomb megjelenítése a navigációs sávban",
     "settingsShowFavoritesButtonInNavigation": "Kedvencek gomb megjelenítése a navigációs sávban",
     "settingsShowLibrariesButtonInNavigation": "Könyvtárak gomb megjelenítése a navigációs sávban",
-    "settingsLibraryVisibilitySubtitle": "A kezdőlap láthatóságának váltása könyvtáronként. Indítsd újra a Moonfin alkalmazást, hogy a változtatások életbe lépjenek.",
+    "settingsLibraryVisibilitySubtitle": "A kezdőlap láthatóságának váltása könyvtáronként. Indítsd újra a Foxfin alkalmazást, hogy a változtatások életbe lépjenek.",
     "settingsMediaBarAndLocalPreviews": "Médiasáv és helyi előnézetek",
     "settingsVisualOverlays": "Vizuális fedvények",
     "settingsSeasonalSurprise": "Szezonális meglepetés",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Csatlakozz a Discordhoz",
     "settingsJoinDiscordSubtitle": "Csevegés a közösséggel",
     "settingsJoinTheDiscord": "Csatlakozz a Discordhoz",
-    "settingsSupportMoonfin": "Moonfin támogatása",
+    "settingsSupportMoonfin": "Foxfin támogatása",
     "settingsLegal": "JOGI",
     "settingsLicenses": "Licencek",
     "settingsOpenSourceLicenseNotices": "Nyílt forráskódú licencnyilatkozatok",
     "settingsPrivacyPolicy": "Adatvédelmi szabályzat",
-    "settingsPrivacyPolicySubtitle": "Hogyan kezeli a Moonfin az adataidat",
+    "settingsPrivacyPolicySubtitle": "Hogyan kezeli a Foxfin az adataidat",
     "settingsCheckForUpdates": "Frissítések ellenőrzése",
-    "settingsCheckForUpdatesSubtitle": "A legújabb Moonfin kiadás ellenőrzése",
+    "settingsCheckForUpdatesSubtitle": "A legújabb Foxfin kiadás ellenőrzése",
     "settingsPoweredByFlutter": "Flutterrel készült",
     "settingsLicenseNoticesCount": "{count, plural, one {# licencnyilatkozat} other {# licencnyilatkozat}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Mentett témák",
-    "savedThemesDescription": "Ezek a jelenlegi szerverhez a Moonfin beépülő modulból letöltött témák. A törlés csak ezt a helyi másolatot távolítja el.",
+    "savedThemesDescription": "Ezek a jelenlegi szerverhez a Foxfin beépülő modulból letöltött témák. A törlés csak ezt a helyi másolatot távolítja el.",
     "savedThemesEmpty": "Nem találhatók mentett témák ehhez a szerverhez.",
     "savedThemesCurrentThemeId": "{themeId} • Jelenleg aktív",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Mentett téma törlése",
     "savedThemesManageSubtitle": "A letöltött beépülőmodul-témák kezelése ezen az eszközön",
     "themeEditor": "Témaszerkesztő",
-    "themeEditorSubtitle": "Nyisd meg a Moonfin témaszerkesztőt a böngésződben",
+    "themeEditorSubtitle": "Nyisd meg a Foxfin témaszerkesztőt a böngésződben",
     "homeScreen": "Kezdőképernyő",
     "bottomBar": "Alsó sáv",
     "homeRowsStyleClassic": "Klasszikus",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "SDH feliratok előnyben részesítése",
     "preferSdhSubtitlesSubtitle": "Sorold előre az SDH/CC feliratsávokat az automatikus kiválasztás során.",
     "webDiagnostics": "Webes diagnosztika",
-    "webDiagnosticsTitle": "Moonfin webes diagnosztika",
+    "webDiagnosticsTitle": "Foxfin webes diagnosztika",
     "webDiagnosticsIntro": "Használd ezt az oldalt a böngésző csatlakozási problémáinak diagnosztizálására (CORS, vegyes tartalom és felderítési beállítások).",
     "webDiagnosticsDetectedMixedContentFailure": "Vegyes tartalom miatti hiba észlelve",
     "webDiagnosticsDetectedCorsPreflightFailure": "CORS/Preflight hiba észlelve",
-    "webDiagnosticsMixedContentFailureBody": "A Moonfin észlelte, hogy egy HTTPS-oldal próbál hívni egy HTTP-szerver URL-t. A böngészők blokkolják ezt a kérést, mielőtt az elérné a szerveredet.",
-    "webDiagnosticsCorsFailureBody": "A Moonfin böngészőszintű kéréshibát észlelt, amelyet általában a CORS- vagy preflight-fejlécek hiánya okoz a médiaszerveren.",
+    "webDiagnosticsMixedContentFailureBody": "A Foxfin észlelte, hogy egy HTTPS-oldal próbál hívni egy HTTP-szerver URL-t. A böngészők blokkolják ezt a kérést, mielőtt az elérné a szerveredet.",
+    "webDiagnosticsCorsFailureBody": "A Foxfin böngészőszintű kéréshibát észlelt, amelyet általában a CORS- vagy preflight-fejlécek hiánya okoz a médiaszerveren.",
     "webDiagnosticsTargetUrl": "Cél-URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "nincs beállítva",
     "webDiagnosticsMixedContent": "Vegyes tartalom",
     "webDiagnosticsMixedContentDetected": "Ez az oldal HTTPS-en keresztül van betöltve, de egy vagy több beállított URL HTTP-s. A böngészők blokkolják a HTTPS-oldalakról indított HTTP API-hívásokat.",
-    "webDiagnosticsMixedContentFix": "Megoldás: szolgáld ki a médiaszerveredet vagy a proxyvégpontodat HTTPS-en keresztül, vagy a Moonfint csak megbízható helyi hálózatokon töltsd be HTTP-n.",
+    "webDiagnosticsMixedContentFix": "Megoldás: szolgáld ki a médiaszerveredet vagy a proxyvégpontodat HTTPS-en keresztül, vagy a Foxfint csak megbízható helyi hálózatokon töltsd be HTTP-n.",
     "webDiagnosticsNoMixedContentDetected": "A jelenlegi futási beállítások alapján nem észlelhető egyértelmű vegyes tartalmú konfiguráció.",
     "webDiagnosticsCorsChecklist": "CORS-ellenőrzőlista",
     "webDiagnosticsCorsChecklistItem1": "• Engedélyezd a böngésző eredetét (origin) az Access-Control-Allow-Origin fejlécben.",
@@ -7883,7 +7883,7 @@
         }
     },
     "adminMetadataIdentify": "Azonosítás",
-    "detailScreenStyleSubtitle": "A Klasszikus az eredeti, középre igazított Moonfin elrendezés. A Modern egy reszponzív, moziszerű elrendezés. A Kiemelt egy tartalomközpontú elrendezés felugró tartalomkártyákkal. Az Újszerű egy teljesképernyős elrendezés, egymás alá rendezett szekciókkal. A Minimalista csak a borítóképet, lejátszási gombot és epizódlistát tartalmaz.",
+    "detailScreenStyleSubtitle": "A Klasszikus az eredeti, középre igazított Foxfin elrendezés. A Modern egy reszponzív, moziszerű elrendezés. A Kiemelt egy tartalomközpontú elrendezés felugró tartalomkártyákkal. Az Újszerű egy teljesképernyős elrendezés, egymás alá rendezett szekciókkal. A Minimalista csak a borítóképet, lejátszási gombot és epizódlistát tartalmaz.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7920,7 +7920,7 @@
     "adminBlockedTagsHint": "Az ilyen címkékkel rendelkező tartalmak el lesznek rejtve a felhasználó elől.",
     "adminLoginAttemptsHint": "Állítsd 0-ra az alapértelmezetthez, vagy -1-re a kizárás letiltásához.",
     "adminSyncPlayAccess": "SyncPlay-hozzáférés",
-    "recommendationsApplyParentalRatingCapSubtitle": "Korlátozd a „Moonfin ajánlásai” javaslatait a célmédia szülői korhatár-besorolása alapján",
+    "recommendationsApplyParentalRatingCapSubtitle": "Korlátozd a „Foxfin ajánlásai” javaslatait a célmédia szülői korhatár-besorolása alapján",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -8251,7 +8251,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "A Moonfinnek újra kell indulnia a megjelenítő motor megváltoztatásához. Zárd be most az alkalmazást, majd nyisd meg újra a beállítások érvényesítéséhez.",
+    "impellerRestartMessage": "A Foxfinnek újra kell indulnia a megjelenítő motor megváltoztatásához. Zárd be most az alkalmazást, majd nyisd meg újra a beállítások érvényesítéséhez.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -8284,9 +8284,9 @@
     "@adminLibChapterImageResolutionMatchSource": {
         "description": "Chapter image resolution option that matches the source resolution"
     },
-    "recommendationSystemMoonfin": "Moonfin ajánlásai",
+    "recommendationSystemMoonfin": "Foxfin ajánlásai",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Foxfin Recommends"
     },
     "glassQualityReduced": "Csökkentett",
     "@glassQualityReduced": {
@@ -8318,7 +8318,7 @@
     "@impellerCloseNow": {
         "description": "Button that closes the app so the new rendering engine takes effect on next launch."
     },
-    "recommendationSystemSubtitle": "Használd a Moonfin helyi könyvtárhoz készült ajánlóalgoritmusát, a Jellyfin ajánlóalgoritmusát vagy a TMDb online hasonlósági mutatóit. Megjegyzés: Az online ajánlásokhoz Seerr-integráció szükséges.",
+    "recommendationSystemSubtitle": "Használd a Foxfin helyi könyvtárhoz készült ajánlóalgoritmusát, a Jellyfin ajánlóalgoritmusát vagy a TMDb online hasonlósági mutatóit. Megjegyzés: Az online ajánlásokhoz Seerr-integráció szükséges.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
@@ -8340,7 +8340,7 @@
     "@glassQualityFull": {
         "description": "Glass quality option: force real blur"
     },
-    "customThemeSubtitle": "Az egyedi témák módosítják a Moonfin vizuális elemeit. Válassz egyet a stílusodhoz illő lehetőségek közül.",
+    "customThemeSubtitle": "Az egyedi témák módosítják a Foxfin vizuális elemeit. Válassz egyet a stílusodhoz illő lehetőségek közül.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -8422,7 +8422,7 @@
         }
     },
     "noSubtitlesFound": "Nem találhatók feliratok.",
-    "impellerRenderingSubtitle": "Az Impeller a Flutter modern GPU-megjelenítője a simább animációkért és a kevesebb akadozásért. Néhány TV-boxon és régebbi GPU-n képhibákat vagy fekete videót okozhat; ha ezeket tapasztalod, kapcsold ki. Az Automatikus a legmegfelelőbb alapértelmezést választja ki az eszközödhöz. Indítsd újra a Moonfint a beállítások érvényesítéséhez.",
+    "impellerRenderingSubtitle": "Az Impeller a Flutter modern GPU-megjelenítője a simább animációkért és a kevesebb akadozásért. Néhány TV-boxon és régebbi GPU-n képhibákat vagy fekete videót okozhat; ha ezeket tapasztalod, kapcsold ki. Az Automatikus a legmegfelelőbb alapértelmezést választja ki az eszközödhöz. Indítsd újra a Foxfint a beállítások érvényesítéséhez.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8585,7 +8585,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Jelentkezz be a Moonfinbe a telefonodon",
+    "carSignInPrompt": "Jelentkezz be a Foxfinbe a telefonodon",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -9241,7 +9241,7 @@
     "@interfaceLayout": {
         "description": "Setting to override which UI layout the app uses"
     },
-    "interfaceLayoutSubtitle": "Írd felül az észlelt elrendezést, ha az eszközt a rendszer hibásan ismeri fel. A módosítások érvénybe lépéséhez indítsd újra a Moonfint.",
+    "interfaceLayoutSubtitle": "Írd felül az észlelt elrendezést, ha az eszközt a rendszer hibásan ismeri fel. A módosítások érvénybe lépéséhez indítsd újra a Foxfint.",
     "@interfaceLayoutSubtitle": {
         "description": "Subtitle for the interface layout setting"
     },

@@ -1,6 +1,6 @@
 {
     "@@locale": "sv",
-    "appTitle": "Moonfin",
+    "appTitle": "Foxfin",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin version {version}",
+    "appVersionFooter": "Foxfin version {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin kunde inte komma åt din systemnyckelring. Inloggningen kan fortsätta, men säker tokenlagring kan vara otillgänglig förrän nyckelringen är upplåst.",
+    "secureStorageUnavailableMessage": "Foxfin kunde inte komma åt din systemnyckelring. Inloggningen kan fortsätta, men säker tokenlagring kan vara otillgänglig förrän nyckelringen är upplåst.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Växla mellan Moonfin och Neon Pulse utan att starta om appen",
+    "settingsAppearanceThemeSubtitle": "Växla mellan Foxfin och Neon Pulse utan att starta om appen",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Foxfin",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Foxfin theme"
     },
-    "themeMoonfinSubtitle": "Nuvarande Moonfin look som ni alla har börjat älska",
+    "themeMoonfinSubtitle": "Nuvarande Foxfin look som ni alla har börjat älska",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Foxfin theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Vill du avsluta Moonfin?",
+    "exitApp": "Vill du avsluta Foxfin?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3075,7 +3075,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Inte inställt. Moonfin kommer att prova en standard mpv.conf i app-/datamappar.",
+    "notSetMpvConf": "Inte inställt. Foxfin kommer att prova en standard mpv.conf i app-/datamappar.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3282,7 +3282,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Nedladdningar/Moonfin — synlig för andra appar",
+    "downloadsVisibleToOtherApps": "Nedladdningar/Foxfin — synlig för andra appar",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3318,7 +3318,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Nedladdade media kommer att sparas till Downloads/Moonfin på din enhet. Dessa filer kommer att vara synliga för andra appar som ditt galleri eller din musikspelare.\n\nBefintliga nedladdningar kommer att finnas kvar på sin nuvarande plats.",
+    "saveToDownloadsFolderDescription": "Nedladdade media kommer att sparas till Downloads/Foxfin på din enhet. Dessa filer kommer att vara synliga för andra appar som ditt galleri eller din musikspelare.\n\nBefintliga nedladdningar kommer att finnas kvar på sin nuvarande plats.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3503,9 +3503,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Foxfin",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Foxfin"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4206,9 +4206,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Spela i Moonfin",
+    "playInMoonfin": "Spela i Foxfin",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Foxfin"
     },
     "requestedByName": "Efterfrågad av {name}",
     "@requestedByName": {
@@ -4260,7 +4260,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Objektet hittades inte i ditt Moonfin-bibliotek",
+    "itemNotFoundInLibrary": "Objektet hittades inte i ditt Foxfin-bibliotek",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4516,7 +4516,7 @@
         }
     },
     "adminServerRebootInProgress": "Serverns omstart pågår",
-    "adminServerRebootMessage": "Serverns omstart pågår, starta om Moonfin",
+    "adminServerRebootMessage": "Serverns omstart pågår, starta om Foxfin",
     "adminActiveSessions": "Aktiva sessioner",
     "adminSessionsLoadFailed": "Det gick inte att läsa in sessioner",
     "adminNoActiveSessions": "Inga aktiva sessioner",
@@ -6307,11 +6307,11 @@
     "@subtitlePreviewText": {
         "description": "Sample text shown in the subtitle live preview"
     },
-    "libraryVisibilityDescription": "Växla hemsidans synlighet per bibliotek. Starta om Moonfin för att ändringarna ska träda i kraft.",
+    "libraryVisibilityDescription": "Växla hemsidans synlighet per bibliotek. Starta om Foxfin för att ändringarna ska träda i kraft.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/zillazero/foxfin",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -6552,7 +6552,7 @@
     "settingsShowGenresButtonInNavigation": "Visa genreknappen i navigeringsfältet",
     "settingsShowFavoritesButtonInNavigation": "Visa favoritknappen i navigeringsfältet",
     "settingsShowLibrariesButtonInNavigation": "Visa biblioteksknappen i navigeringsfältet",
-    "settingsLibraryVisibilitySubtitle": "Växla hemsidans synlighet per bibliotek. Starta om Moonfin för att ändringarna ska träda i kraft.",
+    "settingsLibraryVisibilitySubtitle": "Växla hemsidans synlighet per bibliotek. Starta om Foxfin för att ändringarna ska träda i kraft.",
     "settingsMediaBarAndLocalPreviews": "Mediabar och lokala förhandsvisningar",
     "settingsVisualOverlays": "Visuella överlägg",
     "settingsSeasonalSurprise": "Säsongsbetonad överraskning",
@@ -6571,14 +6571,14 @@
     "settingsJoinDiscord": "Gå med i Discord",
     "settingsJoinDiscordSubtitle": "Chatta med samhället",
     "settingsJoinTheDiscord": "Gå med i Discord",
-    "settingsSupportMoonfin": "Stöd Moonfin",
+    "settingsSupportMoonfin": "Stöd Foxfin",
     "settingsLegal": "RÄTTSLIG",
     "settingsLicenses": "Licenser",
     "settingsOpenSourceLicenseNotices": "Licensmeddelanden med öppen källkod",
     "settingsPrivacyPolicy": "Sekretesspolicy",
-    "settingsPrivacyPolicySubtitle": "Hur Moonfin hanterar dina data",
+    "settingsPrivacyPolicySubtitle": "Hur Foxfin hanterar dina data",
     "settingsCheckForUpdates": "Sök efter uppdateringar",
-    "settingsCheckForUpdatesSubtitle": "Sök efter den senaste versionen av Moonfin",
+    "settingsCheckForUpdatesSubtitle": "Sök efter den senaste versionen av Foxfin",
     "settingsPoweredByFlutter": "Drivs av Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# licensmeddelande} other {# licensmeddelanden}}",
     "@settingsLicenseNoticesCount": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Ta bort sparat tema",
     "savedThemesManageSubtitle": "Hantera nedladdade plugin-teman på den här enheten",
     "themeEditor": "Temaredigerare",
-    "themeEditorSubtitle": "Öppna Moonfins temaredigerare i webbläsaren",
+    "themeEditorSubtitle": "Öppna Foxfins temaredigerare i webbläsaren",
     "homeScreen": "Hemskärm",
     "bottomBar": "Nedre fält",
     "homeRowsStyleClassic": "Klassisk",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Föredra SDH-undertexter",
     "preferSdhSubtitlesSubtitle": "Prioritera SDH-/CC-undertextspår vid automatiskt val.",
     "webDiagnostics": "Webbdiagnostik",
-    "webDiagnosticsTitle": "Moonfin webbdiagnostik",
+    "webDiagnosticsTitle": "Foxfin webbdiagnostik",
     "webDiagnosticsIntro": "Använd den här sidan för att felsöka anslutningsproblem i webbläsaren (CORS, blandat innehåll och identifieringsinställningar).",
     "webDiagnosticsDetectedMixedContentFailure": "Fel med blandat innehåll upptäckt",
     "webDiagnosticsDetectedCorsPreflightFailure": "CORS-/preflight-fel upptäckt",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin upptäckte att en HTTPS-sida försöker anropa en server-URL över HTTP. Webbläsare blockerar sådana anrop innan de når din server.",
-    "webDiagnosticsCorsFailureBody": "Moonfin upptäckte ett anropsfel på webbläsarnivå som vanligtvis beror på att CORS- eller preflight-huvuden saknas på mediaservern.",
+    "webDiagnosticsMixedContentFailureBody": "Foxfin upptäckte att en HTTPS-sida försöker anropa en server-URL över HTTP. Webbläsare blockerar sådana anrop innan de når din server.",
+    "webDiagnosticsCorsFailureBody": "Foxfin upptäckte ett anropsfel på webbläsarnivå som vanligtvis beror på att CORS- eller preflight-huvuden saknas på mediaservern.",
     "webDiagnosticsTargetUrl": "Mål-URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "inte konfigurerad",
     "webDiagnosticsMixedContent": "Blandat innehåll",
     "webDiagnosticsMixedContentDetected": "Den här sidan läses in över HTTPS, men en eller flera konfigurerade URL:er använder HTTP. Webbläsare blockerar HTTPS-sidor från att anropa HTTP-API:er.",
-    "webDiagnosticsMixedContentFix": "Åtgärd: publicera din mediaserver eller proxyslutpunkt via HTTPS, eller läs in Moonfin över HTTP endast på betrodda lokala nätverk.",
+    "webDiagnosticsMixedContentFix": "Åtgärd: publicera din mediaserver eller proxyslutpunkt via HTTPS, eller läs in Foxfin över HTTP endast på betrodda lokala nätverk.",
     "webDiagnosticsNoMixedContentDetected": "Ingen uppenbar konfiguration med blandat innehåll upptäcktes utifrån de aktuella körtidsinställningarna.",
     "webDiagnosticsCorsChecklist": "CORS-checklista",
     "webDiagnosticsCorsChecklistItem1": "• Tillåt webbläsarens ursprung i Access-Control-Allow-Origin.",
@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Klassisk är Moonfins ursprungliga centrerade layout. Modern är en responsiv, filmisk layout.",
+    "detailScreenStyleSubtitle": "Klassisk är Foxfins ursprungliga centrerade layout. Modern är en responsiv, filmisk layout.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Använd Moonfin Recommends lokala biblioteksalgoritm eller TMDb:s likhetsmått online. Obs: Onlinerekommendationer kräver Seerr-integration.",
+    "recommendationSystemSubtitle": "Använd Foxfin Recommends lokala biblioteksalgoritm eller TMDb:s likhetsmått online. Obs: Onlinerekommendationer kräver Seerr-integration.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
+    "recommendationSystemMoonfin": "Foxfin Recommends",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Foxfin Recommends"
     },
     "recommendationSystemTmdb": "TMDb-likhet",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Begränsa förslag från Moonfin Recommends efter målmediets åldersgräns",
+    "recommendationsApplyParentalRatingCapSubtitle": "Begränsa förslag från Foxfin Recommends efter målmediets åldersgräns",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Anpassade teman ändrar visuella element i hela Moonfin. Välj ett av alternativen som passar din stil.",
+    "customThemeSubtitle": "Anpassade teman ändrar visuella element i hela Foxfin. Välj ett av alternativen som passar din stil.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Logga in på Moonfin i din telefon",
+    "carSignInPrompt": "Logga in på Foxfin i din telefon",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8940,7 +8940,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller är Flutters moderna GPU-renderare som ger mjukare animationer och mindre hackande. På vissa TV-boxar och äldre GPU:er kan den orsaka grafikfel eller svart video – stäng av den om du ser sådant. Automatiskt väljer det bästa standardvärdet för din enhet. Starta om Moonfin för att tillämpa ändringen.",
+    "impellerRenderingSubtitle": "Impeller är Flutters moderna GPU-renderare som ger mjukare animationer och mindre hackande. På vissa TV-boxar och äldre GPU:er kan den orsaka grafikfel eller svart video – stäng av den om du ser sådant. Automatiskt väljer det bästa standardvärdet för din enhet. Starta om Foxfin för att tillämpa ändringen.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8951,7 +8951,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin måste startas om för att byta renderingsmotor. Stäng appen nu och öppna den igen för att tillämpa ändringen.",
+    "impellerRestartMessage": "Foxfin måste startas om för att byta renderingsmotor. Stäng appen nu och öppna den igen för att tillämpa ändringen.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },

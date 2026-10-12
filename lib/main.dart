@@ -19,7 +19,6 @@ import 'background/watch_next_background.dart' as watch_next_bg;
 import 'data/services/carplay_service.dart';
 import 'data/services/cast/airplay_command_bridge.dart';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'background/auto_download_background.dart';
 import 'background/auto_download_background_main.dart' as auto_download_bg;
@@ -923,11 +922,6 @@ void main() async {
   if (PlatformDetection.isMobile) {
     SystemUi.install();
 
-    // Registered before runApp so a background/terminated push can be handled.
-    // The handler itself is a no-op; the OS draws these notifications.
-    try {
-      FirebaseMessaging.onBackgroundMessage(pushBackgroundHandler);
-    } catch (_) {}
   }
 
   await configureDependencies();

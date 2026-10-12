@@ -1,3 +1,4 @@
+import 'package:moonfin_design/moonfin_design.dart' show ThemeRegistry;
 enum SubtitleMode {
   flagged,
   always,
@@ -296,8 +297,14 @@ enum AppTheme {
   neonPulseMagenta(0xFFFF2E92),
   eightBitGold(0xFFFFCD75);
 
-  const AppTheme(this.colorValue);
-  final int colorValue;
+  const AppTheme(this._rawColorValue);
+  final int _rawColorValue;
+
+  /// Foxfin: [moonfinCyan] is the "theme accent" slot and follows the active
+  /// FOX theme's accent colour instead of a fixed cyan.
+  int get colorValue => this == AppTheme.moonfinCyan
+      ? ThemeRegistry.active.colors.accent.toARGB32()
+      : _rawColorValue;
 }
 
 enum VisualThemeId {

@@ -43,7 +43,7 @@ class _AboutCategoryScreen extends StatelessWidget {
                 subtitle: Text(l10n.sourceCodeUrl),
                 onTap: () => showQrOrLaunch(
                   context,
-                  url: 'https://github.com/Moonfin-Client/Moonfin-Core',
+                  url: 'https://github.com/zillazero/foxfin',
                   title: l10n.sourceCode,
                 ),
               ),
@@ -53,7 +53,7 @@ class _AboutCategoryScreen extends StatelessWidget {
                 subtitle: Text(l10n.settingsReportAnIssueSubtitle),
                 onTap: () => showQrOrLaunch(
                   context,
-                  url: 'https://github.com/Moonfin-Client/Moonfin-Core/issues',
+                  url: 'https://github.com/zillazero/foxfin/issues',
                   title: l10n.settingsReportAnIssue,
                 ),
               ),
@@ -87,22 +87,6 @@ class _AboutCategoryScreen extends StatelessWidget {
                   context.navigateTopLevel(Destinations.setup);
                 },
               ),
-              _TvSettingsListTile(
-                leading: const Icon(Icons.forum),
-                title: Text(l10n.settingsJoinDiscord),
-                subtitle: Text(l10n.settingsJoinDiscordSubtitle),
-                onTap: () => showQrOrLaunch(
-                  context,
-                  url: 'https://discord.gg/moonfin',
-                  title: l10n.settingsJoinTheDiscord,
-                ),
-              ),
-              _TvSettingsListTile(
-                leading: const Icon(Icons.favorite),
-                title: Text(l10n.settingsSupportMoonfin),
-                subtitle: Text(l10n.settingsSupportMoonfinSubtitle),
-                onTap: () => showSupportDialog(context),
-              ),
             ],
           ),
           _SectionHeader(l10n.settingsLegal),
@@ -115,7 +99,7 @@ class _AboutCategoryScreen extends StatelessWidget {
                 onTap: () => showQrOrLaunch(
                   context,
                   url:
-                      'https://github.com/Moonfin-Client/Moonfin-Core/blob/main/LICENSE',
+                      'https://github.com/zillazero/foxfin/blob/main/NOTICE',
                   title: l10n.settingsLicenses,
                 ),
               ),
@@ -125,7 +109,7 @@ class _AboutCategoryScreen extends StatelessWidget {
                 subtitle: Text(l10n.settingsPrivacyPolicySubtitle),
                 onTap: () => showQrOrLaunch(
                   context,
-                  url: 'https://moonfin.io/privacy',
+                  url: 'https://pk187.site/datenschutz/',
                   title: l10n.settingsPrivacyPolicy,
                 ),
               ),

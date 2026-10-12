@@ -10,7 +10,7 @@ class AppLocalizationsMn extends AppLocalizations {
   AppLocalizationsMn([String locale = 'mn']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Foxfin';
 
   @override
   String get animeMarkerFiller => 'Filler';
@@ -105,7 +105,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin хувилбар $version';
+    return 'Foxfin хувилбар $version';
   }
 
   @override
@@ -157,7 +157,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin таны системийн түлхүүрт нэвтэрч чадсангүй. Нэвтрэхийг үргэлжлүүлж болох ч түлхүүрийн оосорыг нээх хүртэл аюулгүй жетон хадгалах боломжгүй байж магадгүй.';
+      'Foxfin таны системийн түлхүүрт нэвтэрч чадсангүй. Нэвтрэхийг үргэлжлүүлж болох ч түлхүүрийн оосорыг нээх хүртэл аюулгүй жетон хадгалах боломжгүй байж магадгүй.';
 
   @override
   String get ok => 'OK';
@@ -170,7 +170,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get detailScreenStyleSubtitle =>
-      'Сонгодог нь Moonfin-ий анхны төвлөрсөн байрлал. Орчин үеийн нь дэлгэцэд зохицдог кино маягийн байрлал.';
+      'Сонгодог нь Foxfin-ий анхны төвлөрсөн байрлал. Орчин үеийн нь дэлгэцэд зохицдог кино маягийн байрлал.';
 
   @override
   String get detailScreenStyleMoonfin => 'Сонгодог';
@@ -410,10 +410,10 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get recommendationSystemSubtitle =>
-      'Moonfin Recommends дотоод сангийн алгоритм эсвэл онлайн TMDb-ийн ижил төстэй байдлын хэмжүүрийг ашиглана. Тэмдэглэл: Онлайн зөвлөмжид Seerr холболт шаардлагатай.';
+      'Foxfin Recommends дотоод сангийн алгоритм эсвэл онлайн TMDb-ийн ижил төстэй байдлын хэмжүүрийг ашиглана. Тэмдэглэл: Онлайн зөвлөмжид Seerr холболт шаардлагатай.';
 
   @override
-  String get recommendationSystemMoonfin => 'Moonfin Recommends';
+  String get recommendationSystemMoonfin => 'Foxfin Recommends';
 
   @override
   String get recommendationSystemJellyfin => 'Jellyfin Recommends';
@@ -427,7 +427,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      'Moonfin Recommends-ийн саналыг сонгосон медиагийн насны ангиллаар хязгаарлана';
+      'Foxfin Recommends-ийн саналыг сонгосон медиагийн насны ангиллаар хязгаарлана';
 
   @override
   String get interfaceStyle => 'Интерфейсийн хэв маяг';
@@ -450,7 +450,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get interfaceLayoutSubtitle =>
-      'Override the detected layout when this device is read wrong. Restart Moonfin for changes to take effect.';
+      'Override the detected layout when this device is read wrong. Restart Foxfin for changes to take effect.';
 
   @override
   String get interfaceLayoutAutomatic => 'Automatic';
@@ -515,14 +515,14 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get settingsAppearanceThemeSubtitle =>
-      'Програмыг дахин эхлүүлэхгүйгээр Moonfin болон Neon Pulse хооронд сэлгэнэ үү';
+      'Програмыг дахин эхлүүлэхгүйгээр Foxfin болон Neon Pulse хооронд сэлгэнэ үү';
 
   @override
   String get customThemeTitle => 'Захиалгат загвар';
 
   @override
   String get customThemeSubtitle =>
-      'Захиалгат загвар нь Moonfin даяарх харагдах байдлыг өөрчилнө. Өөрийн хэв маягт тохирох нэгийг сонгоно уу.';
+      'Захиалгат загвар нь Foxfin даяарх харагдах байдлыг өөрчилнө. Өөрийн хэв маягт тохирох нэгийг сонгоно уу.';
 
   @override
   String get keyboardPreferSystemIme => 'Системийн гарыг илүүд үздэг';
@@ -542,11 +542,11 @@ class AppLocalizationsMn extends AppLocalizations {
       'Let a connected game controller move focus and select items';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeMoonfin => 'Foxfin';
 
   @override
   String get themeMoonfinSubtitle =>
-      'Одоогийн Moonfin та бүгд дурласан харагдана';
+      'Одоогийн Foxfin та бүгд дурласан харагдана';
 
   @override
   String get themeNeonPulse => 'Неон импульс';
@@ -621,7 +621,7 @@ class AppLocalizationsMn extends AppLocalizations {
   }
 
   @override
-  String get exitApp => 'Moonfin гарах уу?';
+  String get exitApp => 'Foxfin гарах уу?';
 
   @override
   String get exitAppConfirmation => 'Та гарахдаа итгэлтэй байна уу?';
@@ -1769,7 +1769,7 @@ class AppLocalizationsMn extends AppLocalizations {
   String get shuffleAllMusic => 'Бүх хөгжмийг холих';
 
   @override
-  String get carSignInPrompt => 'Утсан дээрээ Moonfin-д нэвтэрнэ үү';
+  String get carSignInPrompt => 'Утсан дээрээ Foxfin-д нэвтэрнэ үү';
 
   @override
   String get carServerUnreachable => 'Таны сервертэй холбогдож чадсангүй';
@@ -2054,7 +2054,7 @@ class AppLocalizationsMn extends AppLocalizations {
   String get shortcutToggleFullscreen => 'Fullscreen on or off';
 
   @override
-  String get shortcutQuit => 'Quit Moonfin';
+  String get shortcutQuit => 'Quit Foxfin';
 
   @override
   String get shortcutPlayPause => 'Play or pause';
@@ -3026,7 +3026,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get loadingAnimationDescription =>
-      'Customize the loading animations used throughout Moonfin';
+      'Customize the loading animations used throughout Foxfin';
 
   @override
   String get loadingAnimationConfiguration => 'Loading Animation Configuration';
@@ -3035,7 +3035,7 @@ class AppLocalizationsMn extends AppLocalizations {
   String get loadingAnimationImage => 'Image';
 
   @override
-  String get loadingAnimationImageMoonfinLogo => 'Moonfin Logo';
+  String get loadingAnimationImageMoonfinLogo => 'Foxfin Logo';
 
   @override
   String get loadingAnimationImageSpinner => 'Spinner';
@@ -3047,7 +3047,7 @@ class AppLocalizationsMn extends AppLocalizations {
   String get loadingAnimationImageMoonPhases => 'Moon Phases';
 
   @override
-  String get loadingAnimationImageMoonfinPhases => 'Moonfin Phases';
+  String get loadingAnimationImageMoonfinPhases => 'Foxfin Phases';
 
   @override
   String get loadingAnimationImageNeonfinPhases => 'Neonfin Phases';
@@ -4070,7 +4070,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get notSetMpvConf =>
-      'Тохируулаагүй. Moonfin апп/өгөгдлийн хавтсанд өгөгдмөл mpv.conf-г оролдох болно.';
+      'Тохируулаагүй. Foxfin апп/өгөгдлийн хавтсанд өгөгдмөл mpv.conf-г оролдох болно.';
 
   @override
   String get selectMpvConf => 'mpv.conf-г сонгоно уу';
@@ -4333,14 +4333,14 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get downloadLocationLimitedByAndroid =>
-      'Android only lets Moonfin write to the folders it owns, and this device has no removable storage. Turn on Save to Downloads folder above to keep downloads somewhere other apps can reach.';
+      'Android only lets Foxfin write to the folders it owns, and this device has no removable storage. Turn on Save to Downloads folder above to keep downloads somewhere other apps can reach.';
 
   @override
   String get saveToDownloadsFolder => 'Татаж авсан файлд хадгална уу';
 
   @override
   String get downloadsVisibleToOtherApps =>
-      'Татаж авах/Moonfin — бусад апп-д харагдана';
+      'Татаж авах/Foxfin — бусад апп-д харагдана';
 
   @override
   String get dangerZone => 'Аюултай бүс';
@@ -4370,7 +4370,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      'Татаж авсан медиа таны төхөөрөмж дээрх Татаж авсан файлууд/Moonfin хэсэгт хадгалагдах болно. Эдгээр файлууд нь таны галерей эсвэл хөгжим тоглуулагч зэрэг бусад програмуудад харагдах болно.\n\nОдоо байгаа татан авалтууд одоогийн байршилдаа хэвээр үлдэнэ.';
+      'Татаж авсан медиа таны төхөөрөмж дээрх Татаж авсан файлууд/Foxfin хэсэгт хадгалагдах болно. Эдгээр файлууд нь таны галерей эсвэл хөгжим тоглуулагч зэрэг бусад програмуудад харагдах болно.\n\nОдоо байгаа татан авалтууд одоогийн байршилдаа хэвээр үлдэнэ.';
 
   @override
   String get transcodingTimeRemainingUnavailable =>
@@ -4521,7 +4521,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get libraryVisibilityDescription =>
-      'Номын сан бүрийн нүүр хуудасны харагдах байдлыг асаах/унтраах. Өөрчлөлтүүд хүчин төгөлдөр болохын тулд Moonfin-г дахин эхлүүлнэ үү.';
+      'Номын сан бүрийн нүүр хуудасны харагдах байдлыг асаах/унтраах. Өөрчлөлтүүд хүчин төгөлдөр болохын тулд Foxfin-г дахин эхлүүлнэ үү.';
 
   @override
   String get showInNavigation => 'Навигацид харуулах';
@@ -4584,7 +4584,7 @@ class AppLocalizationsMn extends AppLocalizations {
       'Төрөл бүрийн медиа самбарын хэв маягаас сонгох эсвэл медиа мөрийг унтраа';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeMoonfin => 'Foxfin';
 
   @override
   String get mediaBarModeMakd => 'МакД';
@@ -4910,7 +4910,7 @@ class AppLocalizationsMn extends AppLocalizations {
   String get screensaverBackdropBlack => 'Black';
 
   @override
-  String get screensaverBackdropMoonfin => 'Moonfin';
+  String get screensaverBackdropMoonfin => 'Foxfin';
 
   @override
   String get screensaverBackdropCalm => 'Calm';
@@ -4925,7 +4925,7 @@ class AppLocalizationsMn extends AppLocalizations {
   String get screensaverAdditionalComponent => 'Additional Component';
 
   @override
-  String get screensaverComponentMoonfinLogo => 'Moonfin Logo';
+  String get screensaverComponentMoonfinLogo => 'Foxfin Logo';
 
   @override
   String get screensaverComponentRunner => 'Runner';
@@ -5213,7 +5213,7 @@ class AppLocalizationsMn extends AppLocalizations {
   String get sourceCode => 'Эх код';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/zillazero/foxfin';
 
   @override
   String get checkForUpdatesNow => 'Шинэчлэлтүүдийг одоо шалгана уу';
@@ -5391,7 +5391,7 @@ class AppLocalizationsMn extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInMoonfin => 'Moonfin дээр тоглох';
+  String get playInMoonfin => 'Foxfin дээр тоглох';
 
   @override
   String get requestedByLabel => 'Requested by';
@@ -5437,7 +5437,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get itemNotFoundInLibrary =>
-      'Таны Moonfin номын сангаас зүйл олдсонгүй';
+      'Таны Foxfin номын сангаас зүйл олдсонгүй';
 
   @override
   String get errorSearchingLibrary => 'Номын санг хайхад алдаа гарлаа';
@@ -6031,7 +6031,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get adminServerRebootMessage =>
-      'Серверийг дахин ачаалж байна, дахин эхлүүлнэ үү Moonfin';
+      'Серверийг дахин ачаалж байна, дахин эхлүүлнэ үү Foxfin';
 
   @override
   String get adminActiveSessions => 'Идэвхтэй сессүүд';
@@ -10043,7 +10043,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      'Номын сан бүрийн нүүр хуудасны харагдах байдлыг асаах/унтраах. Өөрчлөлтүүд хүчин төгөлдөр болохын тулд Moonfin-г дахин эхлүүлнэ үү.';
+      'Номын сан бүрийн нүүр хуудасны харагдах байдлыг асаах/унтраах. Өөрчлөлтүүд хүчин төгөлдөр болохын тулд Foxfin-г дахин эхлүүлнэ үү.';
 
   @override
   String get settingsMediaBarAndLocalPreviews =>
@@ -10165,7 +10165,7 @@ class AppLocalizationsMn extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Discord-д нэгдээрэй';
 
   @override
-  String get settingsSupportMoonfin => 'Дэмжлэг Moonfin';
+  String get settingsSupportMoonfin => 'Дэмжлэг Foxfin';
 
   @override
   String get settingsSupportMoonfinSubtitle => 'Хөгжүүлэгчид кофе хандивлах';
@@ -10185,14 +10185,14 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get settingsPrivacyPolicySubtitle =>
-      'Moonfin таны өгөгдлийг хэрхэн зохицуулдаг вэ';
+      'Foxfin таны өгөгдлийг хэрхэн зохицуулдаг вэ';
 
   @override
   String get settingsCheckForUpdates => 'Шинэчлэлтүүдийг шалгана уу';
 
   @override
   String get settingsCheckForUpdatesSubtitle =>
-      'Хамгийн сүүлийн үеийн Moonfin хувилбарыг шалгана уу';
+      'Хамгийн сүүлийн үеийн Foxfin хувилбарыг шалгана уу';
 
   @override
   String get settingsBoth => 'Хоёулаа';
@@ -10631,7 +10631,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get savedThemesDescription =>
-      'Эдгээр нь одоогийн серверийн Moonfin залгаасаас татаж авсан загварууд юм. Устгаснаар зөвхөн энэ дотоод хуулбарыг устгана.';
+      'Эдгээр нь одоогийн серверийн Foxfin залгаасаас татаж авсан загварууд юм. Устгаснаар зөвхөн энэ дотоод хуулбарыг устгана.';
 
   @override
   String get savedThemesEmpty => 'Энэ серверт хадгалсан загвар олдсонгүй.';
@@ -10653,7 +10653,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get themeEditorSubtitle =>
-      'Хөтөч дээрээ Moonfin загвар засварлагчийг нээнэ үү';
+      'Хөтөч дээрээ Foxfin загвар засварлагчийг нээнэ үү';
 
   @override
   String get homeScreen => 'Үндсэн дэлгэц';
@@ -10975,7 +10975,7 @@ class AppLocalizationsMn extends AppLocalizations {
   String get webDiagnostics => 'Вэб оношлогоо';
 
   @override
-  String get webDiagnosticsTitle => 'Moonfin Вэб оношилгоо';
+  String get webDiagnosticsTitle => 'Foxfin Вэб оношилгоо';
 
   @override
   String get webDiagnosticsIntro =>
@@ -10991,11 +10991,11 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Moonfin HTTP серверийн URL руу залгахыг оролдож буй HTTPS хуудсыг илрүүллээ. Хөтөчүүд энэ хүсэлтийг таны серверт хүрэхээс өмнө блоклодог.';
+      'Foxfin HTTP серверийн URL руу залгахыг оролдож буй HTTPS хуудсыг илрүүллээ. Хөтөчүүд энэ хүсэлтийг таны серверт хүрэхээс өмнө блоклодог.';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Moonfin хөтчийн түвшний хүсэлтийн алдаа илрүүллээ. Энэ нь ихэвчлэн медиа сервер дээр CORS эсвэл preflight толгой дутуугаас үүсдэг.';
+      'Foxfin хөтчийн түвшний хүсэлтийн алдаа илрүүллээ. Энэ нь ихэвчлэн медиа сервер дээр CORS эсвэл preflight толгой дутуугаас үүсдэг.';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -11043,7 +11043,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      'Засвар: медиа сервер эсвэл прокси цэгээ HTTPS-ээр нийлүүлнэ үү, эсвэл Moonfin-ийг зөвхөн итгэмжлэгдсэн дотоод сүлжээнд HTTP-ээр ачаална уу.';
+      'Засвар: медиа сервер эсвэл прокси цэгээ HTTPS-ээр нийлүүлнэ үү, эсвэл Foxfin-ийг зөвхөн итгэмжлэгдсэн дотоод сүлжээнд HTTP-ээр ачаална уу.';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -12759,7 +12759,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller бол илүү жигд хөдөлгөөн, бага доголдолтой байхад зориулсан Flutter-ийн орчин үеийн GPU дүрслэгч юм. Зарим ТВ хайрцаг болон хуучин GPU дээр гажилт эсвэл хар дэлгэц үүсгэж болзошгүй; тийм зүйл харвал Унтраах болгоно уу. Автомат нь таны төхөөрөмжид тохирох үндсэн утгыг сонгоно. Хэрэглэхийн тулд Moonfin-ийг дахин эхлүүлнэ үү.';
+      'Impeller бол илүү жигд хөдөлгөөн, бага доголдолтой байхад зориулсан Flutter-ийн орчин үеийн GPU дүрслэгч юм. Зарим ТВ хайрцаг болон хуучин GPU дээр гажилт эсвэл хар дэлгэц үүсгэж болзошгүй; тийм зүйл харвал Унтраах болгоно уу. Автомат нь таны төхөөрөмжид тохирох үндсэн утгыг сонгоно. Хэрэглэхийн тулд Foxfin-ийг дахин эхлүүлнэ үү.';
 
   @override
   String get impellerAuto => 'Автомат';
@@ -12775,7 +12775,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get impellerRestartMessage =>
-      'Дүрслэлийн хөдөлгүүрийг солихын тулд Moonfin дахин эхлэх шаардлагатай. Аппыг одоо хаагаад дахин нээж хэрэглэнэ үү.';
+      'Дүрслэлийн хөдөлгүүрийг солихын тулд Foxfin дахин эхлэх шаардлагатай. Аппыг одоо хаагаад дахин нээж хэрэглэнэ үү.';
 
   @override
   String get impellerCloseNow => 'Аппыг одоо хаах';
@@ -13288,7 +13288,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get autoDownloadTranscodedForegroundNote =>
-      'Transcoded qualities only download while Moonfin is open. Original quality also downloads in the background.';
+      'Transcoded qualities only download while Foxfin is open. Original quality also downloads in the background.';
 
   @override
   String get autoDownloadTranscodedRunningNote =>
@@ -13296,7 +13296,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get autoDownloadForegroundOnly =>
-      'Downloads only while Moonfin is open';
+      'Downloads only while Foxfin is open';
 
   @override
   String get autoDownloadQualityTitle => 'Auto-download quality';
@@ -13319,7 +13319,7 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get smartDownloadsEnableSubtitle =>
-      'When you finish an episode on any device, Moonfin downloads the next ones. Downloaded episodes are deleted once watched.';
+      'When you finish an episode on any device, Foxfin downloads the next ones. Downloaded episodes are deleted once watched.';
 
   @override
   String get smartDownloadsKeepReady => 'Episodes to Keep Downloaded';
@@ -13379,15 +13379,15 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get autoDownloadBackgroundRefreshSubtitle =>
-      'Allow the system to check for new episodes periodically while Moonfin is closed';
+      'Allow the system to check for new episodes periodically while Foxfin is closed';
 
   @override
   String get autoDownloadBackgroundRefreshDenied =>
-      'Background App Refresh is disabled for Moonfin. Enable it in iOS Settings.';
+      'Background App Refresh is disabled for Foxfin. Enable it in iOS Settings.';
 
   @override
   String get autoDownloadBackgroundRestrictedAndroid =>
-      'Background usage is restricted for Moonfin in Android Settings.';
+      'Background usage is restricted for Foxfin in Android Settings.';
 
   @override
   String get autoDownloadCheckNow => 'Check Now';
@@ -13605,13 +13605,13 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get topShelfDescription =>
-      'What the Apple TV home screen shows above the Moonfin icon when it is selected. This setting stays on this device.';
+      'What the Apple TV home screen shows above the Foxfin icon when it is selected. This setting stays on this device.';
 
   @override
   String get topShelfLatestMedia => 'Latest media';
 
   @override
-  String get topShelfAppBanner => 'Moonfin banner';
+  String get topShelfAppBanner => 'Foxfin banner';
 
   @override
   String get keepVideoClearOfDynamicIsland =>

@@ -1419,7 +1419,7 @@ class UserPreferences extends ChangeNotifier {
 
   static final focusColor = EnumPreference(
     key: 'focus_color',
-    defaultValue: AppTheme.white,
+    defaultValue: AppTheme.moonfinCyan,
     values: AppTheme.values,
   );
 

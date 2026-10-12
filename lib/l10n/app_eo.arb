@@ -1,6 +1,6 @@
 {
     "@@locale": "eo",
-    "appTitle": "Moonfin",
+    "appTitle": "Foxfin",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin versio {version}",
+    "appVersionFooter": "Foxfin versio {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin ne povis aliri vian sisteman ŝlosilringon. Ensaluto povas daŭri, sed sekura ĵetono-stokado eble estos nedisponebla ĝis la ŝlosilringo estas malŝlosita.",
+    "secureStorageUnavailableMessage": "Foxfin ne povis aliri vian sisteman ŝlosilringon. Ensaluto povas daŭri, sed sekura ĵetono-stokado eble estos nedisponebla ĝis la ŝlosilringo estas malŝlosita.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Ŝanĝu inter Moonfin kaj Neon Pulse sen rekomenci la apon",
+    "settingsAppearanceThemeSubtitle": "Ŝanĝu inter Foxfin kaj Neon Pulse sen rekomenci la apon",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Foxfin",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Foxfin theme"
     },
-    "themeMoonfinSubtitle": "Nuna aspekto de Moonfin, kiun vi ĉiuj amis",
+    "themeMoonfinSubtitle": "Nuna aspekto de Foxfin, kiun vi ĉiuj amis",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Foxfin theme"
     },
     "themeNeonPulse": "Neona Pulso",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Eliri Moonfin?",
+    "exitApp": "Eliri Foxfin?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Ne fiksita. Moonfin provos defaŭltan mpv.conf en dosierujoj de aplikaĵoj/datumoj.",
+    "notSetMpvConf": "Ne fiksita. Foxfin provos defaŭltan mpv.conf en dosierujoj de aplikaĵoj/datumoj.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Elŝutoj/Moonfin - videbla por aliaj programoj",
+    "downloadsVisibleToOtherApps": "Elŝutoj/Foxfin - videbla por aliaj programoj",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Elŝutitaj amaskomunikiloj estos konservitaj al Elŝutoj/Moonfin en via aparato. Ĉi tiuj dosieroj estos videblaj por aliaj programoj kiel via galerio aŭ muzikludanto.\n\nEkzistantaj elŝutoj restos en sia nuna loko.",
+    "saveToDownloadsFolderDescription": "Elŝutitaj amaskomunikiloj estos konservitaj al Elŝutoj/Foxfin en via aparato. Ĉi tiuj dosieroj estos videblaj por aliaj programoj kiel via galerio aŭ muzikludanto.\n\nEkzistantaj elŝutoj restos en sia nuna loko.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Ŝaltu hejmpaĝan videblecon per biblioteko. Rekomencu Moonfin por ke ŝanĝoj efektiviĝu.",
+    "libraryVisibilityDescription": "Ŝaltu hejmpaĝan videblecon per biblioteko. Rekomencu Foxfin por ke ŝanĝoj efektiviĝu.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Foxfin",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Foxfin"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/zillazero/foxfin",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Ludu en Moonfin",
+    "playInMoonfin": "Ludu en Foxfin",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Foxfin"
     },
     "requestedByName": "Petite de {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Ero ne trovita en via Moonfin-biblioteko",
+    "itemNotFoundInLibrary": "Ero ne trovita en via Foxfin-biblioteko",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Servilo rekomencas en progreso",
-    "adminServerRebootMessage": "Servilo rekomencas, bonvolu rekomenci Moonfin",
+    "adminServerRebootMessage": "Servilo rekomencas, bonvolu rekomenci Foxfin",
     "adminActiveSessions": "Aktivaj Sesioj",
     "adminSessionsLoadFailed": "Malsukcesis ŝargi kunsidojn",
     "adminNoActiveSessions": "Neniuj aktivaj sesioj",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Montru la ĝenrojn-butonon en la navigadbreto",
     "settingsShowFavoritesButtonInNavigation": "Montru la plej ŝatatajn butonon en la navigadbreto",
     "settingsShowLibrariesButtonInNavigation": "Montru la butonon de bibliotekoj en la navigadbreto",
-    "settingsLibraryVisibilitySubtitle": "Ŝaltu hejmpaĝan videblecon per biblioteko. Rekomencu Moonfin por ke ŝanĝoj efektiviĝu.",
+    "settingsLibraryVisibilitySubtitle": "Ŝaltu hejmpaĝan videblecon per biblioteko. Rekomencu Foxfin por ke ŝanĝoj efektiviĝu.",
     "settingsMediaBarAndLocalPreviews": "Media Trinkejo & Lokaj Antaŭrigardoj",
     "settingsVisualOverlays": "Vidaj Supermetaĵoj",
     "settingsSeasonalSurprise": "Sezona Surprizo",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Aliĝu al Discord",
     "settingsJoinDiscordSubtitle": "Babilu kun la komunumo",
     "settingsJoinTheDiscord": "Aliĝu al la Discord",
-    "settingsSupportMoonfin": "Subtenu Moonfin",
+    "settingsSupportMoonfin": "Subtenu Foxfin",
     "settingsLegal": "LEGALE",
     "settingsLicenses": "Licencoj",
     "settingsOpenSourceLicenseNotices": "Malfermfontaj licencaj avizoj",
     "settingsPrivacyPolicy": "Privateca Politiko",
-    "settingsPrivacyPolicySubtitle": "Kiel Moonfin pritraktas viajn datumojn",
+    "settingsPrivacyPolicySubtitle": "Kiel Foxfin pritraktas viajn datumojn",
     "settingsCheckForUpdates": "Kontrolu ĝisdatigojn",
-    "settingsCheckForUpdatesSubtitle": "Kontrolu la plej novan eldonon de Moonfin",
+    "settingsCheckForUpdatesSubtitle": "Kontrolu la plej novan eldonon de Foxfin",
     "settingsPoweredByFlutter": "Funkciigita de Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# licencavizo} other {# licencavizoj}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Konservitaj temoj",
-    "savedThemesDescription": "Ĉi tiuj estas temoj elŝutitaj de la kromaĵo Moonfin por la nuna servilo. Forigo forigas nur ĉi tiun lokan kopion.",
+    "savedThemesDescription": "Ĉi tiuj estas temoj elŝutitaj de la kromaĵo Foxfin por la nuna servilo. Forigo forigas nur ĉi tiun lokan kopion.",
     "savedThemesEmpty": "Neniuj konservitaj temoj estis trovitaj por ĉi tiu servilo.",
     "savedThemesCurrentThemeId": "{themeId} • Nuntempe aktiva",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Forigu konservitan temon",
     "savedThemesManageSubtitle": "Administru elŝutitajn kromtemojn sur ĉi tiu aparato",
     "themeEditor": "Temo-Redaktilo",
-    "themeEditorSubtitle": "Malfermu la Moonfin Temo-Redaktilon en via retumilo",
+    "themeEditorSubtitle": "Malfermu la Foxfin Temo-Redaktilon en via retumilo",
     "homeScreen": "Hejma Ekrano",
     "bottomBar": "Malsupra Trinkejo",
     "homeRowsStyleClassic": "Klasika",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Preferu SDH-subtekstojn",
     "preferSdhSubtitlesSubtitle": "Priorigu SDH/CC-subtitolojn dum aŭtomata elekto.",
     "webDiagnostics": "Reta diagnozo",
-    "webDiagnosticsTitle": "Moonfin Reteja Diagnozo",
+    "webDiagnosticsTitle": "Foxfin Reteja Diagnozo",
     "webDiagnosticsIntro": "Uzu ĉi tiun paĝon por diagnozi problemojn pri retumila konektebleco (CORS, miksita enhavo kaj malkovraj agordoj).",
     "webDiagnosticsDetectedMixedContentFailure": "Detektita Miksenhava Fiasko",
     "webDiagnosticsDetectedCorsPreflightFailure": "Detektita CORS/Preflight Fiasko",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin detektis HTTPS-paĝon provantan voki HTTP-servilan URL. Retumiloj blokas ĉi tiun peton antaŭ ol ĝi atingas vian servilon.",
-    "webDiagnosticsCorsFailureBody": "Moonfin detektis fiaskon de peto-nivela foliumilo, kiu estas kutime kaŭzita de mankantaj CORS aŭ antaŭflugaj kaplinioj sur la amaskomunikila servilo.",
+    "webDiagnosticsMixedContentFailureBody": "Foxfin detektis HTTPS-paĝon provantan voki HTTP-servilan URL. Retumiloj blokas ĉi tiun peton antaŭ ol ĝi atingas vian servilon.",
+    "webDiagnosticsCorsFailureBody": "Foxfin detektis fiaskon de peto-nivela foliumilo, kiu estas kutime kaŭzita de mankantaj CORS aŭ antaŭflugaj kaplinioj sur la amaskomunikila servilo.",
     "webDiagnosticsTargetUrl": "Cela URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "ne agordita",
     "webDiagnosticsMixedContent": "Miksita Enhavo",
     "webDiagnosticsMixedContentDetected": "Ĉi tiu paĝo estas ŝarĝita per HTTPS, sed unu aŭ pluraj agorditaj URL-oj estas HTTP. Retumiloj blokas HTTPS-paĝojn de voki HTTP-APIojn.",
-    "webDiagnosticsMixedContentFix": "Ripari: servu vian amaskomunikilaron aŭ prokuran finpunkton per HTTPS, aŭ ŝarĝu Moonfin per HTTP nur en fidindaj lokaj retoj.",
+    "webDiagnosticsMixedContentFix": "Ripari: servu vian amaskomunikilaron aŭ prokuran finpunkton per HTTPS, aŭ ŝarĝu Foxfin per HTTP nur en fidindaj lokaj retoj.",
     "webDiagnosticsNoMixedContentDetected": "Neniu evidenta miksenhava agordo detektita de nunaj rultempaj agordoj.",
     "webDiagnosticsCorsChecklist": "Kontrollisto de CORS",
     "webDiagnosticsCorsChecklistItem1": "• Permesu la retumilon originon en Aliro-Kontrolo-Allow-Origino.",
@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Klasika estas la origina centrigita aranĝo de Moonfin. Moderna estas respondema kinema aranĝo.",
+    "detailScreenStyleSubtitle": "Klasika estas la origina centrigita aranĝo de Foxfin. Moderna estas respondema kinema aranĝo.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Uzi la lok-bibliotekan algoritmon de Moonfin Recommends aŭ la retajn similecajn metrikojn de TMDb. Noto: retaj rekomendoj bezonas Seerr-integriĝon.",
+    "recommendationSystemSubtitle": "Uzi la lok-bibliotekan algoritmon de Foxfin Recommends aŭ la retajn similecajn metrikojn de TMDb. Noto: retaj rekomendoj bezonas Seerr-integriĝon.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
+    "recommendationSystemMoonfin": "Foxfin Recommends",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Foxfin Recommends"
     },
     "recommendationSystemTmdb": "TMDb-simileco",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Limigi la sugestojn de Moonfin Recommends laŭ la aĝoklasifiko de la celata aŭdvidaĵo",
+    "recommendationsApplyParentalRatingCapSubtitle": "Limigi la sugestojn de Foxfin Recommends laŭ la aĝoklasifiko de la celata aŭdvidaĵo",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Propraj temoj ŝanĝas vidajn elementojn tra Moonfin. Elektu unu el ĉi tiuj ebloj laŭ via stilo.",
+    "customThemeSubtitle": "Propraj temoj ŝanĝas vidajn elementojn tra Foxfin. Elektu unu el ĉi tiuj ebloj laŭ via stilo.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Ensalutu al Moonfin per via telefono",
+    "carSignInPrompt": "Ensalutu al Foxfin per via telefono",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8940,7 +8940,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller estas la moderna GPU-bildigilo de Flutter por pli glataj animacioj kaj malpli da ŝutriĝo. Sur kelkaj TV-skatoloj kaj pli malnovaj GPU-oj ĝi povas kaŭzi difektojn aŭ nigran videon; malŝaltu ĝin se vi vidas tiajn. Aŭtomata elektas la plej bonan defaŭlton por via aparato. Restartigu Moonfin por apliki.",
+    "impellerRenderingSubtitle": "Impeller estas la moderna GPU-bildigilo de Flutter por pli glataj animacioj kaj malpli da ŝutriĝo. Sur kelkaj TV-skatoloj kaj pli malnovaj GPU-oj ĝi povas kaŭzi difektojn aŭ nigran videon; malŝaltu ĝin se vi vidas tiajn. Aŭtomata elektas la plej bonan defaŭlton por via aparato. Restartigu Foxfin por apliki.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8951,7 +8951,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin devas restarti por ŝanĝi la bildigan maŝinon. Fermu la aplikaĵon nun, poste remalfermu ĝin por apliki.",
+    "impellerRestartMessage": "Foxfin devas restarti por ŝanĝi la bildigan maŝinon. Fermu la aplikaĵon nun, poste remalfermu ĝin por apliki.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },

@@ -10,7 +10,7 @@ class AppLocalizationsRo extends AppLocalizations {
   AppLocalizationsRo([String locale = 'ro']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Foxfin';
 
   @override
   String get animeMarkerFiller => 'Filler';
@@ -105,7 +105,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin versiunea $version';
+    return 'Foxfin versiunea $version';
   }
 
   @override
@@ -157,7 +157,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin nu a putut accesa breloul de chei al sistemului. Autentificarea poate continua, dar stocarea securizată a token-ului poate fi indisponibilă până la deblocarea breloului de chei.';
+      'Foxfin nu a putut accesa breloul de chei al sistemului. Autentificarea poate continua, dar stocarea securizată a token-ului poate fi indisponibilă până la deblocarea breloului de chei.';
 
   @override
   String get ok => 'OK';
@@ -170,7 +170,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get detailScreenStyleSubtitle =>
-      'Clasic este aspectul original Moonfin, centrat. Modern este un aspect cinematic adaptabil. Spotlight este un aspect cu accent pe imaginea principală și carduri de conținut pop-up. Nouveau este un aspect pe tot ecranul, cu secțiunile așezate una sub alta pe pagină. Minimalist înseamnă ilustrații, un singur buton de redare și episoadele.';
+      'Clasic este aspectul original Foxfin, centrat. Modern este un aspect cinematic adaptabil. Spotlight este un aspect cu accent pe imaginea principală și carduri de conținut pop-up. Nouveau este un aspect pe tot ecranul, cu secțiunile așezate una sub alta pe pagină. Minimalist înseamnă ilustrații, un singur buton de redare și episoadele.';
 
   @override
   String get detailScreenStyleMoonfin => 'Clasic';
@@ -425,10 +425,10 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get recommendationSystemSubtitle =>
-      'Folosește algoritmul local Moonfin Recommends pentru biblioteca ta, motorul Jellyfin Recommends de pe server sau metricile de similaritate TMDb online. Notă: recomandările online necesită integrarea Seerr.';
+      'Folosește algoritmul local Foxfin Recommends pentru biblioteca ta, motorul Jellyfin Recommends de pe server sau metricile de similaritate TMDb online. Notă: recomandările online necesită integrarea Seerr.';
 
   @override
-  String get recommendationSystemMoonfin => 'Moonfin Recommends';
+  String get recommendationSystemMoonfin => 'Foxfin Recommends';
 
   @override
   String get recommendationSystemJellyfin => 'Recomandări Jellyfin';
@@ -442,7 +442,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      'Limitează sugestiile Moonfin Recommends în funcție de clasificarea parentală a conținutului vizat';
+      'Limitează sugestiile Foxfin Recommends în funcție de clasificarea parentală a conținutului vizat';
 
   @override
   String get interfaceStyle => 'Stilul interfeței';
@@ -465,7 +465,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get interfaceLayoutSubtitle =>
-      'Suprascrie aspectul detectat când acest dispozitiv este recunoscut greșit. Repornește Moonfin pentru ca modificările să aibă efect.';
+      'Suprascrie aspectul detectat când acest dispozitiv este recunoscut greșit. Repornește Foxfin pentru ca modificările să aibă efect.';
 
   @override
   String get interfaceLayoutAutomatic => 'Automat';
@@ -537,7 +537,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get customThemeSubtitle =>
-      'Temele personalizate modifică elementele vizuale din întreaga aplicație Moonfin. Alege una dintre aceste opțiuni, potrivită stilului tău.';
+      'Temele personalizate modifică elementele vizuale din întreaga aplicație Foxfin. Alege una dintre aceste opțiuni, potrivită stilului tău.';
 
   @override
   String get keyboardPreferSystemIme => 'Preferă tastatura de sistem';
@@ -557,11 +557,11 @@ class AppLocalizationsRo extends AppLocalizations {
       'Permite unui controler de joc conectat să mute focalizarea și să selecteze elemente';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeMoonfin => 'Foxfin';
 
   @override
   String get themeMoonfinSubtitle =>
-      'Aspectul original, simplu și curat, implicit în Moonfin.';
+      'Aspectul original, simplu și curat, implicit în Foxfin.';
 
   @override
   String get themeNeonPulse => 'Neon Pulse';
@@ -637,7 +637,7 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
-  String get exitApp => 'Ieși din Moonfin?';
+  String get exitApp => 'Ieși din Foxfin?';
 
   @override
   String get exitAppConfirmation => 'Sigur vrei să ieși?';
@@ -1797,7 +1797,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get shuffleAllMusic => 'Redă aleatoriu toată muzica';
 
   @override
-  String get carSignInPrompt => 'Autentifică-te în Moonfin pe telefon';
+  String get carSignInPrompt => 'Autentifică-te în Foxfin pe telefon';
 
   @override
   String get carServerUnreachable => 'Serverul nu poate fi contactat';
@@ -2085,7 +2085,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get shortcutToggleFullscreen => 'Ecran complet activat sau dezactivat';
 
   @override
-  String get shortcutQuit => 'Ieși din Moonfin';
+  String get shortcutQuit => 'Ieși din Foxfin';
 
   @override
   String get shortcutPlayPause => 'Redă sau pune pe pauză';
@@ -3069,7 +3069,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get loadingAnimationDescription =>
-      'Personalizează animațiile de încărcare folosite în Moonfin';
+      'Personalizează animațiile de încărcare folosite în Foxfin';
 
   @override
   String get loadingAnimationConfiguration =>
@@ -3079,7 +3079,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get loadingAnimationImage => 'Imagine';
 
   @override
-  String get loadingAnimationImageMoonfinLogo => 'Sigla Moonfin';
+  String get loadingAnimationImageMoonfinLogo => 'Sigla Foxfin';
 
   @override
   String get loadingAnimationImageSpinner => 'Spinner';
@@ -3091,7 +3091,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get loadingAnimationImageMoonPhases => 'Fazele Lunii';
 
   @override
-  String get loadingAnimationImageMoonfinPhases => 'Fazele Moonfin';
+  String get loadingAnimationImageMoonfinPhases => 'Fazele Foxfin';
 
   @override
   String get loadingAnimationImageNeonfinPhases => 'Fazele Neonfin';
@@ -4118,7 +4118,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get notSetMpvConf =>
-      'Nesetat. Moonfin va încerca un mpv.conf implicit în folderele aplicației/datelor.';
+      'Nesetat. Foxfin va încerca un mpv.conf implicit în folderele aplicației/datelor.';
 
   @override
   String get selectMpvConf => 'Selectează mpv.conf';
@@ -4381,14 +4381,14 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get downloadLocationLimitedByAndroid =>
-      'Android permite aplicației Moonfin să scrie doar în folderele proprii, iar acest dispozitiv nu are stocare detașabilă. Activează mai sus „Salvează în folderul Descărcări” pentru a păstra descărcările într-un loc accesibil și altor aplicații.';
+      'Android permite aplicației Foxfin să scrie doar în folderele proprii, iar acest dispozitiv nu are stocare detașabilă. Activează mai sus „Salvează în folderul Descărcări” pentru a păstra descărcările într-un loc accesibil și altor aplicații.';
 
   @override
   String get saveToDownloadsFolder => 'Salvează în folderul Descărcări';
 
   @override
   String get downloadsVisibleToOtherApps =>
-      'Descărcări/Moonfin — vizibil pentru alte aplicații';
+      'Descărcări/Foxfin — vizibil pentru alte aplicații';
 
   @override
   String get dangerZone => 'Zonă periculoasă';
@@ -4418,7 +4418,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      'Fișierele media descărcate vor fi salvate în Descărcări/Moonfin pe dispozitivul tău. Aceste fișiere vor fi vizibile pentru alte aplicații, precum galeria sau playerul muzical.\n\nDescărcările existente rămân în locația lor actuală.';
+      'Fișierele media descărcate vor fi salvate în Descărcări/Foxfin pe dispozitivul tău. Aceste fișiere vor fi vizibile pentru alte aplicații, precum galeria sau playerul muzical.\n\nDescărcările existente rămân în locația lor actuală.';
 
   @override
   String get transcodingTimeRemainingUnavailable =>
@@ -4571,7 +4571,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get libraryVisibilityDescription =>
-      'Comută vizibilitatea pe ecranul principal pentru fiecare bibliotecă. Repornește Moonfin pentru ca modificările să aibă efect.';
+      'Comută vizibilitatea pe ecranul principal pentru fiecare bibliotecă. Repornește Foxfin pentru ca modificările să aibă efect.';
 
   @override
   String get showInNavigation => 'Afișează în navigare';
@@ -4634,7 +4634,7 @@ class AppLocalizationsRo extends AppLocalizations {
       'Alege între diverse stiluri de bară media sau dezactiveaz-o';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeMoonfin => 'Foxfin';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4959,7 +4959,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get screensaverBackdropBlack => 'Negru';
 
   @override
-  String get screensaverBackdropMoonfin => 'Moonfin';
+  String get screensaverBackdropMoonfin => 'Foxfin';
 
   @override
   String get screensaverBackdropCalm => 'Calm';
@@ -4974,7 +4974,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get screensaverAdditionalComponent => 'Componentă suplimentară';
 
   @override
-  String get screensaverComponentMoonfinLogo => 'Sigla Moonfin';
+  String get screensaverComponentMoonfinLogo => 'Sigla Foxfin';
 
   @override
   String get screensaverComponentRunner => 'Alergător';
@@ -5265,7 +5265,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get sourceCode => 'Cod sursă';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/zillazero/foxfin';
 
   @override
   String get checkForUpdatesNow => 'Verifică actualizările acum';
@@ -5446,7 +5446,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get cancelRequest4k => 'Anulează cererea 4K';
 
   @override
-  String get playInMoonfin => 'Redă în Moonfin';
+  String get playInMoonfin => 'Redă în Foxfin';
 
   @override
   String get requestedByLabel => 'Solicitat de';
@@ -5492,7 +5492,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get itemNotFoundInLibrary =>
-      'Elementul nu a fost găsit în biblioteca ta Moonfin';
+      'Elementul nu a fost găsit în biblioteca ta Foxfin';
 
   @override
   String get errorSearchingLibrary => 'Eroare la căutarea în bibliotecă';
@@ -6088,7 +6088,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get adminServerRebootMessage =>
-      'Repornirea serverului este în curs, repornește Moonfin';
+      'Repornirea serverului este în curs, repornește Foxfin';
 
   @override
   String get adminActiveSessions => 'Sesiuni active';
@@ -10143,7 +10143,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      'Comută vizibilitatea pe ecranul principal pentru fiecare bibliotecă. Repornește Moonfin pentru ca modificările să aibă efect.';
+      'Comută vizibilitatea pe ecranul principal pentru fiecare bibliotecă. Repornește Foxfin pentru ca modificările să aibă efect.';
 
   @override
   String get settingsMediaBarAndLocalPreviews =>
@@ -10268,7 +10268,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Alătură-te pe Discord';
 
   @override
-  String get settingsSupportMoonfin => 'Susține Moonfin';
+  String get settingsSupportMoonfin => 'Susține Foxfin';
 
   @override
   String get settingsSupportMoonfinSubtitle =>
@@ -10289,14 +10289,14 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get settingsPrivacyPolicySubtitle =>
-      'Cum gestionează Moonfin datele tale';
+      'Cum gestionează Foxfin datele tale';
 
   @override
   String get settingsCheckForUpdates => 'Verifică actualizările';
 
   @override
   String get settingsCheckForUpdatesSubtitle =>
-      'Verifică cea mai recentă versiune Moonfin';
+      'Verifică cea mai recentă versiune Foxfin';
 
   @override
   String get settingsBoth => 'Ambele';
@@ -10736,7 +10736,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get savedThemesDescription =>
-      'Acestea sunt temele descărcate din pluginul Moonfin pentru serverul curent. Ștergerea elimină doar această copie locală.';
+      'Acestea sunt temele descărcate din pluginul Foxfin pentru serverul curent. Ștergerea elimină doar această copie locală.';
 
   @override
   String get savedThemesEmpty =>
@@ -10759,7 +10759,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get themeEditorSubtitle =>
-      'Deschide editorul de teme Moonfin în browser';
+      'Deschide editorul de teme Foxfin în browser';
 
   @override
   String get homeScreen => 'Ecran principal';
@@ -11081,7 +11081,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get webDiagnostics => 'Diagnosticare web';
 
   @override
-  String get webDiagnosticsTitle => 'Diagnosticare web Moonfin';
+  String get webDiagnosticsTitle => 'Diagnosticare web Foxfin';
 
   @override
   String get webDiagnosticsIntro =>
@@ -11097,11 +11097,11 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Moonfin a detectat o pagină HTTPS care încearcă să apeleze un URL de server HTTP. Browserele blochează această cerere înainte să ajungă la server.';
+      'Foxfin a detectat o pagină HTTPS care încearcă să apeleze un URL de server HTTP. Browserele blochează această cerere înainte să ajungă la server.';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Moonfin a detectat o eroare de cerere la nivel de browser, cauzată de obicei de lipsa antetelor CORS sau preflight de pe serverul media.';
+      'Foxfin a detectat o eroare de cerere la nivel de browser, cauzată de obicei de lipsa antetelor CORS sau preflight de pe serverul media.';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -11150,7 +11150,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      'Soluție: servește serverul media sau endpointul proxy prin HTTPS ori încarcă Moonfin prin HTTP doar în rețele locale de încredere.';
+      'Soluție: servește serverul media sau endpointul proxy prin HTTPS ori încarcă Foxfin prin HTTP doar în rețele locale de încredere.';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -12883,7 +12883,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller este motorul GPU modern al Flutter, pentru animații mai fluide și mai puține sacadări. Pe unele TV box-uri și plăci grafice mai vechi poate provoca artefacte sau imagine neagră; dezactivează-l dacă observi astfel de probleme. Opțiunea Automat alege cea mai bună valoare implicită pentru dispozitivul tău. Repornește Moonfin pentru a aplica modificarea.';
+      'Impeller este motorul GPU modern al Flutter, pentru animații mai fluide și mai puține sacadări. Pe unele TV box-uri și plăci grafice mai vechi poate provoca artefacte sau imagine neagră; dezactivează-l dacă observi astfel de probleme. Opțiunea Automat alege cea mai bună valoare implicită pentru dispozitivul tău. Repornește Foxfin pentru a aplica modificarea.';
 
   @override
   String get impellerAuto => 'Automat';
@@ -12899,7 +12899,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get impellerRestartMessage =>
-      'Moonfin trebuie repornit pentru a schimba motorul de randare. Închide aplicația acum, apoi redeschide-o pentru a aplica modificarea.';
+      'Foxfin trebuie repornit pentru a schimba motorul de randare. Închide aplicația acum, apoi redeschide-o pentru a aplica modificarea.';
 
   @override
   String get impellerCloseNow => 'Închide aplicația acum';
@@ -13422,7 +13422,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get autoDownloadTranscodedForegroundNote =>
-      'Calitățile transcodate se descarcă doar cât timp Moonfin este deschis. Calitatea originală se descarcă și în fundal.';
+      'Calitățile transcodate se descarcă doar cât timp Foxfin este deschis. Calitatea originală se descarcă și în fundal.';
 
   @override
   String get autoDownloadTranscodedRunningNote =>
@@ -13430,7 +13430,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get autoDownloadForegroundOnly =>
-      'Se descarcă doar cât timp Moonfin este deschis';
+      'Se descarcă doar cât timp Foxfin este deschis';
 
   @override
   String get autoDownloadQualityTitle => 'Calitatea descărcării automate';
@@ -13453,7 +13453,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get smartDownloadsEnableSubtitle =>
-      'When you finish an episode on any device, Moonfin downloads the next ones. Downloaded episodes are deleted once watched.';
+      'When you finish an episode on any device, Foxfin downloads the next ones. Downloaded episodes are deleted once watched.';
 
   @override
   String get smartDownloadsKeepReady => 'Episodes to Keep Downloaded';
@@ -13513,15 +13513,15 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get autoDownloadBackgroundRefreshSubtitle =>
-      'Permite sistemului să verifice periodic dacă există episoade noi cât timp Moonfin este închis';
+      'Permite sistemului să verifice periodic dacă există episoade noi cât timp Foxfin este închis';
 
   @override
   String get autoDownloadBackgroundRefreshDenied =>
-      'Reîmprospătarea aplicațiilor în fundal este dezactivată pentru Moonfin. Activeaz-o în Setările iOS.';
+      'Reîmprospătarea aplicațiilor în fundal este dezactivată pentru Foxfin. Activeaz-o în Setările iOS.';
 
   @override
   String get autoDownloadBackgroundRestrictedAndroid =>
-      'Utilizarea în fundal este restricționată pentru Moonfin în Setările Android.';
+      'Utilizarea în fundal este restricționată pentru Foxfin în Setările Android.';
 
   @override
   String get autoDownloadCheckNow => 'Verifică acum';
@@ -13745,13 +13745,13 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get topShelfDescription =>
-      'What the Apple TV home screen shows above the Moonfin icon when it is selected. This setting stays on this device.';
+      'What the Apple TV home screen shows above the Foxfin icon when it is selected. This setting stays on this device.';
 
   @override
   String get topShelfLatestMedia => 'Latest media';
 
   @override
-  String get topShelfAppBanner => 'Moonfin banner';
+  String get topShelfAppBanner => 'Foxfin banner';
 
   @override
   String get keepVideoClearOfDynamicIsland =>

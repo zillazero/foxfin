@@ -10,7 +10,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Foxfin';
 
   @override
   String get animeMarkerFiller => 'Filler';
@@ -104,7 +104,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin 版本 $version';
+    return 'Foxfin 版本 $version';
   }
 
   @override
@@ -156,7 +156,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin 无法访问系统密钥环。仍可继续登录，但在密钥环解锁前，安全令牌存储可能不可用。';
+      'Foxfin 无法访问系统密钥环。仍可继续登录，但在密钥环解锁前，安全令牌存储可能不可用。';
 
   @override
   String get ok => '确定';
@@ -168,10 +168,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get detailScreenStyle => '详情界面样式';
 
   @override
-  String get detailScreenStyleSubtitle => 'Moonfin 是经典布局；Modern 是自适应影院风布局。';
+  String get detailScreenStyleSubtitle => 'Foxfin 是经典布局；Modern 是自适应影院风布局。';
 
   @override
-  String get detailScreenStyleMoonfin => 'Moonfin';
+  String get detailScreenStyleMoonfin => 'Foxfin';
 
   @override
   String get detailScreenStyleModern => '现代';
@@ -406,10 +406,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get recommendationSystemSubtitle =>
-      '可选用「Moonfin本地资料库推荐算法」，或线上 TMDb 相似度匹配算法。注意：线上推荐功能需要对接 Seerr 服务。';
+      '可选用「Foxfin本地资料库推荐算法」，或线上 TMDb 相似度匹配算法。注意：线上推荐功能需要对接 Seerr 服务。';
 
   @override
-  String get recommendationSystemMoonfin => 'Moonfin 智能推荐';
+  String get recommendationSystemMoonfin => 'Foxfin 智能推荐';
 
   @override
   String get recommendationSystemJellyfin => 'Jellyfin Recommends';
@@ -422,7 +422,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      '按目标媒体的家长分级限制 Moonfin 推荐内容';
+      '按目标媒体的家长分级限制 Foxfin 推荐内容';
 
   @override
   String get interfaceStyle => '界面风格';
@@ -444,7 +444,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get interfaceLayout => '界面布局';
 
   @override
-  String get interfaceLayoutSubtitle => '当此设备识别错误时覆盖检测到的布局。重启 Moonfin 使更改生效。';
+  String get interfaceLayoutSubtitle => '当此设备识别错误时覆盖检测到的布局。重启 Foxfin 使更改生效。';
 
   @override
   String get interfaceLayoutAutomatic => '自动';
@@ -507,13 +507,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsAppearanceThemeSubtitle =>
-      '可在 Moonfin 与 Neon Pulse 之间切换，无需重启应用。';
+      '可在 Foxfin 与 Neon Pulse 之间切换，无需重启应用。';
 
   @override
   String get customThemeTitle => '自定义主题';
 
   @override
-  String get customThemeSubtitle => '自定义主题可更改 Moonfin 全部视觉元素，从中挑选一款贴合你的使用风格。';
+  String get customThemeSubtitle => '自定义主题可更改 Foxfin 全部视觉元素，从中挑选一款贴合你的使用风格。';
 
   @override
   String get keyboardPreferSystemIme => '优先使用系统键盘';
@@ -531,10 +531,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get gamepadNavigationDescription => '允许已连接游戏手柄移动焦点并选择项目';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeMoonfin => 'Foxfin';
 
   @override
-  String get themeMoonfinSubtitle => '原版简洁清爽的 Moonfin 默认界面。';
+  String get themeMoonfinSubtitle => '原版简洁清爽的 Foxfin 默认界面。';
 
   @override
   String get themeNeonPulse => 'Neon Pulse';
@@ -599,7 +599,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get exitApp => '退出 Moonfin？';
+  String get exitApp => '退出 Foxfin？';
 
   @override
   String get exitAppConfirmation => '确定要退出吗？';
@@ -1724,7 +1724,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shuffleAllMusic => '随机播放所有音乐';
 
   @override
-  String get carSignInPrompt => '在手机上登录 Moonfin';
+  String get carSignInPrompt => '在手机上登录 Foxfin';
 
   @override
   String get carServerUnreachable => '无法连接到服务器';
@@ -2008,7 +2008,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shortcutToggleFullscreen => 'Fullscreen on or off';
 
   @override
-  String get shortcutQuit => 'Quit Moonfin';
+  String get shortcutQuit => 'Quit Foxfin';
 
   @override
   String get shortcutPlayPause => 'Play or pause';
@@ -2961,7 +2961,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get loadingAnimation => '加载动画';
 
   @override
-  String get loadingAnimationDescription => '自定义 Moonfin 各处使用的加载动画';
+  String get loadingAnimationDescription => '自定义 Foxfin 各处使用的加载动画';
 
   @override
   String get loadingAnimationConfiguration => '加载动画配置';
@@ -2970,7 +2970,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get loadingAnimationImage => '图像';
 
   @override
-  String get loadingAnimationImageMoonfinLogo => 'Moonfin 徽标';
+  String get loadingAnimationImageMoonfinLogo => 'Foxfin 徽标';
 
   @override
   String get loadingAnimationImageSpinner => '旋转环';
@@ -2982,7 +2982,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get loadingAnimationImageMoonPhases => '月相';
 
   @override
-  String get loadingAnimationImageMoonfinPhases => 'Moonfin 月相';
+  String get loadingAnimationImageMoonfinPhases => 'Foxfin 月相';
 
   @override
   String get loadingAnimationImageNeonfinPhases => '霓虹月相';
@@ -3968,7 +3968,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get customMpvConfPath => '自定义 mpv.conf 路径';
 
   @override
-  String get notSetMpvConf => '未设置。Moonfin 将尝试使用应用/数据文件夹中的默认 mpv.conf。';
+  String get notSetMpvConf => '未设置。Foxfin 将尝试使用应用/数据文件夹中的默认 mpv.conf。';
 
   @override
   String get selectMpvConf => '选择 mpv.conf';
@@ -4219,13 +4219,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get downloadLocationLimitedByAndroid =>
-      'Android 系统只允许 Moonfin 写入其拥有的文件夹，而此设备没有可移动存储设备。请启用上方的“保存到下载文件夹”选项，将下载内容保存到其他应用可以访问的位置。';
+      'Android 系统只允许 Foxfin 写入其拥有的文件夹，而此设备没有可移动存储设备。请启用上方的“保存到下载文件夹”选项，将下载内容保存到其他应用可以访问的位置。';
 
   @override
   String get saveToDownloadsFolder => '保存到下载文件夹';
 
   @override
-  String get downloadsVisibleToOtherApps => 'Downloads/Moonfin — 对其他应用可见';
+  String get downloadsVisibleToOtherApps => 'Downloads/Foxfin — 对其他应用可见';
 
   @override
   String get dangerZone => '危险区域';
@@ -4254,7 +4254,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      '下载的媒体将保存到你设备上的 Downloads/Moonfin 中。这些文件将对其他应用可见，例如你的图库或音乐播放器。\n\n现有下载将保留在当前位置。';
+      '下载的媒体将保存到你设备上的 Downloads/Foxfin 中。这些文件将对其他应用可见，例如你的图库或音乐播放器。\n\n现有下载将保留在当前位置。';
 
   @override
   String get transcodingTimeRemainingUnavailable => '转码中：剩余时间未知';
@@ -4397,7 +4397,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get libraryVisibility => '媒体库可见性';
 
   @override
-  String get libraryVisibilityDescription => '切换每个媒体库的主页可见性。重启 Moonfin 以使更改生效。';
+  String get libraryVisibilityDescription => '切换每个媒体库的主页可见性。重启 Foxfin 以使更改生效。';
 
   @override
   String get showInNavigation => '在导航中显示';
@@ -4458,7 +4458,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mediaBarModeDescription => '选择不同的媒体栏样式，或关闭媒体栏';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeMoonfin => 'Foxfin';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4762,7 +4762,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get screensaverBackdropBlack => '纯黑';
 
   @override
-  String get screensaverBackdropMoonfin => 'Moonfin';
+  String get screensaverBackdropMoonfin => 'Foxfin';
 
   @override
   String get screensaverBackdropCalm => '静谧';
@@ -4777,7 +4777,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get screensaverAdditionalComponent => '附加组件';
 
   @override
-  String get screensaverComponentMoonfinLogo => 'Moonfin 徽标';
+  String get screensaverComponentMoonfinLogo => 'Foxfin 徽标';
 
   @override
   String get screensaverComponentRunner => '奔跑者';
@@ -5054,7 +5054,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sourceCode => '源代码';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/zillazero/foxfin';
 
   @override
   String get checkForUpdatesNow => '立即检查更新';
@@ -5222,7 +5222,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cancelRequest4k => '取消 4K 版本请求';
 
   @override
-  String get playInMoonfin => '在 Moonfin 中播放';
+  String get playInMoonfin => '在 Foxfin 中播放';
 
   @override
   String get requestedByLabel => 'Requested by';
@@ -5267,7 +5267,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get keep => '保留';
 
   @override
-  String get itemNotFoundInLibrary => '在你的 Moonfin 媒体库中未找到此媒体项';
+  String get itemNotFoundInLibrary => '在你的 Foxfin 媒体库中未找到此媒体项';
 
   @override
   String get errorSearchingLibrary => '搜索媒体库时出错';
@@ -5854,7 +5854,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get adminServerRebootInProgress => '服务器正在重启';
 
   @override
-  String get adminServerRebootMessage => '服务器正在重启，请重启 Moonfin';
+  String get adminServerRebootMessage => '服务器正在重启，请重启 Foxfin';
 
   @override
   String get adminActiveSessions => '活跃会话';
@@ -9701,7 +9701,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      '切换每个媒体库的主页可见性。重启 Moonfin 以使更改生效。';
+      '切换每个媒体库的主页可见性。重启 Foxfin 以使更改生效。';
 
   @override
   String get settingsMediaBarAndLocalPreviews => '媒体栏和本地预览';
@@ -9814,7 +9814,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsJoinTheDiscord => '加入 Discord';
 
   @override
-  String get settingsSupportMoonfin => '支持 Moonfin';
+  String get settingsSupportMoonfin => '支持 Foxfin';
 
   @override
   String get settingsSupportMoonfinSubtitle => '请开发者喝杯咖啡';
@@ -9832,13 +9832,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsPrivacyPolicy => '隐私政策';
 
   @override
-  String get settingsPrivacyPolicySubtitle => 'Moonfin 如何处理你的数据';
+  String get settingsPrivacyPolicySubtitle => 'Foxfin 如何处理你的数据';
 
   @override
   String get settingsCheckForUpdates => '检查更新';
 
   @override
-  String get settingsCheckForUpdatesSubtitle => '检查最新的 Moonfin 版本';
+  String get settingsCheckForUpdatesSubtitle => '检查最新的 Foxfin 版本';
 
   @override
   String get settingsBoth => '两者';
@@ -10241,7 +10241,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get savedThemesDescription =>
-      '这些主题来自当前服务器的 Moonfin 插件。删除时只会移除此设备上的本地副本。';
+      '这些主题来自当前服务器的 Foxfin 插件。删除时只会移除此设备上的本地副本。';
 
   @override
   String get savedThemesEmpty => '找不到该服务器的已保存主题。';
@@ -10261,7 +10261,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get themeEditor => '主题编辑器';
 
   @override
-  String get themeEditorSubtitle => '在浏览器中打开 Moonfin 主题编辑器';
+  String get themeEditorSubtitle => '在浏览器中打开 Foxfin 主题编辑器';
 
   @override
   String get homeScreen => '主屏幕';
@@ -10554,7 +10554,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get webDiagnostics => 'Web 诊断';
 
   @override
-  String get webDiagnosticsTitle => 'Moonfin Web 诊断';
+  String get webDiagnosticsTitle => 'Foxfin Web 诊断';
 
   @override
   String get webDiagnosticsIntro => '使用此页面可以诊断浏览器连接问题（CORS、混合内容和发现设置）。';
@@ -10567,11 +10567,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Moonfin 检测到一个 HTTPS 页面试图调用 HTTP 服务器 URL。浏览器会在请求到达你的服务器之前阻止该请求。';
+      'Foxfin 检测到一个 HTTPS 页面试图调用 HTTP 服务器 URL。浏览器会在请求到达你的服务器之前阻止该请求。';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Moonfin 检测到浏览器请求失败，常见原因是媒体服务器缺少 CORS 或预检请求标头。';
+      'Foxfin 检测到浏览器请求失败，常见原因是媒体服务器缺少 CORS 或预检请求标头。';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -10619,7 +10619,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      '修复：通过 HTTPS 为你的媒体服务器或代理端点提供服务，或仅在受信任的本地网络上通过 HTTP 加载 Moonfin。';
+      '修复：通过 HTTPS 为你的媒体服务器或代理端点提供服务，或仅在受信任的本地网络上通过 HTTP 加载 Foxfin。';
 
   @override
   String get webDiagnosticsNoMixedContentDetected => '从当前运行时设置中未检测到明显的混合内容配置。';
@@ -12302,7 +12302,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller 是 Flutter 的现代 GPU 渲染器，可实现更流畅的动画和更少的卡顿。在某些电视盒子和旧款 GPU 上可能会导致故障或黑屏；如果遇到这些问题，请将其关闭。自动会为你的设备选择最佳默认值。重启 Moonfin 以应用。';
+      'Impeller 是 Flutter 的现代 GPU 渲染器，可实现更流畅的动画和更少的卡顿。在某些电视盒子和旧款 GPU 上可能会导致故障或黑屏；如果遇到这些问题，请将其关闭。自动会为你的设备选择最佳默认值。重启 Foxfin 以应用。';
 
   @override
   String get impellerAuto => '自动';
@@ -12317,8 +12317,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get impellerRestartTitle => '需要重启';
 
   @override
-  String get impellerRestartMessage =>
-      'Moonfin 需要重启以更改渲染引擎。立即关闭应用，然后重新打开以应用更改。';
+  String get impellerRestartMessage => 'Foxfin 需要重启以更改渲染引擎。立即关闭应用，然后重新打开以应用更改。';
 
   @override
   String get impellerCloseNow => '立即关闭应用';
@@ -12817,14 +12816,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get autoDownloadTranscodedForegroundNote =>
-      '转码画质仅在 Moonfin 运行时下载；原片画质可后台下载。';
+      '转码画质仅在 Foxfin 运行时下载；原片画质可后台下载。';
 
   @override
   String get autoDownloadTranscodedRunningNote =>
       '转码下载中断后无法续传，需要从头开始；原片画质支持断点续传。';
 
   @override
-  String get autoDownloadForegroundOnly => '仅 Moonfin 运行时才会下载';
+  String get autoDownloadForegroundOnly => '仅 Foxfin 运行时才会下载';
 
   @override
   String get autoDownloadQualityTitle => '自动下载画质';
@@ -12847,7 +12846,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get smartDownloadsEnableSubtitle =>
-      'When you finish an episode on any device, Moonfin downloads the next ones. Downloaded episodes are deleted once watched.';
+      'When you finish an episode on any device, Foxfin downloads the next ones. Downloaded episodes are deleted once watched.';
 
   @override
   String get smartDownloadsKeepReady => 'Episodes to Keep Downloaded';
@@ -12904,16 +12903,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get autoDownloadBackgroundRefresh => '后台检查更新';
 
   @override
-  String get autoDownloadBackgroundRefreshSubtitle =>
-      '允许系统在 Moonfin 关闭时定期检查新剧集';
+  String get autoDownloadBackgroundRefreshSubtitle => '允许系统在 Foxfin 关闭时定期检查新剧集';
 
   @override
   String get autoDownloadBackgroundRefreshDenied =>
-      'Moonfin 的后台应用刷新已被禁用，请前往 iOS 设置开启。';
+      'Foxfin 的后台应用刷新已被禁用，请前往 iOS 设置开启。';
 
   @override
   String get autoDownloadBackgroundRestrictedAndroid =>
-      'Android 设置限制了 Moonfin 后台运行权限。';
+      'Android 设置限制了 Foxfin 后台运行权限。';
 
   @override
   String get autoDownloadCheckNow => '立即检查';
@@ -13128,13 +13126,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get topShelfDescription =>
-      'What the Apple TV home screen shows above the Moonfin icon when it is selected. This setting stays on this device.';
+      'What the Apple TV home screen shows above the Foxfin icon when it is selected. This setting stays on this device.';
 
   @override
   String get topShelfLatestMedia => 'Latest media';
 
   @override
-  String get topShelfAppBanner => 'Moonfin banner';
+  String get topShelfAppBanner => 'Foxfin banner';
 
   @override
   String get keepVideoClearOfDynamicIsland =>
@@ -13328,7 +13326,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   AppLocalizationsZhHant() : super('zh_Hant');
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Foxfin';
 
   @override
   String get interfaceLanguage => '介面語言';
@@ -13395,7 +13393,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin 版本 $version';
+    return 'Foxfin 版本 $version';
   }
 
   @override
@@ -13447,7 +13445,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin 無法存取您的系統金鑰環。登入可以繼續，但在密鑰環解鎖之前，安全令牌儲存可能不可用。';
+      'Foxfin 無法存取您的系統金鑰環。登入可以繼續，但在密鑰環解鎖之前，安全令牌儲存可能不可用。';
 
   @override
   String get ok => '好的';
@@ -13460,7 +13458,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get detailScreenStyleSubtitle =>
-      '「經典」是 Moonfin 原本的置中版面；「現代」是自適應的電影感版面。';
+      '「經典」是 Foxfin 原本的置中版面；「現代」是自適應的電影感版面。';
 
   @override
   String get detailScreenStyleMoonfin => '經典';
@@ -13485,10 +13483,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get recommendationSystemSubtitle =>
-      '使用 Moonfin Recommends 的本機媒體庫演算法，或線上 TMDb 的相似度指標。注意：線上推薦需要整合 Seerr。';
+      '使用 Foxfin Recommends 的本機媒體庫演算法，或線上 TMDb 的相似度指標。注意：線上推薦需要整合 Seerr。';
 
   @override
-  String get recommendationSystemMoonfin => 'Moonfin 推薦';
+  String get recommendationSystemMoonfin => 'Foxfin 推薦';
 
   @override
   String get recommendationSystemTmdb => 'TMDb 相似度';
@@ -13498,7 +13496,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      '依目標媒體的家長分級限制 Moonfin Recommends 的建議';
+      '依目標媒體的家長分級限制 Foxfin Recommends 的建議';
 
   @override
   String get interfaceStyle => '介面風格';
@@ -13534,13 +13532,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get settingsAppearanceThemeSubtitle =>
-      '在 Moonfin 和 Neon Pulse 之間切換，無需重新啟動應用程式';
+      '在 Foxfin 和 Neon Pulse 之間切換，無需重新啟動應用程式';
 
   @override
   String get customThemeTitle => '自訂主題';
 
   @override
-  String get customThemeSubtitle => '自訂主題會改變整個 Moonfin 的視覺元素。請選擇一個符合您風格的選項。';
+  String get customThemeSubtitle => '自訂主題會改變整個 Foxfin 的視覺元素。請選擇一個符合您風格的選項。';
 
   @override
   String get keyboardPreferSystemIme => '優先使用系統鍵盤';
@@ -13549,10 +13547,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get keyboardPreferSystemImeDescription => '預設使用您裝置的輸入法輸入文字';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeMoonfin => 'Foxfin';
 
   @override
-  String get themeMoonfinSubtitle => '目前的 Moonfin 外觀你們都喜歡';
+  String get themeMoonfinSubtitle => '目前的 Foxfin 外觀你們都喜歡';
 
   @override
   String get themeNeonPulse => '霓虹脈動';
@@ -13617,7 +13615,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get exitApp => '退出Moonfin？';
+  String get exitApp => '退出Foxfin？';
 
   @override
   String get exitAppConfirmation => '確定要退出嗎？';
@@ -14632,7 +14630,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get shuffleAllMusic => '隨機播放所有音樂';
 
   @override
-  String get carSignInPrompt => '請在您的手機上登入 Moonfin';
+  String get carSignInPrompt => '請在您的手機上登入 Foxfin';
 
   @override
   String get carServerUnreachable => '無法連線到您的伺服器';
@@ -15992,7 +15990,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get customMpvConfPath => '自訂 mpv.conf 路徑';
 
   @override
-  String get notSetMpvConf => '未設定。 Moonfin 將嘗試應用程式/資料資料夾中的預設 mpv.conf。';
+  String get notSetMpvConf => '未設定。 Foxfin 將嘗試應用程式/資料資料夾中的預設 mpv.conf。';
 
   @override
   String get selectMpvConf => '選擇mpv.conf';
@@ -16188,7 +16186,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get saveToDownloadsFolder => '儲存到下載資料夾';
 
   @override
-  String get downloadsVisibleToOtherApps => 'Downloads/Moonfin — 對其他應用程式可見';
+  String get downloadsVisibleToOtherApps => 'Downloads/Foxfin — 對其他應用程式可見';
 
   @override
   String get dangerZone => '危險區';
@@ -16217,7 +16215,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      '下載的媒體將會儲存到您裝置上的 Downloads/Moonfin 中。這些檔案將對其他應用程式可見，例如您的圖庫或音樂播放器。\n\n現有下載將保留在目前位置。';
+      '下載的媒體將會儲存到您裝置上的 Downloads/Foxfin 中。這些檔案將對其他應用程式可見，例如您的圖庫或音樂播放器。\n\n現有下載將保留在目前位置。';
 
   @override
   String get enable => '使能夠';
@@ -16346,7 +16344,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get libraryVisibilityDescription =>
-      '切換各媒體庫在首頁的顯示狀態。重新啟動 Moonfin 後設定才會生效。';
+      '切換各媒體庫在首頁的顯示狀態。重新啟動 Foxfin 後設定才會生效。';
 
   @override
   String get showInNavigation => '在導航中顯示';
@@ -16387,10 +16385,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get mediaBarMode => '媒體欄風格';
 
   @override
-  String get mediaBarModeDescription => '在 Moonfin、MakD 之間進行選擇，或關閉媒體列';
+  String get mediaBarModeDescription => '在 Foxfin、MakD 之間進行選擇，或關閉媒體列';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeMoonfin => 'Foxfin';
 
   @override
   String get mediaBarModeMakd => '馬克D';
@@ -16829,7 +16827,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get sourceCode => '原始碼';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/zillazero/foxfin';
 
   @override
   String get checkForUpdatesNow => '立即檢查更新';
@@ -16967,7 +16965,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get cancelRequest => '取消請求';
 
   @override
-  String get playInMoonfin => '在 Moonfin 中播放';
+  String get playInMoonfin => '在 Foxfin 中播放';
 
   @override
   String requestedByName(String name) {
@@ -17000,7 +16998,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get keep => '保持';
 
   @override
-  String get itemNotFoundInLibrary => '在您的 Moonfin 媒體庫中找不到此項目';
+  String get itemNotFoundInLibrary => '在您的 Foxfin 媒體庫中找不到此項目';
 
   @override
   String get errorSearchingLibrary => '搜尋媒體庫時出錯';
@@ -17584,7 +17582,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get adminServerRebootInProgress => '伺服器正在重啟';
 
   @override
-  String get adminServerRebootMessage => '伺服器正在重新啟動，請重新啟動 Moonfin';
+  String get adminServerRebootMessage => '伺服器正在重新啟動，請重新啟動 Foxfin';
 
   @override
   String get adminActiveSessions => '活躍會話';
@@ -21184,7 +21182,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      '切換各媒體庫在首頁的顯示狀態。重新啟動 Moonfin 後設定才會生效。';
+      '切換各媒體庫在首頁的顯示狀態。重新啟動 Foxfin 後設定才會生效。';
 
   @override
   String get settingsMediaBarAndLocalPreviews => '媒體欄和本地預覽';
@@ -21232,7 +21230,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsJoinTheDiscord => '加入 Discord';
 
   @override
-  String get settingsSupportMoonfin => '支援Moonfin';
+  String get settingsSupportMoonfin => '支援Foxfin';
 
   @override
   String get settingsSupportMoonfinSubtitle => '請開發者喝杯咖啡';
@@ -21250,13 +21248,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsPrivacyPolicy => '隱私權政策';
 
   @override
-  String get settingsPrivacyPolicySubtitle => 'Moonfin 如何處理您的數據';
+  String get settingsPrivacyPolicySubtitle => 'Foxfin 如何處理您的數據';
 
   @override
   String get settingsCheckForUpdates => '檢查更新';
 
   @override
-  String get settingsCheckForUpdatesSubtitle => '檢查最新的 Moonfin 版本';
+  String get settingsCheckForUpdatesSubtitle => '檢查最新的 Foxfin 版本';
 
   @override
   String get settingsBoth => '兩個都';
@@ -21616,7 +21614,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get savedThemesDescription =>
-      '這些是為目前伺服器從 Moonfin 外掛程式下載的主題。刪除僅會移除此本機副本。';
+      '這些是為目前伺服器從 Foxfin 外掛程式下載的主題。刪除僅會移除此本機副本。';
 
   @override
   String get savedThemesEmpty => '找不到此伺服器的已儲存主題。';
@@ -21636,7 +21634,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get themeEditor => '主題編輯器';
 
   @override
-  String get themeEditorSubtitle => '在您的瀏覽器中開啟 Moonfin 主題編輯器';
+  String get themeEditorSubtitle => '在您的瀏覽器中開啟 Foxfin 主題編輯器';
 
   @override
   String get homeScreen => '首頁畫面';
@@ -21830,7 +21828,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get webDiagnostics => '網頁診斷';
 
   @override
-  String get webDiagnosticsTitle => 'Moonfin 網頁診斷';
+  String get webDiagnosticsTitle => 'Foxfin 網頁診斷';
 
   @override
   String get webDiagnosticsIntro => '使用此頁面診斷瀏覽器連線問題（CORS、混合內容與探索設定）。';
@@ -21843,11 +21841,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Moonfin 偵測到 HTTPS 頁面嘗試呼叫 HTTP 的伺服器 URL。瀏覽器會在要求送達您的伺服器之前將其封鎖。';
+      'Foxfin 偵測到 HTTPS 頁面嘗試呼叫 HTTP 的伺服器 URL。瀏覽器會在要求送達您的伺服器之前將其封鎖。';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Moonfin 偵測到瀏覽器層級的要求失敗，這通常是因為媒體伺服器缺少 CORS 或預檢標頭所造成。';
+      'Foxfin 偵測到瀏覽器層級的要求失敗，這通常是因為媒體伺服器缺少 CORS 或預檢標頭所造成。';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -21895,7 +21893,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      '解決方式：透過 HTTPS 提供您的媒體伺服器或代理端點，或僅在受信任的本地網路上以 HTTP 載入 Moonfin。';
+      '解決方式：透過 HTTPS 提供您的媒體伺服器或代理端點，或僅在受信任的本地網路上以 HTTP 載入 Foxfin。';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -22689,7 +22687,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller 是 Flutter 新一代的 GPU 算圖器，可帶來更流暢的動畫並減少卡頓。在部分電視盒與較舊的 GPU 上可能造成畫面異常或黑畫面；若您遇到這些狀況請將其關閉。「自動」會為您的裝置選擇最合適的預設值。需重新啟動 Moonfin 才會生效。';
+      'Impeller 是 Flutter 新一代的 GPU 算圖器，可帶來更流暢的動畫並減少卡頓。在部分電視盒與較舊的 GPU 上可能造成畫面異常或黑畫面；若您遇到這些狀況請將其關閉。「自動」會為您的裝置選擇最合適的預設值。需重新啟動 Foxfin 才會生效。';
 
   @override
   String get impellerAuto => '自動';
@@ -22705,7 +22703,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get impellerRestartMessage =>
-      'Moonfin 需要重新啟動才能變更算圖引擎。請立即關閉應用程式，再重新開啟以套用。';
+      'Foxfin 需要重新啟動才能變更算圖引擎。請立即關閉應用程式，再重新開啟以套用。';
 
   @override
   String get impellerCloseNow => '立即關閉應用程式';

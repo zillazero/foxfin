@@ -342,8 +342,8 @@ class _TrickplaySettingsPreviewState extends State<TrickplaySettingsPreview> {
                 child: SizedBox(
                   width: logoSize,
                   height: logoSize,
-                  child: SvgPicture.asset(
-                    'assets/icons/moonfin_logo.svg',
+                  child: Image.asset(
+                    'assets/icons/moonfin.png',
                     fit: BoxFit.contain,
                   ),
                 ),

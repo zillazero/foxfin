@@ -5,6 +5,7 @@ import 'themes/moonfin_theme_spec.dart';
 import 'themes/neon_pulse_theme_spec.dart';
 import 'themes/glass_theme_spec.dart';
 import 'themes/eightbit_hero_theme_spec.dart';
+import 'themes/fox_theme_specs.dart';
 
 class ThemeRegistry {
   const ThemeRegistry._();
@@ -22,12 +23,34 @@ class ThemeRegistry {
     eightbitHeroId,
   };
 
-  static const Map<String, ThemeSpec> _builtIns = {
-    moonfinId: moonfinThemeSpec,
-    neonPulseId: neonPulseThemeSpec,
-    glassId: glassThemeSpec,
-    eightbitHeroId: eightbitHeroThemeSpec,
+  // Foxfin: the upstream Moonfin/Neon/Glass/8-bit looks are replaced by the
+  // five FOX Designsystem themes. Foxhole (default) keeps the internal id
+  // 'moonfin' so stored preferences and the default VisualThemeId resolve to it.
+  static const String foxholeId = moonfinId;
+  static const List<String> foxThemeOrder = [
+    moonfinId, 'magenta', 'amber', 'gruen', 'polizei',
+  ];
+  static const Map<String, String> foxThemeKeys = {
+    moonfinId: 'foxhole', 'magenta': 'magenta', 'amber': 'amber',
+    'gruen': 'gruen', 'polizei': 'polizei',
   };
+
+  static const Map<String, ThemeSpec> _builtIns = {
+    moonfinId: foxFoxholeThemeSpec,
+  };
+
+  static const Map<String, ThemeSpec> _fox = {
+    'magenta': foxMagentaThemeSpec,
+    'amber': foxAmberThemeSpec,
+    'gruen': foxGruenThemeSpec,
+    'polizei': foxPolizeiThemeSpec,
+  };
+
+  // Upstream specs kept referenced for GPL diff clarity; not selectable.
+  // ignore: unused_field
+  static const List<ThemeSpec> _upstreamUnused = [
+    moonfinThemeSpec, neonPulseThemeSpec, glassThemeSpec, eightbitHeroThemeSpec,
+  ];
 
   static final Map<String, ThemeSpec> _custom = {};
 
@@ -39,23 +62,24 @@ class ThemeRegistry {
   /// Plugin/server themes take precedence over store themes on id clash.
   static Map<String, ThemeSpec> get availableThemes => {
         ..._builtIns,
+        ..._fox,
         ..._store,
         ..._custom,
       };
 
   /// The theme the user picked, before OLED Mode is layered on.
-  static ThemeSpec _base = moonfinThemeSpec;
+  static ThemeSpec _base = foxFoxholeThemeSpec;
   static OledTuning _oled = OledTuning.off;
 
   /// [_base] with [_oled] applied. Memoized rather than derived per read:
   /// `AppColorScheme` proxies this getter on every colour lookup, so deriving
   /// lazily would allocate `Color`s in the paint path.
-  static ThemeSpec _active = moonfinThemeSpec;
+  static ThemeSpec _active = foxFoxholeThemeSpec;
 
   static ThemeSpec get active => _active;
 
   static void setActiveById(String id) {
-    _base = availableThemes[id] ?? moonfinThemeSpec;
+    _base = availableThemes[id] ?? foxFoxholeThemeSpec;
     _recompute();
   }
 
@@ -68,7 +92,7 @@ class ThemeRegistry {
   static void _recompute() => _active = applyOled(_base, _oled);
 
   static ThemeSpec resolveById(String id) {
-    return availableThemes[id] ?? moonfinThemeSpec;
+    return availableThemes[id] ?? foxFoxholeThemeSpec;
   }
 
   /// Register or replace a plugin-supplied theme. Built-in IDs are reserved
@@ -88,7 +112,7 @@ class ThemeRegistry {
     _custom
       ..clear()
       ..addEntries(specs
-          .where((s) => !builtInIds.contains(s.id))
+          .where((s) => !builtInIds.contains(s.id) && !_fox.containsKey(s.id))
           .map((s) => MapEntry(s.id, s)));
   }
 

@@ -103,7 +103,7 @@ class _AppearanceThemeScreenState extends State<AppearanceThemeScreen> {
 
   static String _titleForTheme(AppLocalizations l10n, ThemeSpec spec) {
     return switch (spec.id) {
-      ThemeRegistry.moonfinId => l10n.themeMoonfin,
+      ThemeRegistry.moonfinId => spec.displayName,
       ThemeRegistry.neonPulseId => l10n.themeNeonPulse,
       ThemeRegistry.glassId => l10n.themeGlass,
       ThemeRegistry.eightbitHeroId => l10n.theme8BitHero,
@@ -113,7 +113,7 @@ class _AppearanceThemeScreenState extends State<AppearanceThemeScreen> {
 
   static String? _subtitleForTheme(AppLocalizations l10n, ThemeSpec spec) {
     return switch (spec.id) {
-      ThemeRegistry.moonfinId => l10n.themeMoonfinSubtitle,
+      ThemeRegistry.moonfinId => spec.description,
       ThemeRegistry.neonPulseId => l10n.themeNeonPulseSubtitle,
       ThemeRegistry.glassId => l10n.themeGlassSubtitle,
       ThemeRegistry.eightbitHeroId => l10n.theme8BitHeroSubtitle,
@@ -122,6 +122,8 @@ class _AppearanceThemeScreenState extends State<AppearanceThemeScreen> {
   }
 
   static int _themeSortRank(String id) {
+    final fox = ThemeRegistry.foxThemeOrder.indexOf(id);
+    if (fox >= 0) return fox - 10;
     if (id == ThemeRegistry.moonfinId) return 0;
     if (id == ThemeRegistry.neonPulseId) return 1;
     if (id == ThemeRegistry.glassId) return 2;

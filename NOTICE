@@ -1,0 +1,25 @@
+Foxfin
+======
+
+Foxfin is a modified version of Moonfin (https://github.com/Moonfin-Client/Moonfin-Core),
+a Jellyfin & Emby client by the Moonfin contributors, which itself derives from
+the Jellyfin Android TV project. Foxfin is not affiliated with or endorsed by
+Moonfin, Jellyfin or Emby.
+
+License: GNU General Public License, version 2 or (at your option) any later
+version. See LICENSE. All original copyright notices are retained.
+
+Complete corresponding source code: https://github.com/zillazero/foxfin
+
+Changes made for Foxfin (2026-10-12, FOX / pk187):
+- Renamed to "Foxfin", application id site.pk187.foxfin, new icon, TV banner
+  and logos from the FOX Designsystem.
+- Replaced the built-in Moonfin/Neon Pulse/Glass/8-Bit Hero themes with the five
+  FOX Designsystem themes (Foxhole default, Magenta, Amber, Gruen, Polizei),
+  selectable per user/device in Settings > Appearance.
+- Removed Firebase (firebase_core, firebase_messaging, google-services); push
+  notifications are disabled.
+- Removed Discord and donation links; source/issue/license links point to the
+  Foxfin repository; update check points to the Foxfin repository and is
+  skipped when installed via the FOX Store.
+- No server addresses or credentials are preconfigured.
