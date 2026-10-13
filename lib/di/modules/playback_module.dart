@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:playback_core/playback_core.dart';
@@ -44,6 +45,9 @@ import '../../util/episode_playability.dart';
 import '../../util/season_queue_context.dart';
 import '../../util/audio_track_logic.dart';
 import '../../util/subtitle_track_logic.dart';
+import '../../integrations/tracking/tracking_config.dart';
+import '../../integrations/tracking/tracking_player_service.dart';
+import '../../integrations/tracking/tracking_service.dart';
 
 final _getIt = GetIt.instance;
 
@@ -778,7 +782,7 @@ void setActiveStreamResolver(MediaServerClient client) {
     inner: serverResolver,
     offline: _getIt<OfflineStreamResolver>(),
   );
-  final service = LocalAwarePlayerService(
+  final localAware = LocalAwarePlayerService(
     serverService,
     _getIt<OfflineRepository>(),
     canReachServer: () =>
@@ -786,6 +790,22 @@ void setActiveStreamResolver(MediaServerClient client) {
         _getIt<ConnectivityService>().canReachServer,
     onStopped: _onItemStopped,
   );
+  // Foxfin: Trakt/Simkl scrobbling + periodic sync for this server session.
+  final PlayerService service;
+  if (TrackingConfig.anyTrackerAvailable) {
+    if (!_getIt.isRegistered<TrackingService>()) {
+      _getIt.registerSingleton<TrackingService>(TrackingService());
+    }
+    final tracking = _getIt<TrackingService>();
+    service = TrackingPlayerService(localAware, tracking);
+    unawaited(Future<void>.delayed(const Duration(seconds: 20), () async {
+      try {
+        await tracking.maybeAutoSync();
+      } catch (_) {}
+    }));
+  } else {
+    service = localAware;
+  }
 
   _getIt.registerSingleton<MediaStreamResolver>(resolver);
   _getIt.registerSingleton<PlayerService>(service);

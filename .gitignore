@@ -147,3 +147,4 @@ tizen/obj/
 *.jks
 *.keystore
 android/keystore.properties
+foxfin-keys.json

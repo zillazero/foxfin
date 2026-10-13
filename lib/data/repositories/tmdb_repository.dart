@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:server_core/server_core.dart';
 
+import '../../integrations/tracking/tmdb_direct.dart';
+
 /// A studio for the details screen: its name and, when the plugin has a cached
 /// logo, an authenticated URL to that logo image.
 typedef StudioCompany = ({String name, String? imageUrl});
@@ -124,11 +126,19 @@ class TmdbRepository {
     _pendingEpisodes[cacheKey] = completer;
 
     try {
-      final response = await _get('/Moonfin/Tmdb/EpisodeRating', {
-        'tmdbId': tmdbId,
-        'season': season,
-        'episode': episode,
-      });
+      Map<String, dynamic>? response;
+      try {
+        response = await _get('/Moonfin/Tmdb/EpisodeRating', {
+          'tmdbId': tmdbId,
+          'season': season,
+          'episode': episode,
+        });
+      } catch (_) {}
+      // Foxfin: direct TMDB fallback when the server plugin is missing.
+      if (response == null && TmdbDirect.instance.available) {
+        final v = await TmdbDirect.instance.episodeRating(tmdbId, season, episode);
+        if (v != null) response = {'voteAverage': v};
+      }
 
       if (response == null) {
         completer.complete(null);
@@ -169,10 +179,25 @@ class TmdbRepository {
     _pendingSeasons[cacheKey] = completer;
 
     try {
-      final response = await _get('/Moonfin/Tmdb/SeasonRatings', {
-        'tmdbId': tmdbId,
-        'season': season,
-      });
+      Map<String, dynamic>? response;
+      try {
+        response = await _get('/Moonfin/Tmdb/SeasonRatings', {
+          'tmdbId': tmdbId,
+          'season': season,
+        });
+      } catch (_) {}
+      // Foxfin: direct TMDB fallback when the server plugin is missing.
+      if (response == null && TmdbDirect.instance.available) {
+        final m = await TmdbDirect.instance.seasonRatings(tmdbId, season);
+        if (m != null) {
+          response = {
+            'episodes': [
+              for (final e in m.entries)
+                {'episodeNumber': e.key, 'voteAverage': e.value},
+            ],
+          };
+        }
+      }
 
       if (response == null) {
         completer.complete(null);

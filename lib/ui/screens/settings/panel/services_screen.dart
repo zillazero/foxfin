@@ -75,6 +75,14 @@ class _ServicesScreenState extends State<_ServicesScreen> {
               onTap: () =>
                   context.pushSettingsScreen(const SeerrConfigScreen()),
             ),
+            if (TrackingConfig.anyTrackerAvailable)
+              _TvSettingsListTile(
+                leading: const Icon(Icons.track_changes),
+                title: const Text('Trakt & Simkl'),
+                subtitle: const Text('Scrobbeln, Gesehen, Merkliste, Weiterschauen'),
+                onTap: () =>
+                    context.pushSettingsScreen(const TrackingScreen()),
+              ),
             if (achievements.available)
               _TvSettingsListTile(
                 leading: const Icon(

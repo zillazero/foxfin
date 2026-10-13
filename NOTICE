@@ -23,3 +23,13 @@ Changes made for Foxfin (2026-10-12, FOX / pk187):
   Foxfin repository; update check points to the Foxfin repository and is
   skipped when installed via the FOX Store.
 - No server addresses or credentials are preconfigured.
+
+Changes in Foxfin 2.7.1 (2026-10-13):
+- Trakt and Simkl integration (lib/integrations/tracking): OAuth device/PIN
+  login per server user, scrobbling (start/pause/stop), two-way watched sync,
+  watchlist <-> favourites sync, resume points ("continue watching") from
+  Trakt/Simkl into Jellyfin.
+- Direct TMDB fallback for episode/season ratings when the Moonfin server
+  plugin is not installed.
+- API keys are supplied at build time via --dart-define-from-file
+  (foxfin-keys.json, never committed). Services without a key are hidden.
