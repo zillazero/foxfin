@@ -15,6 +15,8 @@ import 'package:server_core/server_core.dart' hide ImageType;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/services/achievements_service.dart';
+import '../../../integrations/fox_sso/fox_account_screen.dart';
+import '../../../integrations/fox_sso/fox_sync_service.dart';
 import '../../../integrations/tracking/tracking_config.dart';
 import '../../../integrations/tracking/tracking_screen.dart';
 import '../../../data/services/auto_download_service.dart';

@@ -28,6 +28,7 @@ fun loadAndroidTvVersionName(rootDir: File, fallback: String): String {
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.4.0"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
@@ -184,6 +185,10 @@ dependencies {
     implementation("eu.simonbinder:sqlite3-native-library:3.52.0")
     implementation("androidx.tvprovider:tvprovider:1.1.0")
     implementation("androidx.work:work-runtime-ktx:2.12.0")
+    // Foxfin: FOX SSO client (sources in src/main/kotlin/site/pk187/sso)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0") // 5.x needs compileSdk 37
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 }
 
 val flutterApkOutputDir = layout.buildDirectory.dir("app/outputs/flutter-apk")

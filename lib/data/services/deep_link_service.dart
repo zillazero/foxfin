@@ -46,6 +46,11 @@ class DeepLinkService {
   /// is only honored for users already signed in on this device, and never
   /// bypasses a PIN, an always-authenticate setting or Kids Mode.
   static String? routeForDeepLink(Uri uri) {
+    // Foxfin: "Filme ansehen" from the FOX Store passes Jellyfin web URLs of
+    // the shop server (https://watch.pk187.site/web/#/details?id=...).
+    if (uri.scheme == 'https' && uri.host == 'watch.pk187.site') {
+      return _routeForShopWebUrl(uri);
+    }
     if (uri.scheme != 'moonfin') return null;
     final id = uri.queryParameters['id'];
     if (id == null || id.isEmpty) return null;
@@ -60,5 +65,24 @@ class DeepLinkService {
         .map((e) => '${e.key}=${Uri.encodeQueryComponent(e.value)}')
         .join('&');
     return query.isEmpty ? '/item/$id' : '/item/$id?$query';
+  }
+
+  static const shopServerId = '37f9a5dd4a4e49fba3dc493068b2397d';
+
+  static String? _routeForShopWebUrl(Uri uri) {
+    String? id = uri.queryParameters['id'];
+    final frag = uri.fragment; // e.g. "/details?id=abc&serverId=..." or "!/details?id="
+    final q = frag.indexOf('?');
+    if ((id == null || id.isEmpty) && q >= 0) {
+      try {
+        id = Uri.splitQueryString(frag.substring(q + 1))['id'];
+      } catch (_) {}
+    }
+    if (id == null || !RegExp(r'^[0-9a-fA-F-]{32,36}$').hasMatch(id)) {
+      return null; // no item: the app simply opens
+    }
+    final play = frag.contains('play') || uri.path.contains('play');
+    return '/item/${id.replaceAll('-', '').toLowerCase()}?serverId=$shopServerId'
+        '${play ? '&autoPlay=true' : ''}';
   }
 }

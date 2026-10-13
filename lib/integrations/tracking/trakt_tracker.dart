@@ -15,7 +15,7 @@ class TraktTracker implements Tracker {
       'Content-Type': 'application/json',
       'trakt-api-version': '2',
       'trakt-api-key': TrackingConfig.traktClientId,
-      'User-Agent': 'Foxfin/2.7.1',
+      'User-Agent': 'Foxfin/2.7.2',
     },
     validateStatus: (_) => true,
   ));

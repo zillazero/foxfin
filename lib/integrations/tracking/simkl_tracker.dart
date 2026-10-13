@@ -14,12 +14,12 @@ class SimklTracker implements Tracker {
     headers: {
       'Content-Type': 'application/json',
       'simkl-api-key': TrackingConfig.simklClientId,
-      'User-Agent': 'Foxfin/2.7.1',
+      'User-Agent': 'Foxfin/2.7.2',
     },
     queryParameters: {
       'client_id': TrackingConfig.simklClientId,
       'app-name': 'foxfin',
-      'app-version': '2.7.1',
+      'app-version': '2.7.2',
     },
     validateStatus: (_) => true,
   ));

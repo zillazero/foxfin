@@ -11,6 +11,7 @@ import 'package:get_it/get_it.dart';
 import 'package:server_core/server_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../fox_sso/fox_sync_service.dart';
 import 'simkl_tracker.dart';
 import 'tracker.dart';
 import 'tracking_config.dart';
@@ -137,6 +138,8 @@ class TrackingService extends ChangeNotifier {
     } else {
       await _storage.write(key: _key(id, 'token'), value: jsonEncode(token));
     }
+    // Foxfin: share only the link status with the FOX account.
+    unawaited(FoxSyncService.instance.pushLink(id, token != null));
     notifyListeners();
   }
 

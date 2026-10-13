@@ -377,6 +377,11 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
             flutterEngine.dartExecutor.binaryMessenger,
             MediaStoreHelper.CHANNEL,
         ).setMethodCallHandler(MediaStoreHelper(this))
+        // Foxfin: FOX Store SSO + sync
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            FoxSsoChannel.CHANNEL,
+        ).setMethodCallHandler(FoxSsoChannel(this))
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             DeviceStorageHelper.CHANNEL,

@@ -18,7 +18,17 @@
     <uses-feature android:name="android.hardware.microphone" android:required="false"/>
     <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
     <uses-feature android:name="android.software.leanback" android:required="false"/>
+    <!-- Foxfin: FOX SSO (same signing key as the FOX Store) -->
+    <permission
+        android:name="site.pk187.permission.SSO"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="site.pk187.permission.SSO" />
+    <queries>
+        <package android:name="site.pk187.foxstore" />
+        <provider android:authorities="site.pk187.foxstore.sso" />
+    </queries>
     <application
+        android:allowBackup="false"
         android:label="${appName}"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
@@ -53,6 +63,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="moonfin"/>
+            </intent-filter>
+            <!-- Foxfin: "Filme ansehen" from the FOX Store (Jellyfin web URLs of the shop server) -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https" android:host="watch.pk187.site"/>
             </intent-filter>
             <!-- Keep the engine's built-in deep linking off so raw moonfin://
                  URIs only reach DeepLinkService. -->

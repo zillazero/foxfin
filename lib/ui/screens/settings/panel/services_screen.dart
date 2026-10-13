@@ -75,6 +75,14 @@ class _ServicesScreenState extends State<_ServicesScreen> {
               onTap: () =>
                   context.pushSettingsScreen(const SeerrConfigScreen()),
             ),
+            if (FoxSyncService.instance.supported)
+              _TvSettingsListTile(
+                leading: const Icon(Icons.account_circle),
+                title: const Text('FOX-Konto'),
+                subtitle: const Text('Anmeldung über den FOX Store, Sync'),
+                onTap: () =>
+                    context.pushSettingsScreen(const FoxAccountScreen()),
+              ),
             if (TrackingConfig.anyTrackerAvailable)
               _TvSettingsListTile(
                 leading: const Icon(Icons.track_changes),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'integrations/fox_sso/fox_sync_service.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/gestures.dart'
@@ -90,6 +91,8 @@ class _MoonfinAppState extends State<MoonfinApp> {
     super.initState();
     _prefs = GetIt.instance<UserPreferences>();
     _themeController = AppThemeController.fromPreferences(_prefs);
+    // Foxfin: theme sync with the FOX account.
+    FoxSyncService.instance.attachTheme(_themeController, _prefs);
     _lastResolvedLocale = _resolveLocale();
     AppUiIdiomResolver.setOverride(_prefs.get(UserPreferences.interfaceStyle));
     GlassCapability.apply(_prefs.get(UserPreferences.glassQuality));

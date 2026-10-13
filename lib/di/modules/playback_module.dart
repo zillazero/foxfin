@@ -45,6 +45,8 @@ import '../../util/episode_playability.dart';
 import '../../util/season_queue_context.dart';
 import '../../util/audio_track_logic.dart';
 import '../../util/subtitle_track_logic.dart';
+import '../../integrations/fox_sso/fox_sync_player_service.dart';
+import '../../integrations/fox_sso/fox_sync_service.dart';
 import '../../integrations/tracking/tracking_config.dart';
 import '../../integrations/tracking/tracking_player_service.dart';
 import '../../integrations/tracking/tracking_service.dart';
@@ -806,13 +808,25 @@ void setActiveStreamResolver(MediaServerClient client) {
   } else {
     service = localAware;
   }
+  // Foxfin: FOX account progress sync (shop server only, checked inside).
+  final PlayerService foxService = FoxSyncService.instance.supported
+      ? FoxSyncPlayerService(service)
+      : service;
+  unawaited(Future<void>.delayed(const Duration(seconds: 25), () async {
+    try {
+      await FoxSyncService.instance.refreshStatus();
+      if (FoxSyncService.instance.loggedIn) {
+        await FoxSyncService.instance.syncAll();
+      }
+    } catch (_) {}
+  }));
 
   _getIt.registerSingleton<MediaStreamResolver>(resolver);
-  _getIt.registerSingleton<PlayerService>(service);
+  _getIt.registerSingleton<PlayerService>(foxService);
 
   final manager = _getIt<PlaybackManager>();
   manager.setResolver(resolver);
-  manager.setPlayerService(service);
+  manager.setPlayerService(foxService);
 
   _currentActiveResolverClient = client;
 }

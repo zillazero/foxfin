@@ -33,3 +33,13 @@ Changes in Foxfin 2.7.1 (2026-10-13):
   plugin is not installed.
 - API keys are supplied at build time via --dart-define-from-file
   (foxfin-keys.json, never committed). Services without a key are hidden.
+
+Changes in Foxfin 2.7.2 (2026-10-13):
+- FOX account: sign-in through the FOX Store (SSO, signature permission
+  site.pk187.permission.SSO) using the bundled FOX SSO client
+  (android/app/src/main/kotlin/site/pk187/sso, MethodChannel "fox_sso").
+- Sync with the FOX account: theme, favourites and playback progress (shop
+  Jellyfin watch.pk187.site only, server_id 37f9a5dd4a4e49fba3dc493068b2397d;
+  private servers are never uploaded) and Trakt/Simkl link status (no tokens).
+- Accepts "Filme ansehen" links from the FOX Store (https://watch.pk187.site/...).
+- android:allowBackup="false" so tokens never land in backups.
