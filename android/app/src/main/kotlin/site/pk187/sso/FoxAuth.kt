@@ -117,7 +117,7 @@ class FoxAuthClient(
                 throw FoxApiException(0, "network", "Keine Verbindung zum FOX-Server.")
             }
             resp.use {
-                val text = it.body.string()
+                val text = it.body?.string().orEmpty()
                 if (it.isSuccessful) return@withContext it.code to text
                 val obj = runCatching { json.parseToJsonElement(text) as JsonObject }.getOrNull()
                 val code = obj?.get("code")?.jsonPrimitive?.content ?: "http_${it.code}"
