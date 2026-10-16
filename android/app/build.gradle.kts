@@ -83,8 +83,8 @@ android {
         // the server, so an uninstall can lose real game progress. A distinct id
         // installs alongside instead and touches nothing.
         val testIdSuffix = System.getenv("MOONFIN_TEST_ID_SUFFIX").orEmpty()
-        val mobileAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64")
-        val tvAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64")
+        val mobileAbis = listOf("arm64-v8a", "armeabi-v7a") // FOX: x86_64 dropped (emulator-only, ~60 MB)
+        val tvAbis = listOf("arm64-v8a", "armeabi-v7a")
         create("mobile") {
             dimension = "device"
             applicationId = baseAppId
@@ -154,7 +154,10 @@ android {
     packaging {
         jniLibs {
             useLegacyPackaging = true
-            pickFirsts += setOf("**/libc++_shared.so")
+            pickFirsts += setOf("lib/arm64-v8a/libc++_shared.so", "lib/armeabi-v7a/libc++_shared.so")
+            // FOX: ARM only (phones, Android TV, Fire TV). The Flutter plugin's default
+            // abiFilters are unioned with the flavor filters, so strip x86 here.
+            excludes += setOf("lib/x86/**", "lib/x86_64/**")
         }
     }
 
