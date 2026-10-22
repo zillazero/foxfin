@@ -14774,7 +14774,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get setupTourBulletMore => 'Und vieles mehr';
 
   @override
-  String get runSetupAgain => 'Einrichtungsassistent erneut starten';
+  String get runSetupAgain => 'Einrichtung erneut starten';
 
   @override
   String get serverMessages => 'Nachrichten vom Serveradministrator';

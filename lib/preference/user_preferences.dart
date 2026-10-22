@@ -3341,6 +3341,11 @@ class UserPreferences extends ChangeNotifier {
   /// already answered stays answered.
   static const setupWizardVersion = 1;
 
+  /// Foxfin: version of the FOX steps (theme, FOX account, server, Jellyseerr,
+  /// trackers, summary). Device-wide; bumping it asks the FOX steps once more.
+  static final foxSetupVersion = Preference(key: 'foxfin_fox_setup_version', defaultValue: 0);
+  static const foxSetupCurrent = 1;
+
   static final confirmExit = Preference(
     key: 'confirm_exit',
     defaultValue: true,

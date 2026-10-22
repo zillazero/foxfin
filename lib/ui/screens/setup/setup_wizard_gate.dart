@@ -14,7 +14,14 @@ import '../../widgets/navigation_layout.dart';
 /// [navbarStyle] follows it and only shows once Bottom has been picked, see
 /// [visibleSetupSteps]. [tour] is never suppressed, since it asks nothing
 /// that could already have been answered.
-enum SetupStep { navbar, navbarStyle, mediaBar, homeRows, detailStyle, tour }
+enum SetupStep {
+  foxTheme, foxAccount, foxServer,
+  navbar, navbarStyle, mediaBar, homeRows, detailStyle,
+  foxSeerr, foxServices, tour, foxSummary,
+}
+
+const _foxFront = [SetupStep.foxTheme, SetupStep.foxAccount, SetupStep.foxServer];
+const _foxBack = [SetupStep.foxSeerr, SetupStep.foxServices];
 
 /// [steps] as the user sees them, given the navbar position in effect. The
 /// style question only means something for the bottom navbar.
@@ -72,7 +79,11 @@ class SetupWizardGate {
 
   bool _isCompleteFor(String serverKey) =>
       _prefs.get(UserPreferences.setupWizardVersionForServer(serverKey)) >=
-      UserPreferences.setupWizardVersion;
+          UserPreferences.setupWizardVersion &&
+      !_foxPending;
+
+  bool get _foxPending =>
+      _prefs.get(UserPreferences.foxSetupVersion) < UserPreferences.foxSetupCurrent;
 
   bool shouldRun(MediaServerClient client) {
     if (_rerunning) return true;
@@ -106,11 +117,13 @@ class SetupWizardGate {
           if (step != SetupStep.navbarStyle || offerStyle) step,
       ];
     }
+    final fox = _foxPending;
 
     final askNavbar = !_prefs.containsPreference(
       UserPreferences.navbarPosition,
     );
     final steps = <SetupStep>[
+      if (fox) ..._foxFront,
       if (askNavbar) SetupStep.navbar,
       // Tied to the navbar question: a user whose other answers came over
       // from another device would otherwise get a wizard asking only this.
@@ -124,11 +137,12 @@ class SetupWizardGate {
         SetupStep.homeRows,
       if (!_prefs.containsPreference(UserPreferences.detailScreenStyle))
         SetupStep.detailStyle,
+      if (fox) ..._foxBack,
     ];
     // The tour only pays for itself alongside something else. On its own it is
     // a splash screen between the user and the app they came to open.
     if (steps.isEmpty) return const [];
-    return [...steps, SetupStep.tour];
+    return [...steps, SetupStep.tour, if (fox) SetupStep.foxSummary];
   }
 
   /// Waits for the server to hand over this user's settings.
@@ -173,6 +187,7 @@ class SetupWizardGate {
   /// or skipped the lot. Skipping is an answer: it means stop asking.
   Future<void> markComplete(MediaServerClient client) async {
     _rerunning = false;
+    await _prefs.set(UserPreferences.foxSetupVersion, UserPreferences.foxSetupCurrent);
     final serverKey = _serverKeyFor(client);
     if (serverKey == null) return;
     await _prefs.set(

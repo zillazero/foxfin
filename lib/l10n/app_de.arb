@@ -9800,7 +9800,7 @@
     "@setupTourBulletMore": {
         "description": "Closing bullet on the setup screen settings list"
     },
-    "runSetupAgain": "Einrichtungsassistent erneut starten",
+    "runSetupAgain": "Einrichtung erneut starten",
     "@runSetupAgain": {
         "description": "Starts the first-run setup wizard again from settings"
     },

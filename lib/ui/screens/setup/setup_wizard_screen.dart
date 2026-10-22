@@ -19,8 +19,15 @@ import '../../theme/app_theme_controller.dart';
 import '../../widgets/bottom_nav/bottom_nav_destinations.dart';
 import '../../widgets/navigation_layout.dart';
 import '../../widgets/settings/preference_tiles.dart';
+import '../../../integrations/fox_sso/fox_sync_service.dart';
+import '../../../integrations/tracking/tracking_config.dart';
+import '../../../integrations/tracking/tracking_screen.dart';
+import '../../../integrations/tracking/tracking_service.dart';
+import '../settings/seerr_config_screen.dart';
 import 'setup_wizard_gate.dart';
 import 'setup_wizard_previews.dart';
+
+part 'fox_setup_steps.dart';
 
 /// The first thing a new user sees after signing in.
 ///
@@ -213,6 +220,11 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
   }
 
   void _advance() {
+    if (_steps[_index] == SetupStep.foxServer && _client?.userId == null) {
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+          const SnackBar(content: Text('Bitte zuerst an einem Jellyfin-Server anmelden.')));
+      return;
+    }
     if (_index >= _steps.length - 1) {
       unawaited(_finish());
       return;
@@ -410,6 +422,9 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
               ),
           ],
         ),
+        const SizedBox(width: AppSpacing.spaceMd),
+        Text('Schritt ${_index + 1} von ${_steps.length}',
+            style: TextStyle(color: AppColorScheme.onSurface.withValues(alpha: 0.62), fontSize: AppTypography.fontSizeSm)),
         const Spacer(),
         _SetupTextButton(
           label: l10n.setupSkip,
@@ -422,6 +437,12 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
   }
 
   String _questionFor(SetupStep step, AppLocalizations l10n) => switch (step) {
+    SetupStep.foxTheme => 'Willkommen bei Foxfin – wähle dein FOX-Theme',
+    SetupStep.foxAccount => 'FOX-Konto verbinden',
+    SetupStep.foxServer => 'Jellyfin-Server',
+    SetupStep.foxSeerr => 'Jellyseerr verbinden',
+    SetupStep.foxServices => 'Trakt, Simkl & TMDB',
+    SetupStep.foxSummary => 'Zusammenfassung',
     SetupStep.navbar => l10n.setupNavbarQuestion,
     SetupStep.navbarStyle => l10n.setupNavbarStyleQuestion,
     SetupStep.mediaBar => l10n.setupMediaBarQuestion,
@@ -435,6 +456,12 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     SetupStep step,
     AppLocalizations l10n,
   ) => switch (step) {
+    SetupStep.foxTheme => _FoxThemeStep(prefs: _prefs),
+    SetupStep.foxAccount => const _FoxAccountStep(),
+    SetupStep.foxServer => _FoxServerStep(client: _client),
+    SetupStep.foxSeerr => _FoxSeerrStep(prefs: _prefs),
+    SetupStep.foxServices => const _FoxServicesStep(),
+    SetupStep.foxSummary => _FoxSummaryStep(prefs: _prefs, client: _client),
     SetupStep.navbar => _buildNavbarStep(l10n),
     SetupStep.navbarStyle => _buildNavbarStyleStep(l10n),
     SetupStep.mediaBar => _buildMediaBarStep(l10n),
