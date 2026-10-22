@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Sparade teman",
-    "savedThemesDescription": "Det här är teman som laddats ner från Moonfin-pluginet för den aktuella servern. Borttagning tar endast bort den lokala kopian.",
+    "savedThemesDescription": "Det här är teman som laddats ner från Foxfin-pluginet för den aktuella servern. Borttagning tar endast bort den lokala kopian.",
     "savedThemesEmpty": "Inga sparade teman hittades för den här servern.",
     "savedThemesCurrentThemeId": "{themeId} • Används nu",
     "@savedThemesCurrentThemeId": {
@@ -8505,7 +8505,6 @@
     "adminGeneralDisplayLanguage": "Föredraget visningsspråk",
     "offlineBannerTitle": "Du är offline",
     "offlineBannerSubtitle": "Visar dina nedladdningar",
-    "offlineBannerAction": "Nedladdningar",
     "serverUnreachableBannerTitle": "Kan inte nå din server",
     "serverUnreachableBannerSubtitle": "Spelar från nedladdningar tills den är tillbaka",
     "contextMenuHideFromContinueWatching": "Dölj från Fortsätt titta",

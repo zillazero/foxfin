@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ui' as ui;
 
 import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
@@ -39,6 +38,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../playback/appletv_preview_player.dart';
 import '../../../playback/inline_preview_engine.dart';
 import '../../../playback/media3_player_backend.dart';
+import '../../../playback/mpv_client_certificate.dart';
 import '../../../preference/home_section_config.dart';
 import '../../../preference/preference_constants.dart';
 import '../../../preference/user_preferences.dart';
@@ -51,6 +51,7 @@ import '../../widgets/focus/context_menu_sheet.dart';
 import '../../widgets/focus/locked_focus_row.dart';
 import '../../../util/focus/dpad_keys.dart';
 import '../../../util/focus/input_mode_tracker.dart';
+import '../../../util/focus/scroll_utils.dart';
 import '../../../util/artwork_request_size.dart';
 import '../../../util/device_performance.dart';
 import '../../../util/platform_detection.dart';
@@ -299,7 +300,7 @@ class _HomeShellState extends State<_HomeShell>
     final seerrAvailable = _pluginSyncService.seerrAvailable;
     if (seerrAvailable == _lastSeerrAvailable) return;
     _lastSeerrAvailable = seerrAvailable;
-    _viewModel.refresh(preserveExisting: true);
+    _viewModel.refresh(newSectionsOnly: true);
   }
 
   @override
@@ -317,7 +318,10 @@ class _HomeShellState extends State<_HomeShell>
 
   void _onHomeRefreshRequested() {
     if (!mounted) return;
-    _viewModel.refresh(preserveExisting: true);
+    _viewModel.refresh(
+      newMediaBar: homeRefreshBus.consumeNewMediaBar(),
+      newSectionsOnly: homeRefreshBus.consumeNewSectionsOnly(),
+    );
   }
 
   void _onServerReachabilityChanged() {
@@ -697,23 +701,14 @@ class _Backdrop extends StatelessWidget {
     final maxWidth = targetPxWidth < 480
         ? 480
         : (targetPxWidth > 1280 ? 1280 : targetPxWidth);
-    final image = BoundedNetworkImage(
+    return BoundedNetworkImage(
       imageUrl: imageUrl,
       scale: blur > 0 ? 0.3 : 1.0,
       minWidth: 320,
       maxWidth: maxWidth,
+      blurSigma: blur > 0 ? GlassSettings.decorativeSigma(blur) : 0,
       priority: ImageFetchPriority.high,
       errorBuilder: (_, _, _) => const SizedBox.shrink(),
-    );
-    if (blur <= 0) return image;
-    final sigma = GlassSettings.decorativeSigma(blur);
-    return ImageFiltered(
-      imageFilter: ui.ImageFilter.blur(
-        sigmaX: sigma,
-        sigmaY: sigma,
-        tileMode: TileMode.decal,
-      ),
-      child: image,
     );
   }
 }
@@ -813,6 +808,10 @@ class _ContentRowsState extends State<_ContentRows>
   // as soon as the user navigates or scrolls so the delayed realign on return
   // can never drag them back.
   String? _returnScrollRowId;
+  // How far the viewport sat from that row's top when home was left. The
+  // return puts it back there, since the row's resting band isn't always
+  // where a d-pad scroll left it.
+  double? _returnScrollRowShift;
   int? get _activeFocusedRowIndex => _activeFocusedRowNotifier.value;
   set _activeFocusedRowIndex(int? value) {
     if (_activeFocusedRowNotifier.value != value) {
@@ -863,8 +862,11 @@ class _ContentRowsState extends State<_ContentRows>
   bool _forceRevealOnNextRowFocusFromMediaBar = false;
   DateTime? _lastScrollTime;
   DateTime? _lastMouseWheelTime;
-  DateTime? _lastVerticalNavAt;
   bool _verticalNavInFlight = false;
+  // Each vertical step bumps this, and only the latest step clears
+  // _verticalNavInFlight or finishes a media bar handoff. That way a press
+  // during a scroll takes over instead of being dropped.
+  int _verticalNavGeneration = 0;
   bool _windowHasFocus = true;
   bool _holdMediaBarWhileSidebarFocused = false;
 
@@ -948,8 +950,9 @@ class _ContentRowsState extends State<_ContentRows>
   static const _previewOpenTimeout = Duration(seconds: 10);
   static const _pinTransitionDistance = 96.0;
   static const _previewStartDelay = Duration(milliseconds: 1200);
-  static const _focusHandoffDuration = Duration(milliseconds: 220);
-  static const _focusHandoffCurve = Curves.easeInOutCubic;
+  static Duration get _focusHandoffDuration => navigationAnimationDuration;
+  // Ease out so the scroll starts moving as soon as the key is pressed.
+  static const _focusHandoffCurve = Curves.easeOutCubic;
   static const _mediaBarFadeDuration = Duration(milliseconds: 220);
   static const double _activeRowRecalcDistance = 48.0;
 
@@ -958,8 +961,11 @@ class _ContentRowsState extends State<_ContentRows>
     if (!widget.prefs.get(UserPreferences.previewAudioEnabled)) return;
     final player = _previewPlayer;
     if (player == null || _activePreviewKey == null) return;
-    unawaited(player.setVolume(100.0));
+    unawaited(player.setVolume(_previewAudioLevel));
   }
+
+  double get _previewAudioLevel =>
+      widget.prefs.get(UserPreferences.previewVolume).toDouble();
 
   @override
   void didUpdateWidget(covariant _ContentRows oldWidget) {
@@ -1179,7 +1185,9 @@ class _ContentRowsState extends State<_ContentRows>
     final previewAudioEnabled = widget.prefs.get(
       UserPreferences.previewAudioEnabled,
     );
-    final previewVolume = kIsWeb ? 0.0 : (previewAudioEnabled ? 100.0 : 0.0);
+    final previewVolume = kIsWeb
+        ? 0.0
+        : (previewAudioEnabled ? _previewAudioLevel : 0.0);
 
     if (_previewUsingMedia3) {
       unawaited(_media3PreviewBackend!.setVolume(previewVolume));
@@ -1655,19 +1663,16 @@ class _ContentRowsState extends State<_ContentRows>
       unawaited(_media3PreviewBackend!.release());
       _media3PreviewBackend.resetVolumeState();
     }
+    Future<void>? appleTvReleased;
     if (_previewUsingAppleTv) {
       _previewUsingAppleTv = false;
-      unawaited(_appleTvPreviewPlayer?.setVolume(0));
-      unawaited(_appleTvPreviewPlayer?.stop());
+      appleTvReleased = _releaseAppleTvPreviewPlayer();
     }
     if (releaseResources || kIsWeb) {
       _previewPlayer?.dispose();
       _previewPlayer = null;
       _previewController = null;
-      _appleTvPreviewCompletedSub?.cancel();
-      _appleTvPreviewCompletedSub = null;
-      unawaited(_appleTvPreviewPlayer?.dispose());
-      _appleTvPreviewPlayer = null;
+      unawaited(_releaseAppleTvPreviewPlayer());
     }
 
     if (_activePreviewKey != null || _previewReady || _pendingPreviewKey != null) {
@@ -1675,24 +1680,38 @@ class _ContentRowsState extends State<_ContentRows>
       _previewReady = false;
       _pendingPreviewKey = null;
     }
-    _stopPreviewEncoding();
+    _stopPreviewEncoding(after: appleTvReleased);
     _themeMusicService.setExternalAudioActive(false);
+  }
+
+  /// Disposes the player instead of stopping it. A stopped player keeps its
+  /// stream loaded and rewinds to the start, and the requests that follow
+  /// make the server start the transcode again right after it was told to stop.
+  Future<void> _releaseAppleTvPreviewPlayer() {
+    _appleTvPreviewCompletedSub?.cancel();
+    _appleTvPreviewCompletedSub = null;
+    final player = _appleTvPreviewPlayer;
+    _appleTvPreviewPlayer = null;
+    return player?.dispose() ?? Future<void>.value();
   }
 
   /// Tells the server to stop the preview's transcode. Scoped to the
   /// preview's own play session, so a running main playback transcode on the
-  /// same device is left alone.
-  void _stopPreviewEncoding() {
+  /// same device is left alone. Waits for [after], so a player that's still
+  /// shutting down can't ask for the transcode again.
+  void _stopPreviewEncoding({Future<void>? after}) {
     final client = _previewEncodingClient;
     final playSessionId = _previewPlaySessionId;
     _previewEncodingClient = null;
     _previewPlaySessionId = null;
     if (client == null || playSessionId == null) return;
     unawaited(
-      client.playbackApi
-          .stopActiveEncodings(
-            deviceId: client.deviceInfo.id,
-            playSessionId: playSessionId,
+      (after ?? Future<void>.value())
+          .then(
+            (_) => client.playbackApi.stopActiveEncodings(
+              deviceId: client.deviceInfo.id,
+              playSessionId: playSessionId,
+            ),
           )
           .catchError((_) {}),
     );
@@ -1727,7 +1746,7 @@ class _ContentRowsState extends State<_ContentRows>
       _previewUsingMedia3 = false;
     }
     if (_previewUsingAppleTv) {
-      await _appleTvPreviewPlayer?.stop();
+      await _releaseAppleTvPreviewPlayer();
       _previewUsingAppleTv = false;
     }
     _stopPreviewEncoding();
@@ -1767,7 +1786,9 @@ class _ContentRowsState extends State<_ContentRows>
       final previewAudioEnabled = widget.prefs.get(
         UserPreferences.previewAudioEnabled,
       );
-      final previewVolume = kIsWeb ? 0.0 : (previewAudioEnabled ? 100.0 : 0.0);
+      final previewVolume = kIsWeb
+          ? 0.0
+          : (previewAudioEnabled ? _previewAudioLevel : 0.0);
       final useMedia3 = _useMedia3InlinePreview();
       final backend = useMedia3
           ? 'Media3'
@@ -1832,6 +1853,7 @@ class _ContentRowsState extends State<_ContentRows>
           return;
         }
 
+        await applyMpvClientCertificate(player, previewUrl);
         await player.open(Media(previewUrl)).timeout(_previewOpenTimeout);
         if (!_isPreviewRequestActive(requestId, previewKey)) {
           await player.stop();
@@ -1839,7 +1861,7 @@ class _ContentRowsState extends State<_ContentRows>
         }
 
         if (previewAudioEnabled) {
-          await player.setVolume(100.0);
+          await player.setVolume(_previewAudioLevel);
           if (!_isPreviewRequestActive(requestId, previewKey)) {
             await player.stop();
             return;
@@ -2058,7 +2080,8 @@ class _ContentRowsState extends State<_ContentRows>
       'maxHeight': '720',
       'audioBitRate': '96000',
       'audioChannels': '2',
-      'subtitleMethod': 'Drop',
+      // No subtitle index is asked for, so leaving Drop off burns nothing in.
+      if (client.serverType.supportsSubtitleDrop) 'subtitleMethod': 'Drop',
       if (kIsWeb) 'container': 'mp4',
       if (kIsWeb) 'TranscodingContainer': 'mp4',
       // The server copies this into the segment urls it writes and then refuses
@@ -2067,7 +2090,8 @@ class _ContentRowsState extends State<_ContentRows>
       if (startTicks > 0 && !usesHlsPreview) 'StartTimeTicks': '$startTicks',
       'MediaSourceId': ?mediaSourceId,
       'AudioStreamIndex': ?audioIndex?.toString(),
-      if (client.accessToken != null) 'ApiKey': client.accessToken!,
+      if (client.accessToken != null)
+        client.serverType.tokenQueryParam: client.accessToken!,
     };
 
     final normalizedBasePath = baseUri.path.endsWith('/')
@@ -2475,9 +2499,6 @@ class _ContentRowsState extends State<_ContentRows>
   }
 
   Future<void> _moveFocusFromMediaBarToRows() async {
-    if (_verticalNavInFlight || !_allowVerticalNavNow()) {
-      return;
-    }
     if (!_mediaBarFocusNode.hasFocus) {
       return;
     }
@@ -2488,34 +2509,15 @@ class _ContentRowsState extends State<_ContentRows>
     }
     _finishSharedPreview(releaseResources: true);
     _forceRevealOnNextRowFocusFromMediaBar = true;
-    final isBanner = _isBannerMode();
     if (mounted &&
         _mediaBarVisible &&
-        !isBanner &&
+        !_isBannerMode() &&
         !_isAyaMode() &&
         !_isBookshelfMode()) {
       _mediaBarVisible = false;
     }
-    if (!isBanner && _scrollController.hasClients) {
-      final offsetAdjustment = _desktopRowFocusTargetTop();
-      final target = (_mediaBarHeight() - offsetAdjustment).clamp(
-        0.0,
-        _scrollController.position.maxScrollExtent,
-      );
-      if (_scrollController.offset < target) {
-        _verticalNavInFlight = true;
-        try {
-          await _scrollController.animateTo(
-            target,
-            duration: _focusHandoffDuration,
-            curve: _focusHandoffCurve,
-          );
-        } finally {
-          _verticalNavInFlight = false;
-        }
-        if (!mounted) return;
-      }
-    }
+    // Focus moves right away and the row's own scroll clears the bar, so a
+    // second Down during the scroll isn't lost.
     await _focusAdjacentRowItem(widget.viewModel.rows, -1, 1);
   }
 
@@ -2528,12 +2530,10 @@ class _ContentRowsState extends State<_ContentRows>
   }
 
   Future<void> _moveFocusFromRowsToMediaBar() async {
-    if (_verticalNavInFlight) {
-      return;
-    }
     // This path scrolls to the top on its own, so drop the return anchor
     // rather than let the delayed realign pull back down.
     _returnScrollRowId = null;
+    final generation = ++_verticalNavGeneration;
     _verticalNavInFlight = true;
     try {
       _finishSharedPreview(releaseResources: true);
@@ -2554,6 +2554,12 @@ class _ContentRowsState extends State<_ContentRows>
         return;
       }
 
+      // Focus the bar before scrolling, so a quick Down comes back to the
+      // first row instead of skipping ahead from the row that still had focus.
+      if (_mediaBarFocusNode.context != null) {
+        _mediaBarFocusNode.requestFocus();
+      }
+
       if (_scrollController.hasClients && _scrollController.offset > 0) {
         await _scrollController.animateTo(
           0,
@@ -2562,7 +2568,11 @@ class _ContentRowsState extends State<_ContentRows>
         );
       }
 
-      if (!mounted) return;
+      if (!mounted ||
+          generation != _verticalNavGeneration ||
+          _mediaBarFocusNode.hasFocus) {
+        return;
+      }
 
       final navComplete = Completer<void>();
       late final VoidCallback focusListener;
@@ -2585,14 +2595,16 @@ class _ContentRowsState extends State<_ContentRows>
       );
       _mediaBarFocusNode.removeListener(focusListener);
 
-      if (mounted && !_mediaBarFocusNode.hasFocus) {
+      if (mounted &&
+          generation == _verticalNavGeneration &&
+          !_mediaBarFocusNode.hasFocus) {
         if (!_mediaBarVisible) {
           setState(() => _mediaBarVisible = true);
         }
         _requestMediaBarFocus(force: true);
       }
     } finally {
-      _verticalNavInFlight = false;
+      if (generation == _verticalNavGeneration) _verticalNavInFlight = false;
     }
   }
 
@@ -2944,10 +2956,16 @@ class _ContentRowsState extends State<_ContentRows>
     var rowIndex = _returnScrollRowId == null
         ? -1
         : rows.indexWhere((r) => r.id == _returnScrollRowId);
+    final shift = rowIndex >= 0 ? _returnScrollRowShift : null;
     if (rowIndex < 0) rowIndex = _activeFocusedRowIndex ?? -1;
     if (rowIndex < 0) return;
 
-    final target = _restingOffsetForRow(rowIndex);
+    final target = shift != null && rowIndex < _rowTopOffsets.length
+        ? (_rowTopOffsets[rowIndex] + shift).clamp(
+            0.0,
+            _scrollController.position.maxScrollExtent,
+          )
+        : _restingOffsetForRow(rowIndex);
     if (target == null) return;
     if ((target - _scrollController.offset).abs() <= 1.0) return;
     // Jumps rather than animates. These routes transition instantly, so an
@@ -3024,12 +3042,21 @@ class _ContentRowsState extends State<_ContentRows>
   void noteLeavingHome() {
     _returnFocusToMediaBar = _mediaBarFocusNode.hasFocus;
     _returnScrollRowId = null;
+    _returnScrollRowShift = null;
     // The media bar return path scrolls itself back to the top.
     if (_returnFocusToMediaBar) return;
     final rowIndex = _activeFocusedRowIndex;
     final rows = widget.viewModel.rows;
     if (rowIndex == null || rowIndex < 0 || rowIndex >= rows.length) return;
     _returnScrollRowId = rows[rowIndex].id;
+    // A scroll still running hasn't reached the row's resting place, so the
+    // return falls back to that instead.
+    if (_scrollController.hasClients &&
+        !_scrollController.position.isScrollingNotifier.value &&
+        rowIndex < _rowTopOffsets.length) {
+      _returnScrollRowShift =
+          _scrollController.offset - _rowTopOffsets[rowIndex];
+    }
   }
 
   /// Points the navbar to content focus bridge back at this live instance,
@@ -3216,134 +3243,124 @@ class _ContentRowsState extends State<_ContentRows>
     int fromRowIndex,
     int direction,
   ) async {
-    if (_verticalNavInFlight) return;
     // The user is moving rows, so the delayed realign on return must not
     // drag them back to the row they arrived on.
     _returnScrollRowId = null;
-    _verticalNavInFlight = true;
-    final maxRow = rows.length - 1;
     var target = fromRowIndex + direction;
-    try {
-      while (target >= 0 && target <= maxRow) {
-        final candidate = rows[target];
-        final hasItems = _rowHasFocusableItems(candidate);
-        if (hasItems) {
-          final targetState = _rowStateOf(target);
-          if (targetState != null) {
-            targetState.requestFocusAt(0);
-          } else {
-            _requestRowFocusFromMemory(target, preferredIndex: 0);
-          }
-
-          final navComplete = Completer<void>();
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (!mounted) {
-              if (!navComplete.isCompleted) navComplete.complete();
-              return;
-            }
-            final rowCtx = _rowContextOf(target);
-            if (rowCtx == null) {
-              if (!navComplete.isCompleted) navComplete.complete();
-              return;
-            }
-
-            final fullScreenRows =
-                !PlatformDetection.useMobileUi &&
-                widget.prefs.get(UserPreferences.fullScreenRows);
-            if (fullScreenRows && _scrollController.hasClients) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (!mounted || !_scrollController.hasClients) {
-                  if (!navComplete.isCompleted) navComplete.complete();
-                  return;
-                }
-                final innerCtx = _rowContextOf(target);
-                if (innerCtx == null) {
-                  if (!navComplete.isCompleted) navComplete.complete();
-                  return;
-                }
-                final renderObj = innerCtx.findRenderObject();
-                if (renderObj is! RenderBox || !renderObj.hasSize) {
-                  if (!navComplete.isCompleted) navComplete.complete();
-                  return;
-                }
-                _scrollTvRowIntoOverlayBand(target).whenComplete(() {
-                  if (!navComplete.isCompleted) navComplete.complete();
-                });
-              });
-              return;
-            }
-
-
-            if (_scrollController.hasClients) {
-              final rowObj = _rowContainerKey(
-                target,
-              ).currentContext?.findRenderObject();
-              final viewportObj = context.findRenderObject();
-              if (rowObj is RenderBox &&
-                  rowObj.attached &&
-                  viewportObj is RenderBox &&
-                  viewportObj.attached) {
-                final rowTopInViewport = rowObj
-                    .localToGlobal(Offset.zero, ancestor: viewportObj)
-                    .dy;
-                final targetOffset =
-                    (_scrollController.offset +
-                            rowTopInViewport -
-                            _desktopRowFocusTargetTop())
-                        .clamp(0.0, _scrollController.position.maxScrollExtent);
-                _scrollController
-                    .animateTo(
-                      targetOffset,
-                      duration: _focusHandoffDuration,
-                      curve: _focusHandoffCurve,
-                    )
-                    .whenComplete(() {
-                      if (!navComplete.isCompleted) navComplete.complete();
-                    });
-                return;
-              }
-            }
-
-            Scrollable.ensureVisible(
-              rowCtx,
-              alignment: 0.12,
-              duration: _focusHandoffDuration,
-              curve: _focusHandoffCurve,
-            ).whenComplete(() {
-              if (!navComplete.isCompleted) navComplete.complete();
-            });
-          });
-          await navComplete.future.timeout(
-            const Duration(milliseconds: 450),
-            onTimeout: () {},
-          );
-          return;
-        }
-        target += direction;
-      }
-
+    while (target >= 0 &&
+        target < rows.length &&
+        !_rowHasFocusableItems(rows[target])) {
+      target += direction;
+    }
+    if (target < 0 || target >= rows.length) {
       if (direction < 0) {
         if (_isMediaBarIncluded()) {
-          _verticalNavInFlight = false;
           await _moveFocusFromRowsToMediaBar();
         } else {
+          // Focus leaves the rows, so a scroll the last step still has queued
+          // shouldn't pull the list back down.
+          _verticalNavGeneration++;
+          _verticalNavInFlight = false;
           _navigateFromMediaBarToNavbar();
         }
       }
-    } finally {
-      _verticalNavInFlight = false;
+      return;
     }
-  }
+    // A row the list hasn't built yet can't take focus. Returning before a new
+    // step starts leaves the last step's scroll running, and that scroll
+    // builds the row for the next press.
+    final targetState = _rowStateOf(target);
+    if (targetState == null) return;
 
-  bool _allowVerticalNavNow() {
-    final now = DateTime.now();
-    if (_lastVerticalNavAt != null &&
-        now.difference(_lastVerticalNavAt!) <
-            const Duration(milliseconds: 140)) {
-      return false;
+    final generation = ++_verticalNavGeneration;
+    _verticalNavInFlight = true;
+    try {
+      targetState.requestFocusAt(0);
+
+      final navComplete = Completer<void>();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || generation != _verticalNavGeneration) {
+          if (!navComplete.isCompleted) navComplete.complete();
+          return;
+        }
+        final rowCtx = _rowContextOf(target);
+        if (rowCtx == null) {
+          if (!navComplete.isCompleted) navComplete.complete();
+          return;
+        }
+
+        final fullScreenRows =
+            !PlatformDetection.useMobileUi &&
+            widget.prefs.get(UserPreferences.fullScreenRows);
+        if (fullScreenRows && _scrollController.hasClients) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted || !_scrollController.hasClients) {
+              if (!navComplete.isCompleted) navComplete.complete();
+              return;
+            }
+            final innerCtx = _rowContextOf(target);
+            if (innerCtx == null) {
+              if (!navComplete.isCompleted) navComplete.complete();
+              return;
+            }
+            final renderObj = innerCtx.findRenderObject();
+            if (renderObj is! RenderBox || !renderObj.hasSize) {
+              if (!navComplete.isCompleted) navComplete.complete();
+              return;
+            }
+            _scrollTvRowIntoOverlayBand(target).whenComplete(() {
+              if (!navComplete.isCompleted) navComplete.complete();
+            });
+          });
+          return;
+        }
+
+        if (_scrollController.hasClients) {
+          final rowObj = _rowContainerKey(
+            target,
+          ).currentContext?.findRenderObject();
+          final viewportObj = context.findRenderObject();
+          if (rowObj is RenderBox &&
+              rowObj.attached &&
+              viewportObj is RenderBox &&
+              viewportObj.attached) {
+            final rowTopInViewport = rowObj
+                .localToGlobal(Offset.zero, ancestor: viewportObj)
+                .dy;
+            final targetOffset =
+                (_scrollController.offset +
+                        rowTopInViewport -
+                        _desktopRowFocusTargetTop())
+                    .clamp(0.0, _scrollController.position.maxScrollExtent);
+            _scrollController
+                .animateTo(
+                  targetOffset,
+                  duration: _focusHandoffDuration,
+                  curve: _focusHandoffCurve,
+                )
+                .whenComplete(() {
+                  if (!navComplete.isCompleted) navComplete.complete();
+                });
+            return;
+          }
+        }
+
+        Scrollable.ensureVisible(
+          rowCtx,
+          alignment: 0.12,
+          duration: _focusHandoffDuration,
+          curve: _focusHandoffCurve,
+        ).whenComplete(() {
+          if (!navComplete.isCompleted) navComplete.complete();
+        });
+      });
+      await navComplete.future.timeout(
+        const Duration(milliseconds: 450),
+        onTimeout: () {},
+      );
+    } finally {
+      if (generation == _verticalNavGeneration) _verticalNavInFlight = false;
     }
-    _lastVerticalNavAt = now;
-    return true;
   }
 
   bool _onRowVerticalNavigation({
@@ -3352,7 +3369,6 @@ class _ContentRowsState extends State<_ContentRows>
     required bool isUp,
   }) {
     _markUserGesture();
-    if (!_allowVerticalNavNow()) return true;
     if (isUp) {
       if (rowIndex == 0) {
         if (_isMediaBarIncluded()) {
@@ -4154,6 +4170,16 @@ class _ContentRowsState extends State<_ContentRows>
     );
   }
 
+  // Phones pull Home down to refresh it, the same as tapping Home.
+  Widget _pullToRefresh(Widget list) {
+    if (!PlatformDetection.useMobileUi) return list;
+    return RefreshIndicator(
+      edgeOffset: MediaQuery.paddingOf(context).top,
+      onRefresh: () => widget.viewModel.refresh(newMediaBar: true),
+      child: list,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final rows = widget.viewModel.rows;
@@ -4307,8 +4333,12 @@ class _ContentRowsState extends State<_ContentRows>
             canRequestFocus: false,
             skipTraversal: true,
             onKeyEvent: (_, event) => _handleRowsKeyEvent(event),
-            child: ListView.builder(
+            child: _pullToRefresh(ListView.builder(
               controller: _scrollController,
+              // A Home too short to scroll still has to take the pull.
+              physics: PlatformDetection.useMobileUi
+                  ? const AlwaysScrollableScrollPhysics()
+                  : null,
                   padding: EdgeInsets.only(
                     top: listTopPadding,
                     bottom: neededBottomPadding,
@@ -4536,7 +4566,7 @@ class _ContentRowsState extends State<_ContentRows>
                     }
                     return itemWidget;
                   },
-                ),
+                )),
               ),
             ),
         ValueListenableBuilder<bool>(
@@ -5904,8 +5934,29 @@ class _ContentRowsState extends State<_ContentRows>
 
   void _scheduleRowPrefetch() {
     if (!mounted || _isBackgrounded) return;
+    _loadSectionsNearViewport();
     _rowPrefetchDebounce?.cancel();
     _rowPrefetchDebounce = Timer(_rowPrefetchDelay, _runRowPrefetch);
+  }
+
+  /// Loads the deferred sections of the rows from a screen above the viewport
+  /// to two screens below it. Not debounced, so a held key or a fling keeps
+  /// loading ahead instead of waiting for the list to stop.
+  void _loadSectionsNearViewport() {
+    final viewModel = widget.viewModel;
+    if (!viewModel.hasDeferredSections || !_scrollController.hasClients) {
+      return;
+    }
+    final position = _scrollController.position;
+    final from = position.pixels - position.viewportDimension;
+    final to = position.pixels + 2 * position.viewportDimension;
+    final rows = viewModel.rows;
+    final tops = _rowTopOffsets;
+    final extents = _rowExtents;
+    viewModel.loadSectionsNear([
+      for (var i = 0; i < rows.length && i < tops.length; i++)
+        if (tops[i] < to && tops[i] + extents[i] > from) rows[i],
+    ]);
   }
 
   void _runRowPrefetch() {

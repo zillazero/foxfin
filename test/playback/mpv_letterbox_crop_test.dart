@@ -553,6 +553,24 @@ void main() {
       });
     });
 
+    test('a crop fills a 16:9 screen but only fits an ultrawide one', () {
+      fakeAsync((async) {
+        final host = _MpvDetectHost();
+        final cropper = MpvLetterboxCropper(
+          host,
+          supported: true,
+          autoDelay: Duration.zero,
+          detectDuration: Duration.zero,
+        );
+        cropper.setEnabled(true);
+        async.flushMicrotasks();
+        expect(cropper.fillsWindow(width: 1920, height: 1080), isTrue);
+        expect(cropper.fillsWindow(width: 3840, height: 1080), isFalse);
+        cropper.cancel();
+        async.flushMicrotasks();
+      });
+    });
+
     test('nvdec keeps the decoder and downloads frames for cropdetect', () {
       fakeAsync((async) {
         final host = _MpvDetectHost()..hwdecCurrent = 'nvdec';

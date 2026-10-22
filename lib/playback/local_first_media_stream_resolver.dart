@@ -15,12 +15,15 @@ import 'offline_stream_resolver.dart';
 class LocalFirstMediaStreamResolver extends MediaStreamResolver {
   final MediaStreamResolver _inner;
   final OfflineStreamResolver _offline;
+  final Future<void> Function(String itemId)? _restoreSubtitles;
 
   LocalFirstMediaStreamResolver({
     required MediaStreamResolver inner,
     required OfflineStreamResolver offline,
+    Future<void> Function(String itemId)? restoreSubtitles,
   }) : _inner = inner,
-       _offline = offline;
+       _offline = offline,
+       _restoreSubtitles = restoreSubtitles;
 
   @override
   Future<StreamResolutionResult> resolve(
@@ -70,6 +73,7 @@ class LocalFirstMediaStreamResolver extends MediaStreamResolver {
   ) async {
     try {
       final itemId = MediaStreamResolver.extractItemId(mediaItem);
+      await _restoreMissingSubtitles(itemId);
       final local = await _offline.resolve(itemId);
       if (local == null) return null;
 
@@ -130,6 +134,17 @@ class LocalFirstMediaStreamResolver extends MediaStreamResolver {
     } catch (_) {
       return null;
     }
+  }
+
+  // Fills in subtitle files an earlier download missed. The wait is capped so
+  // a slow server extraction finishes in the background instead of holding
+  // up playback.
+  Future<void> _restoreMissingSubtitles(String itemId) async {
+    final restore = _restoreSubtitles;
+    if (restore == null || shouldUseOfflineCatalog()) return;
+    try {
+      await restore(itemId).timeout(const Duration(seconds: 5));
+    } catch (_) {}
   }
 
   String? _containerOf(String path) {

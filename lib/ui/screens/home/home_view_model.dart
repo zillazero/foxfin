@@ -54,7 +54,7 @@ class HomeViewModel extends ChangeNotifier {
   final MediaBarViewModel _mediaBarViewModel;
   final MultiServerRepository _multiServerRepo;
   final String _ownerUserId;
-  final HomeRowCacheStore _cacheStore = HomeRowCacheStore();
+  final HomeRowCacheStore _cacheStore;
   final Set<String> _inFlightPagingRowIds = {};
   final Map<String, int> _rowOffsets = {};
   final Set<String> _rowsPagedThisLoad = {};
@@ -68,7 +68,18 @@ class HomeViewModel extends ChangeNotifier {
   final TvChannelsService _tvChannels = TvChannelsService();
 
   List<HomeRow> _rows = [];
-  List<HomeRow> get rows => _rows;
+  List<HomeRow> get rows => _emptySectionIds.isEmpty
+      ? _rows
+      : _rows.where((row) => !_isEmptySectionPlaceholder(row)).toList();
+
+  /// Placeholder ids of sections expected to come back empty, because their
+  /// last load did or a cold start found nothing cached for them. Their
+  /// placeholders still hold their place in the order, but aren't shown, so
+  /// an empty section doesn't flash its title on every load.
+  final Set<String> _emptySectionIds = {};
+
+  bool _isEmptySectionPlaceholder(HomeRow row) =>
+      row.isLoading && row.items.isEmpty && _emptySectionIds.contains(row.id);
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -77,6 +88,19 @@ class HomeViewModel extends ChangeNotifier {
   bool _reloadRequestedWhileLoading = false;
   bool _pendingReloadPreserveExisting = true;
   bool _pendingReloadForceRefresh = false;
+  bool _pendingReloadNewSectionsOnly = true;
+
+  /// How many sections from the top load with Home. The single row sections
+  /// below them, such as collections, genres and playlists, wait in
+  /// [_deferredSections] until Home scrolls near their row, so a Home with
+  /// hundreds of collections doesn't fetch them all up front.
+  static const _eagerSectionCount = 8;
+
+  /// Sections waiting to load, keyed by the id their row has on Home.
+  final Map<String, HomeSectionConfig> _deferredSections = {};
+
+  /// Loads a section the way the last [load] did.
+  Future<void> Function(HomeSectionConfig cfg)? _loadDeferredSection;
 
   /// The last seasonal answer, kept for the session so every Home reload doesn't
   /// ask Moonbase again. The daily refresh clears it, which is when the server's
@@ -111,22 +135,42 @@ class HomeViewModel extends ChangeNotifier {
   /// was opened at, which is often not how users reach the server, so a LAN
   /// address against a public domain never matches however it is spelled. With
   /// one server there is nowhere else the row could belong, so keep it anyway.
+  /// A collection picked from another signed-in server shows only while
+  /// multi-server libraries are on.
   bool _belongsToThisServer(HomeSectionConfig cfg) {
     if (cfg.isBuiltin || cfg.pluginSource == HomeSectionPluginSource.custom) {
       return true;
     }
+    if (_otherServerRows.containsKey(cfg.stableId)) return _multiServerEnabled;
     if (!_multiServerEnabled) return true;
     return _isThisServer(cfg.serverId);
   }
 
-  /// The address a dynamic row loads from. A row carrying an address this
-  /// client can't match falls back to the active server rather than reaching
-  /// for one it may not be able to see.
-  String _sectionServerId(HomeSectionConfig cfg) {
-    final stored = cfg.serverId;
-    if (stored == null || stored.isEmpty) return _serverId;
-    if (!_multiServerEnabled || _isThisServer(stored)) return _serverId;
-    return stored;
+  /// The signed-in server each collection row picked from another server
+  /// loads and pages from, by row id.
+  Map<String, ServerUserSession> _otherServerRows = const {};
+
+  Future<Map<String, ServerUserSession>> _findOtherServerRows(
+    List<HomeSectionConfig> configs,
+  ) async {
+    final foreign = configs.where(
+      (c) =>
+          c.pluginSource == HomeSectionPluginSource.collections &&
+          !_isThisServer(c.serverId),
+    );
+    if (foreign.isEmpty) return const {};
+    try {
+      final sessions = {
+        for (final s in await _multiServerRepo.getLoggedInServers())
+          normalizeServerBaseUrl(s.client.baseUrl): s,
+      };
+      return {
+        for (final c in foreign)
+          c.stableId: ?sessions[normalizeServerBaseUrl(c.serverId ?? '')],
+      };
+    } catch (_) {
+      return const {};
+    }
   }
 
   String _homeCacheKey() {
@@ -189,6 +233,7 @@ class HomeViewModel extends ChangeNotifier {
     if (!c.isBuiltin) return false;
     return switch (c.type) {
       HomeSectionType.liveTv ||
+      HomeSectionType.onNow ||
       HomeSectionType.activeRecordings ||
       HomeSectionType.playlists ||
       HomeSectionType.audioPlaylists ||
@@ -276,11 +321,13 @@ class HomeViewModel extends ChangeNotifier {
     required MediaServerClient client,
     required MediaBarViewModel mediaBarViewModel,
     required MultiServerRepository multiServerRepo,
+    HomeRowCacheStore? cacheStore,
   }) : _dataSource = dataSource,
        _prefs = prefs,
        _client = client,
        _mediaBarViewModel = mediaBarViewModel,
        _multiServerRepo = multiServerRepo,
+       _cacheStore = cacheStore ?? HomeRowCacheStore(),
        _ownerUserId = client.userId ?? '';
 
   /// Whether a section whose load threw keeps what is already on screen.
@@ -319,7 +366,14 @@ class HomeViewModel extends ChangeNotifier {
     required bool couldReachServer,
   }) => canReachServer && !couldReachServer;
 
-  Future<void> load({bool preserveExisting = false, bool forceRefresh = false}) async {
+  /// [newSectionsOnly] loads just the sections that have no rows yet, such as
+  /// the Seerr rows that show up once Seerr signs in, and leaves the others
+  /// as they are.
+  Future<void> load({
+    bool preserveExisting = false,
+    bool forceRefresh = false,
+    bool newSectionsOnly = false,
+  }) async {
     _checkAndTriggerDailyExternalRowsRefresh();
     if (_isLoading) {
       _reloadRequestedWhileLoading = true;
@@ -327,14 +381,20 @@ class HomeViewModel extends ChangeNotifier {
           _pendingReloadPreserveExisting && preserveExisting;
       _pendingReloadForceRefresh =
           _pendingReloadForceRefresh || forceRefresh;
+      _pendingReloadNewSectionsOnly =
+          _pendingReloadNewSectionsOnly && newSectionsOnly;
       return;
     }
+    newSectionsOnly = newSectionsOnly && _rows.isNotEmpty;
+    if (newSectionsOnly) preserveExisting = true;
     _isLoading = true;
-    _mediaBarViewModel.load(force: forceRefresh);
+    if (!newSectionsOnly) {
+      _mediaBarViewModel.load(force: forceRefresh);
+      _rowOffsets.clear();
+      _multiServerRepo.clearOffsets();
+      _rowsPagedThisLoad.clear();
+    }
     notifyListeners();
-    _rowOffsets.clear();
-    _multiServerRepo.clearOffsets();
-    _rowsPagedThisLoad.clear();
     try {
       var hydratedFromCache = false;
       if (_rows.isEmpty) {
@@ -367,6 +427,7 @@ class HomeViewModel extends ChangeNotifier {
               ),
             ]
           : activeConfigs;
+      _otherServerRows = await _findOtherServerRows(configs);
       final showFavoritesRows = _prefs.get(
         UserPreferences.displayFavoritesRows,
       );
@@ -482,6 +543,23 @@ class HomeViewModel extends ChangeNotifier {
             (c) => c.isBuiltin && c.type == HomeSectionType.resume,
           );
 
+      final List<HomeSectionConfig> sectionsToLoad;
+      if (newSectionsOnly) {
+        sectionsToLoad = nonResumeEffectiveConfigs
+            .where((c) => !_rows.any((r) => _rowBelongsToConfig(r, c)))
+            .toList();
+      } else {
+        _deferredSections.clear();
+        sectionsToLoad = [];
+        for (final (index, cfg) in nonResumeEffectiveConfigs.indexed) {
+          if (index >= _eagerSectionCount && _isDeferrable(cfg)) {
+            _deferredSections[cfg.stableId] = cfg;
+          } else {
+            sectionsToLoad.add(cfg);
+          }
+        }
+      }
+
       if ((!preserveExisting && !hydratedFromCache) || _rows.isEmpty) {
         final placeholders = <HomeRow>[];
         for (final cfg in effectiveConfigs) {
@@ -493,7 +571,10 @@ class HomeViewModel extends ChangeNotifier {
         _rows = placeholders;
         notifyListeners();
       } else {
-        final reconciledRows = _reconcilePreservedRows(effectiveConfigs);
+        final reconciledRows = _reconcilePreservedRows(
+          effectiveConfigs,
+          hydratedFromCache: hydratedFromCache,
+        );
         if (!listEquals(_rows, reconciledRows)) {
           _rows = reconciledRows;
           notifyListeners();
@@ -502,9 +583,11 @@ class HomeViewModel extends ChangeNotifier {
 
       Future<void> loadConfigItem(HomeSectionConfig cfg) async {
         List<HomeRow> sectionRows;
+        var failed = false;
         try {
           sectionRows = await _loadConfig(cfg, forceRefresh: forceRefresh);
         } catch (e) {
+          failed = true;
           debugPrint('[Home] Failed to load section $cfg: $e');
           final hasVisibleRow = _rowsForConfig(
             _rows,
@@ -545,6 +628,13 @@ class HomeViewModel extends ChangeNotifier {
             })
             .toList();
         final placeholder = _placeholderForConfig(cfg);
+        if (placeholder != null && !failed) {
+          if (loadedRows.isEmpty) {
+            _emptySectionIds.add(placeholder.id);
+          } else {
+            _emptySectionIds.remove(placeholder.id);
+          }
+        }
         final loadedIds = loadedRows.map((r) => r.id).toSet();
         // Find the row that immediately follows this section's placeholder /
         // existing rows, so we can re-anchor after removals.
@@ -599,8 +689,9 @@ class HomeViewModel extends ChangeNotifier {
         unawaited(_loadResumeAndNextUpInBackground());
       }
 
+      _loadDeferredSection = loadConfigItem;
       await mapBounded<HomeSectionConfig, void>(
-        nonResumeEffectiveConfigs,
+        sectionsToLoad,
         3,
         (cfg) => loadConfigItem(cfg),
       );
@@ -615,13 +706,41 @@ class HomeViewModel extends ChangeNotifier {
       if (_reloadRequestedWhileLoading) {
         final nextPreserveExisting = _pendingReloadPreserveExisting;
         final nextForceRefresh = _pendingReloadForceRefresh;
+        final nextNewSectionsOnly = _pendingReloadNewSectionsOnly;
         _reloadRequestedWhileLoading = false;
         _pendingReloadPreserveExisting = true;
         _pendingReloadForceRefresh = false;
-        await load(preserveExisting: nextPreserveExisting, forceRefresh: nextForceRefresh);
+        _pendingReloadNewSectionsOnly = true;
+        await load(
+          preserveExisting: nextPreserveExisting,
+          forceRefresh: nextForceRefresh,
+          newSectionsOnly: nextNewSectionsOnly,
+        );
       }
     }
   }
+
+  bool get hasDeferredSections => _deferredSections.isNotEmpty;
+
+  /// Loads the deferred sections behind [nearRows], the rows on or near the
+  /// screen.
+  void loadSectionsNear(Iterable<HomeRow> nearRows) {
+    final loadSection = _loadDeferredSection;
+    if (loadSection == null) return;
+    final due = [
+      for (final row in nearRows) ?_deferredSections.remove(row.id),
+    ];
+    if (due.isEmpty) return;
+    unawaited(
+      mapBounded<HomeSectionConfig, void>(due, 3, loadSection)
+          .then((_) => _saveRowCache()),
+    );
+  }
+
+  /// Single row sections, which a layout can hold hundreds of, and whose row
+  /// takes the section's id.
+  static bool _isDeferrable(HomeSectionConfig cfg) =>
+      cfg.isPluginDynamic && (cfg.pluginSection?.isNotEmpty ?? false);
 
   /// Repaints the watched ticks on the rows already built, without refetching
   /// them. The home screen drives this so the listener lives and dies with the
@@ -640,8 +759,9 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   List<HomeRow> _reconcilePreservedRows(
-    List<HomeSectionConfig> effectiveConfigs,
-  ) {
+    List<HomeSectionConfig> effectiveConfigs, {
+    bool hydratedFromCache = false,
+  }) {
     final currentRows = _rows;
     final reconciledRows = <HomeRow>[];
 
@@ -654,6 +774,14 @@ class HomeViewModel extends ChangeNotifier {
 
       final placeholder = _placeholderForConfig(cfg);
       if (placeholder != null) {
+        // The cache holds every section that had something to show, apart
+        // from rows too short lived to keep. A deferred section may never
+        // have loaded, and hiding it would keep Home from scrolling near it.
+        if (hydratedFromCache &&
+            !HomeRowCacheStore.isTimeBound(placeholder.rowType) &&
+            !_deferredSections.containsKey(cfg.stableId)) {
+          _emptySectionIds.add(placeholder.id);
+        }
         reconciledRows.add(placeholder);
       }
     }
@@ -764,8 +892,10 @@ class HomeViewModel extends ChangeNotifier {
         return row.rowType == HomeRowType.audioPlaylists;
       case HomeSectionType.liveTv:
         return row.rowType == HomeRowType.liveTv ||
-            row.rowType == HomeRowType.liveTvOnNow ||
+            (row.rowType == HomeRowType.liveTvOnNow && row.id != 'onNow') ||
             row.rowType == HomeRowType.liveTvFavorites;
+      case HomeSectionType.onNow:
+        return row.rowType == HomeRowType.liveTvOnNow && row.id == 'onNow';
       case HomeSectionType.activeRecordings:
         return row.rowType == HomeRowType.activeRecordings;
       case HomeSectionType.seerrShortcuts:
@@ -856,8 +986,16 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> refresh({bool preserveExisting = true}) async {
-    await load(preserveExisting: preserveExisting);
+  Future<void> refresh({
+    bool preserveExisting = true,
+    bool newMediaBar = false,
+    bool newSectionsOnly = false,
+  }) async {
+    if (newMediaBar) unawaited(_mediaBarViewModel.load(force: true));
+    await load(
+      preserveExisting: preserveExisting,
+      newSectionsOnly: newSectionsOnly,
+    );
   }
 
   /// Lightweight refresh for returning to home from a pushed route. Viewing or
@@ -930,15 +1068,22 @@ class HomeViewModel extends ChangeNotifier {
     final items = _filterEmptyElements(filter(fresh.items));
     _rows = List.of(_rows);
     if (items.isEmpty) {
+      _emptySectionIds.add(rowId);
       _rows.removeAt(index);
     } else {
+      _emptySectionIds.remove(rowId);
       _rows[index] = _rows[index].copyWith(items: items, isLoading: false);
     }
     notifyListeners();
   }
 
   Future<void> loadMoreForRow(int rowIndex) async {
-    if (rowIndex < 0 || rowIndex >= _rows.length) return;
+    final displayedRows = rows;
+    if (rowIndex < 0 || rowIndex >= displayedRows.length) return;
+    // Placeholders of sections expected to be empty are hidden, so the index
+    // on screen can differ from the one the paging loaders use.
+    rowIndex = _rows.indexWhere((row) => row.id == displayedRows[rowIndex].id);
+    if (rowIndex < 0) return;
     final row = _rows[rowIndex];
     if (!row.hasMore || _inFlightPagingRowIds.contains(row.id)) return;
 
@@ -970,9 +1115,10 @@ class HomeViewModel extends ChangeNotifier {
       if (_multiServerEnabled && !row.id.startsWith('pluginDynamic:')) {
         result = await _multiServerRepo.loadMore(row: row);
       } else {
-        result = await _dataSource.loadMore(
+        final other = _otherServerRows[row.id];
+        result = await _dataSourceFor(other).loadMore(
           row: row,
-          serverId: _serverId,
+          serverId: other?.server.id ?? _serverId,
           offset: currentOffset,
         );
       }
@@ -982,16 +1128,22 @@ class HomeViewModel extends ChangeNotifier {
       final newTotalCount = filteredItems.length <= row.items.length
           ? filteredItems.length
           : (result.$2 - (result.$1.length - filteredItems.length));
-      _rows = List.of(_rows);
-      _rows[rowIndex] = row.copyWith(
-        items: filteredItems,
-        totalCount: newTotalCount,
+      _replaceRowById(
+        row.copyWith(items: filteredItems, totalCount: newTotalCount),
       );
-      notifyListeners();
     } catch (_) {
     } finally {
       _inFlightPagingRowIds.remove(row.id);
     }
+  }
+
+  /// Puts a paged [row] back wherever its id sits now. A section that
+  /// finished loading during the page request can have moved it.
+  void _replaceRowById(HomeRow row) {
+    final index = _rows.indexWhere((r) => r.id == row.id);
+    if (index < 0) return;
+    _rows = List.of(_rows)..[index] = row;
+    notifyListeners();
   }
 
   Future<List<HomeRow>> _loadConfig(HomeSectionConfig cfg, {bool forceRefresh = false}) async {
@@ -999,11 +1151,12 @@ class HomeViewModel extends ChangeNotifier {
     if (cfg.isPluginDynamic) {
       final section = cfg.pluginSection;
       if (section == null || section.isEmpty) return const [];
-      final row = await _dataSource.loadDynamicSection(
+      final other = _otherServerRows[cfg.stableId];
+      final row = await _dataSourceFor(other).loadDynamicSection(
         rowId: cfg.stableId,
         section: section,
         title: cfg.pluginDisplayText ?? section,
-        serverId: _sectionServerId(cfg),
+        serverId: other?.server.id ?? _serverId,
         additionalData: cfg.pluginAdditionalData,
         pluginSource: cfg.pluginSource,
         forceRefresh: forceRefresh,
@@ -1012,6 +1165,17 @@ class HomeViewModel extends ChangeNotifier {
     }
     return _loadSection(cfg.type, forceRefresh: forceRefresh);
   }
+
+  /// Kept per server so a collection the user can't open isn't asked for
+  /// again on every load.
+  final Map<String, RowDataSource> _otherServerSources = {};
+
+  RowDataSource _dataSourceFor(ServerUserSession? other) => other == null
+      ? _dataSource
+      : _otherServerSources.putIfAbsent(
+          other.server.id,
+          () => RowDataSource(other.client),
+        );
 
   HomeRow? _placeholderForConfig(HomeSectionConfig cfg) {
     if (cfg.isPluginDynamic) {
@@ -1050,6 +1214,8 @@ class HomeViewModel extends ChangeNotifier {
         return const {'nextUp'};
       case HomeSectionType.liveTv:
         return const {'liveTv'};
+      case HomeSectionType.onNow:
+        return const {'onNow'};
       case HomeSectionType.libraryTilesSmall:
         return const {'libraryTiles'};
       case HomeSectionType.libraryButtons:
@@ -1405,12 +1571,18 @@ class HomeViewModel extends ChangeNotifier {
           ),
         ];
         try {
-          final onNow = await _dataSource.loadOnNow(_serverId);
-          if (onNow.items.isNotEmpty) rows.add(onNow);
+          // The standalone On Now section shows this row in its own spot.
+          if (!_prefs.activeHomeSections.contains(HomeSectionType.onNow)) {
+            final onNow = await _dataSource.loadOnNow(_serverId);
+            if (onNow.items.isNotEmpty) rows.add(onNow);
+          }
           final favorites = await _dataSource.loadFavoritesChannels(_serverId);
           if (favorites.items.isNotEmpty) rows.add(favorites);
         } catch (_) {}
         return rows;
+      case HomeSectionType.onNow:
+        if (!await _dataSource.hasLiveTvChannels()) return [];
+        return [(await _dataSource.loadOnNow(_serverId)).copyWith(id: 'onNow')];
       case HomeSectionType.activeRecordings:
         return [
           HomeRow(
@@ -2074,6 +2246,13 @@ class HomeViewModel extends ChangeNotifier {
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
+      case HomeSectionType.onNow:
+        return HomeRow(
+          id: 'onNow',
+          title: l10n.onNow,
+          rowType: HomeRowType.liveTvOnNow,
+          isLoading: true,
+        );
       case HomeSectionType.liveTv:
       case HomeSectionType.activeRecordings:
       case HomeSectionType.mediaBar:
@@ -2267,8 +2446,10 @@ class HomeViewModel extends ChangeNotifier {
     if (resumeIndex < 0) return;
     _rows = List.of(_rows);
     if (mergedItems.isEmpty) {
+      _emptySectionIds.add('resume');
       _rows.removeAt(resumeIndex);
     } else {
+      _emptySectionIds.remove('resume');
       _rows[resumeIndex] = _rows[resumeIndex].copyWith(
         items: mergedItems,
         isLoading: false,
@@ -2378,7 +2559,6 @@ class HomeViewModel extends ChangeNotifier {
     final page = await repo.getSliderPage(slider, page: nextPage);
     _seerrRowPages[row.id] = nextPage;
     _appendSeerrRowItems(
-      rowIndex,
       row,
       page.results,
       null,
@@ -2575,12 +2755,11 @@ class HomeViewModel extends ChangeNotifier {
     // empty a whole page, and holding the pointer back would refetch that same
     // page on every scroll instead of moving on.
     _seerrRowPages[row.id] = nextPage;
-    _appendSeerrRowItems(rowIndex, row, rawItems, type, exhausted: exhausted);
+    _appendSeerrRowItems(row, rawItems, type, exhausted: exhausted);
   }
 
   /// Adds a fetched page to a Seerr row, skipping what it already shows.
   void _appendSeerrRowItems(
-    int rowIndex,
     HomeRow row,
     List<SeerrDiscoverItem> rawItems,
     SeerrRowType? type, {
@@ -2596,12 +2775,12 @@ class HomeViewModel extends ChangeNotifier {
       ).where((item) => !existingIds.contains(item.id)),
     ];
 
-    _rows = List.of(_rows);
-    _rows[rowIndex] = row.copyWith(
-      items: items,
-      totalCount: exhausted ? items.length : items.length + 1,
+    _replaceRowById(
+      row.copyWith(
+        items: items,
+        totalCount: exhausted ? items.length : items.length + 1,
+      ),
     );
-    notifyListeners();
   }
 
   /// Row ids are the prefix followed by the type's serialized name, so deriving

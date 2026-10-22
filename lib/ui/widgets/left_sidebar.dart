@@ -23,6 +23,7 @@ import '../../l10n/app_localizations.dart';
 import '../../util/audio_artwork_url.dart';
 import '../../util/clock_format.dart';
 import '../../util/focus/dpad_keys.dart';
+import '../../util/focus/input_mode_tracker.dart';
 import '../../util/game_library.dart';
 import '../../util/live_tv_library.dart';
 import '../../util/overlay_color_palette.dart';
@@ -106,7 +107,10 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
   bool _showLabels = false;
   bool _librariesExpanded = false;
   bool _canExpandViaFocus = false;
-  bool _skipExpandOnNextFocusFromNavigation = false;
+  // Set when a rail item opens a screen.
+  bool _openedRouteFromRail = false;
+  // Armed on Back; the next focus change uses or clears it.
+  bool _awaitingPopFocusRestore = false;
   // Tracked per instance instead of reading the shared isFocusedNotifier,
   // where a stale value from another route's sidebar would break focus-gain
   // detection and leave focus stuck in a collapsed rail.
@@ -178,11 +182,9 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
       _armTvFocusGate();
       _sidebarFocus.addListener(_onSidebarFocusNodeChanged);
     }
-    if (PlatformDetection.isTV) {
-      _profileFocusNode.addListener(() {
-        if (mounted) setState(() {});
-      });
-    }
+    _profileFocusNode.addListener(() {
+      if (mounted) setState(() {});
+    });
   }
 
   ModalRoute<dynamic>? _observedRoute;
@@ -206,6 +208,8 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
     // that it targets this live one.
     NavigationLayout.focusNavbarNotifier.value = _focusNavbarCallback;
     NavigationLayout.focusNavbarAvatarNotifier.value = _focusAvatarCallback;
+    _awaitingPopFocusRestore = _openedRouteFromRail;
+    _openedRouteFromRail = false;
   }
 
   @override
@@ -407,8 +411,8 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
   void _onSidebarFocusNodeChanged() {
     final hasFocus = _sidebarFocus.hasFocus;
     if (hasFocus && !_sidebarHadFocus) {
-      if (_skipExpandOnNextFocusFromNavigation) {
-        _skipExpandOnNextFocusFromNavigation = false;
+      if (_awaitingPopFocusRestore) {
+        _awaitingPopFocusRestore = false;
         _focusHomeTimer?.cancel();
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
@@ -440,7 +444,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
 
   void _markNavigationAwayFromSidebar() {
     if (PlatformDetection.isTV || (PlatformDetection.isDesktop || (PlatformDetection.isWeb && !PlatformDetection.useMobileUi))) {
-      _skipExpandOnNextFocusFromNavigation = true;
+      _openedRouteFromRail = true;
     }
   }
 
@@ -497,12 +501,24 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
           }
         }
       }
-      if (PlatformDetection.isTV &&
-          event.logicalKey == LogicalKeyboardKey.arrowUp &&
+      if (event.logicalKey == LogicalKeyboardKey.arrowUp &&
           _homeFocusNode.hasFocus) {
         if (_profileFocusNode.context != null) {
           _profileFocusNode.requestFocus();
         }
+        return KeyEventResult.handled;
+      }
+    }
+    // A browser maps Up and Down to scrolling, not focus traversal, so move
+    // focus here to keep the menu usable from a keyboard.
+    if (!PlatformDetection.isTV && event.isActionable) {
+      final primary = FocusManager.instance.primaryFocus;
+      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+        primary?.focusInDirection(TraversalDirection.up);
+        return KeyEventResult.handled;
+      }
+      if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+        primary?.focusInDirection(TraversalDirection.down);
         return KeyEventResult.handled;
       }
     }
@@ -519,6 +535,8 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
   }
 
   void _trackPreviousFocus() {
+    // Runs after the rail's listener, so a restore into it is already handled.
+    _awaitingPopFocusRestore = false;
     final primary = FocusManager.instance.primaryFocus;
     if (primary == null || _sidebarFocus.hasFocus) return;
     _previousFocus = primary;
@@ -549,7 +567,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
       return false;
     }
     final context = node.context;
-    if (context == null) {
+    if (context == null || !context.mounted) {
       return false;
     }
     final renderObject = context.findRenderObject();
@@ -882,7 +900,6 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
           _onNavigate();
           await showServerMessagesDialog(context);
           if (!mounted) return;
-          _markNavigationAwayFromSidebar();
           _serverMessagesFocusNode.requestFocus();
         },
       ),
@@ -907,7 +924,6 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
           _onNavigate();
           await FriendsNavSlot.open(context);
           if (!mounted) return;
-          _markNavigationAwayFromSidebar();
           _friendsFocusNode.requestFocus();
         },
       ),
@@ -974,7 +990,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                   onPressed: () {
                     _onNavigate();
                     if (_isActive(Destinations.home)) {
-                      homeRefreshBus.request();
+                      homeRefreshBus.request(newMediaBar: true);
                       _exitSidebarToContent();
                       return;
                     }
@@ -1223,7 +1239,6 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                       const SettingsSidePanel(),
                     );
                     if (!mounted) return;
-                    _markNavigationAwayFromSidebar();
                     _settingsFocusNode.requestFocus();
                   },
                 ),
@@ -1314,7 +1329,12 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
 
     final tvCompact = PlatformDetection.isTV && !_showLabels;
     final innerPad = tvCompact ? 0.0 : 6.0;
-    final isFocused = _profileFocusNode.hasFocus;
+    final isFocused = InputModeTracker.showFocusVisuals(
+      context,
+      _profileFocusNode.hasFocus,
+    );
+    final tvFocused = PlatformDetection.isTV && isFocused;
+    final focusColor = Color(_prefs.get(UserPreferences.focusColor).colorValue);
 
     final avatar = Container(
       width: 40,
@@ -1356,8 +1376,10 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
       duration: const Duration(milliseconds: 150),
       padding: EdgeInsets.all(innerPad),
       decoration: BoxDecoration(
-        color: (PlatformDetection.isTV && isFocused && _showLabels)
+        color: (tvFocused && _showLabels)
             ? Colors.white
+            : (isFocused && !tvFocused)
+            ? focusColor.withValues(alpha: 0.12)
             : Colors.transparent,
         borderRadius: AppRadius.circular(24),
       ),
@@ -1370,8 +1392,10 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
               child: Text(
                 user?.name ?? '',
                 style: TextStyle(
-                  color: (PlatformDetection.isTV && isFocused)
+                  color: tvFocused
                       ? Colors.black
+                      : isFocused
+                      ? focusColor
                       : Colors.white.withValues(alpha: 0.9),
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -1386,39 +1410,30 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
-      child: PlatformDetection.isTV
-          ? Focus(
-              focusNode: _profileFocusNode,
-              onKeyEvent: (_, event) {
-                if (event is KeyDownEvent) {
-                  if (event.logicalKey == LogicalKeyboardKey.select ||
-                      event.logicalKey == LogicalKeyboardKey.enter) {
-                    _onNavigate();
-                    showUserMenu(context);
-                    return KeyEventResult.handled;
-                  }
-                  if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-                    _homeFocusNode.requestFocus();
-                    return KeyEventResult.handled;
-                  }
-                }
-                return KeyEventResult.ignored;
-              },
-              child: GestureDetector(
-                onTap: () {
-                  _onNavigate();
-                  showUserMenu(context);
-                },
-                child: content,
-              ),
-            )
-          : GestureDetector(
-              onTap: () {
-                _onNavigate();
-                showUserMenu(context);
-              },
-              child: content,
-            ),
+      child: Focus(
+        focusNode: _profileFocusNode,
+        onKeyEvent: (_, event) {
+          if (event is KeyDownEvent) {
+            if (isActivateKey(event)) {
+              _onNavigate();
+              showUserMenu(context);
+              return KeyEventResult.handled;
+            }
+            if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+              _homeFocusNode.requestFocus();
+              return KeyEventResult.handled;
+            }
+          }
+          return KeyEventResult.ignored;
+        },
+        child: GestureDetector(
+          onTap: () {
+            _onNavigate();
+            showUserMenu(context);
+          },
+          child: content,
+        ),
+      ),
     );
   }
 }
@@ -1500,7 +1515,7 @@ class _SidebarItemState extends State<_SidebarItem> {
     final useBaseForFocus = widget.baseColor != null;
     final highlighted =
         (desktopSidebar && _isHovered) ||
-        (PlatformDetection.isTV && _isFocused);
+        InputModeTracker.showFocusVisuals(context, _isFocused);
     final focusColor = Color(_prefs.get(UserPreferences.focusColor).colorValue);
     final tvFocused = PlatformDetection.isTV && _isFocused;
     final baseColor = widget.baseColor ?? Colors.white.withValues(alpha: 0.6);
@@ -1521,9 +1536,7 @@ class _SidebarItemState extends State<_SidebarItem> {
         child: Focus(
           focusNode: _focusNode,
           onKeyEvent: (node, event) {
-            if (event is KeyDownEvent &&
-                (event.logicalKey == LogicalKeyboardKey.select ||
-                    event.logicalKey == LogicalKeyboardKey.enter)) {
+            if (isActivateKey(event)) {
               widget.onPressed();
               return KeyEventResult.handled;
             }
@@ -1639,7 +1652,7 @@ class _SidebarLibraryItemState extends State<_SidebarLibraryItem> {
     final useBaseForFocus = widget.baseColor != null;
     final highlighted =
         (desktopSidebar && _isHovered) ||
-        (PlatformDetection.isTV && _isFocused);
+        InputModeTracker.showFocusVisuals(context, _isFocused);
     final tvFocused = PlatformDetection.isTV && _isFocused;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 1),
@@ -1649,9 +1662,7 @@ class _SidebarLibraryItemState extends State<_SidebarLibraryItem> {
         child: Focus(
           focusNode: _focusNode,
           onKeyEvent: (_, event) {
-            if (event is KeyDownEvent &&
-                (event.logicalKey == LogicalKeyboardKey.select ||
-                    event.logicalKey == LogicalKeyboardKey.enter)) {
+            if (isActivateKey(event)) {
               widget.onPressed();
               return KeyEventResult.handled;
             }
@@ -1894,60 +1905,86 @@ class _SidebarMusicCardState extends State<SidebarMusicCard> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          GestureDetector(
-            onTap: () => appRouter.push(Destinations.audioPlayer),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: AppRadius.circular(8),
-                  child: SizedBox(
-                    width: 48,
-                    height: 48,
-                    child: artUrl != null
-                        ? OfflineAwareImage(
-                            imageUrl: artUrl,
-                            fit: BoxFit.cover,
-                          )
-                        : Container(
-                            color: AppColorScheme.onSurface.withValues(alpha: 0.1),
-                            child: Icon(
-                              Icons.music_note,
-                              color: AppColorScheme.onSurface.withValues(alpha: 0.6),
-                            ),
+          // The rail opens as it takes focus, so this row is the D-pad's way
+          // into the full player.
+          Focus(
+            onKeyEvent: (node, event) {
+              if (isActivateKey(event)) {
+                appRouter.push(Destinations.audioPlayer);
+                return KeyEventResult.handled;
+              }
+              return KeyEventResult.ignored;
+            },
+            child: Builder(
+              builder: (context) {
+                final focused = Focus.of(context).hasFocus;
+                return GestureDetector(
+                  onTap: () => appRouter.push(Destinations.audioPlayer),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 90),
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      borderRadius: AppRadius.circular(10),
+                      color: focused
+                          ? AppColorScheme.onSurface.withValues(alpha: 0.15)
+                          : Colors.transparent,
+                    ),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: AppRadius.circular(8),
+                          child: SizedBox(
+                            width: 48,
+                            height: 48,
+                            child: artUrl != null
+                                ? OfflineAwareImage(
+                                    imageUrl: artUrl,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Container(
+                                    color: AppColorScheme.onSurface.withValues(alpha: 0.1),
+                                    child: Icon(
+                                      Icons.music_note,
+                                      color: AppColorScheme.onSurface.withValues(alpha: 0.6),
+                                    ),
+                                  ),
                           ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.name,
-                        style: TextStyle(
-                          color: AppColorScheme.onSurface,
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      if (artist.isNotEmpty) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          artist,
-                          style: TextStyle(
-                            color: AppColorScheme.onSurface.withValues(alpha: 0.6),
-                            fontSize: 11,
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.name,
+                                style: TextStyle(
+                                  color: AppColorScheme.onSurface,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              if (artist.isNotEmpty) ...[
+                                const SizedBox(height: 2),
+                                Text(
+                                  artist,
+                                  style: TextStyle(
+                                    color: AppColorScheme.onSurface.withValues(alpha: 0.6),
+                                    fontSize: 11,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ],
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                );
+              },
             ),
           ),
           const SizedBox(height: 12),

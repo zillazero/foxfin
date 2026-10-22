@@ -123,6 +123,22 @@ abstract class MediaStreamResolver {
     return sources.map(_mediaSourceId).toSet();
   }
 
+  /// Whether a PlaybackInfo pinned to [mediaSourceId] that failed may retry
+  /// with no id and take the server's own pick. An id the item does not list
+  /// is stale. A single version item gets the same title back either way,
+  /// which matters when the server swaps the source, like the live stream of
+  /// a recording that is still being written. Several versions keep the
+  /// caller's explicit pick.
+  static bool canRetryWithoutMediaSourceId(
+    dynamic mediaItem,
+    String? mediaSourceId,
+  ) {
+    if (mediaSourceId == null || mediaSourceId.isEmpty) return false;
+    final staticIds = staticMediaSourceIds(mediaItem);
+    return staticIds.isNotEmpty &&
+        (staticIds.length == 1 || !staticIds.contains(mediaSourceId));
+  }
+
   static List<dynamic>? _staticMediaSources(dynamic mediaItem) {
     if (mediaItem is Map) return mediaItem['MediaSources'] as List<dynamic>?;
     try {
@@ -319,6 +335,53 @@ abstract class MediaStreamResolver {
         isDefault: stream['IsDefault'] as bool? ?? false,
         isForced: stream['IsForced'] as bool? ?? false,
         streamIndex: stream['Index'] as int?,
+      ));
+    }
+    return subs;
+  }
+
+  /// Embedded SRT and WebVTT tracks the server can also hand out as a file,
+  /// for the secondary subtitle overlay, which fetches its track itself. Kept
+  /// apart from [extractExternalSubtitles] so the primary subtitle paths keep
+  /// treating these tracks as embedded.
+  static List<ExternalSubtitle> extractEmbeddedTextSubtitles(
+    List<Map<String, dynamic>> mediaStreams,
+    String baseUrl, {
+    required String itemId,
+    required String mediaSourceId,
+  }) {
+    if (itemId.isEmpty || mediaSourceId.isEmpty) return const [];
+    final base = Uri.parse(baseUrl.endsWith('/') ? baseUrl : '$baseUrl/');
+    final subs = <ExternalSubtitle>[];
+    for (final stream in mediaStreams) {
+      if (stream['Type'] != 'Subtitle') continue;
+      final deliveryUrl = (stream['DeliveryUrl'] as String?)?.trim();
+      if (deliveryUrl != null && deliveryUrl.isNotEmpty) continue;
+      if (stream['SupportsExternalStream'] != true) continue;
+      final index = stream['Index'];
+      if (index is! int) continue;
+      final codec = (stream['Codec'] as String?)?.trim().toLowerCase();
+      final extension = switch (codec) {
+        'srt' || 'subrip' => 'srt',
+        'vtt' || 'webvtt' => 'vtt',
+        _ => null,
+      };
+      if (extension == null) continue;
+      subs.add(ExternalSubtitle(
+        deliveryUrl: base
+            .resolve(
+              'Videos/${Uri.encodeComponent(itemId)}/'
+              '${Uri.encodeComponent(mediaSourceId)}/Subtitles/$index/0/'
+              'Stream.$extension',
+            )
+            .toString(),
+        title: stream['DisplayTitle'] as String? ??
+            stream['Title'] as String?,
+        language: stream['Language'] as String?,
+        codec: codec!,
+        isDefault: stream['IsDefault'] as bool? ?? false,
+        isForced: stream['IsForced'] as bool? ?? false,
+        streamIndex: index,
       ));
     }
     return subs;

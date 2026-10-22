@@ -657,8 +657,8 @@ class _AppleTvLiveTvPlayerHostScreenState
       chapters: const [],
       hasPrevious: false,
       hasNext: false,
-      skipForwardMs: 0,
-      skipBackMs: 0,
+      skipForwardMs: _prefs.get(UserPreferences.skipForwardLength),
+      skipBackMs: _prefs.get(UserPreferences.skipBackLength),
       audioTracks: _trackOptions(audioStreams, _manager.audioStreamIndex),
       subtitleTracks: [
         ..._trackOptions(

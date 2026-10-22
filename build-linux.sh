@@ -685,11 +685,15 @@ build_appimage() {
 APPDIR="$(cd "$(dirname "$0")" && pwd)"
 export LD_LIBRARY_PATH="$APPDIR/lib:$LD_LIBRARY_PATH"
 
+# nix-ld only hands NixOS programs their libraries once they start, and ldd
+# runs Nix's own loader, which never looks there, so the check adds them.
+check_lib_path="$LD_LIBRARY_PATH${NIX_LD_LIBRARY_PATH:+:$NIX_LD_LIBRARY_PATH}"
+
 resolve_exact_lib() {
   local lib_name="$1"
   local old_ifs="$IFS"
   IFS=':'
-  for lib_dir in $LD_LIBRARY_PATH; do
+  for lib_dir in $check_lib_path; do
     [ -n "$lib_dir" ] && [ -e "$lib_dir/$lib_name" ] && IFS="$old_ifs" && return 0
   done
   IFS="$old_ifs"
@@ -701,7 +705,7 @@ resolve_exact_lib() {
   return 1
 }
 
-ldd_output="$(ldd "$APPDIR/moonfin" 2>/dev/null || true)"
+ldd_output="$(LD_LIBRARY_PATH="$check_lib_path" ldd "$APPDIR/moonfin" 2>/dev/null || true)"
 
 # Only "libfoo.so => not found" lines name a missing library. Symbol version
 # lines start with the binary path, so matching bare "not found" reports the
@@ -795,11 +799,15 @@ build_tarball() {
 APPDIR="$(cd "$(dirname "$0")" && pwd)"
 export LD_LIBRARY_PATH="$APPDIR/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 
+# nix-ld only hands NixOS programs their libraries once they start, and ldd
+# runs Nix's own loader, which never looks there, so the check adds them.
+check_lib_path="$LD_LIBRARY_PATH${NIX_LD_LIBRARY_PATH:+:$NIX_LD_LIBRARY_PATH}"
+
 resolve_exact_lib() {
   lib_name="$1"
   old_ifs="$IFS"
   IFS=':'
-  for lib_dir in $LD_LIBRARY_PATH; do
+  for lib_dir in $check_lib_path; do
     [ -n "$lib_dir" ] && [ -e "$lib_dir/$lib_name" ] && IFS="$old_ifs" && return 0
   done
   IFS="$old_ifs"
@@ -811,7 +819,7 @@ resolve_exact_lib() {
   return 1
 }
 
-ldd_output="$(ldd "$APPDIR/moonfin-bin" 2>/dev/null || true)"
+ldd_output="$(LD_LIBRARY_PATH="$check_lib_path" ldd "$APPDIR/moonfin-bin" 2>/dev/null || true)"
 
 # Only "libfoo.so => not found" lines name a missing library. Symbol version
 # lines start with the binary path, so matching bare "not found" reports the

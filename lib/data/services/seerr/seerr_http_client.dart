@@ -13,7 +13,23 @@ class SeerrHttpClient {
 
   late final Dio _dio;
 
-  SeerrHttpClient({required this.proxyConfig}) {
+  /// Direct mode session cookie (connect.sid), kept in memory and handed to
+  /// [onSessionCookie] so the repository can persist it in secure storage.
+  String? _cookie;
+  final void Function(String? cookie)? onSessionCookie;
+
+  bool get isDirect => proxyConfig.isDirect;
+
+  String get _directBase {
+    var u = proxyConfig.directUrl!.trim();
+    while (u.endsWith('/')) {
+      u = u.substring(0, u.length - 1);
+    }
+    return u;
+  }
+
+  SeerrHttpClient({required this.proxyConfig, this.onSessionCookie}) {
+    _cookie = proxyConfig.sessionCookie;
     _dio = Dio(BaseOptions(
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
@@ -56,6 +72,7 @@ class SeerrHttpClient {
       path.startsWith('/') ? path.substring(1) : path;
 
   String _apiUrl(String path) {
+    if (isDirect) return '$_directBase/api/v1/${_trimSlash(path)}';
     return '${proxyConfig.jellyfinBaseUrl}/Moonfin/Seerr/Api/${_trimSlash(path)}';
   }
 
@@ -64,9 +81,18 @@ class SeerrHttpClient {
   }
 
   Options _authOptions([Options? existing]) {
-    final headers = <String, dynamic>{
-      'Authorization': 'MediaBrowser Token="${proxyConfig.jellyfinToken}"',
-    };
+    final headers = <String, dynamic>{};
+    if (isDirect) {
+      final key = proxyConfig.apiKey?.trim() ?? '';
+      if (_cookie != null && _cookie!.isNotEmpty) {
+        headers['Cookie'] = _cookie;
+      } else if (key.isNotEmpty) {
+        headers['X-Api-Key'] = key;
+      }
+    } else {
+      headers['Authorization'] =
+          'MediaBrowser Token="${proxyConfig.jellyfinToken}"';
+    }
     if (existing != null) {
       return existing.copyWith(headers: {...?existing.headers, ...headers});
     }
@@ -838,33 +864,45 @@ class SeerrHttpClient {
     return response.data as List<dynamic>;
   }
 
-  Future<List<dynamic>> getRadarrCalendar({String? start, String? end}) async {
-    final response = await _dio.get(
-      _moonfinUrl('Radarr/Calendar'),
-      queryParameters: {
-        'start': ?start,
-        'end': ?end,
-      },
-      options: _authOptions(),
-    );
-    _requireSuccess(response, 'getRadarrCalendar');
-    return response.data as List<dynamic>;
+  // Foxfin: Radarr calendar integration is excluded; always empty.
+  Future<List<dynamic>> getRadarrCalendar({String? start, String? end}) async =>
+      const <dynamic>[];
+
+
+  // Foxfin: Sonarr calendar integration is excluded; always empty.
+  Future<List<dynamic>> getSonarrCalendar({String? start, String? end}) async =>
+      const <dynamic>[];
+
+
+  void _captureCookie(Response response) {
+    final setCookie = response.headers.map['set-cookie'];
+    if (setCookie == null) return;
+    for (final c in setCookie) {
+      final first = c.split(';').first.trim();
+      if (first.startsWith('connect.sid=')) {
+        _cookie = first;
+        onSessionCookie?.call(first);
+      }
+    }
   }
 
-  Future<List<dynamic>> getSonarrCalendar({String? start, String? end}) async {
-    final response = await _dio.get(
-      _moonfinUrl('Sonarr/Calendar'),
-      queryParameters: {
-        'start': ?start,
-        'end': ?end,
-      },
-      options: _authOptions(),
+  Future<MoonfinStatusResponse> _directStatus() async {
+    final response = await _dio.get(_apiUrl('auth/me'), options: _authOptions());
+    final ok = response.statusCode == 200 && response.data is Map;
+    final m = ok ? response.data as Map<String, dynamic> : const <String, dynamic>{};
+    return MoonfinStatusResponse(
+      enabled: true,
+      authenticated: ok,
+      url: _directBase,
+      seerrUserId: (m['id'] as num?)?.toInt(),
+      displayName: (m['displayName'] ?? m['username'] ?? m['email'])?.toString(),
+      avatar: m['avatar']?.toString(),
+      permissions: (m['permissions'] as num?)?.toInt() ?? 0,
     );
-    _requireSuccess(response, 'getSonarrCalendar');
-    return response.data as List<dynamic>;
   }
 
   Future<MoonfinStatusResponse> getMoonfinStatus() async {
+    if (isDirect) return _directStatus();
     final response = await _dio.get(
       _moonfinUrl('Status'),
       options: _authOptions(),
@@ -878,6 +916,27 @@ class SeerrHttpClient {
     required String password,
     String authType = 'jellyfin',
   }) async {
+    if (isDirect) {
+      final local = authType == 'local';
+      final response = await _dio.post(
+        _apiUrl(local ? 'auth/local' : 'auth/jellyfin'),
+        data: local
+            ? {'email': username, 'password': password}
+            : {'username': username, 'password': password},
+        options: Options(contentType: Headers.jsonContentType),
+      );
+      _requireSuccess(response, 'seerrLogin');
+      _captureCookie(response);
+      final st = await _directStatus();
+      if (!st.authenticated) throw Exception('Seerr login failed');
+      return MoonfinLoginResponse(
+        success: true,
+        seerrUserId: st.seerrUserId,
+        displayName: st.displayName,
+        avatar: st.avatar,
+        permissions: st.permissions,
+      );
+    }
     final response = await _dio.post(
       _moonfinUrl('Login'),
       data: MoonfinLoginRequest(
@@ -901,6 +960,12 @@ class SeerrHttpClient {
   Future<MoonfinQuickConnectResult> moonfinQuickConnectLogin({
     String? username,
   }) async {
+    if (isDirect) {
+      return const MoonfinQuickConnectResult(
+        success: false,
+        errorCode: 'sso_unsupported',
+      );
+    }
     final response = await _dio.post(
       _moonfinUrl('Login'),
       data: {
@@ -921,6 +986,15 @@ class SeerrHttpClient {
   }
 
   Future<void> moonfinLogout() async {
+    if (isDirect) {
+      try {
+        await _dio.post(_apiUrl('auth/logout'), options: _authOptions());
+      } finally {
+        _cookie = null;
+        onSessionCookie?.call(null);
+      }
+      return;
+    }
     final response = await _dio.delete(
       _moonfinUrl('Logout'),
       options: _authOptions(),
@@ -929,6 +1003,10 @@ class SeerrHttpClient {
   }
 
   Future<MoonfinValidateResponse> moonfinValidate() async {
+    if (isDirect) {
+      final st = await _directStatus();
+      return MoonfinValidateResponse(valid: st.authenticated);
+    }
     final response = await _dio.get(
       _moonfinUrl('Validate'),
       options: _authOptions(),

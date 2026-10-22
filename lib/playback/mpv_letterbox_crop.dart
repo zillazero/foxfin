@@ -214,11 +214,9 @@ abstract class MpvFrameSampleHost {
 }
 
 class MpvCropGeometry {
-  const MpvCropGeometry(this.rect, this.sourceWidth, this.sourceHeight);
+  const MpvCropGeometry(this.rect);
 
   final LetterboxCropRect rect;
-  final int sourceWidth;
-  final int sourceHeight;
 }
 
 /// Desktop libmpv [LetterboxCropper]. The only shipping implementation.
@@ -273,16 +271,18 @@ class MpvLetterboxCropper extends LetterboxCropper {
 
   Stream<MpvCropGeometry?> get geometryStream => _geometryController.stream;
 
-  /// The applied crop is wider than its source, so a 16:9 display shows
-  /// bars again under fit and the picture has to be zoomed to fill it.
-  bool get fillsFrame {
+  /// The applied crop is wider than the window, so fit would show bars
+  /// again and the picture has to be zoomed to fill it. An ultrawide window
+  /// already fits the crop's height, so zooming there would cut off the top
+  /// and bottom instead.
+  bool fillsWindow({required double width, required double height}) {
     final geometry = _geometry;
     if (!_applied || geometry == null) return false;
     return MpvLetterboxCrop.fillScale(
           cropWidth: geometry.rect.w,
           cropHeight: geometry.rect.h,
-          windowWidth: geometry.sourceWidth.toDouble(),
-          windowHeight: geometry.sourceHeight.toDouble(),
+          windowWidth: width,
+          windowHeight: height,
         ) >
         1;
   }
@@ -926,7 +926,7 @@ class MpvLetterboxCropper extends LetterboxCropper {
       _setApplied(false);
       return false;
     }
-    _setGeometry(MpvCropGeometry(rect, source.$1, source.$2));
+    _setGeometry(MpvCropGeometry(rect));
     _setApplied(true);
     return true;
   }

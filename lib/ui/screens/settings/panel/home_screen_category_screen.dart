@@ -175,7 +175,8 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
     final pluginAvailable = syncService.pluginAvailable;
     final seerrAvailable = syncService.seerrAvailable;
     final tmdbAvailable = syncService.tmdbAvailable;
-    final showUpcomingCalendars =
+    // Foxfin: Radarr/Sonarr calendars are excluded from this fork.
+    final showUpcomingCalendars = false &&
         seerrAvailable &&
         !_checkingServices &&
         (_radarrInstalled || _sonarrInstalled);
@@ -349,6 +350,17 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
                 subtitle: l10n.enablePreviewAudio,
                 icon: Icons.volume_up,
                 onChanged: _pushPersonalizationSync,
+              ),
+              SliderPreferenceTile(
+                preference: UserPreferences.previewVolume,
+                title: l10n.previewVolume,
+                description: l10n.previewVolumeDescription,
+                icon: Icons.volume_down,
+                min: 0,
+                max: 100,
+                divisions: 20,
+                labelOf: (v) => '$v%',
+                onChangeEnd: _pushPersonalizationSync,
               ),
             ],
           ),

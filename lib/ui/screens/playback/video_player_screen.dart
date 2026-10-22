@@ -22,8 +22,10 @@ import '../../../data/utils/chapter_markers.dart';
 import '../../../data/utils/video_range_label.dart';
 import '../../../playback/subtitle_style.dart';
 import '../../../playback/subtitle_view_config.dart';
+import '../../../playback/system_volume.dart';
 import '../../../util/fullscreen_helper.dart';
 import '../../../util/scroll_sensitivity_binding.dart';
+import '../../widgets/image_source.dart';
 import '../../widgets/player_volume_control.dart';
 import '../../widgets/playback/playback_time_row.dart';
 import '../../widgets/playback/player_logo.dart';
@@ -40,6 +42,7 @@ import '../../widgets/aether_video_view.dart';
 import '../../../playback/playback_lifecycle_handler.dart';
 import '../../../playback/playback_profile_diagnostics.dart';
 import '../../../playback/hdr_stream_capability.dart';
+import '../../../playback/cinema_skip_controller.dart';
 import '../../../data/models/aggregated_item.dart';
 import '../../../data/repositories/item_mutation_repository.dart';
 import '../../../data/models/media_segment.dart';
@@ -240,6 +243,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     final backend = _hdrBackend;
     if (backend == null) return null;
     final status = backend.hdrOutput.status.value;
+    // The native window carries SDR titles too; there is no HDR to report.
+    if (status.isActive && !backend.isPlayingHdrContent) {
+      return l10n.hdrOutputContentSdr;
+    }
     // Engaged, but this display is not receiving HDR - the window sits on a
     // monitor without it.
     if (status.isActive && hdrTonemapped) {
@@ -249,7 +256,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       HdrOutputStatus.active => l10n.hdrOutputActive(
         HdrOutputController.activeOutputFormat,
       ),
-      HdrOutputStatus.displayNotInHdrMode => l10n.hdrOutputDisplayNotHdr,
       HdrOutputStatus.contentIsSdr => l10n.hdrOutputContentSdr,
       HdrOutputStatus.disabledByPreference => l10n.hdrOutputDisabled,
       HdrOutputStatus.failed => l10n.hdrOutputFailed,
@@ -348,6 +354,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   MediaSegment? _skipSegment;
   Duration? _skipTo;
+  late final CinemaSkipController _cinemaSkip;
+  StreamSubscription<Duration>? _cinemaSkipDurationSub;
 
   /// True when the auto-hide setting is on for the current segment.
   bool _skipSegmentAutoHideEnabled = false;
@@ -439,6 +447,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   bool _verticalDragIgnored = false;
   Offset? _doubleTapDownPosition;
   DateTime? _lastDesktopClickAt;
+  bool _wasPlayingBeforeDesktopClick = false;
   DateTime? _lastSeekTime;
   bool _showSkipForward = false;
   bool _showSkipBackward = false;
@@ -502,6 +511,43 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   }
 
   bool get _isCurrentPreroll => _isPrerollQueueItem(_queue.currentItem);
+
+  bool get _isCinemaSkipVisible =>
+      _isCurrentPreroll && _cinemaSkip.visible;
+
+  void _configureCinemaSkip() => _cinemaSkip.configure(
+    enabled: _prefs.get(UserPreferences.cinemaModeSkipEnabled),
+  );
+
+  void _syncCinemaSkip() {
+    final item = _queue.currentItem;
+    final data = _rawDataForQueueItem(item);
+    _cinemaSkip.synchronize(
+      item: item,
+      index: _queue.currentIndex,
+      preroll: data?['__moonfinIsPreroll'] == true ? data : null,
+      itemId: _itemIdForQueueItem(item),
+      source: _manager.bringupState,
+      duration: _manager.backend?.duration ?? Duration.zero,
+      playing: _state.isPlaying,
+    );
+  }
+
+  void _onCinemaSkipChanged() {
+    if (!mounted) return;
+    setState(() {});
+    if (_isCinemaSkipVisible) _focusTvSkipSegment();
+  }
+
+  // A dismissed button stays hidden on hover until the next clip, so moving
+  // the mouse off the X doesn't bring it straight back.
+  int? _cinemaSkipDismissedGeneration;
+
+  void _dismissCinemaSkip() {
+    _suppressBackNavigation(duration: const Duration(milliseconds: 500));
+    _cinemaSkipDismissedGeneration = _cinemaSkip.generation;
+    _cinemaSkip.hide();
+  }
 
   bool _queueItemIsFavorite(dynamic item) {
     if (item is AggregatedItem) {
@@ -684,7 +730,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   @override
   void initState() {
     super.initState();
+    _cinemaSkip = CinemaSkipController(onSkip: _manager.nextInQueue);
+    _configureCinemaSkip();
+    _syncCinemaSkip();
+    _cinemaSkip.addListener(_onCinemaSkipChanged);
+    _cinemaSkipDurationSub = _state.durationStream.listen(
+      (_) => _syncCinemaSkip(),
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _isCinemaSkipVisible) _focusTvSkipSegment();
+    });
     FocusManager.instance.addListener(_restoreOverlayFocus);
+    // A right-click hides the controls, so the browser's own menu stays shut.
+    if (kIsWeb) unawaited(BrowserContextMenu.disableContextMenu());
     if (PlatformDetection.isTV || PlatformDetection.isMobile) {
       // The decoder wants every megabyte a constrained box has, and a stale
       // IME binding swallows d-pad presses mid-playback. Desktop keeps its
@@ -721,6 +779,23 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _themeMusicService.setExternalAudioActive(true);
     _segmentService = _createSegmentService();
     _zoomMode = _prefs.get(UserPreferences.playerZoomMode);
+    final savedSecondaryFontSize = _prefs.get(
+      UserPreferences.secondarySubtitleTextSize,
+    );
+    unawaited(
+      _manager.configureSecondarySubtitleStyle(
+        fontSize: savedSecondaryFontSize > 0 ? savedSecondaryFontSize : null,
+        verticalOffset: _prefs.get(
+          UserPreferences.secondarySubtitleOffsetPosition,
+        ),
+        textColor: switch (_prefs.get(
+          UserPreferences.secondarySubtitleTextColor,
+        )) {
+          -1 => null,
+          final color => color,
+        },
+      ),
+    );
     // Media3 only takes the zoom mode from this call, and the backend change it
     // listens for never fires when it was already the one playing.
     unawaited(_syncMedia3ZoomMode());
@@ -738,6 +813,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       if (state.phase == PlaybackBringupPhase.ready) {
         _applySubtitleStyle(force: true);
       }
+      _syncCinemaSkip();
     });
     _syncPlayManager?.addListener(_onSyncPlayChanged);
     _prefs.addListener(_onPlaybackPrefsChanged);
@@ -833,6 +909,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       _syncMedia3VolumeBoostLevel();
       unawaited(_syncAutoHdrSwitching());
       final isPreroll = _isCurrentPreroll;
+      _syncCinemaSkip();
       _resetSkipSegmentAutoHide();
       setState(() {
         _nextUpDismissed = false;
@@ -867,10 +944,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _onSubtitleLoadingChanged(_state.isSubtitleLoading);
     _playingSub = _state.playingStream.listen((playing) {
       _updateDisplayPlaying(playing);
+      _syncCinemaSkip();
       // The hide timer passes over a player that hasn't started yet, so a
-      // start or resume slower than its delay needs it armed again here.
-      if (playing && _controlsVisible && !_isSeeking) {
-        _scheduleHide();
+      // start or resume slower than its delay needs it armed again here. A
+      // pause with a description card clears the controls sooner so the card
+      // shows quickly.
+      if (_controlsVisible && !_isSeeking) {
+        if (playing) {
+          _scheduleHide();
+        } else if (_hasPausedDescriptionCard) {
+          _scheduleHide(delay: const Duration(seconds: 2));
+        }
       }
       if (isMobilePlayback) {
         _pipService.updatePiPActions(isPlaying: playing);
@@ -915,6 +999,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   @override
   void dispose() {
+    if (kIsWeb) unawaited(BrowserContextMenu.enableContextMenu());
     _cancelPopAfterBackKeyUp?.call();
     _trickplayLoadGeneration++;
     _hdrStatus?.removeListener(_onHdrStatusChanged);
@@ -947,6 +1032,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _cancelTvTemporarySpeedHold();
     _hideTimer?.cancel();
     _skipSegmentAutoHideTimer?.cancel();
+    _cinemaSkipDurationSub?.cancel();
+    _cinemaSkip.removeListener(_onCinemaSkipChanged);
+    _cinemaSkip.dispose();
     _displayPlayingDebounce?.cancel();
     _endsAtTicker?.cancel();
     _volumeOverlayTimer?.cancel();
@@ -1139,11 +1227,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     if (error == null || error.isEmpty) {
       return;
     }
-    // `liveStreamLostError`/`streamStarvedError` are internal sentinels the
-    // manager uses to tag why it gave up recovering, not viewer-facing text.
+    // These are internal sentinels the manager uses to tag why it gave up,
+    // not viewer-facing text.
     if (error == liveStreamLostError || error == streamStarvedError) {
       _showThrottledPlaybackError(
         AppLocalizations.of(context).playbackStreamLost,
+      );
+      return;
+    }
+    if (error == unsupportedVideoError) {
+      _showThrottledPlaybackError(
+        AppLocalizations.of(context).playbackVideoUnsupported,
       );
       return;
     }
@@ -1246,6 +1340,20 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   bool _isBackNavigationSuppressed() {
     final until = _suppressBackNavigationUntil;
+    if (until == null) return false;
+    return DateTime.now().isBefore(until);
+  }
+
+  DateTime? _suppressHoverControlsUntil;
+
+  void _suppressHoverControls() {
+    _suppressHoverControlsUntil = DateTime.now().add(
+      const Duration(seconds: 1),
+    );
+  }
+
+  bool _isHoverControlsSuppressed() {
+    final until = _suppressHoverControlsUntil;
     if (until == null) return false;
     return DateTime.now().isBefore(until);
   }
@@ -2009,7 +2117,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   Future<void> _pushMedia3UiMetadata() async {
     final backend = _activeMedia3Backend;
-    if (backend == null) return;
+    if (backend == null || !mounted) return;
 
     final l10n = AppLocalizations.of(context);
     final item = _queue.currentItem;
@@ -2070,7 +2178,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       showClock: false,
       zoomModeLabel: _letterboxCropOsd
           ? l10n.shortcutRecropBlackBars
-          : _zoomModeLabel(_zoomMode),
+          : _zoomModeLabel(l10n, _zoomMode),
       streamInfoSections: streamInfoSections,
       hasCastCrew: hasCastCrew,
       castPeople: castPeople,
@@ -2396,6 +2504,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   }
 
   void _onPlaybackPrefsChanged() {
+    _configureCinemaSkip();
     _syncMediaQueuingPreference();
     if (!mounted) return;
     _applySubtitleStyle();
@@ -2455,6 +2564,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   }
 
   void _checkSegments(Duration position) {
+    // Don't run automatic segment skips or outro actions during Cinema Mode trailers.
+    if (_isCurrentPreroll && _cinemaSkip.enabled) return;
     final result = _segmentService.checkPosition(position);
     final replaceSkipOutroWithNextUp = _prefs.get(
       UserPreferences.replaceSkipOutroWithNextUp,
@@ -2693,6 +2804,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   }
 
   void _skipCurrentSegment() {
+    // Ignore a Skip Segment press if Cinema Skip has since taken over.
+    if (_isCurrentPreroll && _cinemaSkip.enabled) return;
     _noteViewerActivity();
     final replaceSkipOutroWithNextUp = _prefs.get(
       UserPreferences.replaceSkipOutroWithNextUp,
@@ -2771,6 +2884,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   /// runs it stays up on its own; afterwards it rides along with the OSD.
   /// With auto-hide off it stays up until the segment ends.
   bool get _isSkipSegmentButtonVisible =>
+      !(_isCurrentPreroll && _cinemaSkip.enabled) &&
       _skipSegment != null &&
       (!_skipSegmentAutoHideEnabled ||
           _skipSegmentAutoHidePending ||
@@ -2922,23 +3036,36 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     });
   }
 
-  void _scheduleHide() {
+  void _scheduleHide({Duration? delay}) {
     _hideTimer?.cancel();
-    final hideDelay = PlatformDetection.useMobileUi
-        ? const Duration(seconds: 8)
-        : const Duration(seconds: 5);
+    final hideDelay =
+        delay ??
+        (PlatformDetection.useMobileUi
+            ? const Duration(seconds: 8)
+            : const Duration(seconds: 5));
     _hideTimer = Timer(hideDelay, () {
-      if (mounted && _state.isPlaying) {
-        setState(() {
-          _controlsVisible = false;
-          if (PlatformDetection.isMobile &&
-              _prefs.get(UserPreferences.osdLockEnabled)) {
-            _isOsdLocked = true;
-          }
-        });
-      }
+      if (!mounted) return;
+      final playing = _state.isPlaying;
+      if (!playing && !_hasPausedDescriptionCard) return;
+      setState(() {
+        _controlsVisible = false;
+        if (playing &&
+            PlatformDetection.isMobile &&
+            _prefs.get(UserPreferences.osdLockEnabled)) {
+          _isOsdLocked = true;
+        }
+      });
     });
   }
+
+  // Off TV the transport sits in the middle of the picture, right where the
+  // paused description card goes, so with a card to show the controls still
+  // hide while paused and the card shows once they do.
+  bool get _hasPausedDescriptionCard =>
+      !PlatformDetection.useLeanbackUi &&
+      _bringupState.phase == PlaybackBringupPhase.ready &&
+      _prefs.get(UserPreferences.showDescriptionOnPause) &&
+      _currentItemDescription() != null;
 
   void _onSeekbarFocusChange() {
     if (mounted) setState(() => _seekbarFocused = _tvSeekbarFocus.hasFocus);
@@ -2978,9 +3105,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   }
 
   void _focusTvSkipSegment({int attempt = 0}) {
-    if (!PlatformDetection.isTV || _skipSegment == null) return;
+    if (!PlatformDetection.isTV ||
+        _routeCovered ||
+        (!_isSkipSegmentButtonVisible && !_isCinemaSkipVisible)) {
+      return;
+    }
+    final generation = _cinemaSkip.generation;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || _skipSegment == null) return;
+      if (!mounted ||
+          _routeCovered ||
+          generation != _cinemaSkip.generation ||
+          (!_isSkipSegmentButtonVisible && !_isCinemaSkipVisible)) {
+        return;
+      }
       _tvSkipSegmentFocus.requestFocus();
 
       if (!_tvSkipSegmentFocus.hasFocus && attempt < 8) {
@@ -2998,7 +3135,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       _focusNextUpPlay();
       return;
     }
-    if (_isSkipSegmentButtonVisible) {
+    if (_isSkipSegmentButtonVisible || _isCinemaSkipVisible) {
       _focusTvSkipSegment();
       return;
     }
@@ -3024,6 +3161,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   void _toggleControls() {
     if (_isCurrentPreroll) {
       _syncPrerollOsdState();
+      _cinemaSkip.reveal();
       return;
     }
     if (_isOsdLocked) {
@@ -3050,6 +3188,31 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       return false;
     });
     return dismissed;
+  }
+
+  bool _dismissControlsOrOverlays() {
+    if (_isCinemaSkipVisible) {
+      _dismissCinemaSkip();
+      return true;
+    }
+    if (_showNextUp) {
+      _handleNextUpDismiss();
+      return true;
+    }
+    if (_isSkipSegmentButtonVisible) {
+      _dismissSkipSegment();
+      return true;
+    }
+    if (_dismissTopOverlayRouteIfAny()) {
+      return true;
+    }
+    if (_controlsVisible) {
+      _suppressBackNavigation(duration: const Duration(milliseconds: 500));
+      _hideTimer?.cancel();
+      setState(() => _controlsVisible = false);
+      return true;
+    }
+    return false;
   }
 
   // A skip, a chapter jump or a segment skip lands somewhere the scrub
@@ -3458,6 +3621,26 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
     if (_isCurrentPreroll) {
+      if (_routeCovered && _cinemaSkip.enabled) return KeyEventResult.ignored;
+      // A desktop keyboard uses the regular Escape and dismiss shortcuts.
+      // Remote Back still hides Cinema Skip before leaving playback.
+      if (_cinemaSkip.enabled &&
+          PlatformDetection.useDesktopUi &&
+          event is KeyDownEvent) {
+        final desktopAction = _keyBindings.actionFor(
+          event.logicalKey,
+          shift: HardwareKeyboard.instance.isShiftPressed,
+        );
+        if (desktopAction == PlayerAction.escape) {
+          unawaited(_leaveFullscreenOrPlayback());
+          return KeyEventResult.handled;
+        }
+        if (desktopAction == PlayerAction.hideControls) {
+          if (_dismissControlsOrOverlays()) _suppressHoverControls();
+          return KeyEventResult.handled;
+        }
+      }
+
       if (event is KeyUpEvent) {
         final isBackKey = event.logicalKey.isBackKey;
         if (isBackKey) {
@@ -3474,7 +3657,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         final isBackKey = event.logicalKey.isBackKey;
 
         if (isBackKey) {
-          if (!_isBackNavigationSuppressed()) {
+          if (_isCinemaSkipVisible) {
+            _dismissCinemaSkip();
+          } else if (!_isBackNavigationSuppressed()) {
             _exitPlayback();
           }
           return KeyEventResult.handled;
@@ -3489,13 +3674,27 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
             return KeyEventResult.handled;
           case LogicalKeyboardKey.mediaPlayPause:
           case LogicalKeyboardKey.space:
+            _togglePlayPause();
+            return KeyEventResult.handled;
           case LogicalKeyboardKey.enter:
           case LogicalKeyboardKey.select:
-            _togglePlayPause();
+            if (_cinemaSkip.eligible) {
+              _cinemaSkip.activate();
+            } else {
+              _togglePlayPause();
+            }
+            return KeyEventResult.handled;
+
+          case LogicalKeyboardKey.arrowRight:
+            _cinemaSkip.reveal();
             return KeyEventResult.handled;
 
           case LogicalKeyboardKey.mediaFastForward:
-            unawaited(_manager.next());
+            if (_cinemaSkip.enabled) {
+              _cinemaSkip.skip(requireVisible: false);
+            } else {
+              unawaited(_manager.next());
+            }
             return KeyEventResult.handled;
 
           case LogicalKeyboardKey.mediaRewind:
@@ -3510,24 +3709,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       }
 
       if (event is KeyRepeatEvent) {
-        final isBackKey = event.logicalKey.isBackKey;
-        if (isBackKey) {
-          return KeyEventResult.handled;
-        }
-
-        switch (event.logicalKey) {
-          case LogicalKeyboardKey.mediaPlay:
-          case LogicalKeyboardKey.mediaPause:
-          case LogicalKeyboardKey.mediaPlayPause:
-          case LogicalKeyboardKey.space:
-          case LogicalKeyboardKey.enter:
-          case LogicalKeyboardKey.select:
-          case LogicalKeyboardKey.mediaFastForward:
-          case LogicalKeyboardKey.mediaRewind:
-            return KeyEventResult.handled;
-          default:
-            return KeyEventResult.handled;
-        }
+        return KeyEventResult.handled;
       }
 
       return KeyEventResult.ignored;
@@ -3673,23 +3855,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
           if (_isBackNavigationSuppressed()) {
             return KeyEventResult.handled;
           }
-          if (_showNextUp) {
-            _handleNextUpDismiss();
-            return KeyEventResult.handled;
-          }
-          if (_isSkipSegmentButtonVisible) {
-            _dismissSkipSegment();
-            return KeyEventResult.handled;
-          }
-          if (_dismissTopOverlayRouteIfAny()) {
-            return KeyEventResult.handled;
-          }
-          if (_controlsVisible) {
-            _suppressBackNavigation(
-              duration: const Duration(milliseconds: 500),
-            );
-            _hideTimer?.cancel();
-            setState(() => _controlsVisible = false);
+          if (_dismissControlsOrOverlays()) {
             return KeyEventResult.handled;
           }
           _exitPlayback();
@@ -3807,10 +3973,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         }
         return KeyEventResult.handled;
       case PlayerAction.next:
-        unawaited(_manager.next());
+        if (event is! KeyRepeatEvent) unawaited(_manager.next());
         return KeyEventResult.handled;
       case PlayerAction.previous:
-        unawaited(_manager.previous());
+        if (event is! KeyRepeatEvent) unawaited(_manager.previous());
+        return KeyEventResult.handled;
+      case PlayerAction.skipSegment:
+        if (!_isSkipSegmentButtonVisible) return KeyEventResult.ignored;
+        if (event is! KeyRepeatEvent) _skipCurrentSegment();
         return KeyEventResult.handled;
       case PlayerAction.skipForward:
         _seekRelative(_prefs.get(UserPreferences.skipForwardLength));
@@ -3821,7 +3991,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         _showControls(focusSeekbar: PlatformDetection.isTV);
         return KeyEventResult.handled;
       case PlayerAction.seekBack:
-        _seekRelative(
+        _keyboardSeek(
           -_accelerateSeekStep(
             _prefs.get(UserPreferences.skipBackLength),
             event,
@@ -3829,7 +3999,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         );
         return KeyEventResult.handled;
       case PlayerAction.seekForward:
-        _seekRelative(
+        _keyboardSeek(
           _accelerateSeekStep(
             _prefs.get(UserPreferences.skipForwardLength),
             event,
@@ -3884,8 +4054,15 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         }
         _exitPlayback();
         return KeyEventResult.handled;
+      case PlayerAction.hideControls:
+        if (event is! KeyRepeatEvent && _dismissControlsOrOverlays()) {
+          _suppressHoverControls();
+        }
+        return KeyEventResult.handled;
       case PlayerAction.showControlsOrPlayPause:
-        if (_controlsVisible) {
+        if (_isSkipSegmentButtonVisible) {
+          if (event is! KeyRepeatEvent) _skipCurrentSegment();
+        } else if (_controlsVisible) {
           _togglePlayPause();
         } else {
           _showControls();
@@ -3923,21 +4100,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         if (_isBackNavigationSuppressed()) {
           return;
         }
-        if (_showNextUp) {
-          _handleNextUpDismiss();
-          return;
-        }
-        if (_isSkipSegmentButtonVisible) {
-          _dismissSkipSegment();
-          return;
-        }
-        if (_dismissTopOverlayRouteIfAny()) {
-          return;
-        }
-        if (_controlsVisible) {
-          _suppressBackNavigation(duration: const Duration(milliseconds: 500));
-          _hideTimer?.cancel();
-          setState(() => _controlsVisible = false);
+        if (_dismissControlsOrOverlays()) {
           return;
         }
         _exitPlayback();
@@ -3956,6 +4119,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
           onKeyEvent: _handleKeyEvent,
           child: GestureDetector(
             onTap: PlatformDetection.isTV ? null : _onSurfaceTap,
+            onSecondaryTap: PlatformDetection.isTV
+                ? null
+                : _onSurfaceSecondaryTap,
             onDoubleTapDown: PlatformDetection.isTV
                 ? null
                 : PlatformDetection.useMobileUi && !_isOsdLocked
@@ -3974,12 +4140,20 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                   ? _handleScrollSignal
                   : null,
               child: MouseRegion(
-                cursor: PlatformDetection.useDesktopUi && !_controlsVisible
+                cursor: PlatformDetection.useDesktopUi &&
+                        !_controlsVisible &&
+                        !_isCinemaSkipVisible
                     ? SystemMouseCursors.none
                     : SystemMouseCursors.basic,
                 onHover: (_) {
                   if (PlatformDetection.useDesktopUi) {
-                    if (_controlsVisible) {
+                    if (_isHoverControlsSuppressed()) return;
+                    if (_isCurrentPreroll && _cinemaSkip.eligible) {
+                      if (_cinemaSkipDismissedGeneration !=
+                          _cinemaSkip.generation) {
+                        _cinemaSkip.reveal();
+                      }
+                    } else if (_controlsVisible) {
                       _scheduleHide();
                     } else {
                       _showControls();
@@ -4066,8 +4240,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                       _buildVolumeOverlay(),
                       if (PlatformDetection.useMobileUi)
                         _buildBrightnessOverlay(),
-                      if (PlatformDetection.useMobileUi)
-                        _buildDoubleTapSkipOverlay(),
+                      _buildSkipIndicatorOverlay(),
                       if (_isOsdLocked && !hideOsdForPreroll)
                         _buildLockedOverlay(),
                       if (_isSkipSegmentButtonVisible)
@@ -4084,6 +4257,31 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                                   TrickplayPreviewLayout
                                       .verticalTravelBottomMargin) +
                               AppSpacing.spaceXs,
+                        ),
+                      if (_isCinemaSkipVisible)
+                        SkipSegmentOverlay(
+                          key: ValueKey('cinema-preroll-${_cinemaSkip.generation}'),
+                          segment: MediaSegment(
+                            id: '__cinema_preroll__${_cinemaSkip.generation}',
+                            itemId: _itemIdForQueueItem(_queue.currentItem) ?? '',
+                            type: MediaSegmentType.preview,
+                            start: Duration.zero,
+                            end: _cinemaSkip.duration,
+                          ),
+                          actionLabel: AppLocalizations.of(context).settingsSkip,
+                          focusNode: _tvSkipSegmentFocus,
+                          onSkip: _cinemaSkip.skip,
+                          onDismiss: _dismissCinemaSkip,
+                          positionStream: _state.positionStream,
+                          initialPosition: _state.position,
+                          rightInset: 24.0 +
+                              (PlatformDetection.isMobile && !PlatformDetection.isTV
+                                  ? MediaQuery.viewPaddingOf(context).right
+                                  : 0),
+                          bottomInset: MediaQuery.viewPaddingOf(context).bottom +
+                              (PlatformDetection.isMobile && !PlatformDetection.isTV
+                                  ? 16
+                                  : 24),
                         ),
                       if (_showNextUp && _nextUpItem != null)
                         NextUpOverlay(
@@ -4290,13 +4488,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   NativeVideoZoomMode _nativeZoomMode(ZoomMode mode) => switch (mode) {
     ZoomMode.fit => NativeVideoZoomMode.fit,
-    ZoomMode.autoCrop => NativeVideoZoomMode.crop,
+    ZoomMode.autoCrop => NativeVideoZoomMode.zoomToFill,
     ZoomMode.stretch => NativeVideoZoomMode.stretch,
   };
 
   String _media3ZoomModeWire(ZoomMode mode) => switch (mode) {
     ZoomMode.fit => 'fit',
-    ZoomMode.autoCrop => 'crop',
+    ZoomMode.autoCrop => 'zoomToFill',
     ZoomMode.stretch => 'stretch',
   };
 
@@ -4481,11 +4679,15 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       initialData: _state.isPlaying,
       builder: (context, snap) {
         final isPlaying = _displayPlaying;
+        final centerControlsShowing =
+            !PlatformDetection.useLeanbackUi &&
+            _controlsVisible &&
+            !_isOsdLocked;
         return Positioned.fill(
           child: IgnorePointer(
             child: AnimatedOpacity(
               duration: const Duration(milliseconds: 220),
-              opacity: isPlaying ? 0.0 : 1.0,
+              opacity: isPlaying || centerControlsShowing ? 0.0 : 1.0,
               child: Container(
                 color: Colors.black.withValues(alpha: 0.58),
                 child: SafeArea(
@@ -4739,7 +4941,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       children: [
         if (logoUrl != null) ...[
           PlayerLogo(
-            image: NetworkImage(logoUrl, headers: serverImageHeaders),
+            image: offlineAwareImageProvider(
+              logoUrl,
+              headers: serverImageHeaders,
+            ),
             errorBuilder: (_, _, _) => Text(
               seriesName ?? titleText,
               style: const TextStyle(
@@ -6257,7 +6462,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _playerVolume = 100.0;
     unawaited(_manager.backend?.setVolume(100.0));
 
-    _volumeListenerSub = vc.addListener((value) {
+    _volumeListenerSub = listenToSystemVolume((value) {
       if (mounted && (value - _systemVolume).abs() > 0.01) {
         setState(() => _systemVolume = value);
         _reportVolumeToManager();
@@ -6268,7 +6473,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
           _activeMedia3Backend != null) {
         unawaited(_setMedia3VolumeBoostLevel(0));
       }
-    }, fetchInitialVolume: true);
+    });
   }
 
   void _initDesktopVolume() {
@@ -6373,17 +6578,32 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   // Desktop double-click is timed here because onDoubleTap delays every click.
   void _onSurfaceTap() {
-    if (PlatformDetection.useDesktopUi) {
-      final now = clock.now();
-      final last = _lastDesktopClickAt;
-      _lastDesktopClickAt = now;
-      if (last != null && now.difference(last) < kDoubleTapTimeout) {
-        _lastDesktopClickAt = null;
-        unawaited(_toggleDesktopFullscreen());
-        return;
-      }
+    if (!PlatformDetection.useDesktopUi) {
+      _toggleControls();
+      return;
     }
-    _toggleControls();
+    final now = clock.now();
+    final last = _lastDesktopClickAt;
+    _lastDesktopClickAt = now;
+    if (last != null && now.difference(last) < kDoubleTapTimeout) {
+      _lastDesktopClickAt = null;
+      // The first click already played or paused, so the second puts playback
+      // back the way it was.
+      unawaited(
+        _wasPlayingBeforeDesktopClick ? _manager.resume() : _manager.pause(),
+      );
+      unawaited(_toggleDesktopFullscreen());
+      return;
+    }
+    _wasPlayingBeforeDesktopClick = _state.isPlaying;
+    _togglePlayPause();
+    _showControls();
+  }
+
+  void _onSurfaceSecondaryTap() {
+    if (_dismissControlsOrOverlays()) {
+      _suppressHoverControls();
+    }
   }
 
   void _onDoubleTapDown(TapDownDetails details) {
@@ -6421,8 +6641,22 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
           ? UserPreferences.skipForwardLength
           : UserPreferences.skipBackLength,
     );
-    _seekRelative(forward ? ms : -ms, showControls: false);
-    if (forward) {
+    _skipWithIndicator(forward ? ms : -ms);
+  }
+
+  // A seek with the controls hidden keeps them hidden and only shows how far
+  // it went, so the picture stays in view.
+  void _keyboardSeek(int ms) {
+    if (_controlsVisible) {
+      _seekRelative(ms);
+    } else {
+      _skipWithIndicator(ms);
+    }
+  }
+
+  void _skipWithIndicator(int ms) {
+    _seekRelative(ms, showControls: false);
+    if (ms > 0) {
       _skipForwardAccum += ms;
       setState(() => _showSkipForward = true);
       _skipForwardTimer?.cancel();
@@ -6435,7 +6669,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         }
       });
     } else {
-      _skipBackwardAccum += ms;
+      _skipBackwardAccum -= ms;
       setState(() => _showSkipBackward = true);
       _skipBackwardTimer?.cancel();
       _skipBackwardTimer = Timer(const Duration(milliseconds: 600), () {
@@ -6651,7 +6885,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     );
   }
 
-  Widget _buildDoubleTapSkipOverlay() {
+  Widget _buildSkipIndicatorOverlay() {
     if (!_showSkipForward && !_showSkipBackward) return const SizedBox.shrink();
     final isForward = _showSkipForward;
     final accum = isForward ? _skipForwardAccum : _skipBackwardAccum;
@@ -6702,48 +6936,55 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         behavior: HitTestBehavior.opaque,
         onTap: _showControls,
         child: SafeArea(
-          child: Center(
-            child: IgnorePointer(
-              ignoring: !_controlsVisible,
-              child: GestureDetector(
-                onLongPress: () {
-                  setState(() {
-                    _isOsdLocked = false;
-                    _controlsVisible = true;
-                  });
-                  _scheduleHide();
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.spaceLg,
-                    vertical: AppSpacing.spaceMd,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.72),
-                    borderRadius: AppRadius.circular(20),
-                    border: Border.fromBorderSide(
-                      ThemeRegistry.active.borders.cardBorder.copyWith(
-                        color: Colors.white.withValues(alpha: 0.18),
-                      ),
+          child: Align(
+            alignment: AlignmentDirectional.topEnd,
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(
+                top: AppSpacing.spaceSm,
+                end: AppSpacing.spaceLg,
+              ),
+              child: IgnorePointer(
+                ignoring: !_controlsVisible,
+                child: GestureDetector(
+                  onLongPress: () {
+                    setState(() {
+                      _isOsdLocked = false;
+                      _controlsVisible = true;
+                    });
+                    _scheduleHide();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.spaceLg,
+                      vertical: AppSpacing.spaceMd,
                     ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const AdaptiveIcon(
-                        Icons.lock,
-                        color: Colors.white70,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        AppLocalizations.of(context).longPressToUnlock,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 13,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.72),
+                      borderRadius: AppRadius.circular(20),
+                      border: Border.fromBorderSide(
+                        ThemeRegistry.active.borders.cardBorder.copyWith(
+                          color: Colors.white.withValues(alpha: 0.18),
                         ),
                       ),
-                    ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const AdaptiveIcon(
+                          Icons.lock,
+                          color: Colors.white70,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          AppLocalizations.of(context).longPressToUnlock,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -7170,12 +7411,92 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     );
   }
 
-  void _showTrackSelector({required bool audio}) {
+  void _showSubtitleSlotSelector() {
+    final l10n = AppLocalizations.of(context);
+    final resolution = _manager.currentResolution;
+    final streams =
+        (resolution?.mediaStreams ??
+                (_manager.currentOfflineMetadata?['MediaStreams'] as List?)
+                    ?.cast<Map<String, dynamic>>() ??
+                const <Map<String, dynamic>>[])
+            .where((stream) => stream['Type'] == 'Subtitle')
+            .toList();
+
+    String trackLabel(int? index) {
+      if (index == null || index < 0) return l10n.off;
+      final stream = streams
+          .where((entry) => entry['Index'] == index)
+          .firstOrNull;
+      if (stream == null) return l10n.off;
+      final displayTitle = (stream['DisplayTitle'] as String?)?.trim();
+      if (displayTitle != null && displayTitle.isNotEmpty) return displayTitle;
+      final title = (stream['Title'] as String?)?.trim();
+      if (title != null && title.isNotEmpty) return title;
+      final language = (stream['Language'] as String?)?.trim();
+      if (language != null && language.isNotEmpty) return language;
+      return l10n.streamTypeFallback('Subtitle', streams.indexOf(stream) + 1);
+    }
+
+    unawaited(() async {
+      final result = await TrackSelectorDialog.show(
+        context,
+        title: l10n.subtitles,
+        options: [
+          TrackOption(
+            label: l10n.primarySubtitleSlot,
+            subtitle: trackLabel(_manager.subtitleStreamIndex),
+          ),
+          TrackOption(
+            label: l10n.secondarySubtitleSlot,
+            subtitle: trackLabel(_manager.secondarySubtitleStreamIndex),
+          ),
+        ],
+        useRootNavigator: false,
+      );
+      if (result == null || !mounted) return;
+      _showTrackSelector(
+        audio: false,
+        secondary: result == 1,
+        chooseSubtitleSlot: false,
+      );
+    }());
+    _showControls();
+  }
+
+  /// Only Media3 draws a secondary track, and only from an SRT or WebVTT file
+  /// other than the primary, so the subtitle button skips the slot question
+  /// when there is nothing to put in the second slot.
+  bool get _offersSecondarySubtitles {
+    if (_activeBackend is! Media3PlayerBackend) return false;
+    if (_manager.secondarySubtitleStreamIndex != null) return true;
+    final primary = _manager.subtitleStreamIndex;
+    final streams =
+        _manager.currentResolution?.mediaStreams ??
+        const <Map<String, dynamic>>[];
+    return streams.any((stream) {
+      final index = stream['Index'];
+      return stream['Type'] == 'Subtitle' &&
+          index is int &&
+          index != primary &&
+          _manager.canUseAsSecondarySubtitle(index);
+    });
+  }
+
+  void _showTrackSelector({
+    required bool audio,
+    bool secondary = false,
+    bool chooseSubtitleSlot = true,
+  }) {
+    if (!audio && chooseSubtitleSlot && _offersSecondarySubtitles) {
+      _showSubtitleSlotSelector();
+      return;
+    }
     unawaited(
       TrackPicker.show(
         context,
         manager: _manager,
         audio: audio,
+        secondary: secondary,
         clientFor: _clientForItem,
         useRootNavigator: false,
         runMutation: _runSinglePlayerMutation,
@@ -7212,16 +7533,20 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   }
 
   /// Nothing cropped: the user's zoom mode. A fullscreen display covers an
-  /// mpv crop that is wider than its source, since fit would show bars again
-  /// on a 16:9 screen. A window and a narrower crop keep the whole picture.
-  /// Media3 zooms into its crop.
+  /// mpv crop that is wider than the screen, since fit would show bars again.
+  /// A window and a narrower crop keep the whole picture. Media3 zooms into
+  /// its crop.
   ZoomMode get _effectiveZoomMode {
     if (!_letterboxCropApplied) return _zoomMode;
     final fullscreen =
         !PlatformDetection.useDesktopUi || _isDesktopFullscreen;
     final cropper = _activeMediaKitBackend?.letterboxCropper;
     if (cropper is MpvLetterboxCropper) {
-      return fullscreen && cropper.fillsFrame ? ZoomMode.autoCrop : ZoomMode.fit;
+      final screen = MediaQuery.sizeOf(context);
+      return fullscreen &&
+              cropper.fillsWindow(width: screen.width, height: screen.height)
+          ? ZoomMode.autoCrop
+          : ZoomMode.fit;
     }
     return fullscreen ? ZoomMode.autoCrop : _zoomMode;
   }
@@ -7286,7 +7611,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   void _showZoomModeToast(ZoomMode mode) {
     final l10n = AppLocalizations.of(context);
-    _showPlayerToast('${l10n.playerZoomMode}: ${_zoomModeLabel(mode)}');
+    _showPlayerToast('${l10n.playerZoomMode}: ${_zoomModeLabel(l10n, mode)}');
   }
 
   void _showPlayerToast(String message) {
@@ -7350,12 +7675,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _zoomModeToastOverlay = null;
   }
 
-  String _zoomModeLabel(ZoomMode mode) {
-    final spaced = mode.name.replaceAllMapped(_camelCaseSpaceRe, (_) => ' ');
-    return spaced.isEmpty
-        ? mode.name
-        : '${spaced[0].toUpperCase()}${spaced.substring(1)}';
-  }
+  String _zoomModeLabel(AppLocalizations l10n, ZoomMode mode) =>
+      switch (mode) {
+        ZoomMode.fit => l10n.fit,
+        ZoomMode.autoCrop => l10n.autoCrop,
+        ZoomMode.stretch => l10n.stretch,
+      };
 
   String _tooltipMessage(String label, {String? shortcut}) {
     if (shortcut == null || shortcut.isEmpty || PlatformDetection.isTV) {

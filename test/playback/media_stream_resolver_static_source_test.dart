@@ -81,4 +81,43 @@ void main() {
       expect(MediaStreamResolver.staticMediaSourceIds({'Id': 'x'}), isEmpty);
     });
   });
+
+  group('MediaStreamResolver.canRetryWithoutMediaSourceId', () {
+    bool canRetry(Map<String, dynamic> item, String? id) =>
+        MediaStreamResolver.canRetryWithoutMediaSourceId(item, id);
+
+    test('a single version item retries even with its own id', () {
+      expect(
+        canRetry(
+          _item([
+            {'Id': 'a'},
+          ]),
+          'a',
+        ),
+        isTrue,
+      );
+    });
+
+    test('a stale id retries, an explicit version pick does not', () {
+      final item = _item([
+        {'Id': 'a'},
+        {'Id': 'b'},
+      ]);
+      expect(canRetry(item, 'x'), isTrue);
+      expect(canRetry(item, 'b'), isFalse);
+    });
+
+    test('no id or no cached sources never retries', () {
+      expect(
+        canRetry(
+          _item([
+            {'Id': 'a'},
+          ]),
+          null,
+        ),
+        isFalse,
+      );
+      expect(canRetry(_item([]), 'a'), isFalse);
+    });
+  });
 }

@@ -155,6 +155,17 @@ class _GeneralScreenState extends State<_GeneralScreen> {
                         l10n.performanceModeReduced,
                     },
                   ),
+                  if (PlatformDetection.isTV)
+                    EnumPreferenceTile<RendererMode>(
+                      preference: UserPreferences.rendererMode,
+                      title: l10n.rendererMode,
+                      description: l10n.rendererModeSubtitle,
+                      icon: Icons.brush_outlined,
+                      labelOf: (v) => switch (v) {
+                        RendererMode.auto => l10n.rendererModeAuto,
+                        RendererMode.skia => l10n.rendererModeSkia,
+                      },
+                    ),
                 ],
               ),
             ],

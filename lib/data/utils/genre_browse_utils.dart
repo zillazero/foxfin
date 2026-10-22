@@ -20,6 +20,16 @@ const List<String> kNonRootBrowseItemTypes = [
   'Folder',
 ];
 
+/// Plain directories. The server counts a series or a box set as a folder
+/// too, so sorting on IsFolder would put every show ahead of every movie.
+/// Folders first asks for these on their own instead.
+const List<String> kDirectoryItemTypes = [
+  'Folder',
+  'CollectionFolder',
+  'UserView',
+  'PhotoAlbum',
+];
+
 List<String> normalizeBrowsableGenreItemTypes(List<String>? includeItemTypes) {
   final requested =
       includeItemTypes

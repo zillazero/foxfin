@@ -46,6 +46,49 @@ class _LibrariesCategoryScreen extends StatelessWidget {
           _SectionHeader(l10n.libraryView),
           adaptiveListSection(
             children: [
+              EnumPreferenceTile<LibraryStyle>(
+                key: const ValueKey('pref_library_style'),
+                preference: UserPreferences.libraryStyle,
+                title: l10n.libraryStyle,
+                description: PlatformDetection.useMobileUi
+                    ? l10n.libraryStyleDescriptionPhone
+                    : l10n.libraryStyleDescription,
+                icon: Icons.view_sidebar_outlined,
+                labelOf: (v) => switch (v) {
+                  LibraryStyle.classic => l10n.libraryStyleClassic,
+                  LibraryStyle.modern => l10n.libraryStyleModern,
+                  LibraryStyle.docked => l10n.libraryStyleDocked,
+                },
+                onChanged: _pushPersonalizationSync,
+              ),
+              EnumPreferenceTile<BookLibraryStyle>(
+                key: const ValueKey('pref_book_library_style'),
+                preference: UserPreferences.bookLibraryStyle,
+                title: l10n.bookLibraryStyle,
+                description: l10n.bookLibraryStyleDescription,
+                icon: Icons.auto_stories_outlined,
+                labelOf: (v) => switch (v) {
+                  BookLibraryStyle.classic => l10n.bookLibraryStyleClassic,
+                  BookLibraryStyle.readingRoom =>
+                    l10n.bookLibraryStyleReadingRoom,
+                  BookLibraryStyle.bookstore => l10n.bookLibraryStyleBookstore,
+                },
+                onChanged: _pushPersonalizationSync,
+              ),
+              EnumPreferenceTile<MusicLibraryStyle>(
+                key: const ValueKey('pref_music_library_style'),
+                preference: UserPreferences.musicLibraryStyle,
+                title: l10n.musicLibraryStyle,
+                description: l10n.musicLibraryStyleDescription,
+                icon: Icons.library_music_outlined,
+                labelOf: (v) => switch (v) {
+                  MusicLibraryStyle.classic => l10n.musicLibraryStyleClassic,
+                  MusicLibraryStyle.quickAccess =>
+                    l10n.musicLibraryStyleQuickAccess,
+                  MusicLibraryStyle.immersive => l10n.musicLibraryStyleImmersive,
+                },
+                onChanged: _pushPersonalizationSync,
+              ),
               SwitchPreferenceTile(
                 preference: UserPreferences.groupItemsIntoCollections,
                 title: l10n.groupItemsIntoCollections,

@@ -17,6 +17,8 @@
 		23807A4EDDB23AF490468A59 /* SubtitleFontLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A612BBD5A20C7D958608852B /* SubtitleFontLocator.swift */; };
 		2576835342648110517F60BC /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1223DA507FF924808DC58D5B /* Pods_RunnerTests.framework */; };
 		2FBBDDCD9DF4AA12F0EECCBD /* EngineTrustPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03952BAF79509CCED4C39448 /* EngineTrustPolicy.swift */; };
+		53CFB4E3B4A3ED32C53E712F /* ClientIdentityStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C420A016E390AD1852E5F9 /* ClientIdentityStore.swift */; };
+		4E26D2DE2769773D0C85F1D7 /* MoonfinURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E54071C7791340176AAD4CE /* MoonfinURLSession.swift */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		4BC24797D4BCA1F85446ABC9 /* AetherPlayerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C182E5551362E126A18C153 /* AetherPlayerWrapper.swift */; };
@@ -66,6 +68,8 @@
 
 /* Begin PBXFileReference section */
 		03952BAF79509CCED4C39448 /* EngineTrustPolicy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EngineTrustPolicy.swift; path = ../../../tvos/Runner/Playback/Aether/EngineTrustPolicy.swift; sourceTree = "<group>"; };
+		63C420A016E390AD1852E5F9 /* ClientIdentityStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ClientIdentityStore.swift; path = ../../../tvos/Runner/Playback/Aether/ClientIdentityStore.swift; sourceTree = "<group>"; };
+		5E54071C7791340176AAD4CE /* MoonfinURLSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MoonfinURLSession.swift; path = ../../../tvos/Runner/Playback/Aether/MoonfinURLSession.swift; sourceTree = "<group>"; };
 		041867628B7462DDA898ACDA /* NowPlayingController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NowPlayingController.swift; path = ../../../tvos/Runner/Playback/Aether/NowPlayingController.swift; sourceTree = "<group>"; };
 		095D6119F29CB7DFCDDFBEC9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1223DA507FF924808DC58D5B /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -165,6 +169,8 @@
 				C447AAE2415C624001FFFAE0 /* AetherVideoChannel.swift */,
 				6A72A9663C768D316590C41E /* AssRenderer.swift */,
 				03952BAF79509CCED4C39448 /* EngineTrustPolicy.swift */,
+				63C420A016E390AD1852E5F9 /* ClientIdentityStore.swift */,
+				5E54071C7791340176AAD4CE /* MoonfinURLSession.swift */,
 				041867628B7462DDA898ACDA /* NowPlayingController.swift */,
 				162847A8C39D9030F4A75302 /* PlayerTypes.swift */,
 				A612BBD5A20C7D958608852B /* SubtitleFontLocator.swift */,
@@ -497,6 +503,8 @@
 				B2D3B6899D5AC372CED69286 /* AetherVideoChannel.swift in Sources */,
 				523B835D701A02BD8C31AF5B /* AssRenderer.swift in Sources */,
 				2FBBDDCD9DF4AA12F0EECCBD /* EngineTrustPolicy.swift in Sources */,
+				53CFB4E3B4A3ED32C53E712F /* ClientIdentityStore.swift in Sources */,
+				4E26D2DE2769773D0C85F1D7 /* MoonfinURLSession.swift in Sources */,
 				E2A07118715C886FDA36EA75 /* NowPlayingController.swift in Sources */,
 				4C2AA55DF77FE908C5152E72 /* PlayerTypes.swift in Sources */,
 				23807A4EDDB23AF490468A59 /* SubtitleFontLocator.swift in Sources */,
@@ -579,7 +587,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -599,7 +607,7 @@
 				DEVELOPMENT_TEAM = "$(MOONFIN_DEVELOPMENT_TEAM)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -711,7 +719,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -762,7 +770,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -784,7 +792,7 @@
 				DEVELOPMENT_TEAM = "$(MOONFIN_DEVELOPMENT_TEAM)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -809,7 +817,7 @@
 				DEVELOPMENT_TEAM = "$(MOONFIN_DEVELOPMENT_TEAM)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -875,10 +883,10 @@
 		};
 		C40E203472430991A26271B6 /* XCRemoteSwiftPackageReference "AetherEngine" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/superuser404notfound/AetherEngine";
+			repositoryURL = "https://github.com/RadicalMuffinMan/AetherEngine";
 			requirement = {
-				kind = exactVersion;
-				version = 6.89.1;
+				kind = revision;
+				revision = 47cf2f94b38be8520b31d6e0aecdbf47ce7eb857;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

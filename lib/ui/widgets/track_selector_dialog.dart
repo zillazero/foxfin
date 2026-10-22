@@ -28,7 +28,6 @@ Future<T?> showStyledPlayerDialog<T>(
     barrierDismissible: barrierDismissible,
     builder: (dialogContext) {
       final mediaQuery = MediaQuery.of(dialogContext);
-      final glass = AppColorScheme.isGlass;
 
       return ValueListenableBuilder<bool>(
         valueListenable: CustomTVTextField.isKeyboardVisibleNotifier,
@@ -45,21 +44,12 @@ Future<T?> showStyledPlayerDialog<T>(
               effectiveBottomInset -
               24;
 
-          final inner = Container(
+          final inner = playerDialogPanel(
             constraints: BoxConstraints(
               minWidth: 340,
               maxWidth: maxWidth,
               maxHeight: maxDialogHeight,
             ),
-            decoration: glass
-                ? null
-                : BoxDecoration(
-                    color: AppColorScheme.surface.withValues(alpha: 0.9),
-                    borderRadius: AppRadius.circular(20),
-                    border: Border.fromBorderSide(
-                      ThemeRegistry.active.borders.chipBorder,
-                    ),
-                  ),
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -118,19 +108,43 @@ Future<T?> showStyledPlayerDialog<T>(
                 ? const EdgeInsets.fromLTRB(40, 20, 40, 360)
                 : const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
             backgroundColor: Colors.transparent,
-            child: glass
-                ? GlassSurface(
-                    cornerRadius: 20,
-                    reinforced: true,
-                    fallbackColor: Colors.transparent,
-                    child: inner,
-                  )
-                : inner,
+            child: inner,
           );
         },
       );
     },
   );
+}
+
+/// The panel the player's dialogs sit in, on glass when the theme uses it.
+Widget playerDialogPanel({
+  required BoxConstraints constraints,
+  required EdgeInsets padding,
+  required Widget child,
+}) {
+  final glass = AppColorScheme.isGlass;
+  final panel = Container(
+    constraints: constraints,
+    decoration: glass
+        ? null
+        : BoxDecoration(
+            color: AppColorScheme.surface.withValues(alpha: 0.9),
+            borderRadius: AppRadius.circular(20),
+            border: Border.fromBorderSide(
+              ThemeRegistry.active.borders.chipBorder,
+            ),
+          ),
+    padding: padding,
+    child: child,
+  );
+  return glass
+      ? GlassSurface(
+          cornerRadius: 20,
+          reinforced: true,
+          fallbackColor: Colors.transparent,
+          child: panel,
+        )
+      : panel;
 }
 
 class TrackOption {
@@ -150,6 +164,10 @@ class TrackOption {
   final bool scrollLabel;
   final bool scrollSubtitle;
 
+  /// Shown in place of the selection mark, for a row that opens something
+  /// rather than picks a track.
+  final IconData? icon;
+
   const TrackOption({
     required this.label,
     this.subtitle,
@@ -158,6 +176,7 @@ class TrackOption {
     this.badges = const <String>[],
     this.scrollLabel = false,
     this.scrollSubtitle = false,
+    this.icon,
   });
 }
 
@@ -263,7 +282,12 @@ class _TrackRowState extends State<_TrackRow> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           child: Row(
             children: [
-              if (widget.isSelected)
+              if (widget.option.icon case final icon?)
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Icon(icon, color: Colors.white70, size: 20),
+                )
+              else if (widget.isSelected)
                 Padding(
                   padding: const EdgeInsets.only(right: 12),
                   child: Icon(Icons.check_circle, color: AppColorScheme.accent, size: 20),

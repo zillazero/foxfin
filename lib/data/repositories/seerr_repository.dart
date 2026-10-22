@@ -6,6 +6,7 @@ import '../services/seerr/seerr_api_models.dart';
 import '../services/seerr/seerr_discover_sliders.dart';
 import '../services/seerr/seerr_http_client.dart';
 import '../services/seerr/seerr_models.dart';
+import '../../preference/seerr_direct_store.dart';
 
 class SeerrRepository {
   final PreferenceStore _store;
@@ -140,6 +141,55 @@ class SeerrRepository {
     }
   }
 
+  /// Foxfin direct mode: whether a Jellyseerr server is configured directly.
+  bool _isDirect = false;
+  bool get isDirectMode => _isDirect;
+
+  Future<MoonfinProxyConfig> _buildConfig(String baseUrl, String token) async {
+    final uid = _session.activeUserId ?? '';
+    final direct = uid.isEmpty ? null : await SeerrDirectStore.url(uid);
+    _isDirect = direct != null && direct.isNotEmpty;
+    return MoonfinProxyConfig(
+      jellyfinBaseUrl: baseUrl,
+      jellyfinToken: token,
+      directUrl: _isDirect ? direct : null,
+      apiKey: _isDirect ? await SeerrDirectStore.apiKey(uid) : null,
+      sessionCookie: _isDirect ? await SeerrDirectStore.cookie(uid) : null,
+    );
+  }
+
+  /// Saves (or clears, with an empty [url]) a direct Jellyseerr connection and
+  /// re-initialises the client. Returns the resulting status.
+  Future<MoonfinStatusResponse> configureDirect({
+    required String url,
+    String? apiKey,
+  }) async {
+    final uid = _session.activeUserId;
+    if (uid == null) throw StateError('No active user');
+    final clean = url.trim();
+    if (clean.isEmpty) {
+      await SeerrDirectStore.clear(uid);
+    } else {
+      final parsed = Uri.tryParse(clean);
+      if (parsed == null || !(parsed.isScheme('http') || parsed.isScheme('https')) || parsed.host.isEmpty) {
+        throw const FormatException('Invalid Seerr URL');
+      }
+      await SeerrDirectStore.setUrl(uid, clean);
+      await SeerrDirectStore.setCookie(uid, null);
+      if (apiKey != null) await SeerrDirectStore.setApiKey(uid, apiKey);
+    }
+    await ensureInitialized(force: true);
+    final c = _httpClient;
+    if (c == null) return const MoonfinStatusResponse();
+    final st = await c.getMoonfinStatus();
+    if (st.authenticated) {
+      await _store.setBool(_enabledKey, true);
+      await _store.setString(_moonfinDisplayNameKey, st.displayName ?? '');
+      await _store.setString(_moonfinUserIdKey, st.seerrUserId?.toString() ?? '');
+    }
+    return st;
+  }
+
   Future<void> _initMoonfinMode() async {
     final baseUrl = _client.baseUrl;
     final token = _client.accessToken;
@@ -148,10 +198,7 @@ class SeerrRepository {
       return;
     }
 
-    _initClient(MoonfinProxyConfig(
-      jellyfinBaseUrl: baseUrl,
-      jellyfinToken: token,
-    ));
+    _initClient(await _buildConfig(baseUrl, token));
     _isMoonfinMode = true;
 
     try {
@@ -166,7 +213,13 @@ class SeerrRepository {
 
   void _initClient(MoonfinProxyConfig proxyConfig) {
     _httpClient?.close();
-    _httpClient = SeerrHttpClient(proxyConfig: proxyConfig);
+    final uid = _session.activeUserId ?? '';
+    _httpClient = SeerrHttpClient(
+      proxyConfig: proxyConfig,
+      onSessionCookie: uid.isEmpty
+          ? null
+          : (cookie) => SeerrDirectStore.setCookie(uid, cookie),
+    );
     _cachedPublicSettings = null;
     _discoverSliders = null;
   }
@@ -214,10 +267,7 @@ class SeerrRepository {
     if (userId == null) throw StateError('No active user');
     _lastUserId = userId;
 
-    _initClient(MoonfinProxyConfig(
-      jellyfinBaseUrl: jellyfinBaseUrl,
-      jellyfinToken: jellyfinToken,
-    ));
+    _initClient(await _buildConfig(jellyfinBaseUrl, jellyfinToken));
 
     final status = await _httpClient!.getMoonfinStatus();
     final effectiveEnabled = status.enabled && status.authenticated;

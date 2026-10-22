@@ -259,6 +259,24 @@ class AggregatedItem {
 
   List<Map<String, dynamic>> get people => _toListOfMaps(rawData['People']);
 
+  /// What [personId] plays in this title, like "Bender (voice)". Several
+  /// roles come one per line and are joined into one.
+  String? roleOf(String personId) {
+    for (final person in people) {
+      if (person['Id'] != personId) continue;
+      final role = ((person['Role'] as String?) ?? '')
+          .split('\n')
+          .map((line) => line.trim())
+          .where((line) => line.isNotEmpty)
+          .join(', ');
+      if (role.isNotEmpty) return role;
+    }
+    return null;
+  }
+
+  /// The role a person page tagged this title with, see [roleOf].
+  String? get personRole => rawData['__moonfinPersonRole'] as String?;
+
   List<Map<String, dynamic>> get studios => _toListOfMaps(rawData['Studios']);
 
   List<Map<String, dynamic>> get mediaSources =>
@@ -276,6 +294,9 @@ class AggregatedItem {
   /// suffix all land in this one count, so it answers for every layout the
   /// server recognizes.
   int get localTrailerCount => _toInt(rawData['LocalTrailerCount']) ?? 0;
+
+  /// How many files a video is split across, like DVD1 and DVD2.
+  int get partCount => _toInt(rawData['PartCount']) ?? 1;
 
   List<Map<String, dynamic>> get chapters => _toListOfMaps(rawData['Chapters']);
 

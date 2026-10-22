@@ -105,6 +105,14 @@ class _AccountScreen extends StatelessWidget {
                   icon: Icons.gpp_maybe,
                   onChangedValue: (v) => gAllowSelfSignedCertificates = v,
                 ),
+                _TvSettingsListTile(
+                  leading: const Icon(Icons.verified_user),
+                  title: Text(l10n.settingsClientCertificates),
+                  subtitle: Text(l10n.settingsClientCertificatesSubtitle),
+                  onTap: () => context.pushSettingsScreen(
+                    const _ClientCertificatesScreen(),
+                  ),
+                ),
               ],
             ),
           ],
@@ -149,4 +157,152 @@ Future<void> _enableKidsMode(BuildContext context) async {
   // the mode has just taken away. Drop back to the panel, where the only entry
   // left is the way out.
   navigator.popUntil((route) => route.isFirst);
+}
+
+class _ClientCertificatesScreen extends StatefulWidget {
+  const _ClientCertificatesScreen();
+
+  @override
+  State<_ClientCertificatesScreen> createState() =>
+      _ClientCertificatesScreenState();
+}
+
+class _ClientCertificatesScreenState extends State<_ClientCertificatesScreen> {
+  final _store = GetIt.instance<ClientCertificateStore>();
+  List<StoredClientCertificate>? _certificates;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    final certificates = await _store.getAll();
+    if (mounted) setState(() => _certificates = certificates);
+  }
+
+  String get _activeServerHost {
+    final serverId = GetIt.instance<SessionRepository>().activeServerId;
+    if (serverId == null) return '';
+    final address = GetIt.instance<ServerRepository>()
+        .getServer(serverId)
+        ?.address;
+    return Uri.tryParse(address ?? '')?.host ?? '';
+  }
+
+  Future<void> _add() async {
+    final l10n = AppLocalizations.of(context);
+    var typed = _activeServerHost;
+    final confirmed = await showFocusRestoringDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog.adaptive(
+        title: Text(l10n.clientCertAddHostPrompt),
+        content: Material(
+          type: MaterialType.transparency,
+          child: TextFormField(
+            initialValue: typed,
+            autofocus: true,
+            keyboardType: TextInputType.url,
+            onChanged: (value) => typed = value,
+            onFieldSubmitted: (_) => Navigator.of(dialogContext).pop(true),
+          ),
+        ),
+        actions: [
+          adaptiveDialogAction(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          adaptiveDialogAction(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.ok),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    // Matches the host form the server list keeps, punycode included.
+    final url = normalizeServerBaseUrl(typed);
+    final host =
+        Uri.tryParse(url.contains('://') ? url : 'https://$url')?.host ?? '';
+    if (host.isNotEmpty) await _import(host);
+  }
+
+  Future<void> _import(String host) async {
+    final saved = await showClientCertificateDialog(
+      context: context,
+      host: host,
+    );
+    if (saved != null) await _load();
+  }
+
+  Future<void> _manage(StoredClientCertificate certificate) async {
+    final l10n = AppLocalizations.of(context);
+    final action = await showFocusRestoringDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog.adaptive(
+        title: Text(certificate.host),
+        actions: [
+          adaptiveDialogAction(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.cancel),
+          ),
+          adaptiveDialogAction(
+            onPressed: () => Navigator.of(dialogContext).pop('replace'),
+            child: Text(l10n.clientCertReplace),
+          ),
+          adaptiveDialogAction(
+            onPressed: () => Navigator.of(dialogContext).pop('remove'),
+            isDestructive: true,
+            child: Text(l10n.remove),
+          ),
+        ],
+      ),
+    );
+    if (!mounted) return;
+    if (action == 'replace') await _import(certificate.host);
+    if (action == 'remove') {
+      await removeClientCertificate(_store, certificate.host);
+      await _load();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final dates = MaterialLocalizations.of(context);
+    final certificates = _certificates;
+    return Scaffold(
+      appBar: buildSettingsAppBar(
+        context,
+        Text(l10n.settingsClientCertificates),
+      ),
+      body: certificates == null
+          ? const Center(child: CircularProgressIndicator())
+          : ListView(
+              children: [
+                adaptiveListSection(
+                  children: [
+                    for (final certificate in certificates)
+                      _TvSettingsListTile(
+                        leading: const Icon(Icons.verified_user),
+                        title: Text(certificate.host),
+                        subtitle: Text(
+                          '${l10n.clientCertSubject}: ${certificate.subject}\n'
+                          '${l10n.clientCertExpires(dates.formatMediumDate(certificate.notAfter.toLocal()))}',
+                        ),
+                        onTap: () => _manage(certificate),
+                      ),
+                    _TvSettingsListTile(
+                      autofocus: certificates.isEmpty,
+                      leading: const Icon(Icons.add),
+                      title: Text(l10n.clientCertAdd),
+                      onTap: _add,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+    );
+  }
 }

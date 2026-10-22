@@ -33,7 +33,7 @@ Future<void> showSeerrCancelRequestDialog({
   await showFocusRestoringDialog(
     context: context,
     builder: (ctx) => AlertDialog.adaptive(
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       title: Text(cancelLabel, style: const TextStyle(color: Colors.white)),
       content: Text(message, style: const TextStyle(color: Colors.white70)),
       actions: [

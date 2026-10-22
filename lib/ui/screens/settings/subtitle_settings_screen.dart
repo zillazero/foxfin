@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../util/language_codes.dart';
+import '../../../util/remote_subtitle_labels.dart';
 import '../../../preference/preference_constants.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../l10n/app_localizations.dart';
@@ -70,6 +71,17 @@ class SubtitleSettingsScreen extends StatelessWidget {
                         SubtitleMode.none => l10n.subtitleModeNoneDescription,
                       },
                     ),
+                    MultiSelectPreferenceTile(
+                      preference: UserPreferences.subtitleDownloadLanguages,
+                      title: l10n.subtitleDownloadLanguages,
+                      description: l10n.subtitleDownloadLanguagesDescription,
+                      icon: Icons.download,
+                      // Every language, since the providers cover far more
+                      // than the app is translated into.
+                      options: kIso6392Languages,
+                      emptyLabel: l10n.auto,
+                      maxSelected: maxSubtitleDownloadLanguages,
+                    ),
                   ],
                 ),
                 if (showStreamSettings) ...[
@@ -82,6 +94,14 @@ class SubtitleSettingsScreen extends StatelessWidget {
                         icon: Icons.language,
                         options: langOptions,
                       ),
+                      if (PlatformDetection.isAndroid)
+                        StringPickerPreferenceTile(
+                          preference: UserPreferences
+                              .preferredSecondarySubtitleLanguage,
+                          title: l10n.preferredSecondarySubtitleLanguage,
+                          icon: Icons.language,
+                          options: langOptions,
+                        ),
                       StringPickerPreferenceTile(
                         preference: UserPreferences.fallbackSubtitleLanguage,
                         title: l10n.fallbackSubtitleLanguage,

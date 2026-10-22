@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
 import 'package:moonfin/data/services/synced_fields.dart';
+import 'package:moonfin/preference/preference_constants.dart';
 import 'package:moonfin/preference/user_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,6 +31,7 @@ void main() {
     'cardFocusExpansion',
     'cinemaModeEnabled',
     'cinemaModeEpisodesEnabled',
+    'cinemaModeSkipEnabled',
     'clockBehavior',
     'collectionsRowShowEpisodes',
     'collectionsRowSortBy',
@@ -126,6 +128,9 @@ void main() {
     'interfaceStyle',
     'languageOverride',
     'libraryPosterSize',
+    'libraryStyle',
+    'bookLibraryStyle',
+    'musicLibraryStyle',
     'loadingAnimationImage',
     'loadingAnimationPosition',
     'loadingAnimationSize',
@@ -197,6 +202,7 @@ void main() {
     'preferSystemImeKeyboard',
     'preferTextSubtitles',
     'previewAudioEnabled',
+    'previewVolume',
     'radarrCalendarShowCinema',
     'radarrCalendarShowDate',
     'radarrCalendarShowDigital',
@@ -315,6 +321,7 @@ void main() {
     'tmdbTrendingTvDailyEnabled',
     'tmdbTrendingTvWeeklyEnabled',
     'tmdbUpcomingMoviesEnabled',
+    'trailerVolume',
     'unpauseRewindDuration',
     'updateNotificationsEnabled',
     'use24HourClock',
@@ -374,6 +381,12 @@ void main() {
         final effective = prefs.getEffectivePreference(field.pref);
         if (effective.key == field.pref.key) unscoped.add(field.serverKey);
       }
+      for (final type in HomeSectionType.values) {
+        final pref = UserPreferences.homeRowImageType(type);
+        if (prefs.getEffectivePreference(pref).key == pref.key) {
+          unscoped.add('homeRowImageTypes ${type.serializedName}');
+        }
+      }
 
       expect(unscoped, isEmpty,
           reason: 'these would leak across servers: \$unscoped');
@@ -381,6 +394,57 @@ void main() {
   });
 
   scopeAdoptionTests();
+  homeRowImageTypeTests();
+}
+
+void homeRowImageTypeTests() {
+  group('home row image types', () {
+    test('round-trip through the wire format', () {
+      final types = {
+        HomeSectionType.genres: ImageType.thumb,
+        HomeSectionType.nextUp: ImageType.banner,
+        HomeSectionType.seerrTrending: ImageType.poster,
+      };
+      final encoded = encodeHomeRowImageTypes(types)!;
+
+      expect(encoded, 'genres:thumb,nextup:banner,seerr_trending:poster');
+      expect(decodeHomeRowImageTypes(encoded), types);
+    });
+
+    test('Continue Watching stays on its own key', () {
+      expect(
+        encodeHomeRowImageTypes({
+          HomeSectionType.resume: ImageType.thumb,
+          HomeSectionType.genres: ImageType.thumb,
+        }),
+        'genres:thumb',
+      );
+      expect(decodeHomeRowImageTypes('resume:thumb,genres:thumb'), {
+        HomeSectionType.genres: ImageType.thumb,
+      });
+    });
+
+    test('sends nothing when no row has a type', () {
+      expect(encodeHomeRowImageTypes({}), isNull);
+      expect(
+        encodeHomeRowImageTypes({HomeSectionType.resume: ImageType.thumb}),
+        isNull,
+      );
+    });
+
+    test("skips pairs it doesn't recognize and ignores case", () {
+      expect(
+        decodeHomeRowImageTypes(
+          'Genres:Thumb,nosuchrow:poster,nextup:square,latestmedia,,rewatch:banner:x, livetv : BANNER ',
+        ),
+        {
+          HomeSectionType.genres: ImageType.thumb,
+          HomeSectionType.liveTv: ImageType.banner,
+        },
+      );
+      expect(decodeHomeRowImageTypes(''), isEmpty);
+    });
+  });
 }
 
 // Moving a preference to per-server storage changes which key reads consult, so an existing

@@ -61,10 +61,11 @@ abs_files.each do |abs|
 end
 
 # --- AetherEngine ---
-# Pinned exactly, since an engine bump is a deliberate change rather than
+# Pinned to a revision of the fork, which carries client certificate support
+# upstream doesn't have yet. An engine bump is a deliberate change rather than
 # something a resolve should pick up on its own.
-aether_remote_url = 'https://github.com/superuser404notfound/AetherEngine'
-aether_version = '6.89.1'
+aether_remote_url = 'https://github.com/RadicalMuffinMan/AetherEngine'
+aether_revision = '47cf2f94b38be8520b31d6e0aecdbf47ce7eb857'
 aether_local_path = File.expand_path(File.join(project_dir, '..', '..', 'AetherEngine'))
 use_local_aether = ENV['AETHER_LOCAL'] == '1'
 
@@ -106,8 +107,8 @@ unless aether_pkg
   else
     aether_pkg = project.new(Xcodeproj::Project::Object::XCRemoteSwiftPackageReference)
     aether_pkg.repositoryURL = aether_remote_url
-    aether_pkg.requirement = { 'kind' => 'exactVersion', 'version' => aether_version }
-    puts "added AetherEngine remote package reference (#{aether_version})"
+    aether_pkg.requirement = { 'kind' => 'revision', 'revision' => aether_revision }
+    puts "added AetherEngine remote package reference (#{aether_revision})"
   end
   project.root_object.package_references << aether_pkg
 end
@@ -118,10 +119,10 @@ end
 if !use_local_aether &&
    aether_pkg.is_a?(Xcodeproj::Project::Object::XCRemoteSwiftPackageReference) &&
    (aether_pkg.repositoryURL != aether_remote_url ||
-    aether_pkg.requirement != { 'kind' => 'exactVersion', 'version' => aether_version })
+    aether_pkg.requirement != { 'kind' => 'revision', 'revision' => aether_revision })
   aether_pkg.repositoryURL = aether_remote_url
-  aether_pkg.requirement = { 'kind' => 'exactVersion', 'version' => aether_version }
-  puts "repointed AetherEngine at #{aether_remote_url} #{aether_version}"
+  aether_pkg.requirement = { 'kind' => 'revision', 'revision' => aether_revision }
+  puts "repointed AetherEngine at #{aether_remote_url} #{aether_revision}"
 end
 
 unless target.package_product_dependencies.any? { |d| d.product_name == 'AetherEngine' }
@@ -160,11 +161,11 @@ unless target.package_product_dependencies.any? { |d| d.product_name == 'libass'
 end
 
 target.build_configurations.each do |config|
-  config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+  config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '18.0'
 end
 
 project.build_configurations.each do |config|
-  config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+  config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '18.0'
 end
 
 project.save

@@ -15,6 +15,7 @@ import '../../widgets/adaptive/adaptive_list_section.dart';
 import '../../widgets/settings/clean_settings_typography.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/settings/preference_tiles.dart';
+import '../detail/playlist_sort_filter_bar.dart';
 import 'settings_app_bar.dart';
 
 class HomeRowTogglesScreen extends StatefulWidget {
@@ -389,12 +390,8 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                         LibrarySortBy.runtime,
                         LibrarySortBy.random,
                       ],
-                      labelOf: (v) => v == LibrarySortBy.premiereDate
-                          ? 'Release Date'
-                          : v.displayName,
-                      dialogLabelOf: (v) => v == LibrarySortBy.premiereDate
-                          ? 'Release Date'
-                          : v.displayName,
+                      labelOf: (v) => librarySortLabel(v, l10n),
+                      dialogLabelOf: (v) => librarySortLabel(v, l10n),
                       onChanged: _onAudioSortChanged,
                     ),
                     EnumPreferenceTile<SortDirection>(
@@ -427,7 +424,7 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                       title: l10n.collectionsRowSorting,
                       description: l10n.collectionsRowSortingDescription,
                       icon: Icons.sort,
-                      labelOf: (v) => v.displayName,
+                      labelOf: (v) => librarySortLabel(v, l10n),
                       onChanged: _onCollectionsSortChanged,
                     ),
                     EnumPreferenceTile<SortDirection>(
@@ -468,7 +465,7 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                       description: l10n.favoritesRowSortingDescription,
                       icon: Icons.sort,
                       values: LibrarySortBy.itemsApiValues,
-                      labelOf: (v) => v.displayName,
+                      labelOf: (v) => librarySortLabel(v, l10n),
                       onChanged: _onFavoritesSortChanged,
                     ),
                     EnumPreferenceTile<SortDirection>(
@@ -502,7 +499,7 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                       description: l10n.genresRowSortingDescription,
                       icon: Icons.sort,
                       values: LibrarySortBy.itemsApiValues,
-                      labelOf: (v) => v.displayName,
+                      labelOf: (v) => librarySortLabel(v, l10n),
                       onChanged: _onGenresSortChanged,
                     ),
                     EnumPreferenceTile<SortDirection>(
@@ -543,7 +540,7 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                       title: l10n.playlistsRowSorting,
                       description: l10n.playlistsRowSortingDescription,
                       icon: Icons.sort,
-                      labelOf: (v) => v.displayName,
+                      labelOf: (v) => librarySortLabel(v, l10n),
                       onChanged: _onPlaylistsSortChanged,
                     ),
                     EnumPreferenceTile<SortDirection>(
@@ -705,7 +702,7 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                       description: l10n.studiosRowSortingDescription,
                       icon: Icons.sort_by_alpha,
                       values: LibrarySortBy.itemsApiValues,
-                      labelOf: (v) => v.displayName,
+                      labelOf: (v) => librarySortLabel(v, l10n),
                       onChanged: _onStudiosSortChanged,
                     ),
                     EnumPreferenceTile<SortDirection>(

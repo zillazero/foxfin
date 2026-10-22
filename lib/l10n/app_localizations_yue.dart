@@ -72,6 +72,35 @@ class AppLocalizationsYue extends AppLocalizations {
   String get quickConnectInstruction => '在伺服器的 Web 儀表板上輸入以下程式碼：';
 
   @override
+  String get quickConnectScanHint =>
+      'Or scan this with a phone that\'s signed in to your server';
+
+  @override
+  String get quickConnectTapOrScanHint =>
+      'Tap to approve in your browser, or scan this with another device';
+
+  @override
+  String get timesUpTitle => 'Time\'s up';
+
+  @override
+  String get timesUpMessage => 'This account isn\'t available right now.';
+
+  @override
+  String timesUpResumesToday(String time) {
+    return 'You can use it again today at $time.';
+  }
+
+  @override
+  String timesUpResumesTomorrow(String time) {
+    return 'You can use it again tomorrow at $time.';
+  }
+
+  @override
+  String timesUpResumesOn(String day, String time) {
+    return 'You can use it again on $day at $time.';
+  }
+
+  @override
   String get waitingForAuthorization => '等待授權...';
 
   @override
@@ -82,6 +111,10 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get loginFailed => '登入失敗';
+
+  @override
+  String get loginForbidden =>
+      'This account can\'t sign in right now. It may be outside its allowed hours, locked or disabled. Try again later or ask an administrator.';
 
   @override
   String quickConnectUnavailable(String detail) {
@@ -506,6 +539,19 @@ class AppLocalizationsYue extends AppLocalizations {
   String get performanceModeReduced => 'Reduced';
 
   @override
+  String get rendererMode => 'Renderer';
+
+  @override
+  String get rendererModeSubtitle =>
+      'Auto uses Impeller on boxes whose graphics run it smoothly and Skia everywhere else. Pick Skia if animations or video look wrong. Takes effect on the next launch.';
+
+  @override
+  String get rendererModeAuto => 'Auto';
+
+  @override
+  String get rendererModeSkia => 'Skia';
+
+  @override
   String get trailerPreviewHeldBack =>
       'Off because Performance is set to Reduced for this device';
 
@@ -631,6 +677,19 @@ class AppLocalizationsYue extends AppLocalizations {
   String get gameFastForward => '快進';
 
   @override
+  String get gameOrientation => 'Game orientation';
+
+  @override
+  String get gameOrientationSubtitle =>
+      'Screen orientation while playing games';
+
+  @override
+  String get landscape => 'Landscape';
+
+  @override
+  String get portrait => 'Portrait';
+
+  @override
   String get gameEmulatorSettings => '模擬器設定';
 
   @override
@@ -638,6 +697,22 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get gameHoldToOpenMenu => '撳住開選單';
+
+  @override
+  String get gameKeepPlaying => 'Keep playing';
+
+  @override
+  String get gameSaveAndExit => 'Save & exit';
+
+  @override
+  String get gameExitGame => 'Exit game';
+
+  @override
+  String get gameSavingBeforeExit => 'Saving…';
+
+  @override
+  String get gameSaveFailedStillPlaying =>
+      'Could not save state. Still playing.';
 
   @override
   String get gamePlaybackUnsupported => '呢部裝置暫時仲未支援玩遊戲。';
@@ -1295,6 +1370,9 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get extras => '特別收錄';
+
+  @override
+  String get additionalParts => 'Additional Parts';
 
   @override
   String get behindTheScenes => '幕後花絮';
@@ -1978,6 +2056,9 @@ class AppLocalizationsYue extends AppLocalizations {
   String get keyNameBackspace => 'Backspace';
 
   @override
+  String get keyNameDelete => 'Delete';
+
+  @override
   String get keyNamePageUp => 'Page Up';
 
   @override
@@ -2061,6 +2142,9 @@ class AppLocalizationsYue extends AppLocalizations {
       'Exit fullscreen, or stop if not fullscreen';
 
   @override
+  String get shortcutHideControls => 'Hide controls';
+
+  @override
   String get shortcutStopPlayback => 'Stop playback';
 
   @override
@@ -2068,6 +2152,9 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get shortcutPreviousItem => 'Previous item';
+
+  @override
+  String get shortcutSkipSegment => 'Skip intro or credits when offered';
 
   @override
   String get shortcutShowShortcuts => 'Show this list';
@@ -2142,9 +2229,6 @@ class AppLocalizationsYue extends AppLocalizations {
       'Active — tone-mapped to SDR for this display';
 
   @override
-  String get hdrOutputDisplayNotHdr => 'Inactive — display is not in HDR mode';
-
-  @override
   String get hdrOutputContentSdr => 'Inactive — content is SDR';
 
   @override
@@ -2155,11 +2239,20 @@ class AppLocalizationsYue extends AppLocalizations {
       'Inactive — could not start, using the standard path';
 
   @override
-  String get nativeHdrOutput => 'Native HDR Output';
+  String get videoRenderer => 'Video Renderer';
 
   @override
-  String get nativeHdrOutputDescription =>
-      'Sends HDR video to the display untouched instead of converting it to SDR. Used only when the display is already in HDR mode and the title is HDR.';
+  String get videoRendererDescription =>
+      'Native window gives the smoothest motion and sends HDR to the display untouched. Try another option if video misbehaves.';
+
+  @override
+  String get videoRendererNativeWindow => 'Native window (recommended)';
+
+  @override
+  String get videoRendererNativeHdrOnly => 'Native window for HDR only';
+
+  @override
+  String get videoRendererInApp => 'In-app (legacy)';
 
   @override
   String get codec => '編解碼器';
@@ -2200,6 +2293,13 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get epubUnavailableOnPlatform => '應用程式內 EPUB 渲染在此平台上尚不可用。';
+
+  @override
+  String get bookReadingUnavailableTitle => 'Books can\'t be read on Apple TV';
+
+  @override
+  String get bookReadingUnavailableMessage =>
+      'Open it in Foxfin on a phone, tablet or computer to read it. Audiobooks still play here.';
 
   @override
   String formatCannotRenderInApp(String extension) {
@@ -2384,6 +2484,9 @@ class AppLocalizationsYue extends AppLocalizations {
   String get liveBadge => '居住';
 
   @override
+  String get liveTvJumpToLive => 'Jump to Live';
+
+  @override
   String guideNextProgram(String time, String title) {
     return '下一個：$time  $title';
   }
@@ -2484,6 +2587,10 @@ class AppLocalizationsYue extends AppLocalizations {
   @override
   String get playbackStreamLost =>
       'Playback stopped and could not be recovered.';
+
+  @override
+  String get playbackVideoUnsupported =>
+      'This device can\'t play this video\'s format. Try an external player.';
 
   @override
   String liveReconnecting(int attempt, int total) {
@@ -3578,6 +3685,10 @@ class AppLocalizationsYue extends AppLocalizations {
       'Use the arrows to change the order. On a remote, left and right move the highlighted button. Switching one off drops it below the rest.';
 
   @override
+  String get buttonShownInSyncPlayGroup =>
+      'Only shows while you\'re in a SyncPlay group';
+
+  @override
   String get orientationLock => 'Orientation Lock';
 
   @override
@@ -3697,6 +3808,13 @@ class AppLocalizationsYue extends AppLocalizations {
   @override
   String get settingsAudioFallbackCodecDescription =>
       '揀當來源串流冇辦法直接播放或者直通嗰陣，多聲道音訊要轉碼成咩格式。';
+
+  @override
+  String get transcodeAudioCodecs => 'Transcode Audio Codecs';
+
+  @override
+  String get transcodeAudioCodecsDescription =>
+      'The server converts audio in these formats instead of sending it as is.';
 
   @override
   String get settingsAudioFallbackCodecAuto => '自動偵測\n（建議）';
@@ -4007,6 +4125,17 @@ class AppLocalizationsYue extends AppLocalizations {
   String get defaultSubtitleLanguage => '預設字幕語言';
 
   @override
+  String get subtitleDownloadLanguages => 'Subtitle Download Languages';
+
+  @override
+  String get subtitleDownloadLanguagesDescription =>
+      'Languages to search when downloading subtitles, up to 5. Auto searches one language picked from your default subtitle language or the video.';
+
+  @override
+  String get preferredSecondarySubtitleLanguage =>
+      'Preferred Secondary Subtitle Language';
+
+  @override
   String get defaultToNoSubtitles => '預設為無字幕';
 
   @override
@@ -4014,6 +4143,25 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get subtitleSize => '字幕大小';
+
+  @override
+  String get primarySubtitleSlot => 'Primary';
+
+  @override
+  String get secondarySubtitleSlot => 'Secondary';
+
+  @override
+  String get secondarySubtitleTrack => 'Secondary Subtitle Track';
+
+  @override
+  String decreaseValue(String setting) {
+    return 'Decrease $setting';
+  }
+
+  @override
+  String increaseValue(String setting) {
+    return 'Increase $setting';
+  }
 
   @override
   String get textFillColor => '文字填滿顏色';
@@ -4402,6 +4550,109 @@ class AppLocalizationsYue extends AppLocalizations {
   String get libraryView => 'Library View';
 
   @override
+  String get libraryStyle => 'Video Library Style';
+
+  @override
+  String get libraryStyleDescription =>
+      'Classic is the original header with icon buttons. Modern puts search and labeled sort, group and filter buttons in one bar. Docked moves the controls and the letters into a side panel.';
+
+  @override
+  String get libraryStyleDescriptionPhone =>
+      'Classic is the original header with icon buttons. Modern adds labeled sort, group and filter chips under the search. Docked keeps the controls in a bar at the bottom of the screen.';
+
+  @override
+  String get libraryStyleClassic => 'Classic';
+
+  @override
+  String get libraryStyleModern => 'Modern';
+
+  @override
+  String get libraryStyleDocked => 'Docked';
+
+  @override
+  String get bookLibraryStyle => 'Book Library Style';
+
+  @override
+  String get bookLibraryStyleDescription =>
+      'Classic is the original shelves under a featured title. Reading Room leads with what you\'re reading on large cards. Bookstore browses the whole library in a grid.';
+
+  @override
+  String get bookLibraryStyleClassic => 'Classic';
+
+  @override
+  String get bookLibraryStyleReadingRoom => 'Reading Room';
+
+  @override
+  String get bookLibraryStyleBookstore => 'Bookstore';
+
+  @override
+  String get musicLibraryStyle => 'Music Library Style';
+
+  @override
+  String get musicLibraryStyleDescription =>
+      'Classic is the original rows under a Jump Back In card. Quick Access starts with a grid of your recent albums and playlists. Immersive leads with the album you\'re listening to.';
+
+  @override
+  String get musicLibraryStyleClassic => 'Classic';
+
+  @override
+  String get musicLibraryStyleQuickAccess => 'Quick Access';
+
+  @override
+  String get musicLibraryStyleImmersive => 'Immersive';
+
+  @override
+  String get jumpBackIn => 'Jump Back In';
+
+  @override
+  String get yourPlaylists => 'Your Playlists';
+
+  @override
+  String get fromThisAlbum => 'From This Album';
+
+  @override
+  String get searchMusic => 'Search Music';
+
+  @override
+  String bookSeriesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count series',
+      one: '1 series',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String bookInProgressCount(int count) {
+    return '$count in progress';
+  }
+
+  @override
+  String bookBrowseAllTitles(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Browse all $count titles',
+      one: 'Browse 1 title',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchBooks => 'Search books';
+
+  @override
+  String get libraryShowLabel => 'Show';
+
+  @override
+  String get libraryAToZ => 'A to Z';
+
+  @override
+  String get libraryJumpToLetter => 'Jump to letter';
+
+  @override
   String get enableFolderView => '啟用資料夾視圖';
 
   @override
@@ -4560,6 +4811,12 @@ class AppLocalizationsYue extends AppLocalizations {
   String get enableTrailerAudio => '喺媒體列嘅預告片開聲';
 
   @override
+  String get trailerVolume => 'Trailer Volume';
+
+  @override
+  String get trailerVolumeDescription => 'How loud media bar trailers play';
+
+  @override
   String get trailerCaptions => 'Trailer Captions';
 
   @override
@@ -4583,6 +4840,13 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get enablePreviewAudio => '為預告片和劇集預覽啟用音訊';
+
+  @override
+  String get previewVolume => 'Preview Volume';
+
+  @override
+  String get previewVolumeDescription =>
+      'How loud media previews on cards play';
 
   @override
   String get latestMedia => '最新媒體';
@@ -4665,6 +4929,12 @@ class AppLocalizationsYue extends AppLocalizations {
       'Customize padding between home rows';
 
   @override
+  String get homeRowsGenresAndStudios => 'Genres and Studios';
+
+  @override
+  String get homeRowsExternalLists => 'External Lists';
+
+  @override
   String get perRowSettings => '每行設定';
 
   @override
@@ -4702,6 +4972,13 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get enablePinCode => '啟用 PIN 碼';
+
+  @override
+  String get pinSynced => 'PIN synced';
+
+  @override
+  String get pinResetFailed =>
+      'The PIN on the server could not be cleared. If it is still set, ask a server administrator to remove it.';
 
   @override
   String get requirePinToAccess => '需要 PIN 碼才能存取您的帳戶';
@@ -5792,6 +6069,1416 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminExitTooltip => '退出管理';
 
   @override
+  String get adminPremiereNoteLiveTv =>
+      'Live TV needs Emby Premiere. Without it the server doesn\'t import channels or record anything.';
+
+  @override
+  String get adminPremiereNoteBackups =>
+      'Backup & Restore needs Emby Premiere once its trial ends.';
+
+  @override
+  String get adminGeneralRunAtStartup => 'Run the server at startup';
+
+  @override
+  String get adminGeneralLaunchWebApp =>
+      'Open the web app in a browser when the server starts';
+
+  @override
+  String get adminGeneralBannerText => 'Home screen banner text';
+
+  @override
+  String get adminGeneralBannerTextHelp =>
+      'Shown to every user on their home screen';
+
+  @override
+  String get adminGeneralSectionMaintenance => 'Maintenance mode';
+
+  @override
+  String get adminGeneralMaintenanceMode =>
+      'Put the server into maintenance mode';
+
+  @override
+  String get adminGeneralMaintenanceModeHelp =>
+      'Users only see the maintenance message.';
+
+  @override
+  String get adminGeneralMaintenanceMessage => 'Maintenance message';
+
+  @override
+  String get adminGeneralMaintenanceMessageHelp =>
+      'Leave it blank for a general message in each user\'s language.';
+
+  @override
+  String get adminGeneralSectionUpdates => 'Automatic updates';
+
+  @override
+  String get adminGeneralAutoUpdate => 'Update the server automatically';
+
+  @override
+  String get adminGeneralAutoRestart =>
+      'Restart automatically to apply updates';
+
+  @override
+  String get adminGeneralAutoRestartHelp =>
+      'The server only restarts while no users are active.';
+
+  @override
+  String adminTaskTriggerSystemEvent(String event) {
+    return 'After a system event ($event)';
+  }
+
+  @override
+  String get adminPluginNeedsPremiere =>
+      'Needs Emby Premiere after a 14-day free trial';
+
+  @override
+  String get adminEmbyBackupsHelp =>
+      'Emby backs up through its Backup & Restore plugin.';
+
+  @override
+  String get adminEmbyBackupsNoPlugin =>
+      'The Backup & Restore plugin isn\'t installed. Install it from the plugin catalog to back up this server.';
+
+  @override
+  String get adminEmbyBackupNow => 'Back up now';
+
+  @override
+  String get adminEmbyFullBackup => 'Full backup';
+
+  @override
+  String get adminEmbyLightBackups => 'Database backups';
+
+  @override
+  String adminEmbyBackupServerVersion(String version) {
+    return 'Emby $version';
+  }
+
+  @override
+  String adminEmbyRestoreConfirm(String name) {
+    return 'Restore $name? It replaces this server\'s libraries, settings, users and passwords, and the server shuts down when it\'s done. You may need to start it again yourself.';
+  }
+
+  @override
+  String get adminEmbyRestoreServerId => 'Restore the server ID';
+
+  @override
+  String get adminEmbyRestoreServerIdHelp =>
+      'Turn this off when you restore the same backup onto more than one server.';
+
+  @override
+  String get adminEmbyRestoreShuttingDown =>
+      'The restore is done and the server is shutting down. Start it again if it doesn\'t restart by itself.';
+
+  @override
+  String get adminHiddenRemotely =>
+      'Hide from login screens when connected remotely';
+
+  @override
+  String get adminHiddenFromUnusedDevices =>
+      'Hide from login screens on devices they\'ve never signed in on';
+
+  @override
+  String get adminSimultaneousStreamLimitHelp =>
+      'Limits how many videos this user can play at once.';
+
+  @override
+  String get adminUnlimited => 'Unlimited';
+
+  @override
+  String get adminAutoRemoteQuality => 'Auto remote quality (Mbps)';
+
+  @override
+  String get adminAutoRemoteQualityHelp =>
+      'Used remotely when the player is set to auto quality. Leave empty to detect it.';
+
+  @override
+  String get adminAllowCameraUpload => 'Allow camera upload';
+
+  @override
+  String get adminAllowSubtitleDownloading => 'Allow subtitle downloading';
+
+  @override
+  String get adminAllowMediaConversion => 'Allow media conversion';
+
+  @override
+  String get adminAllowSyncTranscoding =>
+      'Allow downloads that need transcoding';
+
+  @override
+  String get adminAllowSharingPersonalItems =>
+      'Allow sharing playlists with other users';
+
+  @override
+  String get adminAllowPreferenceAccess =>
+      'Allow changing their own password and profile image';
+
+  @override
+  String get adminTagMode => 'Tag mode';
+
+  @override
+  String get adminEmbyConnect => 'Emby Connect';
+
+  @override
+  String get adminEmbyConnectUser => 'Emby Connect username or email';
+
+  @override
+  String get adminEmbyConnectHelp =>
+      'Lets this user sign in from any Emby app without knowing the server address.';
+
+  @override
+  String get adminEmbyConnectLink => 'Link';
+
+  @override
+  String get adminEmbyConnectUnlink => 'Unlink';
+
+  @override
+  String get adminEmbyConnectLinked => 'Linked to Emby Connect';
+
+  @override
+  String get adminEmbyConnectPending =>
+      'Invitation sent. The link is made once they accept it.';
+
+  @override
+  String get adminEmbyConnectUnlinked => 'Emby Connect link removed';
+
+  @override
+  String get adminEmbyConnectNotFound =>
+      'No Emby Connect account has that username or email.';
+
+  @override
+  String get adminLibImportPlaylists => 'Import playlist files';
+
+  @override
+  String get adminLibExcludeFromSearch => 'Exclude from global search';
+
+  @override
+  String get adminLibForcedSubtitlesOnly => 'Download forced subtitles only';
+
+  @override
+  String get adminLibImportCollections =>
+      'Import collections from metadata downloaders';
+
+  @override
+  String get adminLibThumbnailInterval => 'Preview thumbnail interval';
+
+  @override
+  String adminLibThumbnailEverySeconds(int count) {
+    return 'Every $count seconds';
+  }
+
+  @override
+  String get adminLibThumbnailAtChapters => 'At chapter markers';
+
+  @override
+  String get adminLibSaveThumbnailsWithMedia =>
+      'Save preview thumbnails into media folders';
+
+  @override
+  String get adminLibrarySectionMarkers => 'Intro markers';
+
+  @override
+  String get adminLibIntroDetection => 'Detect intros';
+
+  @override
+  String get adminLibIntroDetectionDuringScan =>
+      'Detect intros during the library scan';
+
+  @override
+  String get adminProviderEmbyGuide => 'Emby Guide Data';
+
+  @override
+  String get adminLiveTvEmbyGuideSelectLineup =>
+      'Select a lineup. If none are listed, check the postal code. Lineups need Emby Premiere.';
+
+  @override
+  String get adminLiveTvWakeServer => 'Wake the server for recordings';
+
+  @override
+  String get adminDrawerLiveTvChannels => 'Live TV Channels';
+
+  @override
+  String get adminPageDescLiveTvChannels =>
+      'Turn channels on and off and set their order';
+
+  @override
+  String get adminLiveTvChannelsEmpty =>
+      'No channels yet. They show up here once a tuner is set up and the server has imported its channels.';
+
+  @override
+  String get adminTranscodingHwaAdvanced => 'Advanced';
+
+  @override
+  String get adminTranscodingHwaHelp =>
+      'Advanced lets you pick and order the hardware codecs.';
+
+  @override
+  String get adminTranscodingHwDecoders => 'Preferred hardware decoders';
+
+  @override
+  String get adminTranscodingHwEncoders => 'Preferred hardware encoders';
+
+  @override
+  String get adminTranscodingTempPathHelp =>
+      'Where the transcoder keeps its working files. Leave it empty to use the server\'s data folder.';
+
+  @override
+  String get adminTranscodingThrottleHelp =>
+      'Slows transcoding down once enough is buffered, to lower CPU use.';
+
+  @override
+  String get adminTranscodingDownmixHelp =>
+      'Raises the volume when audio is downmixed. 1 keeps the original volume.';
+
+  @override
+  String get adminTranscodingFontExtraction =>
+      'Allow font extraction on the fly';
+
+  @override
+  String get adminTranscodingMaxResolution => 'Max transcoding resolution';
+
+  @override
+  String get adminTranscodingMaxResolutionHelp =>
+      'A limit on every transcode, whatever quality the app asks for.';
+
+  @override
+  String get adminTranscodingToneMapSoftware =>
+      'Tone mapping in software transcodes';
+
+  @override
+  String get adminTranscodingToneMapHardware =>
+      'Tone mapping in hardware transcodes';
+
+  @override
+  String get adminTranscodingToneMapHelp =>
+      'Keeps HDR video from looking dim and washed out when it\'s transcoded.';
+
+  @override
+  String get adminNetworkingLocalAddress => 'Local IP address';
+
+  @override
+  String get adminNetworkingLocalAddressHelp =>
+      'The local address the server gives to apps. Leave it empty to detect it automatically.';
+
+  @override
+  String get adminNetworkingBehindProxy =>
+      'HTTPS is handled by a reverse proxy';
+
+  @override
+  String get adminNetworkingExternalDomain => 'External domain';
+
+  @override
+  String get adminNetworkingExternalDomainHelp =>
+      'A domain or dynamic DNS name for remote connections, without the protocol or port. A custom certificate needs it.';
+
+  @override
+  String get adminNetworkingUpnp => 'Enable automatic port mapping';
+
+  @override
+  String get adminNetworkingUpnpHelp =>
+      'Tries to map the public port to the local port with UPnP. Some routers don\'t support it.';
+
+  @override
+  String get adminNetworkingProxyHeaders =>
+      'Read proxy headers for client addresses';
+
+  @override
+  String get adminNetworkingProxyHeadersHelp =>
+      'Uses headers like X-Forwarded-For to find each client\'s address. Only turn this on behind a reverse proxy.';
+
+  @override
+  String get adminNetworkingProxyHeadersRemote =>
+      'Only when they hold remote addresses';
+
+  @override
+  String get adminNetworkingIpv4Only => 'Use IPv4 for outgoing requests';
+
+  @override
+  String get adminNetworkingIpv4OnlyHelp =>
+      'For when metadata providers and other services can\'t be reached over IPv6.';
+
+  @override
+  String get adminOnePerLine => 'One per line';
+
+  @override
+  String get adminStreamingStreamLimit => 'Max simultaneous video streams';
+
+  @override
+  String get adminStreamingStreamLimitHelp =>
+      'How many videos can play at once across the server. 0 means no limit.';
+
+  @override
+  String get adminSyncJobsConversions => 'Conversion jobs';
+
+  @override
+  String get adminSyncJobsDownloads => 'Download jobs';
+
+  @override
+  String get adminSyncJobsEmpty => 'No jobs';
+
+  @override
+  String get adminSyncJobCancel => 'Cancel job';
+
+  @override
+  String adminSyncJobCancelConfirm(String name) {
+    return 'Cancel $name and remove it from the list?';
+  }
+
+  @override
+  String get adminSyncJobConverting => 'Converting';
+
+  @override
+  String get adminSyncJobReady => 'Ready to transfer';
+
+  @override
+  String get adminSyncJobTransferring => 'Transferring';
+
+  @override
+  String get adminSyncJobCompletedWithError => 'Completed with errors';
+
+  @override
+  String adminSyncJobItemCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '1 item',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminDrawerDatabase => 'Database';
+
+  @override
+  String get adminPageDescDatabase => 'Cache size and upkeep';
+
+  @override
+  String get adminDatabaseWarning =>
+      'These are advanced options. Leave them at their defaults unless you have a reason to change them.';
+
+  @override
+  String get adminDatabaseCacheSize => 'Database cache size (MB)';
+
+  @override
+  String get adminDatabaseCacheSizeHelp =>
+      'How much of each database file the server keeps in memory. More can make the server faster. Takes effect after a restart.';
+
+  @override
+  String get adminDatabaseOptimize =>
+      'Optimize the database when the server shuts down';
+
+  @override
+  String get adminDatabaseOptimizeHelp =>
+      'Usually this does nothing, but now and then it runs an analysis that helps the server\'s queries. Shutdowns can take longer.';
+
+  @override
+  String get adminDatabaseAnalysisLimit => 'Analysis row limit';
+
+  @override
+  String get adminDatabaseAnalysisLimitHelp =>
+      'About how many rows of each index the optimize step reads. More rows work better but can slow shutdowns.';
+
+  @override
+  String get adminDatabaseVacuum => 'Vacuum the database on the next startup';
+
+  @override
+  String get adminDatabaseVacuumHelp =>
+      'Rebuilds the database file so it takes up the least space, which can help performance. The server can\'t be used while it runs and shows no progress, so don\'t force it closed. It turns itself back off after that startup.';
+
+  @override
+  String get adminDrawerCinemaIntros => 'Cinema Intros';
+
+  @override
+  String get adminPageDescCinemaIntros => 'Trailers and intros before playback';
+
+  @override
+  String get adminCinemaIntrosPlayBefore => 'Play intros before';
+
+  @override
+  String get adminCinemaIntrosUpcoming =>
+      'Include trailers from new and upcoming movies';
+
+  @override
+  String get adminCinemaIntrosOlder => 'Include trailers from older movies';
+
+  @override
+  String get adminCinemaIntrosLibrary =>
+      'Include trailers from movies in my libraries';
+
+  @override
+  String get adminCinemaIntrosLibraryHelp => 'Needs local trailers set up.';
+
+  @override
+  String get adminCinemaIntrosCount => 'Number of trailers to play';
+
+  @override
+  String get adminCinemaIntrosParental => 'Smart parental control';
+
+  @override
+  String get adminCinemaIntrosParentalHelp =>
+      'Only picks trailers rated the same as or lower than what\'s being watched.';
+
+  @override
+  String get adminCinemaIntrosUnwatchedOnly =>
+      'Only play intros before unwatched content';
+
+  @override
+  String get adminCinemaIntrosSimilarOnly =>
+      'Only play trailers similar to what\'s being watched';
+
+  @override
+  String get adminCinemaIntrosSimilarOnlyHelp =>
+      'Based on shared genres, tags, studios and so on.';
+
+  @override
+  String get adminCinemaIntrosCustom => 'Custom intros';
+
+  @override
+  String get adminCinemaIntrosCustomPath => 'Custom intros folder';
+
+  @override
+  String get adminCinemaIntrosCustomPathHelp =>
+      'A folder of videos. One is picked at random and plays after the trailers.';
+
+  @override
+  String get adminCinemaIntrosCodecPath => 'Codec intros folder';
+
+  @override
+  String get adminCinemaIntrosCodecPathHelp =>
+      'A folder of videos. One whose file name matches the video codec, audio codec, audio profile or a tag plays before the main feature.';
+
+  @override
+  String get adminDrawerDlna => 'DLNA';
+
+  @override
+  String get adminPageDescDlna => 'Play To and the DLNA server';
+
+  @override
+  String get adminDlnaPlayTo => 'Enable DLNA Play To';
+
+  @override
+  String get adminDlnaPlayToHelp =>
+      'Emby can find devices on your network and control them remotely.';
+
+  @override
+  String get adminDlnaServer => 'Enable the DLNA server';
+
+  @override
+  String get adminDlnaServerHelp =>
+      'Lets the server stream media to DLNA devices.';
+
+  @override
+  String get adminDlnaDefaultUser => 'Default user';
+
+  @override
+  String get adminDlnaDefaultUserHelp =>
+      'Whose libraries connected devices see. A device profile can override it.';
+
+  @override
+  String get adminDlnaDebugLog => 'Enable DLNA debug logging';
+
+  @override
+  String get adminDlnaDebugLogHelp =>
+      'Makes large log files. Only turn it on while troubleshooting.';
+
+  @override
+  String get adminDrawerCameraUpload => 'Camera Upload';
+
+  @override
+  String get adminPageDescCameraUpload => 'Where photos from phones are saved';
+
+  @override
+  String get adminCameraUploadPath => 'Camera upload folder';
+
+  @override
+  String get adminCameraUploadPathHelp =>
+      'Leave it blank to use the default folder. A custom folder also has to be added as a library.';
+
+  @override
+  String get adminCameraUploadSubfolders => 'Make a subfolder for each device';
+
+  @override
+  String get adminDrawerConversions => 'Conversions';
+
+  @override
+  String get adminPageDescConversions => 'Converted media and downloads';
+
+  @override
+  String get adminConversionsTempPath => 'Temporary file folder';
+
+  @override
+  String get adminConversionsTempPathHelp =>
+      'Where media is kept while it\'s being converted.';
+
+  @override
+  String get adminConversionsFullSpeed => 'Convert at full speed';
+
+  @override
+  String get adminConversionsFullSpeedHelp =>
+      'Conversions run slowly by default to keep the load down.';
+
+  @override
+  String get adminDrawerPremiere => 'Emby Premiere';
+
+  @override
+  String get adminPageDescPremiere => 'License status and key';
+
+  @override
+  String get adminPremiereActive => 'Premiere is active on this server.';
+
+  @override
+  String get adminPremiereInactive => 'This server has no Premiere key.';
+
+  @override
+  String get adminPremiereKeyInvalid =>
+      'A key is set but isn\'t active. It may be mistyped or expired.';
+
+  @override
+  String get adminPremiereCurrentKey => 'Current key';
+
+  @override
+  String get adminPremiereNewKey => 'New key';
+
+  @override
+  String get adminPremiereNewKeyHint =>
+      'Paste the key from your Emby Premiere email.';
+
+  @override
+  String get adminPremiereSaveKey => 'Save key';
+
+  @override
+  String get adminPremiereRemoveKey => 'Remove key';
+
+  @override
+  String get adminPremiereKeyRejected =>
+      'Emby saved the key but didn\'t accept it.';
+
+  @override
+  String get adminPremiereLoadFailed => 'Couldn\'t load the Premiere status';
+
+  @override
+  String get embyPremiereRequiredTitle => 'Emby Premiere required';
+
+  @override
+  String get embyPremiereRequiredBody =>
+      'This needs an active Emby Premiere subscription on the server.';
+
+  @override
+  String get embyPremiereRequiredSaveBody =>
+      'This needs an active Emby Premiere subscription. Emby keeps the setting but won\'t use it until Premiere is active.';
+
+  @override
+  String get embyPremiereLearnMore => 'Learn more';
+
+  @override
+  String get embyPremiereSaveAnyway => 'Save anyway';
+
+  @override
+  String get embyPremiereEnterKey => 'Enter key';
+
+  @override
+  String get adminPremiereNote =>
+      'Needs Emby Premiere. The server keeps this setting but won\'t use it until Premiere is active.';
+
+  @override
+  String adminExternalIdLabel(String name) {
+    return '$name Id';
+  }
+
+  @override
+  String get adminExternalIdTypePerson => 'Person';
+
+  @override
+  String get adminExternalIdTypeArtist => 'Artist';
+
+  @override
+  String get adminExternalIdTypeAlbumArtist => 'Album Artist';
+
+  @override
+  String get adminExternalIdTypeOtherArtist => 'Other Artist';
+
+  @override
+  String get adminExternalIdTypeReleaseGroup => 'Release Group';
+
+  @override
+  String get adminExternalIdTypeBook => 'Book';
+
+  @override
+  String get adminPlaybackHwAccelWarning =>
+      'Hardware acceleration can be unstable on some systems. Keep the operating system and video drivers up to date, and set this back to None if video stops playing.';
+
+  @override
+  String get adminLibMetadataChangeHelp =>
+      'Changes to metadata settings apply to new content. To update existing content, refresh it from its detail page or refresh the library.';
+
+  @override
+  String get adminLibFetcherSettings => 'Fetcher settings';
+
+  @override
+  String adminLibImageOptionsTitle(String type) {
+    return 'Image options for $type';
+  }
+
+  @override
+  String get adminLibFetchImages => 'Fetch images';
+
+  @override
+  String get adminLibMaxBackdrops => 'Maximum number of backdrops per item';
+
+  @override
+  String get adminLibMinBackdropWidth => 'Minimum backdrop download width';
+
+  @override
+  String get adminImageTypeArt => 'Clearart';
+
+  @override
+  String get adminImageTypeBox => 'Box';
+
+  @override
+  String get adminImageTypeBoxRear => 'Box (back)';
+
+  @override
+  String get adminImageTypeDisc => 'Disc';
+
+  @override
+  String get adminImageTypeMenu => 'Menu';
+
+  @override
+  String get adminActivityMediaDetails => 'Media details';
+
+  @override
+  String get adminNetworkingOtherPublishedUriHint =>
+      'e.g. 192.168.1.0/24=http://192.168.1.5:8096';
+
+  @override
+  String get adminMetadataFieldOriginalLanguage => 'Original language';
+
+  @override
+  String get adminMetadataFieldDateAdded => 'Date added';
+
+  @override
+  String get adminMetadataFieldArtists => 'Artists';
+
+  @override
+  String get adminMetadataFieldAlbumArtists => 'Album artists';
+
+  @override
+  String get adminMetadataFieldAlbum => 'Album';
+
+  @override
+  String get adminMetadataFieldSeriesName => 'Series name';
+
+  @override
+  String get adminMetadataFieldEpisodeNumber => 'Episode number';
+
+  @override
+  String get adminMetadataFieldSeasonNumber => 'Season number';
+
+  @override
+  String get adminMetadataFieldTrackNumber => 'Track number';
+
+  @override
+  String get adminMetadataFieldDiscNumber => 'Disc number';
+
+  @override
+  String get adminMetadataFieldAirTime => 'Air time';
+
+  @override
+  String get adminMetadataFieldRuntime => 'Runtime in minutes';
+
+  @override
+  String get adminMetadataFieldPlaceOfBirth => 'Place of birth';
+
+  @override
+  String get adminMetadataFieldBirthDate => 'Birth date';
+
+  @override
+  String get adminMetadataFieldBirthYear => 'Birth year';
+
+  @override
+  String get adminMetadataFieldDeathDate => 'Death date';
+
+  @override
+  String get adminMetadataFieldAspectRatio => 'Original aspect ratio';
+
+  @override
+  String get adminMetadataFieldAirsBeforeSeason => 'Airs before season';
+
+  @override
+  String get adminMetadataFieldAirsAfterSeason => 'Airs after season';
+
+  @override
+  String get adminMetadataFieldAirsBeforeEpisode => 'Airs before episode';
+
+  @override
+  String get adminMetadataNamesHelp =>
+      'Separate several names with a semicolon.';
+
+  @override
+  String get adminMetadataSectionRatings => 'Ratings';
+
+  @override
+  String get adminMetadataItemLocked =>
+      'This item\'s metadata is locked. Unlock it before you identify it.';
+
+  @override
+  String get adminMetadataNameOrIdRequired => 'Enter a name or an external ID.';
+
+  @override
+  String get adminLibMetadataReaders => 'Metadata readers';
+
+  @override
+  String adminLibSimilarProvidersFor(String type) {
+    return 'Similar item providers: $type';
+  }
+
+  @override
+  String get adminLibMediaSegmentProviders => 'Media segment providers';
+
+  @override
+  String get adminLibEnableLibrary => 'Enable the library';
+
+  @override
+  String get adminLibEnableLibraryHelp =>
+      'Disabling the library hides it from all user views.';
+
+  @override
+  String get adminLibSaveLyricsWithMedia => 'Save lyrics into media folders';
+
+  @override
+  String get adminLibUseCustomTagDelimiters => 'Use custom tag delimiter';
+
+  @override
+  String get adminLibCustomTagDelimiters => 'Custom tag delimiter';
+
+  @override
+  String get adminLibCustomTagDelimitersHelp =>
+      'Characters to treat as delimiters that separate tags.';
+
+  @override
+  String get adminLibDelimiterWhitelist => 'Delimiter whitelist';
+
+  @override
+  String get adminLibDelimiterWhitelistHelp =>
+      'Items to leave out of tag splitting, one per line.';
+
+  @override
+  String get adminLibDownloadLanguages => 'Download languages';
+
+  @override
+  String get adminLibraryFolderRequired =>
+      'Add at least one folder to this library.';
+
+  @override
+  String get adminRenameLibraryWarning =>
+      'Renaming a library loses all of its metadata. Proceed with caution.';
+
+  @override
+  String adminDeleteLibraryConfirm(String name) {
+    return 'Remove the library \"$name\"? Files on disk are not deleted.';
+  }
+
+  @override
+  String get adminDeleteLibraryLocations =>
+      'These media locations will be removed from the library:';
+
+  @override
+  String get adminRefreshMode => 'Refresh mode';
+
+  @override
+  String get adminRefreshModeScan => 'Scan for new and updated files';
+
+  @override
+  String get adminRefreshModeMissing => 'Search for missing metadata';
+
+  @override
+  String get adminReplaceTrickplayImages => 'Replace existing trickplay images';
+
+  @override
+  String get adminRefreshDialogHelp =>
+      'Metadata is refreshed based on the settings and internet services enabled in the dashboard.';
+
+  @override
+  String adminActivityCount(String shown, String total) {
+    return '$shown of $total';
+  }
+
+  @override
+  String get adminLiveTvTabSources => 'Tuners and guide';
+
+  @override
+  String get adminLiveTvTabRecordings => 'Recordings';
+
+  @override
+  String get adminLiveTvAddTuner => 'Add tuner device';
+
+  @override
+  String get adminLiveTvEditTuner => 'Edit tuner device';
+
+  @override
+  String get adminLiveTvTunerType => 'Tuner type';
+
+  @override
+  String get adminLiveTvDetectDevices => 'Detect my devices';
+
+  @override
+  String get adminLiveTvNoNewDevices => 'No new devices found';
+
+  @override
+  String get adminLiveTvDrmNote => 'Channels with DRM will not be imported.';
+
+  @override
+  String get adminLiveTvTunerSaved => 'Tuner saved';
+
+  @override
+  String get adminLiveTvDeleteTuner => 'Delete tuner device';
+
+  @override
+  String get adminLiveTvDeleteTunerConfirm =>
+      'Are you sure you want to delete this tuner device?';
+
+  @override
+  String get adminLiveTvDeleteProvider => 'Delete guide provider';
+
+  @override
+  String get adminLiveTvDeleteProviderConfirm =>
+      'Are you sure you want to delete this guide provider?';
+
+  @override
+  String get adminLiveTvProviderSaved => 'Guide provider saved';
+
+  @override
+  String get adminLiveTvAddProvider => 'Add provider';
+
+  @override
+  String get adminLiveTvRefreshGuide => 'Refresh guide data';
+
+  @override
+  String get adminLiveTvMapChannels => 'Map channels';
+
+  @override
+  String get adminLiveTvNoTunerChannels => 'No tuner channels found';
+
+  @override
+  String get adminLiveTvXmltvPathHelp =>
+      'A path or URL to an XMLTV file. The server reads it and checks it for updates. You are responsible for creating and updating the file.';
+
+  @override
+  String adminLiveTvSdCreateAccount(String url) {
+    return 'Create an account at $url';
+  }
+
+  @override
+  String get adminLiveTvSdSignIn => 'Sign in';
+
+  @override
+  String get adminLiveTvSdLineup => 'Lineup';
+
+  @override
+  String get adminLiveTvSdSelectLineup =>
+      'Select a lineup. If none are listed, check your username, password and postal code.';
+
+  @override
+  String get adminLiveTvGuideDays => 'Number of days of guide data to download';
+
+  @override
+  String get adminLiveTvGuideDaysHelp =>
+      'More days let you schedule further ahead and see more listings, but the download takes longer. Automatic picks a value from the number of channels.';
+
+  @override
+  String get adminLiveTvRecordingPath => 'Default recording path';
+
+  @override
+  String get adminLiveTvRecordingPathHelp =>
+      'Where recordings are saved. If empty, the server\'s program data folder is used.';
+
+  @override
+  String get adminLiveTvStartWhenPossible => 'Start when possible';
+
+  @override
+  String get adminLiveTvStopWhenPossible => 'Stop when possible';
+
+  @override
+  String get adminLiveTvMinutesBefore => 'minutes before';
+
+  @override
+  String get adminLiveTvMinutesAfter => 'minutes after';
+
+  @override
+  String get adminLiveTvSectionGuide => 'Guide data';
+
+  @override
+  String get adminLiveTvSectionDefaultRecording => 'Default recording settings';
+
+  @override
+  String get adminLiveTvSectionMetadata => 'Recording metadata';
+
+  @override
+  String adminUserLastActivity(String time) {
+    return 'Last activity $time';
+  }
+
+  @override
+  String get adminCurrentPassword => 'Current password';
+
+  @override
+  String get adminChannelAccess => 'Channel access';
+
+  @override
+  String get adminDeviceAccess => 'Device access';
+
+  @override
+  String get adminDeleteFromAllLibraries => 'All libraries';
+
+  @override
+  String get adminUserDisabledBanner =>
+      'This user is disabled. Turn off Disabled under Permissions to let them sign in again.';
+
+  @override
+  String get adminNewPasswordEmpty => 'New password cannot be empty';
+
+  @override
+  String get adminScheduleStartBeforeEnd =>
+      'The start time must be before the end time';
+
+  @override
+  String get adminDashboardAlerts => 'Alerts';
+
+  @override
+  String get adminSessionGoHome => 'Go to home screen';
+
+  @override
+  String get adminPlayMethodRemux => 'Remuxing';
+
+  @override
+  String get adminPlayMethodDirectStream => 'Direct streaming';
+
+  @override
+  String get adminPlayMethodDirectPlay => 'Direct playing';
+
+  @override
+  String get adminLogLevelTrace => 'Trace';
+
+  @override
+  String get adminLogLevelDebug => 'Debug';
+
+  @override
+  String get adminLogLevelInformation => 'Information';
+
+  @override
+  String get adminLogLevelWarning => 'Warning';
+
+  @override
+  String get adminLogLevelError => 'Error';
+
+  @override
+  String get adminLogLevelCritical => 'Critical';
+
+  @override
+  String get adminLogLevelNone => 'None';
+
+  @override
+  String get adminActivityAllUsers => 'All users';
+
+  @override
+  String adminTaskLastRan(String time, String duration) {
+    return 'Last ran $time, taking $duration.';
+  }
+
+  @override
+  String get adminTaskResultFailed => 'Failed';
+
+  @override
+  String get adminTaskResultCancelled => 'Cancelled';
+
+  @override
+  String get adminTaskResultAborted => 'Aborted by server shutdown';
+
+  @override
+  String adminDurationSecondsShort(String seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String get adminDeleteTaskTrigger => 'Delete task trigger';
+
+  @override
+  String get adminDeleteTaskTriggerConfirm =>
+      'Are you sure you want to delete this task trigger?';
+
+  @override
+  String adminTaskTriggerEveryMinutes(String minutes) {
+    return 'Every $minutes minutes';
+  }
+
+  @override
+  String adminTaskTriggerEveryHours(String hours) {
+    return 'Every $hours hours';
+  }
+
+  @override
+  String adminTaskMinutesValue(String minutes) {
+    return '$minutes minutes';
+  }
+
+  @override
+  String adminTaskHoursValue(String hours) {
+    return '$hours hours';
+  }
+
+  @override
+  String get adminTimeLimitHours => 'Time limit (hours)';
+
+  @override
+  String get adminTranscodingDecodingFor => 'Enable hardware decoding for';
+
+  @override
+  String get adminTranscodingThreadCountHelp =>
+      'The most threads a transcode can use. Fewer threads lower CPU use but may be too slow for smooth playback.';
+
+  @override
+  String get adminTranscodingThreadMax => 'Max';
+
+  @override
+  String get adminTranscodingFfmpegPath => 'FFmpeg path';
+
+  @override
+  String get adminTranscodingFfmpegPathHelp =>
+      'The FFmpeg the server runs. It is set on the server, not here.';
+
+  @override
+  String get adminTranscodingAudioSeek => 'Audio seek strategy';
+
+  @override
+  String get adminTranscodingAudioSeekHelp =>
+      'How the server handles audio when you seek in an HLS stream.';
+
+  @override
+  String get adminTranscodingTrimCopiedAudio => 'Trim copied audio';
+
+  @override
+  String get adminTranscodingTranscodeAudio => 'Transcode audio';
+
+  @override
+  String get adminResumeMinAudiobookMinutes =>
+      'Minimum audiobook resume (minutes)';
+
+  @override
+  String get adminResumeMinAudiobookHelp =>
+      'Audiobooks stopped before this time count as unplayed.';
+
+  @override
+  String get adminResumeAudiobookRemaining =>
+      'Audiobook remaining minutes to resume';
+
+  @override
+  String get adminResumeAudiobookRemainingHelp =>
+      'Audiobooks stopped with less than this many minutes left count as played.';
+
+  @override
+  String get adminBrandingSplashSection => 'Splash screen';
+
+  @override
+  String get adminBrandingSectionWebClient => 'Web client';
+
+  @override
+  String get adminBrandingSplashSizeHint =>
+      'Custom images should be in a 16x9 aspect ratio at a minimum size of 1920x1080.';
+
+  @override
+  String get adminNetworkingSectionServerAddress => 'Server address settings';
+
+  @override
+  String get adminNetworkingSectionHttps => 'HTTPS settings';
+
+  @override
+  String get adminNetworkingSectionRemoteAccess => 'Remote access settings';
+
+  @override
+  String get adminNetworkingSectionIpProtocols => 'IP protocols';
+
+  @override
+  String get adminNetworkingSectionDiscovery => 'Network discovery';
+
+  @override
+  String get adminNetworkingSectionFirewall => 'Firewall and proxy settings';
+
+  @override
+  String get adminNetworkingLocalHttpPort => 'Local HTTP port number';
+
+  @override
+  String get adminNetworkingLocalHttpPortHelp =>
+      'The TCP port number for the HTTP server.';
+
+  @override
+  String get adminNetworkingEnableHttpsHelp =>
+      'Listen on the HTTPS port. A valid certificate must also be set for this to take effect.';
+
+  @override
+  String get adminNetworkingLocalHttpsPort => 'Local HTTPS port number';
+
+  @override
+  String get adminNetworkingLocalHttpsPortHelp =>
+      'The TCP port number for the HTTPS server.';
+
+  @override
+  String get adminNetworkingBaseUrlHelp =>
+      'Adds a subdirectory to the server URL, for example https://example.com/jellyfin.';
+
+  @override
+  String get adminNetworkingBindAddress => 'Bind to local network address';
+
+  @override
+  String get adminNetworkingBindAddressHelp =>
+      'Overrides the local IP address of the HTTP server. Leave it empty to bind to all addresses. A change needs a restart.';
+
+  @override
+  String get adminNetworkingLanNetworksHelp =>
+      'IP addresses or IP/netmask entries of networks treated as local for bandwidth and remote access limits. Leave it empty to treat all RFC1918 addresses as local.';
+
+  @override
+  String get adminNetworkingKnownProxiesHelp =>
+      'IP addresses or host names of the proxies in front of this server. Needed to read X-Forwarded-For headers. A change needs a restart.';
+
+  @override
+  String get adminNetworkingCustomCertPath => 'Custom SSL certificate path';
+
+  @override
+  String get adminNetworkingCertPathHelp =>
+      'Path to a PKCS #12 file with a certificate and private key, for TLS on a custom domain.';
+
+  @override
+  String get adminNetworkingCertPasswordHelp =>
+      'Enter the password if your certificate needs one.';
+
+  @override
+  String get adminNetworkingAllowRemote =>
+      'Allow remote connections to this server';
+
+  @override
+  String get adminNetworkingAllowRemoteHelp =>
+      'When off, all remote connections are blocked.';
+
+  @override
+  String get adminNetworkingRemoteIpFilterHelp =>
+      'IP addresses or IP/netmask entries of remote networks. Leave it empty to allow every remote address.';
+
+  @override
+  String get adminNetworkingRemoteIpFilterMode =>
+      'Remote IP address filter mode';
+
+  @override
+  String get adminNetworkingPublicHttpPortHelp =>
+      'The public port mapped to the local HTTP port.';
+
+  @override
+  String get adminNetworkingPublicHttpsPortHelp =>
+      'The public port mapped to the local HTTPS port.';
+
+  @override
+  String get adminNetworkingAutoDiscoveryLabel => 'Enable auto discovery';
+
+  @override
+  String get adminNetworkingAutoDiscoveryHelp =>
+      'Lets apps find this server on UDP port 7359.';
+
+  @override
+  String get adminNetworkingSamePublishedUri =>
+      'Use the same published server URI for internal and external access';
+
+  @override
+  String get adminNetworkingPublishedUri => 'Published server URI';
+
+  @override
+  String get adminNetworkingPublishedUriHelp =>
+      'Overrides the URI the server gives out, based on the interface or the client IP address.';
+
+  @override
+  String get adminNetworkingInternalUri => 'Internal URI';
+
+  @override
+  String get adminNetworkingInternalUriHelp =>
+      'Published server URI for internal access.';
+
+  @override
+  String get adminNetworkingExternalUri => 'External URI';
+
+  @override
+  String get adminNetworkingExternalUriHelp =>
+      'Published server URI for external access.';
+
+  @override
+  String get adminNetworkingOtherPublishedUris => 'Other published URIs';
+
+  @override
+  String get adminNetworkingOtherPublishedUrisHelp =>
+      'URIs for one subnet or interface, written as subnet=URI.';
+
+  @override
+  String get adminBackupsHelp =>
+      'Create and restore snapshots of your server. They can include the database, metadata, subtitles and trickplay images.';
+
+  @override
+  String get adminBackupDisclaimer =>
+      'Depending on the size of your library, the backup can take a while.';
+
+  @override
+  String get adminBackupTasksWarningTitle => 'Scheduled tasks are running';
+
+  @override
+  String get adminBackupTasksWarning =>
+      'Stop these tasks or wait for them to finish before you create a backup.';
+
+  @override
+  String get adminBackupArchiveNotFound =>
+      'The server could not find this backup archive.';
+
+  @override
+  String get adminRestoreInProgress => 'Restore in progress';
+
+  @override
+  String get adminRestoreWaitingForServer =>
+      'Waiting for the server to come back.';
+
+  @override
+  String get adminRestoreSucceeded => 'Restore completed';
+
+  @override
+  String get adminLogWatch => 'Watch';
+
+  @override
+  String get adminLogStopWatching => 'Stop watching';
+
+  @override
+  String get adminPluginInstallConfirmTitle => 'Confirm plugin installation';
+
+  @override
+  String get adminPluginInstallDisclaimer =>
+      'Installing a third party plugin carries risks. It may contain unstable or malicious code, and it can change at any time. Only install plugins from authors you trust, and know what they can do, such as query outside services, slow down library scans or add background work.';
+
+  @override
+  String get adminGroupOverview => 'Overview';
+
+  @override
+  String get adminGroupLibrary => 'Library';
+
+  @override
+  String get adminGroupPlayback => 'Playback';
+
+  @override
+  String get adminGroupPeople => 'People';
+
+  @override
+  String get adminGroupSystem => 'System';
+
+  @override
+  String get adminAreasLabel => 'Admin areas';
+
+  @override
+  String get adminPagesLabel => 'Pages';
+
+  @override
+  String get adminPageDescDashboard =>
+      'Server health, sessions and recent activity';
+
+  @override
+  String get adminPageDescAnalytics => 'Library sizes, codecs and formats';
+
+  @override
+  String get adminPageDescActivity => 'Everything that happened on the server';
+
+  @override
+  String get adminPageDescTasks => 'Scans, cleanups and their triggers';
+
+  @override
+  String get adminPageDescLibraries =>
+      'Folders, scanners and metadata fetchers';
+
+  @override
+  String get adminPageDescDisplay => 'How libraries show to users';
+
+  @override
+  String get adminPageDescMetadata => 'Default language, country and images';
+
+  @override
+  String get adminPageDescNfo => 'Kodi NFO reading and saving';
+
+  @override
+  String get adminPageDescLiveTv => 'Tuners, guide data and recordings';
+
+  @override
+  String get adminPageDescTranscoding =>
+      'Hardware acceleration, encoders, tone mapping';
+
+  @override
+  String get adminPageDescResume => 'When items count as started or played';
+
+  @override
+  String get adminPageDescStreaming => 'Remote bitrate limit';
+
+  @override
+  String get adminPageDescTrickplay => 'Seek preview thumbnails';
+
+  @override
+  String get adminPageDescUsers => 'Accounts, access and parental control';
+
+  @override
+  String get adminPageDescDevices => 'Signed in devices and their names';
+
+  @override
+  String get adminPageDescApiKeys => 'Keys for apps and scripts';
+
+  @override
+  String get adminPageDescSettings =>
+      'Server name, language, paths, performance';
+
+  @override
+  String get adminPageDescBranding =>
+      'Login message, custom CSS, splash screen';
+
+  @override
+  String get adminPageDescNetworking => 'Ports, HTTPS, LAN and remote access';
+
+  @override
+  String get adminPageDescPlugins => 'Installed plugins and the catalog';
+
+  @override
+  String get adminPageDescRepositories => 'Where plugins come from';
+
+  @override
+  String get adminPageDescBackups => 'Create and restore server backups';
+
+  @override
+  String get adminPageDescLogs => 'Server log files';
+
+  @override
+  String adminSearchSettingsHint(int count) {
+    return 'Search $count settings';
+  }
+
+  @override
+  String get adminSearchNoResults => 'No settings match';
+
+  @override
+  String get adminSearchClear => 'Clear search';
+
+  @override
+  String get adminUnsavedChanges => 'Unsaved changes';
+
+  @override
+  String get adminDiscard => 'Discard';
+
+  @override
+  String get adminLeaveTitle => 'Discard unsaved changes?';
+
+  @override
+  String get adminLeaveMessage =>
+      'The changes on this page haven\'t been saved yet.';
+
+  @override
+  String get adminKeepEditing => 'Keep editing';
+
+  @override
   String get adminDashboardLoadFailed => '無法載入儀表板';
 
   @override
@@ -5816,11 +7503,6 @@ class AppLocalizationsYue extends AppLocalizations {
   @override
   String adminFailedScheduledTasks(int count) {
     return '失敗咗嘅排程工作：$count 個';
-  }
-
-  @override
-  String adminRecentAlertEntries(int count) {
-    return '最近嘅警告／錯誤紀錄：$count 項';
   }
 
   @override
@@ -5870,9 +7552,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminShutdownServer => '關閉伺服器';
-
-  @override
-  String get adminScanLibraries => '掃描函式庫';
 
   @override
   String get adminLibraryScanStarted => '圖書館掃描開始';
@@ -5958,12 +7637,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get completion => '完成';
-
-  @override
-  String get direct => '直接的';
-
-  @override
-  String get adminDisconnect => '斷開';
 
   @override
   String get adminClearDates => '明確日期';
@@ -6105,14 +7778,6 @@ class AppLocalizationsYue extends AppLocalizations {
   }
 
   @override
-  String get adminLibraryOptionsSaved => '已儲存庫選項';
-
-  @override
-  String adminLibraryOptionsSaveFailed(String error) {
-    return '儲存唔到選項：$error';
-  }
-
-  @override
   String get adminLibraryLoadFailed => '載入庫失敗';
 
   @override
@@ -6123,9 +7788,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminBrowseFilesystem => '瀏覽伺服器檔案系統：';
-
-  @override
-  String get adminSaveOptions => '儲存選項';
 
   @override
   String get adminPreferredMetadataLanguage => '首選元資料語言';
@@ -6199,9 +7861,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminLibRealtimeMonitorHint => '偵測檔案變動，然後自動處理。';
-
-  @override
-  String get adminLibArchiveMediaFiles => '將壓縮檔當做媒體檔案';
 
   @override
   String get adminLibEnablePhotos => '顯示相片';
@@ -6377,9 +8036,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminSelectedPaths => '選定的路徑：';
 
   @override
-  String get adminNoPathsAdded => '未新增路徑（可以稍後新增）';
-
-  @override
   String get adminCreateLibrary => '建立庫';
 
   @override
@@ -6443,18 +8099,9 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminUsernameRequired => '使用者名稱不能為空';
 
   @override
-  String get adminNoProfileChanges => '沒有要儲存的設定檔更改';
-
-  @override
-  String get adminProfileSaved => '個人資料已儲存';
-
-  @override
   String adminSaveFailed(String error) {
     return '儲存唔到：$error';
   }
-
-  @override
-  String get adminPermissionsSaved => '權限已儲存';
 
   @override
   String get adminPasswordsMismatch => '密碼不匹配';
@@ -6466,12 +8113,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminUserLoadFailed => '載入用戶失敗';
-
-  @override
-  String get adminBackToUsers => '返回用戶';
-
-  @override
-  String get adminSaveProfile => '儲存個人資料';
 
   @override
   String get adminDeleteUser => '刪除用戶';
@@ -6504,9 +8145,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminForceRemoteTranscoding => '強制遠端來源轉碼';
 
   @override
-  String get adminAllowContentDeletion => '允許內容刪除';
-
-  @override
   String get adminAllowContentDownloading => '允許內容下載';
 
   @override
@@ -6520,9 +8158,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminAllowRemoteAccess => '允許遠端存取';
-
-  @override
-  String get adminRemoteBitrateLimit => '遠端客戶端位元速率限制 (bps)';
 
   @override
   String get adminLeaveEmptyNoLimit => '留空則無限制';
@@ -6546,13 +8181,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminAllowLyricManagement => '允許歌詞管理';
 
   @override
-  String get adminSavePermissions => '保存權限';
-
-  @override
   String get adminEnableAllLibraryAccess => '允許存取所有庫';
-
-  @override
-  String get adminSaveAccess => '儲存存取權限';
 
   @override
   String get adminChangePassword => '更改密碼';
@@ -6580,9 +8209,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminLibraryAccess => '圖書館訪問';
-
-  @override
-  String get adminDeviceAndChannelAccess => '設備和通道訪問';
 
   @override
   String get adminEnableAllDevices => '啟用對所有裝置的訪問';
@@ -6688,12 +8314,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminAddTag => '加入標籤';
-
-  @override
-  String get adminEnabledDevices => '已啟用嘅裝置';
-
-  @override
-  String get adminEnabledChannels => '已啟用嘅頻道';
 
   @override
   String get adminAuthProvider => '驗證提供者';
@@ -6806,9 +8426,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminBackupOptionsTitle => '建立備份';
-
-  @override
-  String get adminBackupInclude => '揀吓要備份啲乜。';
 
   @override
   String get adminBackupDatabase => '資料庫';
@@ -6963,9 +8580,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminTriggerType => '觸發類型';
 
   @override
-  String get adminTimeLimit => '時間限制（可選）';
-
-  @override
   String get adminNoLimit => '無限制';
 
   @override
@@ -7057,9 +8671,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String adminPluginUpdating(String name, String version) {
     return '更新緊「$name」去 v$version...';
   }
-
-  @override
-  String get adminMissingAuthToken => '無法開啟設定：缺少身份驗證令牌。';
 
   @override
   String adminPluginLoadFailed(String error) {
@@ -7157,9 +8768,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminSlowResponseThreshold => '慢響應閾值（毫秒）';
 
   @override
-  String get adminBrandingSaved => '已儲存品牌設定';
-
-  @override
   String get adminBrandingLoadFailed => '無法加載品牌設置';
 
   @override
@@ -7178,9 +8786,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminEnableSplashScreen => '啟用啟動畫面';
 
   @override
-  String get adminStreamingSaved => '已儲存串流媒體設定';
-
-  @override
   String get adminStreamingLoadFailed => '無法加載串流媒體設置';
 
   @override
@@ -7193,13 +8798,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminLeaveEmptyForUnlimited => '留空或 0 表示無限制';
 
   @override
-  String get adminPlaybackSaved => '已儲存播放設定';
-
-  @override
   String get adminPlaybackLoadFailed => '無法載入播放設定';
-
-  @override
-  String get adminPlaybackTranscoding => '播放/轉碼';
 
   @override
   String get adminHardwareAcceleration => '硬體加速';
@@ -7236,9 +8835,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminThrottleBuffering => '油門緩衝';
-
-  @override
-  String get adminTrickplaySaved => '已儲存 Trickplay 設定';
 
   @override
   String get adminTrickplayLoadFailed => '載入唔到 Trickplay 設定';
@@ -7283,9 +8879,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminProcessThreads => '處理線程';
 
   @override
-  String get adminResumeSaved => '恢復已儲存的設定';
-
-  @override
   String get adminResumeLoadFailed => '無法載入恢復設定';
 
   @override
@@ -7314,9 +8907,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminMaxAudiobookResume => '最大有聲書恢復百分比';
-
-  @override
-  String get adminNetworkingSaved => '已儲存網路設定。可能需要重新啟動伺服器。';
 
   @override
   String get adminNetworkingLoadFailed => '無法載入網路設定';
@@ -7379,16 +8969,8 @@ class AppLocalizationsYue extends AppLocalizations {
   String get notSet => '未設定';
 
   @override
-  String get adminMetadataSaved => '元資料已儲存';
-
-  @override
   String adminMetadataLoadFailed(String error) {
     return '載入唔到中繼資料：$error';
-  }
-
-  @override
-  String adminMetadataSaveFailed(String error) {
-    return '儲存唔到中繼資料：$error';
   }
 
   @override
@@ -7399,9 +8981,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminReplaceAllMetadata => '替換所有元數據';
-
-  @override
-  String get adminReplaceAllImages => '替換所有圖像';
 
   @override
   String get adminMetadataRefreshRequested => '請求元資料刷新';
@@ -7501,12 +9080,6 @@ class AppLocalizationsYue extends AppLocalizations {
   }
 
   @override
-  String get adminAddTuner => '新增調音器';
-
-  @override
-  String get adminEditTuner => '編輯調諧器';
-
-  @override
   String get adminTunerTypeM3u => 'M3U 調諧器';
 
   @override
@@ -7555,9 +9128,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminTunerReadAtNativeFramerate => '用原生影格率讀取輸入';
 
   @override
-  String get adminEditProvider => '編輯提供者';
-
-  @override
   String get adminProviderXmltv => 'XMLTV';
 
   @override
@@ -7600,38 +9170,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminSdPostalCode => '郵遞區號';
 
   @override
-  String get adminSdGetListings => '取得節目表';
-
-  @override
-  String get adminSdListings => '節目表';
-
-  @override
   String get adminEnableAllTuners => '啟用所有調諧器';
-
-  @override
-  String get adminTunerType => '調音器類型';
-
-  @override
-  String get adminTunerAdded => '新增了調音器';
-
-  @override
-  String adminTunerAddFailed(String error) {
-    return '加入唔到調諧器：$error';
-  }
-
-  @override
-  String get adminAddGuideProvider => '新增嚮導提供者';
-
-  @override
-  String get adminProviderType => '提供者類型';
-
-  @override
-  String get adminProviderAdded => '提供者已新增';
-
-  @override
-  String adminProviderAddFailed(String error) {
-    return '加入唔到提供者：$error';
-  }
 
   @override
   String adminTunerRemoveFailed(String error) {
@@ -7639,32 +9178,9 @@ class AppLocalizationsYue extends AppLocalizations {
   }
 
   @override
-  String get adminTunerResetRequested => '請求重置調諧器';
-
-  @override
-  String adminTunerResetFailed(String error) {
-    return '重設唔到調諧器：$error';
-  }
-
-  @override
-  String get adminTunerResetNotSupported => '呢種調諧器唔支援重設。';
-
-  @override
   String adminProviderRemoveFailed(String error) {
     return '移除唔到提供者：$error';
   }
-
-  @override
-  String get adminRecordingSettings => '錄音設定';
-
-  @override
-  String get adminPrePadding => '預填（分鐘）';
-
-  @override
-  String get adminPostPadding => '後填充（分鐘）';
-
-  @override
-  String get adminRecordingPath => '錄音路徑';
 
   @override
   String get adminSeriesRecordingPath => '系列錄音路徑';
@@ -7673,15 +9189,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminMovieRecordingPath => '電影錄影路徑';
 
   @override
-  String get adminGuideDays => '節目表資料日數';
-
-  @override
   String get adminGuideDaysAuto => '自動';
-
-  @override
-  String adminGuideDaysValue(int days) {
-    return '$days 日';
-  }
 
   @override
   String get adminRecordingPostProcessor => '後製處理程式路徑';
@@ -7696,42 +9204,14 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminSaveRecordingImages => '儲存錄影圖片';
 
   @override
-  String get adminLiveTvSectionTiming => '時間設定';
-
-  @override
   String get adminLiveTvSectionPaths => '錄影路徑';
 
   @override
   String get adminLiveTvSectionPostProcessing => '後製處理';
 
   @override
-  String adminGuideDaysDisplay(String value) {
-    return '節目表資料：$value';
-  }
-
-  @override
-  String get adminRecordingSettingsSaved => '已儲存錄音設定';
-
-  @override
   String adminSettingsSaveFailed(String error) {
     return '儲存唔到設定：$error';
-  }
-
-  @override
-  String get adminSetChannelMappings => '設定通道映射';
-
-  @override
-  String get adminMappingJson => '映射 JSON';
-
-  @override
-  String get adminMappingJsonHint => '範例：映射 JSON 負載';
-
-  @override
-  String get adminChannelMappingsUpdated => '頻道映射已更新';
-
-  @override
-  String adminMappingsUpdateFailed(String error) {
-    return '更新唔到對應：$error';
   }
 
   @override
@@ -7747,48 +9227,13 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminGuideProviders => '導遊提供者';
 
   @override
-  String get adminRefreshGuideData => '重新整理節目表資料';
-
-  @override
   String get adminGuideRefreshStarted => '已開始重新整理節目表資料';
 
   @override
   String get adminGuideRefreshUnavailable => '呢部伺服器冇節目表重新整理工作。';
 
   @override
-  String get adminAddProvider => '新增提供者';
-
-  @override
   String get adminNoListingProviders => '未配置清單提供者';
-
-  @override
-  String adminRecordingPathDisplay(String path) {
-    return '錄影路徑：$path';
-  }
-
-  @override
-  String adminSeriesPathDisplay(String path) {
-    return '劇集路徑：$path';
-  }
-
-  @override
-  String adminPrePaddingDisplay(int minutes) {
-    return '提早錄影：$minutes 分鐘';
-  }
-
-  @override
-  String adminPostPaddingDisplay(int minutes) {
-    return '延後錄影：$minutes 分鐘';
-  }
-
-  @override
-  String get adminTunerDiscovery => '調音器發現';
-
-  @override
-  String get adminChannelMappings => '通道映射';
-
-  @override
-  String get adminNoDiscoveredTuners => '尚未發現調諧器';
 
   @override
   String get adminSettingsSaved => '設定已儲存';
@@ -7811,9 +9256,6 @@ class AppLocalizationsYue extends AppLocalizations {
   }
 
   @override
-  String get adminRestoreRequested => '已請求恢復。伺服器重新啟動可能會中斷此會話。';
-
-  @override
   String get adminBackupsTitle => '備份';
 
   @override
@@ -7823,19 +9265,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminUnnamedBackup => '未命名備份';
 
   @override
-  String get adminLiveTvNotAvailable => '直播電視管理在此伺服器版本上不可用。';
-
-  @override
-  String get adminLiveTvTitle => '直播電視管理';
-
-  @override
   String get adminApply => '套用';
-
-  @override
-  String get adminNotSet => '未設定';
-
-  @override
-  String get adminReset => '重設';
 
   @override
   String get adminLogsTitle => '伺服器日誌';
@@ -7991,9 +9421,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminMetadataField3DFormat => '3D format';
-
-  @override
-  String get adminMetadataPersonKindUnknown => 'Unknown';
 
   @override
   String get adminMetadataPersonKindActor => 'Actor';
@@ -8159,9 +9586,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminMetadataImageThumb => '大拇指';
-
-  @override
-  String get adminMetadataRecursive => '遞迴';
 
   @override
   String get adminMetadataProvider => '提供者';
@@ -8418,25 +9842,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminNetworkingRestartWarning => '更改網路設定可能需要重新啟動伺服器。';
 
   @override
-  String get adminNetworkingRemoteAccess => '啟用遠端存取';
-
-  @override
-  String get adminNetworkingPorts => '港口';
-
-  @override
-  String get adminNetworkingHttpPort => 'HTTP連接埠';
-
-  @override
-  String get adminNetworkingHttpsPort => 'HTTPS連接埠';
-
-  @override
   String get adminNetworkingEnableHttps => '啟用 HTTPS';
-
-  @override
-  String get adminNetworkingLocalNetwork => '本地網路';
-
-  @override
-  String get adminNetworkingLocalAddresses => '本地網路位址';
 
   @override
   String get adminNetworkingAddressHint => '例如192.168.1.0/24';
@@ -8499,9 +9905,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminPlaybackEnableHwEncoding => '啟用硬體編碼';
 
   @override
-  String get adminPlaybackEnableHwDecoding => '啟用硬體解碼：';
-
-  @override
   String get adminPlaybackQsvDevice => 'QSV 裝置';
 
   @override
@@ -8509,9 +9912,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminPlaybackPreferNativeDecoder => '優先用系統原生嘅硬件解碼器';
-
-  @override
-  String get adminPlaybackColorDepth => '硬件解碼色彩深度';
 
   @override
   String get adminPlaybackColorDepth10Hevc => '10-bit HEVC 解碼';
@@ -8577,9 +9977,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminPlaybackVppTonemappingContrast => 'VPP 色調對應對比度';
 
   @override
-  String get adminPlaybackPresetsQuality => '預設集同品質';
-
-  @override
   String get adminPlaybackEncoderPreset => '編碼器預設集';
 
   @override
@@ -8632,12 +10029,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminResumeAudiobooks => '有聲書';
-
-  @override
-  String get adminResumeMinAudiobookPct => '有聲書最低履歷百分比';
-
-  @override
-  String get adminResumeMaxAudiobookPct => '最大有聲書恢復百分比';
 
   @override
   String get adminStreamingBitrateLimit => '遠端客戶端位元速率限制 (Mbps)';
@@ -8755,11 +10146,6 @@ class AppLocalizationsYue extends AppLocalizations {
   }
 
   @override
-  String adminTaskTriggerInterval(String duration) {
-    return '每 $duration';
-  }
-
-  @override
   String get adminTaskTriggerStartup => '應用程式啟動時';
 
   @override
@@ -8778,18 +10164,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminTaskTriggerEveryHour => '每小時';
 
   @override
-  String get adminTaskTriggerEvery6Hours => '每 6 小時';
-
-  @override
-  String get adminTaskTriggerEvery12Hours => '每12小時一次';
-
-  @override
-  String get adminTaskTriggerEvery24Hours => '每24小時一次';
-
-  @override
-  String get adminTaskTriggerEvery2Days => '每2天一次';
-
-  @override
   String adminTaskTriggerHours(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -8802,9 +10176,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminTaskTriggerTime => '時間';
-
-  @override
-  String get adminTaskTriggerNoLimit => '無限制';
 
   @override
   String get adminActivityJustNow => '現在';
@@ -8872,9 +10243,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminNetworkingBaseUrlHint => '例如 /jellyfin';
 
   @override
-  String get adminNetworkingHttps => 'HTTPS';
-
-  @override
   String get adminNetworkingPublicHttpPort => '公開 HTTP 連接埠';
 
   @override
@@ -8888,36 +10256,13 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminNetworkingCertPassword => '憑證密碼';
 
   @override
-  String get adminNetworkingIpSettings => 'IP 設定';
-
-  @override
   String get adminNetworkingEnableIpv4 => '啟用 IPv4';
 
   @override
   String get adminNetworkingEnableIpv6 => '啟用 IPv6';
 
   @override
-  String get adminNetworkingAutoDiscovery => '啟用自動連接埠對應';
-
-  @override
   String get adminNetworkingLocalSubnets => '區域網路';
-
-  @override
-  String get adminNetworkingLocalSubnetsHint =>
-      '用逗號或者換行分隔嘅 IP 位址或者 CIDR 子網路清單，會當做喺區域網路入面。';
-
-  @override
-  String get adminNetworkingPublishedUris => '公開嘅伺服器 URI';
-
-  @override
-  String get adminNetworkingPublishedUriHint =>
-      '將子網路或者位址對應去一個公開 URL，例如 all=https://example.com';
-
-  @override
-  String get adminNetworkingCertPath => '證書路徑';
-
-  @override
-  String get adminNetworkingRemoteIpFilter => '遠端IP過濾';
 
   @override
   String get adminNetworkingRemoteIpFilterLabel => '遠端IP過濾器';
@@ -9028,9 +10373,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get adminSettingsLoadFailed => '無法載入設定';
-
-  @override
-  String get adminDiscover => '發現';
 
   @override
   String adminChannelMappingsUpdateFailed(String error) {
@@ -9261,9 +10603,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get offlineBannerSubtitle => '顯示緊你嘅下載';
-
-  @override
-  String get offlineBannerAction => '下載';
 
   @override
   String get serverUnreachableBannerTitle => '連唔到你個伺服器';
@@ -9695,6 +11034,89 @@ class AppLocalizationsYue extends AppLocalizations {
   @override
   String get untrustedServerCertificate =>
       'This server\'s certificate isn\'t trusted. If it\'s your own server and uses a self-signed or private certificate, you can allow it here.';
+
+  @override
+  String get clientCertTitle => 'Client certificate';
+
+  @override
+  String clientCertHost(String host) {
+    return 'Certificate for $host';
+  }
+
+  @override
+  String get clientCertChooseFile => 'Choose file';
+
+  @override
+  String get clientCertPassword => 'Certificate password';
+
+  @override
+  String get clientCertStartUpload => 'Send from phone';
+
+  @override
+  String get clientCertUploadHint =>
+      'Scan this code with your phone, or open the address in its browser, then pick the file and enter its password.';
+
+  @override
+  String get clientCertStopUpload => 'Stop waiting';
+
+  @override
+  String get clientCertNoFileData => 'Couldn\'t read the file. Try again.';
+
+  @override
+  String get clientCertPickFailed => 'Couldn\'t open the file picker.';
+
+  @override
+  String get clientCertUploadFailed =>
+      'Couldn\'t start the upload page. Try again.';
+
+  @override
+  String get clientCertNoSecureStorage =>
+      'This device has no secure storage, so the certificate can\'t be saved. On Linux, install libsecret and try again.';
+
+  @override
+  String get clientCertDecodeFailed =>
+      'Couldn\'t read that file as a certificate. Make sure it\'s a .p12 or .pfx.';
+
+  @override
+  String get clientCertWrongPassword =>
+      'That password doesn\'t unlock this certificate.';
+
+  @override
+  String get clientCertRequired =>
+      'This server needs a client certificate (mTLS). Add one for this host to continue.';
+
+  @override
+  String clientCertExpired(String date) {
+    return 'The certificate for this server expired on $date. Replace it to continue.';
+  }
+
+  @override
+  String get clientCertAddButton => 'Add client certificate';
+
+  @override
+  String get settingsClientCertificates => 'Client certificates';
+
+  @override
+  String get settingsClientCertificatesSubtitle =>
+      'Certificates this app presents to servers that require one (mTLS)';
+
+  @override
+  String get clientCertSubject => 'Subject';
+
+  @override
+  String clientCertExpires(String date) {
+    return 'Expires $date';
+  }
+
+  @override
+  String get clientCertReplace => 'Replace';
+
+  @override
+  String get clientCertAdd => 'Add certificate';
+
+  @override
+  String get clientCertAddHostPrompt =>
+      'Which server host needs a certificate?';
 
   @override
   String get itemBlockedByParentalControls => 'This isn\'t available';
@@ -10787,12 +12209,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get watchWithGroup => '同群組一齊睇';
 
   @override
-  String get errors => '錯誤';
-
-  @override
-  String get warnings => '警告';
-
-  @override
   String get disk => '磁碟';
 
   @override
@@ -11598,12 +13014,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminNoDevicesMatchCurrentFilters => '冇裝置符合目前嘅篩選條件';
 
   @override
-  String get passwordSet => '已設定密碼';
-
-  @override
-  String get noPasswordConfigured => '未設定密碼';
-
-  @override
   String get remoteAccess => '遠端存取';
 
   @override
@@ -11648,6 +13058,20 @@ class AppLocalizationsYue extends AppLocalizations {
   String get analyticsNoLibrariesAvailable => '冇媒體庫可以用。';
 
   @override
+  String get analyticsLibraryShare => 'Share of items by library';
+
+  @override
+  String get analyticsTopRating => 'Most common rating';
+
+  @override
+  String get analyticsTypicalRuntime => 'Typical runtime';
+
+  @override
+  String analyticsShareOfItems(String percent) {
+    return '$percent% of items';
+  }
+
+  @override
   String get adminServerAdministrationTitle => '伺服器管理';
 
   @override
@@ -11689,24 +13113,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get needsAttention => '需要處理';
 
   @override
-  String get adminDrawerSectionServer => '伺服器';
-
-  @override
-  String get adminDrawerSectionPlayback => '播放';
-
-  @override
-  String get adminDrawerSectionDevices => '裝置';
-
-  @override
-  String get adminDrawerSectionAdvanced => '進階';
-
-  @override
-  String get adminDrawerSectionPlugins => '外掛程式';
-
-  @override
-  String get adminDrawerSectionLiveTv => '直播電視';
-
-  @override
   String get homeVideos => '家庭影片';
 
   @override
@@ -11717,12 +13123,6 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get mixedMoviesAndShows => '電影同劇集混合';
-
-  @override
-  String get intelQuickSync => 'Intel Quick Sync';
-
-  @override
-  String get rockchipMpp => 'Rockchip MPP';
 
   @override
   String get dolbyVision => 'Dolby Vision';
@@ -12441,24 +13841,6 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminLabelYear => 'Year';
 
   @override
-  String get adminLabelImdbId => 'IMDb Id';
-
-  @override
-  String get adminLabelTmdbMovieId => 'TheMovieDb Movie Id';
-
-  @override
-  String get adminLabelTmdbBoxSetId => 'TheMovieDb Box Set Id';
-
-  @override
-  String get adminLabelTvdbBoxSetId => 'TheTVDB Box Set Id';
-
-  @override
-  String get adminLabelTvdbId => 'TheTVDB Numerical Id';
-
-  @override
-  String get adminLabelTvdbSlug => 'TheTVDB Slug Movie Id';
-
-  @override
   String get adminReplaceImages => 'Replace existing images';
 
   @override
@@ -12915,8 +14297,8 @@ class AppLocalizationsYue extends AppLocalizations {
   String get smartDownloadsEnable => 'Download Next Episodes';
 
   @override
-  String get smartDownloadsEnableSubtitle =>
-      'When you finish an episode on any device, Foxfin downloads the next ones. Downloaded episodes are deleted once watched.';
+  String get smartDownloadsEnableDescription =>
+      'When you finish an episode on any device, Foxfin downloads the next ones. Episodes it downloads are deleted once watched.';
 
   @override
   String get smartDownloadsKeepReady => 'Episodes to Keep Downloaded';
@@ -12956,8 +14338,22 @@ class AppLocalizationsYue extends AppLocalizations {
   String get autoDownloadDelete => 'Delete Downloaded Episodes';
 
   @override
-  String get autoDownloadDeleteSubtitle =>
-      'When to remove automatically downloaded episodes after you watch them';
+  String get autoDownloadDeleteFollowedSubtitle =>
+      'When to remove episodes downloaded for series you follow, after you watch them';
+
+  @override
+  String get removeWatchedDownloads => 'Remove Watched Downloads';
+
+  @override
+  String get removeWatchedDownloadsSubtitle =>
+      'When to remove episodes and movies you downloaded yourself. Only those you watch after turning this on are removed';
+
+  @override
+  String get keepDownloaded => 'Keep Downloaded';
+
+  @override
+  String get keepDownloadedSubtitle =>
+      'Never remove this automatically after watching';
 
   @override
   String get autoDownloadDeleteNever => 'Never';
@@ -13268,6 +14664,13 @@ class AppLocalizationsYue extends AppLocalizations {
   String get navYou => 'You';
 
   @override
+  String get cinemaSkipPrerolls => 'Cinema Mode Skip Button';
+
+  @override
+  String get cinemaSkipPrerollsDescription =>
+      'Show a Skip button during Cinema Mode trailers, commercials, and other pre-rolls.';
+
+  @override
   String get detailsPage => 'Details Page';
 
   @override
@@ -13395,6 +14798,74 @@ class AppLocalizationsYue extends AppLocalizations {
   @override
   String get playerSettingsSubtitle =>
       'Controls, seeking, player buttons, and trick play';
+
+  @override
+  String get playlistSortReleaseDate => 'Release Date';
+
+  @override
+  String get playlistSortCriticRating => 'Critic Rating';
+
+  @override
+  String get playlistSortRuntime => 'Runtime';
+
+  @override
+  String get playlistSortLastPlayed => 'Last Played';
+
+  @override
+  String get playlistSortPlayCount => 'Play Count';
+
+  @override
+  String get playlistSortRandom => 'Random';
+
+  @override
+  String playlistFilterActiveCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count active',
+      one: '1 active',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get playlistNoMatchingTracks => 'No tracks match the active filters';
+
+  @override
+  String get librarySortPlaylistOrder => 'Playlist Order';
+
+  @override
+  String get librarySortDateAdded => 'Date Added';
+
+  @override
+  String get librarySortDateEpisodeAdded => 'Date Episode Added';
+
+  @override
+  String get librarySortParentalRating => 'Parental Rating';
+
+  @override
+  String get librarySortMyRating => 'My Rating';
+
+  @override
+  String get librarySortAlbumArtist => 'Album Artist';
+
+  @override
+  String get librarySortAlbum => 'Album';
+
+  @override
+  String get librarySortArtist => 'Artist';
+
+  @override
+  String get librarySortTrackNumber => 'Track Number';
+
+  @override
+  String get librarySortGenre => 'Genre';
+
+  @override
+  String get librarySortFoldersFirst => 'Folders First';
+
+  @override
+  String get librarySortLength => 'Length';
 }
 
 /// The translations for Yue Chinese Cantonese, as used in China (`yue_CN`).
@@ -16866,11 +18337,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   }
 
   @override
-  String adminRecentAlertEntries(int count) {
-    return 'Recent warning/error entries: $count';
-  }
-
-  @override
   String get analyticsMediaDistribution => '媒体发行';
 
   @override
@@ -16917,9 +18383,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminShutdownServer => '关闭服务器';
-
-  @override
-  String get adminScanLibraries => '扫描库';
 
   @override
   String get adminLibraryScanStarted => '图书馆扫描开始';
@@ -17005,12 +18468,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get completion => '完成';
-
-  @override
-  String get direct => '直接的';
-
-  @override
-  String get adminDisconnect => '断开';
 
   @override
   String get adminClearDates => '明确日期';
@@ -17125,14 +18582,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   }
 
   @override
-  String get adminLibraryOptionsSaved => '已保存库选项';
-
-  @override
-  String adminLibraryOptionsSaveFailed(String error) {
-    return 'Failed to save options: $error';
-  }
-
-  @override
   String get adminLibraryLoadFailed => '加载库失败';
 
   @override
@@ -17143,9 +18592,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminBrowseFilesystem => '浏览服务器文件系统：';
-
-  @override
-  String get adminSaveOptions => '保存选项';
 
   @override
   String get adminPreferredMetadataLanguage => '首选元数据语言';
@@ -17172,9 +18618,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminSelectedPaths => '选定的路径：';
-
-  @override
-  String get adminNoPathsAdded => '未添加路径（可以稍后添加）';
 
   @override
   String get adminCreateLibrary => '创建库';
@@ -17240,18 +18683,9 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminUsernameRequired => '用户名不能为空';
 
   @override
-  String get adminNoProfileChanges => '没有要保存的配置文件更改';
-
-  @override
-  String get adminProfileSaved => '个人资料已保存';
-
-  @override
   String adminSaveFailed(String error) {
     return 'Failed to save: $error';
   }
-
-  @override
-  String get adminPermissionsSaved => '权限已保存';
 
   @override
   String get adminPasswordsMismatch => '密码不匹配';
@@ -17263,12 +18697,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminUserLoadFailed => '加载用户失败';
-
-  @override
-  String get adminBackToUsers => '返回用户';
-
-  @override
-  String get adminSaveProfile => '保存个人资料';
 
   @override
   String get adminDeleteUser => '删除用户';
@@ -17301,9 +18729,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminForceRemoteTranscoding => '强制远程源转码';
 
   @override
-  String get adminAllowContentDeletion => '允许内容删除';
-
-  @override
   String get adminAllowContentDownloading => '允许内容下载';
 
   @override
@@ -17317,9 +18742,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminAllowRemoteAccess => '允许远程访问';
-
-  @override
-  String get adminRemoteBitrateLimit => '远程客户端比特率限制 (bps)';
 
   @override
   String get adminLeaveEmptyNoLimit => '留空则无限制';
@@ -17343,13 +18765,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminAllowLyricManagement => '允许歌词管理';
 
   @override
-  String get adminSavePermissions => '保存权限';
-
-  @override
   String get adminEnableAllLibraryAccess => '允许访问所有库';
-
-  @override
-  String get adminSaveAccess => '保存访问权限';
 
   @override
   String get adminChangePassword => '更改密码';
@@ -17377,9 +18793,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminLibraryAccess => '图书馆访问';
-
-  @override
-  String get adminDeviceAndChannelAccess => '设备和通道访问';
 
   @override
   String get adminEnableAllDevices => '启用对所有设备的访问';
@@ -17607,9 +19020,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminTriggerType => '触发类型';
 
   @override
-  String get adminTimeLimit => '时间限制（可选）';
-
-  @override
   String get adminNoLimit => '无限制';
 
   @override
@@ -17701,9 +19111,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String adminPluginUpdating(String name, String version) {
     return 'Updating \"$name\" to v$version...';
   }
-
-  @override
-  String get adminMissingAuthToken => '无法打开设置：缺少身份验证令牌。';
 
   @override
   String adminPluginLoadFailed(String error) {
@@ -17801,9 +19208,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminSlowResponseThreshold => '慢响应阈值（毫秒）';
 
   @override
-  String get adminBrandingSaved => '已保存品牌设置';
-
-  @override
   String get adminBrandingLoadFailed => '无法加载品牌设置';
 
   @override
@@ -17822,9 +19226,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminEnableSplashScreen => '启用启动画面';
 
   @override
-  String get adminStreamingSaved => '已保存流媒体设置';
-
-  @override
   String get adminStreamingLoadFailed => '无法加载流媒体设置';
 
   @override
@@ -17837,13 +19238,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminLeaveEmptyForUnlimited => '留空或 0 表示无限制';
 
   @override
-  String get adminPlaybackSaved => '已保存播放设置';
-
-  @override
   String get adminPlaybackLoadFailed => '无法加载播放设置';
-
-  @override
-  String get adminPlaybackTranscoding => '播放/转码';
 
   @override
   String get adminHardwareAcceleration => '硬件加速';
@@ -17921,9 +19316,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminProcessThreads => '处理线程';
 
   @override
-  String get adminResumeSaved => '恢复已保存的设置';
-
-  @override
   String get adminResumeLoadFailed => '无法加载恢复设置';
 
   @override
@@ -17952,9 +19344,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminMaxAudiobookResume => '最大有声读物恢复百分比';
-
-  @override
-  String get adminNetworkingSaved => '已保存网络设置。可能需要重新启动服务器。';
 
   @override
   String get adminNetworkingLoadFailed => '无法加载网络设置';
@@ -18014,16 +19403,8 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get notSet => '未设置';
 
   @override
-  String get adminMetadataSaved => '元数据已保存';
-
-  @override
   String adminMetadataLoadFailed(String error) {
     return 'Failed to load metadata: $error';
-  }
-
-  @override
-  String adminMetadataSaveFailed(String error) {
-    return 'Failed to save metadata: $error';
   }
 
   @override
@@ -18034,9 +19415,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminReplaceAllMetadata => '替换所有元数据';
-
-  @override
-  String get adminReplaceAllImages => '替换所有图像';
 
   @override
   String get adminMetadataRefreshRequested => '请求元数据刷新';
@@ -18136,44 +19514,8 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   }
 
   @override
-  String get adminAddTuner => '添加调音器';
-
-  @override
-  String get adminTunerType => '调音器类型';
-
-  @override
-  String get adminTunerAdded => '添加了调音器';
-
-  @override
-  String adminTunerAddFailed(String error) {
-    return 'Failed to add tuner: $error';
-  }
-
-  @override
-  String get adminAddGuideProvider => '添加向导提供者';
-
-  @override
-  String get adminProviderType => '提供商类型';
-
-  @override
-  String get adminProviderAdded => '提供商已添加';
-
-  @override
-  String adminProviderAddFailed(String error) {
-    return 'Failed to add provider: $error';
-  }
-
-  @override
   String adminTunerRemoveFailed(String error) {
     return 'Failed to remove tuner: $error';
-  }
-
-  @override
-  String get adminTunerResetRequested => '请求重置调谐器';
-
-  @override
-  String adminTunerResetFailed(String error) {
-    return 'Failed to reset tuner: $error';
   }
 
   @override
@@ -18182,43 +19524,11 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   }
 
   @override
-  String get adminRecordingSettings => '录音设置';
-
-  @override
-  String get adminPrePadding => '预填充（分钟）';
-
-  @override
-  String get adminPostPadding => '后填充（分钟）';
-
-  @override
-  String get adminRecordingPath => '录音路径';
-
-  @override
   String get adminSeriesRecordingPath => '系列录音路径';
-
-  @override
-  String get adminRecordingSettingsSaved => '已保存录音设置';
 
   @override
   String adminSettingsSaveFailed(String error) {
     return 'Failed to save settings: $error';
-  }
-
-  @override
-  String get adminSetChannelMappings => '设置通道映射';
-
-  @override
-  String get adminMappingJson => '映射 JSON';
-
-  @override
-  String get adminMappingJsonHint => '示例：映射 JSON 负载';
-
-  @override
-  String get adminChannelMappingsUpdated => '频道映射已更新';
-
-  @override
-  String adminMappingsUpdateFailed(String error) {
-    return 'Failed to update mappings: $error';
   }
 
   @override
@@ -18234,39 +19544,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminGuideProviders => '导游提供者';
 
   @override
-  String get adminAddProvider => '添加提供商';
-
-  @override
   String get adminNoListingProviders => '未配置列表提供商';
-
-  @override
-  String adminRecordingPathDisplay(String path) {
-    return 'Recording path: $path';
-  }
-
-  @override
-  String adminSeriesPathDisplay(String path) {
-    return 'Series path: $path';
-  }
-
-  @override
-  String adminPrePaddingDisplay(int minutes) {
-    return 'Pre-padding: $minutes min';
-  }
-
-  @override
-  String adminPostPaddingDisplay(int minutes) {
-    return 'Post-padding: $minutes min';
-  }
-
-  @override
-  String get adminTunerDiscovery => '调音器发现';
-
-  @override
-  String get adminChannelMappings => '通道映射';
-
-  @override
-  String get adminNoDiscoveredTuners => '尚未发现调谐器';
 
   @override
   String get adminSettingsSaved => '设置已保存';
@@ -18289,9 +19567,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   }
 
   @override
-  String get adminRestoreRequested => '已请求恢复。服务器重新启动可能会断开此会话。';
-
-  @override
   String get adminBackupsTitle => '备份';
 
   @override
@@ -18301,19 +19576,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminUnnamedBackup => '未命名备份';
 
   @override
-  String get adminLiveTvNotAvailable => '直播电视管理在此服务器版本上不可用。';
-
-  @override
-  String get adminLiveTvTitle => '直播电视管理';
-
-  @override
   String get adminApply => '申请';
-
-  @override
-  String get adminNotSet => '未设置';
-
-  @override
-  String get adminReset => '重置';
 
   @override
   String get adminLogsTitle => '服务器日志';
@@ -18447,9 +19710,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminMetadataImageThumb => '拇指';
-
-  @override
-  String get adminMetadataRecursive => '递归';
 
   @override
   String get adminMetadataProvider => '提供者';
@@ -18696,25 +19956,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminNetworkingRestartWarning => '更改网络设置可能需要重新启动服务器。';
 
   @override
-  String get adminNetworkingRemoteAccess => '启用远程访问';
-
-  @override
-  String get adminNetworkingPorts => '港口';
-
-  @override
-  String get adminNetworkingHttpPort => 'HTTP端口';
-
-  @override
-  String get adminNetworkingHttpsPort => 'HTTPS端口';
-
-  @override
   String get adminNetworkingEnableHttps => '启用 HTTPS';
-
-  @override
-  String get adminNetworkingLocalNetwork => '本地网络';
-
-  @override
-  String get adminNetworkingLocalAddresses => '本地网络地址';
 
   @override
   String get adminNetworkingAddressHint => '例如192.168.1.0/24';
@@ -18762,9 +20004,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminPlaybackEnableHwEncoding => '启用硬件编码';
 
   @override
-  String get adminPlaybackEnableHwDecoding => '启用硬件解码：';
-
-  @override
   String get adminPlaybackEncoding => '编码';
 
   @override
@@ -18784,12 +20023,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminResumeAudiobooks => '有声读物';
-
-  @override
-  String get adminResumeMinAudiobookPct => '有声读物最低简历百分比';
-
-  @override
-  String get adminResumeMaxAudiobookPct => '最大有声读物恢复百分比';
 
   @override
   String get adminStreamingBitrateLimit => '远程客户端比特率限制 (Mbps)';
@@ -18904,11 +20137,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   }
 
   @override
-  String adminTaskTriggerInterval(String duration) {
-    return 'Every $duration';
-  }
-
-  @override
   String get adminTaskTriggerStartup => '应用程序启动时';
 
   @override
@@ -18927,18 +20155,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminTaskTriggerEveryHour => '每小时';
 
   @override
-  String get adminTaskTriggerEvery6Hours => '每 6 小时';
-
-  @override
-  String get adminTaskTriggerEvery12Hours => '每12小时一次';
-
-  @override
-  String get adminTaskTriggerEvery24Hours => '每24小时一次';
-
-  @override
-  String get adminTaskTriggerEvery2Days => '每2天一次';
-
-  @override
   String adminTaskTriggerHours(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -18951,9 +20167,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminTaskTriggerTime => '时间';
-
-  @override
-  String get adminTaskTriggerNoLimit => '无限制';
 
   @override
   String get adminActivityJustNow => '现在';
@@ -19013,15 +20226,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminNetworkingBaseUrl => '基本网址';
-
-  @override
-  String get adminNetworkingHttps => 'HTTPS';
-
-  @override
-  String get adminNetworkingCertPath => '证书路径';
-
-  @override
-  String get adminNetworkingRemoteIpFilter => '远程IP过滤';
 
   @override
   String get adminNetworkingRemoteIpFilterLabel => '远程IP过滤器';
@@ -19105,9 +20309,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get adminSettingsLoadFailed => '无法加载设置';
-
-  @override
-  String get adminDiscover => '发现';
 
   @override
   String adminChannelMappingsUpdateFailed(String error) {
@@ -20076,7 +21277,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get savedThemesDescription =>
-      'These are themes downloaded from the Moonfin plugin for the current server. Deleting removes only this local copy.';
+      'These are themes downloaded from the Foxfin plugin for the current server. Deleting removes only this local copy.';
 
   @override
   String get savedThemesEmpty => 'No saved themes were found for this server.';
@@ -20098,7 +21299,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get themeEditorSubtitle =>
-      'Open the Moonfin Theme Editor in your browser';
+      'Open the Foxfin Theme Editor in your browser';
 
   @override
   String get homeScreen => 'Home Screen';
@@ -20431,12 +21632,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get watchWithGroup => 'Watch with group';
 
   @override
-  String get errors => 'Errors';
-
-  @override
-  String get warnings => 'Warnings';
-
-  @override
   String get disk => 'Disk';
 
   @override
@@ -20475,12 +21670,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   @override
   String get adminNoDevicesMatchCurrentFilters =>
       'No devices match the current filters';
-
-  @override
-  String get passwordSet => 'Password set';
-
-  @override
-  String get noPasswordConfigured => 'No password configured';
 
   @override
   String get remoteAccess => 'Remote Access';
@@ -20571,24 +21760,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get needsAttention => 'Needs Attention';
 
   @override
-  String get adminDrawerSectionServer => 'Server';
-
-  @override
-  String get adminDrawerSectionPlayback => 'Playback';
-
-  @override
-  String get adminDrawerSectionDevices => 'Devices';
-
-  @override
-  String get adminDrawerSectionAdvanced => 'Advanced';
-
-  @override
-  String get adminDrawerSectionPlugins => 'Plugins';
-
-  @override
-  String get adminDrawerSectionLiveTv => 'Live TV';
-
-  @override
   String get homeVideos => 'Home Videos';
 
   @override
@@ -20599,12 +21770,6 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get mixedMoviesAndShows => 'Mixed Movies & Shows';
-
-  @override
-  String get intelQuickSync => 'Intel Quick Sync';
-
-  @override
-  String get rockchipMpp => 'Rockchip MPP';
 
   @override
   String get dolbyVision => 'Dolby Vision';
@@ -24160,11 +25325,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   }
 
   @override
-  String adminRecentAlertEntries(int count) {
-    return 'Recent warning/error entries: $count';
-  }
-
-  @override
   String get analyticsMediaDistribution => '媒體發行';
 
   @override
@@ -24211,9 +25371,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminShutdownServer => '關閉伺服器';
-
-  @override
-  String get adminScanLibraries => '掃描函式庫';
 
   @override
   String get adminLibraryScanStarted => '圖書館掃描開始';
@@ -24299,12 +25456,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get completion => '完成';
-
-  @override
-  String get direct => '直接的';
-
-  @override
-  String get adminDisconnect => '斷開';
 
   @override
   String get adminClearDates => '明確日期';
@@ -24419,14 +25570,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   }
 
   @override
-  String get adminLibraryOptionsSaved => '已儲存庫選項';
-
-  @override
-  String adminLibraryOptionsSaveFailed(String error) {
-    return 'Failed to save options: $error';
-  }
-
-  @override
   String get adminLibraryLoadFailed => '載入庫失敗';
 
   @override
@@ -24437,9 +25580,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminBrowseFilesystem => '瀏覽伺服器檔案系統：';
-
-  @override
-  String get adminSaveOptions => '儲存選項';
 
   @override
   String get adminPreferredMetadataLanguage => '首選元資料語言';
@@ -24466,9 +25606,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminSelectedPaths => '選定的路徑：';
-
-  @override
-  String get adminNoPathsAdded => '未新增路徑（可以稍後新增）';
 
   @override
   String get adminCreateLibrary => '建立庫';
@@ -24534,18 +25671,9 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminUsernameRequired => '使用者名稱不能為空';
 
   @override
-  String get adminNoProfileChanges => '沒有要儲存的設定檔更改';
-
-  @override
-  String get adminProfileSaved => '個人資料已儲存';
-
-  @override
   String adminSaveFailed(String error) {
     return 'Failed to save: $error';
   }
-
-  @override
-  String get adminPermissionsSaved => '權限已儲存';
 
   @override
   String get adminPasswordsMismatch => '密碼不匹配';
@@ -24557,12 +25685,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminUserLoadFailed => '載入用戶失敗';
-
-  @override
-  String get adminBackToUsers => '返回用戶';
-
-  @override
-  String get adminSaveProfile => '儲存個人資料';
 
   @override
   String get adminDeleteUser => '刪除用戶';
@@ -24595,9 +25717,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminForceRemoteTranscoding => '強制遠端來源轉碼';
 
   @override
-  String get adminAllowContentDeletion => '允許內容刪除';
-
-  @override
   String get adminAllowContentDownloading => '允許內容下載';
 
   @override
@@ -24611,9 +25730,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminAllowRemoteAccess => '允許遠端存取';
-
-  @override
-  String get adminRemoteBitrateLimit => '遠端客戶端位元速率限制 (bps)';
 
   @override
   String get adminLeaveEmptyNoLimit => '留空則無限制';
@@ -24637,13 +25753,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminAllowLyricManagement => '允許歌詞管理';
 
   @override
-  String get adminSavePermissions => '保存權限';
-
-  @override
   String get adminEnableAllLibraryAccess => '允許存取所有庫';
-
-  @override
-  String get adminSaveAccess => '儲存存取權限';
 
   @override
   String get adminChangePassword => '更改密碼';
@@ -24671,9 +25781,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminLibraryAccess => '圖書館訪問';
-
-  @override
-  String get adminDeviceAndChannelAccess => '設備和通道訪問';
 
   @override
   String get adminEnableAllDevices => '啟用對所有裝置的訪問';
@@ -24901,9 +26008,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminTriggerType => '觸發類型';
 
   @override
-  String get adminTimeLimit => '時間限制（可選）';
-
-  @override
   String get adminNoLimit => '無限制';
 
   @override
@@ -24995,9 +26099,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String adminPluginUpdating(String name, String version) {
     return 'Updating \"$name\" to v$version...';
   }
-
-  @override
-  String get adminMissingAuthToken => '無法開啟設定：缺少身份驗證令牌。';
 
   @override
   String adminPluginLoadFailed(String error) {
@@ -25095,9 +26196,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminSlowResponseThreshold => '慢響應閾值（毫秒）';
 
   @override
-  String get adminBrandingSaved => '已儲存品牌設定';
-
-  @override
   String get adminBrandingLoadFailed => '無法加載品牌設置';
 
   @override
@@ -25116,9 +26214,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminEnableSplashScreen => '啟用啟動畫面';
 
   @override
-  String get adminStreamingSaved => '已儲存串流媒體設定';
-
-  @override
   String get adminStreamingLoadFailed => '無法加載串流媒體設置';
 
   @override
@@ -25131,13 +26226,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminLeaveEmptyForUnlimited => '留空或 0 表示無限制';
 
   @override
-  String get adminPlaybackSaved => '已儲存播放設定';
-
-  @override
   String get adminPlaybackLoadFailed => '無法載入播放設定';
-
-  @override
-  String get adminPlaybackTranscoding => '播放/轉碼';
 
   @override
   String get adminHardwareAcceleration => '硬體加速';
@@ -25215,9 +26304,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminProcessThreads => '處理線程';
 
   @override
-  String get adminResumeSaved => '恢復已儲存的設定';
-
-  @override
   String get adminResumeLoadFailed => '無法載入恢復設定';
 
   @override
@@ -25246,9 +26332,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminMaxAudiobookResume => '最大有聲書恢復百分比';
-
-  @override
-  String get adminNetworkingSaved => '已儲存網路設定。可能需要重新啟動伺服器。';
 
   @override
   String get adminNetworkingLoadFailed => '無法載入網路設定';
@@ -25308,16 +26391,8 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get notSet => '未設定';
 
   @override
-  String get adminMetadataSaved => '元資料已儲存';
-
-  @override
   String adminMetadataLoadFailed(String error) {
     return 'Failed to load metadata: $error';
-  }
-
-  @override
-  String adminMetadataSaveFailed(String error) {
-    return 'Failed to save metadata: $error';
   }
 
   @override
@@ -25328,9 +26403,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminReplaceAllMetadata => '替換所有元數據';
-
-  @override
-  String get adminReplaceAllImages => '替換所有圖像';
 
   @override
   String get adminMetadataRefreshRequested => '請求元資料刷新';
@@ -25430,44 +26502,8 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   }
 
   @override
-  String get adminAddTuner => '新增調音器';
-
-  @override
-  String get adminTunerType => '調音器類型';
-
-  @override
-  String get adminTunerAdded => '新增了調音器';
-
-  @override
-  String adminTunerAddFailed(String error) {
-    return 'Failed to add tuner: $error';
-  }
-
-  @override
-  String get adminAddGuideProvider => '新增嚮導提供者';
-
-  @override
-  String get adminProviderType => '提供者類型';
-
-  @override
-  String get adminProviderAdded => '提供者已新增';
-
-  @override
-  String adminProviderAddFailed(String error) {
-    return 'Failed to add provider: $error';
-  }
-
-  @override
   String adminTunerRemoveFailed(String error) {
     return 'Failed to remove tuner: $error';
-  }
-
-  @override
-  String get adminTunerResetRequested => '請求重置調諧器';
-
-  @override
-  String adminTunerResetFailed(String error) {
-    return 'Failed to reset tuner: $error';
   }
 
   @override
@@ -25476,43 +26512,11 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   }
 
   @override
-  String get adminRecordingSettings => '錄音設定';
-
-  @override
-  String get adminPrePadding => '預填（分鐘）';
-
-  @override
-  String get adminPostPadding => '後填充（分鐘）';
-
-  @override
-  String get adminRecordingPath => '錄音路徑';
-
-  @override
   String get adminSeriesRecordingPath => '系列錄音路徑';
-
-  @override
-  String get adminRecordingSettingsSaved => '已儲存錄音設定';
 
   @override
   String adminSettingsSaveFailed(String error) {
     return 'Failed to save settings: $error';
-  }
-
-  @override
-  String get adminSetChannelMappings => '設定通道映射';
-
-  @override
-  String get adminMappingJson => '映射 JSON';
-
-  @override
-  String get adminMappingJsonHint => '範例：映射 JSON 負載';
-
-  @override
-  String get adminChannelMappingsUpdated => '頻道映射已更新';
-
-  @override
-  String adminMappingsUpdateFailed(String error) {
-    return 'Failed to update mappings: $error';
   }
 
   @override
@@ -25528,39 +26532,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminGuideProviders => '導遊提供者';
 
   @override
-  String get adminAddProvider => '新增提供者';
-
-  @override
   String get adminNoListingProviders => '未配置清單提供者';
-
-  @override
-  String adminRecordingPathDisplay(String path) {
-    return 'Recording path: $path';
-  }
-
-  @override
-  String adminSeriesPathDisplay(String path) {
-    return 'Series path: $path';
-  }
-
-  @override
-  String adminPrePaddingDisplay(int minutes) {
-    return 'Pre-padding: $minutes min';
-  }
-
-  @override
-  String adminPostPaddingDisplay(int minutes) {
-    return 'Post-padding: $minutes min';
-  }
-
-  @override
-  String get adminTunerDiscovery => '調音器發現';
-
-  @override
-  String get adminChannelMappings => '通道映射';
-
-  @override
-  String get adminNoDiscoveredTuners => '尚未發現調諧器';
 
   @override
   String get adminSettingsSaved => '設定已儲存';
@@ -25583,9 +26555,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   }
 
   @override
-  String get adminRestoreRequested => '已請求恢復。伺服器重新啟動可能會中斷此會話。';
-
-  @override
   String get adminBackupsTitle => '備份';
 
   @override
@@ -25595,19 +26564,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminUnnamedBackup => '未命名備份';
 
   @override
-  String get adminLiveTvNotAvailable => '直播電視管理在此伺服器版本上不可用。';
-
-  @override
-  String get adminLiveTvTitle => '直播電視管理';
-
-  @override
   String get adminApply => '申請';
-
-  @override
-  String get adminNotSet => '未設定';
-
-  @override
-  String get adminReset => '重置';
 
   @override
   String get adminLogsTitle => '伺服器日誌';
@@ -25741,9 +26698,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminMetadataImageThumb => '大拇指';
-
-  @override
-  String get adminMetadataRecursive => '遞迴';
 
   @override
   String get adminMetadataProvider => '提供者';
@@ -25990,25 +26944,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminNetworkingRestartWarning => '更改網路設定可能需要重新啟動伺服器。';
 
   @override
-  String get adminNetworkingRemoteAccess => '啟用遠端存取';
-
-  @override
-  String get adminNetworkingPorts => '港口';
-
-  @override
-  String get adminNetworkingHttpPort => 'HTTP連接埠';
-
-  @override
-  String get adminNetworkingHttpsPort => 'HTTPS連接埠';
-
-  @override
   String get adminNetworkingEnableHttps => '啟用 HTTPS';
-
-  @override
-  String get adminNetworkingLocalNetwork => '本地網路';
-
-  @override
-  String get adminNetworkingLocalAddresses => '本地網路位址';
 
   @override
   String get adminNetworkingAddressHint => '例如192.168.1.0/24';
@@ -26056,9 +26992,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminPlaybackEnableHwEncoding => '啟用硬體編碼';
 
   @override
-  String get adminPlaybackEnableHwDecoding => '啟用硬體解碼：';
-
-  @override
   String get adminPlaybackEncoding => '編碼';
 
   @override
@@ -26078,12 +27011,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminResumeAudiobooks => '有聲書';
-
-  @override
-  String get adminResumeMinAudiobookPct => '有聲書最低履歷百分比';
-
-  @override
-  String get adminResumeMaxAudiobookPct => '最大有聲書恢復百分比';
 
   @override
   String get adminStreamingBitrateLimit => '遠端客戶端位元速率限制 (Mbps)';
@@ -26198,11 +27125,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   }
 
   @override
-  String adminTaskTriggerInterval(String duration) {
-    return 'Every $duration';
-  }
-
-  @override
   String get adminTaskTriggerStartup => '應用程式啟動時';
 
   @override
@@ -26221,18 +27143,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminTaskTriggerEveryHour => '每小時';
 
   @override
-  String get adminTaskTriggerEvery6Hours => '每 6 小時';
-
-  @override
-  String get adminTaskTriggerEvery12Hours => '每12小時一次';
-
-  @override
-  String get adminTaskTriggerEvery24Hours => '每24小時一次';
-
-  @override
-  String get adminTaskTriggerEvery2Days => '每2天一次';
-
-  @override
   String adminTaskTriggerHours(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -26245,9 +27155,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminTaskTriggerTime => '時間';
-
-  @override
-  String get adminTaskTriggerNoLimit => '無限制';
 
   @override
   String get adminActivityJustNow => '現在';
@@ -26307,15 +27214,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminNetworkingBaseUrl => '基本網址';
-
-  @override
-  String get adminNetworkingHttps => 'HTTPS';
-
-  @override
-  String get adminNetworkingCertPath => '證書路徑';
-
-  @override
-  String get adminNetworkingRemoteIpFilter => '遠端IP過濾';
 
   @override
   String get adminNetworkingRemoteIpFilterLabel => '遠端IP過濾器';
@@ -26399,9 +27297,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get adminSettingsLoadFailed => '無法載入設定';
-
-  @override
-  String get adminDiscover => '發現';
 
   @override
   String adminChannelMappingsUpdateFailed(String error) {
@@ -27369,7 +28264,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get savedThemesDescription =>
-      'These are themes downloaded from the Moonfin plugin for the current server. Deleting removes only this local copy.';
+      'These are themes downloaded from the Foxfin plugin for the current server. Deleting removes only this local copy.';
 
   @override
   String get savedThemesEmpty => 'No saved themes were found for this server.';
@@ -27391,7 +28286,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get themeEditorSubtitle =>
-      'Open the Moonfin Theme Editor in your browser';
+      'Open the Foxfin Theme Editor in your browser';
 
   @override
   String get homeScreen => 'Home Screen';
@@ -27724,12 +28619,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get watchWithGroup => 'Watch with group';
 
   @override
-  String get errors => 'Errors';
-
-  @override
-  String get warnings => 'Warnings';
-
-  @override
   String get disk => 'Disk';
 
   @override
@@ -27768,12 +28657,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   @override
   String get adminNoDevicesMatchCurrentFilters =>
       'No devices match the current filters';
-
-  @override
-  String get passwordSet => 'Password set';
-
-  @override
-  String get noPasswordConfigured => 'No password configured';
 
   @override
   String get remoteAccess => 'Remote Access';
@@ -27864,24 +28747,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get needsAttention => 'Needs Attention';
 
   @override
-  String get adminDrawerSectionServer => 'Server';
-
-  @override
-  String get adminDrawerSectionPlayback => 'Playback';
-
-  @override
-  String get adminDrawerSectionDevices => 'Devices';
-
-  @override
-  String get adminDrawerSectionAdvanced => 'Advanced';
-
-  @override
-  String get adminDrawerSectionPlugins => 'Plugins';
-
-  @override
-  String get adminDrawerSectionLiveTv => 'Live TV';
-
-  @override
   String get homeVideos => 'Home Videos';
 
   @override
@@ -27892,12 +28757,6 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get mixedMoviesAndShows => 'Mixed Movies & Shows';
-
-  @override
-  String get intelQuickSync => 'Intel Quick Sync';
-
-  @override
-  String get rockchipMpp => 'Rockchip MPP';
 
   @override
   String get dolbyVision => 'Dolby Vision';

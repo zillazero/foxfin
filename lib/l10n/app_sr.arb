@@ -8505,7 +8505,6 @@
     "adminGeneralDisplayLanguage": "Жељени језик приказа",
     "offlineBannerTitle": "Нисте повезани на интернет",
     "offlineBannerSubtitle": "Приказују се преузети садржаји",
-    "offlineBannerAction": "Преузимања",
     "serverUnreachableBannerTitle": "Серверу није могуће приступити",
     "serverUnreachableBannerSubtitle": "Репродукција преузетих садржаја док сервер поново не буде доступан",
     "contextMenuHideFromContinueWatching": "Сакриј из одељка „Настави са гледањем“",
@@ -12997,10 +12996,6 @@
     "autoDownloadDelete": "Обриши преузете епизоде",
     "@autoDownloadDelete": {
         "description": "Setting that picks how soon an auto-downloaded episode is removed after it was watched"
-    },
-    "autoDownloadDeleteSubtitle": "Изаберите када ће се аутоматски преузете епизоде уклонити након гледања",
-    "@autoDownloadDeleteSubtitle": {
-        "description": "Explains the delete-after-watching setting"
     },
     "autoDownloadDeleteNever": "Никада",
     "@autoDownloadDeleteNever": {

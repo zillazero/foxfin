@@ -20,6 +20,8 @@ import '../../ui/widgets/navigation_layout.dart';
 import '../../preference/home_section_config.dart';
 import '../../preference/preference_constants.dart' as prefs;
 import '../../preference/seerr_preferences.dart';
+import '../../preference/seerr_direct_store.dart';
+import '../../auth/repositories/session_repository.dart';
 import '../../preference/seerr_row_config.dart';
 import '../../preference/user_preferences.dart';
 import '../../util/platform_detection.dart';
@@ -71,9 +73,29 @@ class PluginSyncService extends ChangeNotifier {
   String? _seerrUrl;
   String? get seerrUrl => _seerrUrl;
   bool _seerrEnabled = false;
-  bool get seerrEnabled => _seerrEnabled;
+  bool get seerrEnabled => _seerrEnabled || _directSeerr;
   bool get seerrAvailable =>
-      _pluginAvailable && _seerrEnabled && _prefs.get(UserPreferences.seerrEnabled);
+      ((_pluginAvailable && _seerrEnabled) || _directSeerr) &&
+      _prefs.get(UserPreferences.seerrEnabled);
+
+  /// Foxfin: a Jellyseerr server is connected directly (no Moonfin plugin).
+  bool _directSeerr = false;
+  bool get directSeerr => _directSeerr;
+
+  Future<void> refreshDirectSeerr() async {
+    final session = GetIt.instance.isRegistered<SessionRepository>()
+        ? GetIt.instance<SessionRepository>()
+        : null;
+    final uid = session?.activeUserId;
+    final url = uid == null ? null : await SeerrDirectStore.url(uid);
+    final direct = url != null && url.isNotEmpty;
+    final changed = direct != _directSeerr;
+    _directSeerr = direct;
+    if (changed && direct && !_prefs.get(UserPreferences.seerrEnabled)) {
+      _setLocalSeerrEnabled(true);
+    }
+    if (changed) notifyListeners();
+  }
   bool _seerrInfoAvailable = false;
   bool get seerrInfoAvailable => _seerrInfoAvailable;
 
@@ -237,6 +259,8 @@ class PluginSyncService extends ChangeNotifier {
   }
 
   void _setLocalSeerrEnabled(bool enabled) {
+    // Foxfin: a plugin-less server must not switch off a direct connection.
+    if (_directSeerr && !enabled && !_pluginAvailable) return;
     _seerrPrefs.setEnabled(enabled);
     if (_prefs.get(UserPreferences.seerrEnabled) == enabled) {
       return;
@@ -252,6 +276,7 @@ class PluginSyncService extends ChangeNotifier {
     MediaServerClient client,
   ) async {
     resetState(notify: false, stopStream: false);
+    await refreshDirectSeerr();
 
     try {
       final pingResult = await _ping(client);
@@ -1412,6 +1437,7 @@ class PluginSyncService extends ChangeNotifier {
     _applySinceYouWatchedNumRows(resolved);
     _applyMediaBarMode(resolved);
     _applyMediaBarContentType(resolved);
+    _applyHomeRowImageTypes(resolved);
     if (resolved['mdblistRatingSources'] is List) {
       final sources = (resolved['mdblistRatingSources'] as List)
           .cast<String>()
@@ -1813,6 +1839,20 @@ class PluginSyncService extends ChangeNotifier {
     );
   }
 
+  // Rows the list leaves out keep their local value, since it only names rows someone
+  // picked a type for.
+  void _applyHomeRowImageTypes(Map<String, dynamic> data) {
+    final value = _readString(data, 'homeRowImageTypes');
+    if (value == null) return;
+
+    decodeHomeRowImageTypes(value).forEach((type, imageType) {
+      _store.set(
+        _prefs.getEffectivePreference(UserPreferences.homeRowImageType(type)),
+        imageType,
+      );
+    });
+  }
+
   void _applyBool(
     Map<String, dynamic> data,
     String serverKey,
@@ -2032,6 +2072,17 @@ class PluginSyncService extends ChangeNotifier {
     final tmdbKey = _prefs.get(UserPreferences.tmdbApiKey);
     if (tmdbKey.isNotEmpty && tmdbKey != 'null') {
       payload['tmdbApiKey'] = tmdbKey;
+    }
+
+    // Only the rows the user picked a type for, so someone who never picked one keeps
+    // getting the admin defaults.
+    final homeRowImageTypes = encodeHomeRowImageTypes({
+      for (final type in prefs.HomeSectionType.values)
+        if (_prefs.containsPreference(UserPreferences.homeRowImageType(type)))
+          type: _prefs.get(UserPreferences.homeRowImageType(type)),
+    });
+    if (homeRowImageTypes != null) {
+      payload['homeRowImageTypes'] = homeRowImageTypes;
     }
 
     return payload;

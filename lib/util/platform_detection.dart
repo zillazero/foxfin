@@ -88,6 +88,7 @@ class PlatformDetection {
   static final Map<String, dynamic> _deviceMemory = <String, dynamic>{};
   static int? _uptimeAtProbeMs;
   static final Stopwatch _sinceUptimeProbe = Stopwatch();
+  static String? _renderer;
   static final Map<String, dynamic> _audioCapabilities = <String, dynamic>{};
   static bool _hasDisplayHdrCapabilities = false;
   static bool _hasDolbyVisionCodecCapabilities = false;
@@ -286,6 +287,13 @@ class PlatformDetection {
       ..start();
   }
 
+  /// Which renderer Android asked the engine for at launch and why, as the
+  /// platform side words it. Null until the probe answers, and on other
+  /// platforms.
+  static String? get renderer => _renderer;
+
+  static void setRenderer(String? value) => _renderer = value;
+
   static bool _capabilityBool(String key) {
     return _asBool(_mediaCodecCapabilities[key]);
   }
@@ -402,9 +410,9 @@ class PlatformDetection {
   /// Windows user picking the TV layout would activate this by accident.
   ///
   /// This only says the platform is capable. Whether the window is actually
-  /// used is decided per session from the content, the display's HDR state and
-  /// [UserPreferences.nativeHdrOutput] - see `HdrOutputController`. That
-  /// preference is the off switch; there is deliberately no compile-time one.
+  /// used is decided per session - see `HdrOutputController`.
+  /// [UserPreferences.videoRenderer] is the off switch. There is deliberately
+  /// no compile-time one.
   static bool get supportsNativeHdrWindow => isWindows;
 
   /// Apple platforms use the shared AVPlayer-based preview/theme channels

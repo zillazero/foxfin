@@ -14,10 +14,13 @@ import '../../data/services/audiobook_notes_service.dart';
 import '../../data/services/audiobook_resume_service.dart';
 import '../../data/services/auto_download_service.dart';
 import '../../data/services/connectivity_service.dart';
+import '../../data/services/download_service.dart';
 import '../../data/services/log_service.dart';
 import '../../data/services/blocked_content_gate.dart';
 import '../../data/services/media_server_client_factory.dart';
 import '../../data/services/offline_playback_tracker.dart';
+import '../../data/services/remove_watched_planner.dart';
+import '../../data/services/remove_watched_service.dart';
 import '../../playback/local_aware_player_service.dart';
 import '../../playback/local_first_media_stream_resolver.dart';
 
@@ -50,6 +53,7 @@ import '../../integrations/fox_sso/fox_sync_service.dart';
 import '../../integrations/tracking/tracking_config.dart';
 import '../../integrations/tracking/tracking_player_service.dart';
 import '../../integrations/tracking/tracking_service.dart';
+import '../../util/secondary_subtitle_track_selection.dart';
 
 final _getIt = GetIt.instance;
 
@@ -424,6 +428,32 @@ void registerPlaybackModule() {
     _getIt<UserPreferences>().setItemAudioStreamIndex(itemId, index);
   };
 
+  manager.onSecondarySubtitleTrackSelected = (itemId, index, stream) async {
+    final streams = manager.currentResolution?.mediaStreams
+            .where((s) => s['Type'] == 'Subtitle')
+            .toList() ??
+        const <Map<String, dynamic>>[];
+    await prefs.setItemSecondarySubtitleSelection(
+      itemId,
+      stream == null
+          ? const {'off': true}
+          : secondarySubtitleTrackSelection(streams, index),
+    );
+  };
+  manager.secondarySubtitleTrackSelector = (itemId, streams) {
+    if (itemId.isEmpty) return null;
+    return restoreSecondarySubtitleTrack(
+      prefs.getItemSecondarySubtitleSelection(itemId),
+      streams,
+      isCompatible: (stream) {
+        final index = stream['Index'];
+        return index is int &&
+            index != manager.subtitleStreamIndex &&
+            manager.canUseAsSecondarySubtitle(index);
+      },
+    );
+  };
+
   // This choice carries to the next episode, so it takes the selected signal
   // rather than the changed ones above, which also fire without the viewer.
   manager.onSubtitleTrackSelected = (itemId, index) {
@@ -783,6 +813,11 @@ void setActiveStreamResolver(MediaServerClient client) {
   final resolver = LocalFirstMediaStreamResolver(
     inner: serverResolver,
     offline: _getIt<OfflineStreamResolver>(),
+    restoreSubtitles: (itemId) async {
+      if (_getIt.isRegistered<DownloadService>()) {
+        await _getIt<DownloadService>().restoreMissingSubtitles(itemId);
+      }
+    },
   );
   final localAware = LocalAwarePlayerService(
     serverService,
@@ -831,13 +866,17 @@ void setActiveStreamResolver(MediaServerClient client) {
   _currentActiveResolverClient = client;
 }
 
-/// Smart downloads reacts as soon as an episode stops, rather than
-/// waiting for the server's debounced user data event.
+/// Smart downloads and the remove-watched rule react as soon as an item
+/// stops, rather than waiting for the server's debounced user data event or
+/// the next reconnect.
 void _onItemStopped(dynamic item) {
-  if (item is AggregatedItem &&
-      item.type == 'Episode' &&
-      _getIt.isRegistered<AutoDownloadService>()) {
+  if (item is! AggregatedItem) return;
+  if (item.type == 'Episode' && _getIt.isRegistered<AutoDownloadService>()) {
     _getIt<AutoDownloadService>().onEpisodeStopped(item.serverId);
+  }
+  if (removeWatchedTypes.contains(item.type) &&
+      _getIt.isRegistered<RemoveWatchedService>()) {
+    _getIt<RemoveWatchedService>().onItemStopped(item.id);
   }
 }
 

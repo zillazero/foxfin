@@ -271,7 +271,7 @@ class _SeerrRequestDialogState extends State<SeerrRequestDialog> {
             child: SeerrDialogButton(
               label: l10n.submitRequest,
               primary: true,
-              primaryColor: const Color(0xFF6366F1),
+              primaryColor: Theme.of(context).colorScheme.primary,
               busy: _submitting,
               onPressed: _quotaBlocked || _submitting ? null : _submit,
             ),

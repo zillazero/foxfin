@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Gemte temaer",
-    "savedThemesDescription": "Disse er temaer, der er downloadet fra Moonfin plugin til den aktuelle server. Sletning fjerner kun denne lokale kopi.",
+    "savedThemesDescription": "Disse er temaer, der er downloadet fra Foxfin plugin til den aktuelle server. Sletning fjerner kun denne lokale kopi.",
     "savedThemesEmpty": "Der blev ikke fundet nogen gemte temaer for denne server.",
     "savedThemesCurrentThemeId": "{themeId} • Aktiv i øjeblikket",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Slet gemt tema",
     "savedThemesManageSubtitle": "Administrer downloadede plugin-temaer på denne enhed",
     "themeEditor": "Tema redaktør",
-    "themeEditorSubtitle": "Åbn Moonfin Theme Editor i din browser",
+    "themeEditorSubtitle": "Åbn Foxfin Theme Editor i din browser",
     "homeScreen": "Startskærm",
     "bottomBar": "Nederste bjælke",
     "homeRowsStyleClassic": "Klassisk",
@@ -8505,7 +8505,6 @@
     "adminGeneralDisplayLanguage": "Foretrukket visningssprog",
     "offlineBannerTitle": "Du er offline",
     "offlineBannerSubtitle": "Viser dine downloads",
-    "offlineBannerAction": "Downloads",
     "serverUnreachableBannerTitle": "Kan ikke få forbindelse til din server",
     "serverUnreachableBannerSubtitle": "Afspiller fra downloads, indtil den er tilbage",
     "contextMenuHideFromContinueWatching": "Skjul fra Fortsæt med at se",

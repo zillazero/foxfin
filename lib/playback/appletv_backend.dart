@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:playback_core/playback_core.dart';
 
+import '../data/services/client_certificate_service.dart';
 import '../data/services/log_service.dart';
 import '../preference/preference_constants.dart';
 import '../preference/user_preferences.dart';
@@ -15,6 +16,7 @@ import 'dolby_vision_av1.dart';
 import 'engine_trust.dart';
 import 'known_defects.dart';
 import 'letterbox_croppers.dart';
+import 'lossless_audio_bridge.dart';
 import 'server_transcode_capabilities.dart';
 
 class AppleTvBackend implements PlayerBackend {
@@ -50,6 +52,7 @@ class AppleTvBackend implements PlayerBackend {
   int _textTrackCount = 0;
   bool _tracksKnown = false;
   int? _activeSubtitleTrackIndex;
+  Map<String, dynamic>? _pendingEmbeddedSubtitle;
   Completer<void>? _tracksReadyCompleter;
   List<EmbeddedCaptionTrack> _embeddedCaptionTracks = const [];
   final _tracksChangedController = StreamController<void>.broadcast();
@@ -173,6 +176,7 @@ class AppleTvBackend implements PlayerBackend {
       case 'nextUpCancel':
       case 'nextUpDismiss':
       case 'skipSegment':
+      case 'cinemaSkipAction':
       case 'userSeeked':
       case 'searchSubtitles':
       case 'downloadSubtitle':
@@ -186,6 +190,7 @@ class AppleTvBackend implements PlayerBackend {
       case 'tracksChanged':
         _tracksKnown = true;
         _textTrackCount = _toInt(map['textTrackCount']);
+        _applyPendingEmbeddedSubtitle();
         _embeddedCaptionTracks = EmbeddedCaptionTrack.listFromWire(
           map['closedCaptionTracks'],
         );
@@ -301,9 +306,14 @@ class AppleTvBackend implements PlayerBackend {
         : <String, String>{};
 
     _completed = false;
+    // Until the new session ticks, the previous item's end would stand in
+    // for this one's position, and a stop then reports it as watched.
+    _position = startPosition;
+    _positionStream.add(_position);
     _tracksKnown = false;
     _textTrackCount = 0;
     _activeSubtitleTrackIndex = null;
+    _pendingEmbeddedSubtitle = null;
     _tracksReadyCompleter = null;
     _embeddedCaptionTracks = const [];
 
@@ -316,6 +326,10 @@ class AppleTvBackend implements PlayerBackend {
       'autoPlay=$autoPlay',
     );
     await _ensurePlayerPresented(audioOnly: audioOnly);
+
+    await _invoke<void>('setClientCertificates', {
+      'certificates': nativeClientCertificates(pkcs12: true),
+    });
 
     await _invoke<void>('setSource', {
       'url': url,
@@ -335,6 +349,11 @@ class AppleTvBackend implements PlayerBackend {
       'audioProfile': payload['audioProfile']?.toString(),
       'audioChannels': payload['audioChannels'],
       'audioStreamIndex': (payload['audioStreamIndex'] as num?)?.toInt() ?? -1,
+      'audioBridgeLossless': usesLosslessAudioBridge(
+        _prefs.detectedAudioCapabilities,
+        maxAudioChannels: _prefs.resolveMaxAudioChannels(),
+        downmixToStereo: _prefs.get(UserPreferences.downmixToStereo),
+      ),
       'isLive': payload['isLive'] == true,
       'mediaType': payload['mediaType']?.toString() ?? 'video',
       'normalizationGainDb': (payload['normalizationGainDb'] as num?)?.toDouble(),
@@ -378,7 +397,11 @@ class AppleTvBackend implements PlayerBackend {
   Future<bool> resumeLiveEdge() async => false;
 
   @override
+  LiveSeekWindow? get liveSeekWindow => null;
+
+  @override
   Future<void> stop() async {
+    _pendingEmbeddedSubtitle = null;
     await _invoke<void>('stop');
     if (_isPlaying) {
       _isPlaying = false;
@@ -439,11 +462,13 @@ class AppleTvBackend implements PlayerBackend {
       maxBitrateMbps: maxBitrate,
       audioCapabilityProfile: audioCapabilityProfile,
       audioFallbackCodec: _prefs.resolveAudioFallbackCodec(),
+      transcodeAudioCodecs: _prefs.resolveTranscodeAudioCodecs(),
       ac3PassthroughEnabled: _prefs.resolveAc3PassthroughEnabled(),
       eac3PassthroughEnabled: _prefs.resolveEac3PassthroughEnabled(),
       dtsCorePassthroughEnabled: _prefs.resolveDtsCorePassthroughEnabled(),
       trueHdPassthroughEnabled: _prefs.resolveTrueHdPassthroughEnabled(),
       downmixToStereo: _prefs.get(UserPreferences.downmixToStereo),
+      maxAudioChannels: _prefs.resolveMaxAudioChannels(),
       // AetherEngine plays every advertised audio codec: AAC/AC3/EAC3(+JOC
       // Atmos)/FLAC/ALAC are stream-copied intact, and TrueHD/DTS/MP3/Opus/
       // Vorbis/PCM are bridged to EAC3 or FLAC on-device, so stereo routes
@@ -458,6 +483,7 @@ class AppleTvBackend implements PlayerBackend {
       supportsAvcHigh10: PlatformDetection.supportsAvcHigh10,
       avcMainLevel: PlatformDetection.avcMainLevel,
       avcHigh10Level: PlatformDetection.avcHigh10Level,
+      capsAvcRefFrames: false,
       supportsHevc: PlatformDetection.supportsHevc,
       supportsHevcMain10: PlatformDetection.supportsHevcMain10,
       transcodeHevcAllowed: serverAllowsHevcTranscode(),
@@ -613,6 +639,9 @@ class AppleTvBackend implements PlayerBackend {
     return presented ?? false;
   }
 
+  Future<void> setCinemaSkipState(Map<String, Object?> state) =>
+      _invoke<void>('setCinemaSkipState', state);
+
   Future<void> showSkipSegment(
     String label, {
     required String countdownStyle,
@@ -692,27 +721,61 @@ class AppleTvBackend implements PlayerBackend {
     bool isExternalSubtitle = false,
     String? externalSubtitleUrl,
   }) async {
+    _pendingEmbeddedSubtitle = null;
     _activeSubtitleTrackIndex = index;
     _log(
       'setSubtitleTrack index=$index external=$isExternalSubtitle '
       'bitmap=$isBitmapSubtitle codec=${subtitleCodec ?? 'none'} '
       'url=${externalSubtitleUrl == null ? 'none' : loggableUrl(externalSubtitleUrl)}',
     );
-    await _invoke<void>('setSubtitleTrack', {
+    final arguments = <String, dynamic>{
       'index': index,
       'isBitmapSubtitle': isBitmapSubtitle,
       'codec': subtitleCodec,
       'isExternalSubtitle': isExternalSubtitle,
       'externalSubtitleUrl': externalSubtitleUrl,
-    });
+    };
+    // Native track discovery can announce zero subtitles before demux ends.
+    // Keep the choice until its ordinal exists instead of losing it in Swift.
+    if (!isExternalSubtitle && index > _textTrackCount) {
+      _pendingEmbeddedSubtitle = arguments;
+      return;
+    }
+    await _invoke<void>('setSubtitleTrack', arguments);
+  }
+
+  void _applyPendingEmbeddedSubtitle() {
+    final pending = _pendingEmbeddedSubtitle;
+    if (_disposed ||
+        pending == null ||
+        (pending['index'] as int) > _textTrackCount) {
+      return;
+    }
+    // Consume before dispatch so repeated track events cannot reselect it.
+    _pendingEmbeddedSubtitle = null;
+    unawaited(_invoke<void>('setSubtitleTrack', pending));
   }
 
   @override
   Future<void> disableSubtitleTrack() async {
+    _pendingEmbeddedSubtitle = null;
     _activeSubtitleTrackIndex = -1;
     _log('disableSubtitleTrack');
     await _invoke<void>('disableSubtitleTrack');
   }
+
+  @override
+  Future<void> setSecondarySubtitle({String? url, String? codec}) async {}
+
+  @override
+  Future<void> setSecondarySubtitleDelay(double seconds) async {}
+
+  @override
+  Future<void> configureSecondarySubtitleStyle({
+    double? fontSize,
+    double? verticalOffset,
+    int? textColor,
+  }) async {}
 
   @override
   int? get activeSubtitleTrackIndex => _activeSubtitleTrackIndex;
@@ -887,6 +950,7 @@ class AppleTvBackend implements PlayerBackend {
 
   @override
   Future<void> setEmbeddedCaptionTrack(int id) async {
+    _pendingEmbeddedSubtitle = null;
     await _invoke<void>('setClosedCaptionTrack', {'id': id});
   }
 
@@ -896,6 +960,7 @@ class AppleTvBackend implements PlayerBackend {
   @override
   void dispose() {
     if (_disposed) return;
+    _pendingEmbeddedSubtitle = null;
     _disposed = true;
     _prefs.removeListener(_syncNativePreferences);
     _audioDelayDebounce?.cancel();

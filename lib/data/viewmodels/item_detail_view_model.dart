@@ -556,9 +556,27 @@ class ItemDetailViewModel extends ChangeNotifier {
     // Disposal races the await above, so hand back a child nobody listens to
     // rather than wiring one into a dead view model.
     if (_isDisposed) return created;
-    created.addListener(notifyListeners);
+    created.addListener(_onSeerrChanged);
     _seerr = created;
     return created;
+  }
+
+  // The open page keeps refreshing a request, so a title that lands in the
+  // library while it's showing swaps the page out the same way it would on
+  // load.
+  void _onSeerrChanged() {
+    final seerr = _seerr;
+    if (_isSeerrOnly && _seerrResolvedLibraryId == null && seerr != null) {
+      _seerrResolvedLibraryId = _libraryIdFromSeerr(seerr.state);
+    }
+    notifyListeners();
+  }
+
+  // Seerr hands back the media server's own id for a title it knows is there.
+  static String? _libraryIdFromSeerr(SeerrMediaDetailState state) {
+    final id =
+        state.mediaInfo?.jellyfinMediaId ?? state.mediaInfo?.jellyfinMediaId4k;
+    return id == null || id.isEmpty ? null : id;
   }
 
   ItemDetailViewModel({
@@ -676,12 +694,10 @@ class ItemDetailViewModel extends ChangeNotifier {
       return;
     }
 
-    // Seerr hands back the media server's own id for a title it knows is
-    // already there. Nothing else is set here, so the screen stays on its
-    // loading state until it has swapped itself out.
-    final libraryId =
-        state.mediaInfo?.jellyfinMediaId ?? state.mediaInfo?.jellyfinMediaId4k;
-    if (libraryId != null && libraryId.isNotEmpty) {
+    // Nothing else is set for a title already in the library, so the screen
+    // stays on its loading state until it has swapped itself out.
+    final libraryId = _libraryIdFromSeerr(state);
+    if (libraryId != null) {
       _seerrResolvedLibraryId = libraryId;
       notifyListeners();
       return;
@@ -2102,15 +2118,31 @@ class ItemDetailViewModel extends ChangeNotifier {
   }
 
   Future<void> _loadFeatures() async {
+    final parts = _loadAdditionalParts();
     try {
       final items = await _client.itemsApi.getSpecialFeatures(itemId);
-      _features = _mapItems(
-        items,
-      ).where((item) => item.id != itemId).toList(growable: false);
+      _features = [
+        ...await parts,
+        ..._mapItems(items).where((item) => item.id != itemId),
+      ];
       notifyListeners();
     } catch (_) {
-      _features = const [];
+      _features = await parts;
       notifyListeners();
+    }
+  }
+
+  // A movie split across files, like DVD1 and DVD2, lists the other files as
+  // its parts. They're tagged so the extras rows give them their own heading.
+  Future<List<AggregatedItem>> _loadAdditionalParts() async {
+    if ((_item?.partCount ?? 1) < 2) return const [];
+    try {
+      final parts = await _client.itemsApi.getAdditionalParts(itemId);
+      return _mapItems([
+        for (final part in parts) {...part, '__moonfinAdditionalPart': true},
+      ]);
+    } catch (_) {
+      return const [];
     }
   }
 
@@ -2129,10 +2161,22 @@ class ItemDetailViewModel extends ChangeNotifier {
         sortOrder: 'Descending',
         recursive: true,
         limit: 100,
-        fields: 'PrimaryImageAspectRatio,BasicSyncInfo',
+        fields: 'PrimaryImageAspectRatio,BasicSyncInfo,People',
       );
       final items = (data['Items'] as List?) ?? [];
-      _filmography = _mapItems(items);
+      // The cards don't know whose page they're on, so each title carries
+      // the role for its subtitle and lets go of the rest of the cast.
+      _filmography = [
+        for (final item in _mapItems(items))
+          AggregatedItem(
+            id: item.id,
+            serverId: item.serverId,
+            rawData: {
+              ...item.rawData,
+              '__moonfinPersonRole': item.roleOf(localId),
+            }..remove('People'),
+          ),
+      ];
       notifyListeners();
     } catch (_) {}
   }
@@ -2475,7 +2519,7 @@ class ItemDetailViewModel extends ChangeNotifier {
     _isDisposed = true;
     userDataSync.removeListener(_onUserDataChanged);
     // The child owns a download poll timer, so this is what stops it.
-    _seerr?.removeListener(notifyListeners);
+    _seerr?.removeListener(_onSeerrChanged);
     _seerr?.dispose();
     _seerr = null;
     super.dispose();

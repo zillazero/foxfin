@@ -6949,7 +6949,7 @@
         }
     },
     "savedThemesTitle": "Saved themes",
-    "savedThemesDescription": "These are themes downloaded from the Moonfin plugin for the current server. Deleting removes only this local copy.",
+    "savedThemesDescription": "These are themes downloaded from the Foxfin plugin for the current server. Deleting removes only this local copy.",
     "savedThemesEmpty": "No saved themes were found for this server.",
     "savedThemesCurrentThemeId": "{themeId} • Currently active",
     "@savedThemesCurrentThemeId": {
@@ -6963,7 +6963,7 @@
     "savedThemesDeleteTooltip": "Delete saved theme",
     "savedThemesManageSubtitle": "Manage downloaded plugin themes on this device",
     "themeEditor": "Theme Editor",
-    "themeEditorSubtitle": "Open the Moonfin Theme Editor in your browser",
+    "themeEditorSubtitle": "Open the Foxfin Theme Editor in your browser",
     "homeScreen": "Home Screen",
     "bottomBar": "Bottom Bar",
     "homeRowsStyleClassic": "Classic",

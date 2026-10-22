@@ -32,6 +32,7 @@ import android.os.SystemClock
 import android.util.Rational
 import android.view.KeyEvent
 import android.view.MotionEvent
+import android.view.WindowManager
 import androidx.mediarouter.media.MediaRouteSelector
 import androidx.mediarouter.media.MediaRouter
 import com.google.android.gms.cast.CastMediaControlIntent
@@ -303,6 +304,15 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             runCatching { window.colorMode = ActivityInfo.COLOR_MODE_HDR }
         }
+        // Android 14 and older keep a fullscreen landscape window clear of the
+        // camera cutout, which leaves a black strip beside the video. Android
+        // 15 draws under it already.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.attributes = window.attributes.apply {
+                layoutInDisplayCutoutMode =
+                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            }
+        }
         deepLinkFrom(intent)?.let { pendingDeepLink = it }
         gameInputManager?.registerInputDeviceListener(gameInputDeviceListener, null)
     }
@@ -415,6 +425,7 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
                 }
                 "buildFingerprint" -> result.success(Build.FINGERPRINT)
                 "uptimeMillis" -> result.success(SystemClock.uptimeMillis())
+                "renderer" -> result.success(MoonfinApplication.rendererSummary)
                 "dolbyVisionCodecCapabilities" -> {
                     result.success(MediaCodecCapabilities.queryDolbyVisionCapabilities())
                 }

@@ -262,7 +262,7 @@ final class EpisodeBrowserViewController: UIViewController, RemotePlayerNavigabl
         logoWidth.constant = 0
         titleLabel.isHidden = false
         guard !urlString.isEmpty, let url = URL(string: urlString) else { return }
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+        MoonfinURLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
             let image = data.flatMap { UIImage(data: $0) }
             DispatchQueue.main.async {
                 guard let self, self.logoUrl == urlString, let image, image.size.height > 0 else {
@@ -583,7 +583,7 @@ private final class EpisodeRowCell: UICollectionViewCell {
         imageUrl = urlString
         thumb.image = nil
         guard !urlString.isEmpty, let url = URL(string: urlString) else { return }
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+        MoonfinURLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
             let image = data.flatMap { UIImage(data: $0) }
             DispatchQueue.main.async {
                 guard let self, self.imageUrl == urlString else { return }

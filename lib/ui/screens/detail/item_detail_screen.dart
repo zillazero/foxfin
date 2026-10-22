@@ -51,6 +51,7 @@ import 'nouveau/nouveau_detail_content.dart';
 import 'nouveau/hero/nouveau_action_buttons.dart';
 import 'modern/modern_detail_content.dart';
 import 'spotlight/spotlight_detail_content.dart';
+import 'playlist_sort_filter_bar.dart';
 import '../../widgets/skeleton/skeleton_detail_screen.dart';
 import '../../widgets/skeleton/skeleton_shimmer.dart';
 import '../../../data/repositories/seerr_repository.dart';
@@ -72,6 +73,7 @@ import '../../../util/seerr_credits.dart';
 import '../../navigation/destinations.dart';
 import '../../widgets/adaptive/adaptive_dialog.dart';
 import '../../widgets/adaptive/sf_symbol.dart';
+import '../../widgets/book/book_navigation.dart';
 import '../../widgets/settings/settings_panel.dart';
 import '../../widgets/add_to_playlist_dialog.dart';
 import '../../widgets/logo_view.dart';
@@ -395,7 +397,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen>
 
     // A pushed child screen (e.g. a similar item) clears the shared play-button
     // notifier on its way out; reclaim it so focus restoration finds this screen.
-    if (PlatformDetection.isTV && _initialContentFocusNode != null) {
+    if (!PlatformDetection.useMobileUi && _initialContentFocusNode != null) {
       NavigationLayout.focusDetailsPlayButtonNotifier.value =
           _initialContentFocusNode;
     }
@@ -562,7 +564,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen>
   /// focus. Focus then falls back to the scope around it, where a remote has
   /// nothing to move from, so it goes back to the top of the page.
   void _recoverFocusAfterSectionChange() {
-    if (!PlatformDetection.isTV) return;
+    if (PlatformDetection.useMobileUi) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (ModalRoute.of(context)?.isCurrent == false) return;
@@ -825,31 +827,34 @@ class _ItemDetailScreenState extends State<ItemDetailScreen>
             ? _buildModernContent()
             : _buildSpotlightContent(),
 
-        DetailScreenStyle.nouveau => NouveauDetailContent(
-          key: _nouveauContentKey,
-          viewModel: _viewModel,
-          prefs: _prefs,
-          backdropUrl: _backdropUrl,
-          selectedMediaSourceId: _selectedMediaSourceId,
-          initialFocusNode: _ensureInitialFocusNode(),
-          onSelectedMediaSourceChanged: (id) {
-            setState(() => _selectedMediaSourceId = id);
-            _viewModel.load(mediaSourceId: id);
-          },
-          onBackdropItemFocused: _onBackdropItemFocused,
-          autoPlay: widget.autoPlay,
-          onPlayFromChapter: (position) => unawaited(
-            _playFromChapter(
-              context,
-              _viewModel.item!,
-              position,
-              _selectedMediaSourceId,
-            ),
-          ),
-          actionsExpanded: _actionsExpanded,
-          onActionsExpandedChanged: (val) =>
-              setState(() => _actionsExpanded = val),
-        ),
+        DetailScreenStyle.nouveau =>
+          detailFallsBackToModern(_viewModel.item?.type)
+            ? _buildModernContent()
+            : NouveauDetailContent(
+                key: _nouveauContentKey,
+                viewModel: _viewModel,
+                prefs: _prefs,
+                backdropUrl: _backdropUrl,
+                selectedMediaSourceId: _selectedMediaSourceId,
+                initialFocusNode: _ensureInitialFocusNode(),
+                onSelectedMediaSourceChanged: (id) {
+                  setState(() => _selectedMediaSourceId = id);
+                  _viewModel.load(mediaSourceId: id);
+                },
+                onBackdropItemFocused: _onBackdropItemFocused,
+                autoPlay: widget.autoPlay,
+                onPlayFromChapter: (position) => unawaited(
+                  _playFromChapter(
+                    context,
+                    _viewModel.item!,
+                    position,
+                    _selectedMediaSourceId,
+                  ),
+                ),
+                actionsExpanded: _actionsExpanded,
+                onActionsExpandedChanged: (val) =>
+                    setState(() => _actionsExpanded = val),
+              ),
 
         DetailScreenStyle.minimalist => MinimalistDetailContent(
           viewModel: _viewModel,
@@ -935,6 +940,9 @@ class _DetailContentState extends State<_DetailContent> {
   final Map<String, FocusNode> _trackFocusNodes = <String, FocusNode>{};
   final Map<String, FocusNode> _featureFocusNodes = <String, FocusNode>{};
 
+  FocusNode get _albumPlayButtonNode =>
+      widget.initialFocusNode ?? _albumPlayFocusNode;
+
   FocusNode _featureFocusNodeFor(String categoryKey) {
     return _featureFocusNodes.putIfAbsent(
       categoryKey,
@@ -954,6 +962,21 @@ class _DetailContentState extends State<_DetailContent> {
   );
   final FocusNode _seriesNextUpFocusNode = FocusNode(
     debugLabel: 'detailSeriesNextUp',
+  );
+  LibrarySortBy _playlistSortBy = LibrarySortBy.playlistOrder;
+  SortDirection _playlistSortDirection = SortDirection.ascending;
+  PlayedStatusFilter _playlistPlayedFilter = PlayedStatusFilter.all;
+  bool _playlistFavoriteFilter = false;
+  String? _playlistMediaTypeFilter;
+  int? _playlistRandomSeed;
+  final FocusNode _playlistSortFocusNode = FocusNode(
+    debugLabel: 'playlistSortPill',
+  );
+  final FocusNode _playlistFilterFocusNode = FocusNode(
+    debugLabel: 'playlistFilterPill',
+  );
+  final FocusNode _playlistClearFiltersFocusNode = FocusNode(
+    debugLabel: 'playlistClearFiltersButton',
   );
   String? _tvAlbumPlayFocusAppliedForItemId;
   List<SeerrDiscoverItem>? _seerrAppearances;
@@ -1318,11 +1341,17 @@ class _DetailContentState extends State<_DetailContent> {
       _sectionScrollControllers.clear();
       _pendingSectionFocusRetries.clear();
       _loadSeerrAppearances();
+      _playlistSortBy = LibrarySortBy.playlistOrder;
+      _playlistSortDirection = SortDirection.ascending;
+      _playlistPlayedFilter = PlayedStatusFilter.all;
+      _playlistFavoriteFilter = false;
+      _playlistMediaTypeFilter = null;
+      _playlistRandomSeed = null;
     }
   }
 
   void _ensureTvAlbumPlayFocus(AggregatedItem item) {
-    if (!PlatformDetection.isTV) return;
+    if (PlatformDetection.useMobileUi) return;
     if (item.type != 'MusicAlbum' && item.type != 'Playlist') return;
     if (_tvAlbumPlayFocusAppliedForItemId == item.id) return;
     _tryRequestTvAlbumPlayFocus(item.id, 0);
@@ -1333,7 +1362,7 @@ class _DetailContentState extends State<_DetailContent> {
       if (!mounted) return;
       if (!canClaimInitialFocus(context)) return;
       if (_tvAlbumPlayFocusAppliedForItemId == itemId) return;
-      final node = _albumPlayFocusNode;
+      final node = _albumPlayButtonNode;
       if (node.context != null && node.canRequestFocus) {
         node.requestFocus();
         if (node.hasFocus) {
@@ -1363,6 +1392,9 @@ class _DetailContentState extends State<_DetailContent> {
     _firstChapterFocusNode.dispose();
     _firstFeatureFocusNode.dispose();
     _albumPlayFocusNode.dispose();
+    _playlistSortFocusNode.dispose();
+    _playlistFilterFocusNode.dispose();
+    _playlistClearFiltersFocusNode.dispose();
     for (final node in _trackFocusNodes.values) {
       node.dispose();
     }
@@ -1390,7 +1422,7 @@ class _DetailContentState extends State<_DetailContent> {
     return switch (item.type) {
       'Person' =>
         widget.initialFocusNode ?? _sectionFocusNode('detailPersonFavorite'),
-      'MusicAlbum' || 'Playlist' => _albumPlayFocusNode,
+      'MusicAlbum' || 'Playlist' => _albumPlayButtonNode,
       'BoxSet' => _sectionFocusNode('detailBoxSetActionButtons'),
       _ => widget.initialFocusNode ?? _sectionFocusNode('detailActionButtons'),
     };
@@ -1402,7 +1434,7 @@ class _DetailContentState extends State<_DetailContent> {
   /// widgets listen to, and the nodes it names have no context until the
   /// frame is done anyway.
   void _publishTopNavbarTarget(AggregatedItem item, FocusNode? overview) {
-    if (!PlatformDetection.isTV) return;
+    if (PlatformDetection.useMobileUi) return;
     final target = _topNavbarFocusTarget(item, overview);
     _publishedNavbarTarget = target;
     if (NavigationLayout.focusDetailsPlayButtonNotifier.value == target) return;
@@ -2159,6 +2191,7 @@ class _DetailContentState extends State<_DetailContent> {
     required AggregatedItem? episode,
     required String title,
     required FocusNode node,
+    bool replacePage = false,
   }) {
     if (episode == null || !_visibility.shows(DetailSection.upNext)) {
       return null;
@@ -2180,6 +2213,7 @@ class _DetailContentState extends State<_DetailContent> {
             episode: episode,
             imageApi: viewModel.imageApi,
             contextSeasonId: viewModel.effectiveSeasonId,
+            replacePage: replacePage,
             focusNode: node,
             onKeyEvent: (event) {
               if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
@@ -2470,6 +2504,7 @@ class _DetailContentState extends State<_DetailContent> {
         episode: nextEpisode,
         title: l10n.nextEpisode,
         node: _nextEpisodeFocusNode,
+        replacePage: true,
       ),
       if (viewModel.episodes.isNotEmpty &&
           _visibility.shows(DetailSection.moreEpisodes))
@@ -3128,16 +3163,44 @@ class _DetailContentState extends State<_DetailContent> {
     final canManagePlaylistTracks =
         isPlaylist && viewModel.canManagePlaylistTracks;
     final canDeleteItem = item.canDelete;
+    final canDeleteDownloaded =
+        !PlatformDetection.isTV &&
+        (item.type == 'MusicAlbum' || item.type == 'AudioBook');
+    final availableMediaTypes = isPlaylist
+        ? viewModel.tracks
+            .map((t) => t.type)
+            .whereType<String>()
+            .toSet()
+            .toList()
+        : const <String>[];
+
+    final displayedTracks = isPlaylist
+        ? sortAndFilterPlaylistTracks(
+            tracks: viewModel.tracks,
+            sortBy: _playlistSortBy,
+            sortDirection: _playlistSortDirection,
+            playedFilter: _playlistPlayedFilter,
+            favoriteOnly: _playlistFavoriteFilter,
+            mediaTypeFilter: _playlistMediaTypeFilter,
+            randomSeed: _playlistRandomSeed,
+          )
+        : viewModel.tracks;
+
     final canDownloadAll =
         userCanDownload() &&
         (item.type == 'MusicAlbum' ||
             item.type == 'AudioBook' ||
             (item.type == 'Playlist' &&
-                viewModel.tracks.isNotEmpty &&
-                viewModel.tracks.every(_isAudioItem)));
-    final canDeleteDownloaded =
-        !PlatformDetection.isTV &&
-        (item.type == 'MusicAlbum' || item.type == 'AudioBook');
+                displayedTracks.isNotEmpty &&
+                displayedTracks.every(_isAudioItem)));
+
+    final isDefaultPlaylistOrder =
+        _playlistSortBy == LibrarySortBy.playlistOrder &&
+        _playlistSortDirection == SortDirection.ascending &&
+        _playlistPlayedFilter == PlayedStatusFilter.all &&
+        !_playlistFavoriteFilter &&
+        (_playlistMediaTypeFilter == null || _playlistMediaTypeFilter == 'all');
+
     return [
       _AlbumHeader(
         item: item,
@@ -3150,16 +3213,27 @@ class _DetailContentState extends State<_DetailContent> {
       const SizedBox(height: 16),
       _AlbumActions(
         item: item,
-        tracks: viewModel.tracks,
-        playFocusNode: widget.initialFocusNode ?? _albumPlayFocusNode,
+        tracks: displayedTracks,
+        playFocusNode: _albumPlayButtonNode,
         // Do not steal focus onto the media page when a settings panel is open
         // over the details and rebuilds it (detail style or theme change).
         autofocusPlay:
-            PlatformDetection.isTV && !SettingsPanel.isOpenNotifier.value,
+            !PlatformDetection.useMobileUi && !SettingsPanel.isOpenNotifier.value,
         onPlayDown: () {
-          if (viewModel.tracks.isNotEmpty) {
-            final node = _getTrackFocusNode(viewModel.tracks.first.id);
-            if (node.canRequestFocus) {
+          if (isPlaylist) {
+            if (_playlistSortFocusNode.context?.mounted == true) {
+              _playlistSortFocusNode.requestFocus();
+              return;
+            }
+          }
+          if (displayedTracks.isNotEmpty) {
+            final first = displayedTracks.first;
+            final rawId = first.rawData['PlaylistItemId']?.toString();
+            final firstId = (rawId != null && rawId.isNotEmpty)
+                ? rawId
+                : first.id;
+            final node = _getTrackFocusNode(firstId);
+            if (node.context?.mounted == true) {
               node.requestFocus();
             }
           }
@@ -3169,7 +3243,7 @@ class _DetailContentState extends State<_DetailContent> {
             ? () => _downloadTrackList(
                 context,
                 item.name,
-                viewModel.tracks,
+                displayedTracks,
                 itemLabel: isAudiobook ? 'chapters' : 'tracks',
               )
             : null,
@@ -3187,61 +3261,221 @@ class _DetailContentState extends State<_DetailContent> {
               ? l10n.playlist
               : (isAudiobook ? l10n.tableOfContents : l10n.tracklist),
         ),
-        const SizedBox(height: 12),
-        DetailTrackList(
-          tracks: viewModel.tracks,
-          getFocusNode: _getTrackFocusNode,
-          onFirstTrackUp: () {
-            final targetNode = widget.initialFocusNode ?? _albumPlayFocusNode;
-            if (!targetNode.canRequestFocus) return;
-            targetNode.requestFocus();
-          },
-          onTrackFocused: onBackdropItemFocused,
-          isAudiobook: isAudiobook,
-          groupByDisc: item.type == 'MusicAlbum',
-          reorderable: canManagePlaylistTracks,
-          isPlaylist: isPlaylist,
-          imageApi: viewModel.imageApi,
-          onPlayTrack: (index) {
-            final manager = GetIt.instance<PlaybackManager>();
-            unawaited(() async {
-              final isAudio = viewModel.tracks.every(_isAudioItem);
-              await launchPlayerWhilePreparing(
-                context,
-                manager: manager,
-                destination: isAudio
-                    ? Destinations.audioPlayer
-                    : Destinations.videoPlayer,
-                startPlayback: (launchSession) async {
-                  await runPlaybackStart(
-                    launchSession,
-                    () =>
-                        manager.playItems(viewModel.tracks, startIndex: index),
-                  );
-                  return true;
-                },
-              );
-            }());
-          },
-          onReorder: canManagePlaylistTracks
-              ? (oldIndex, newIndex) {
-                  var target = newIndex;
-                  if (target > oldIndex) {
-                    target -= 1;
-                  }
-                  viewModel.reorderPlaylistTrack(oldIndex, target);
+        if (isPlaylist) ...[
+          const SizedBox(height: 10),
+          PlaylistSortFilterBar(
+            sortBy: _playlistSortBy,
+            sortDirection: _playlistSortDirection,
+            onSortChanged: (pair) {
+              setState(() {
+                _playlistSortBy = pair.$1;
+                _playlistSortDirection = pair.$2;
+                if (pair.$1 == LibrarySortBy.random) {
+                  _playlistRandomSeed = DateTime.now().millisecondsSinceEpoch;
                 }
-              : null,
-          onRemoveFromPlaylist: canManagePlaylistTracks
-              ? (track) => viewModel.removeTrackFromPlaylist(track)
-              : null,
-          onMoveUp: canManagePlaylistTracks
-              ? (index) => viewModel.reorderPlaylistTrack(index, index - 1)
-              : null,
-          onMoveDown: canManagePlaylistTracks
-              ? (index) => viewModel.reorderPlaylistTrack(index, index + 1)
-              : null,
-        ),
+              });
+            },
+            playedFilter: _playlistPlayedFilter,
+            favoriteOnly: _playlistFavoriteFilter,
+            mediaTypeFilter: _playlistMediaTypeFilter,
+            availableMediaTypes: availableMediaTypes,
+            onFilterChanged: (played, fav, mediaType) {
+              setState(() {
+                _playlistPlayedFilter = played;
+                _playlistFavoriteFilter = fav;
+                _playlistMediaTypeFilter = mediaType;
+              });
+            },
+            onReset: () {
+              setState(() {
+                _playlistSortBy = LibrarySortBy.playlistOrder;
+                _playlistSortDirection = SortDirection.ascending;
+                _playlistPlayedFilter = PlayedStatusFilter.all;
+                _playlistFavoriteFilter = false;
+                _playlistMediaTypeFilter = null;
+                _playlistRandomSeed = null;
+              });
+            },
+            totalCount: viewModel.tracks.length,
+            filteredCount: displayedTracks.length,
+            sortFocusNode: _playlistSortFocusNode,
+            filterFocusNode: _playlistFilterFocusNode,
+            onSortArrowUp: () {
+              final targetNode = _albumPlayButtonNode;
+              if (targetNode.canRequestFocus) targetNode.requestFocus();
+            },
+            onSortArrowDown: () {
+              if (displayedTracks.isNotEmpty) {
+                final first = displayedTracks.first;
+                final rawId = first.rawData['PlaylistItemId']?.toString();
+                final firstId = (rawId != null && rawId.isNotEmpty)
+                    ? rawId
+                    : first.id;
+                final node = _getTrackFocusNode(firstId);
+                if (node.context?.mounted == true) node.requestFocus();
+              } else if (_playlistClearFiltersFocusNode.context?.mounted == true) {
+                _playlistClearFiltersFocusNode.requestFocus();
+              }
+            },
+            onSortArrowLeft: () {
+              NavigationLayout.focusNavbarNotifier.value?.call();
+            },
+            onFilterArrowUp: () {
+              final targetNode = _albumPlayButtonNode;
+              if (targetNode.canRequestFocus) targetNode.requestFocus();
+            },
+            onFilterArrowDown: () {
+              if (displayedTracks.isNotEmpty) {
+                final first = displayedTracks.first;
+                final rawId = first.rawData['PlaylistItemId']?.toString();
+                final firstId = (rawId != null && rawId.isNotEmpty)
+                    ? rawId
+                    : first.id;
+                final node = _getTrackFocusNode(firstId);
+                if (node.context?.mounted == true) node.requestFocus();
+              } else if (_playlistClearFiltersFocusNode.context?.mounted == true) {
+                _playlistClearFiltersFocusNode.requestFocus();
+              }
+            },
+          ),
+        ],
+        if (displayedTracks.isEmpty) ...[
+          const SizedBox(height: 24),
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.filter_list_off_rounded,
+                  size: 40,
+                  color: Colors.white38,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  l10n.playlistNoMatchingTracks,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.white54,
+                      ),
+                ),
+                const SizedBox(height: 12),
+                Focus(
+                  onKeyEvent: (node, event) {
+                    if (event is KeyDownEvent) {
+                      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                        if (_playlistSortFocusNode.context?.mounted == true) {
+                          _playlistSortFocusNode.requestFocus();
+                          return KeyEventResult.handled;
+                        }
+                      }
+                      if (isActivateKey(event)) {
+                        setState(() {
+                          _playlistPlayedFilter = PlayedStatusFilter.all;
+                          _playlistFavoriteFilter = false;
+                          _playlistMediaTypeFilter = null;
+                        });
+                        if (_playlistSortFocusNode.context?.mounted == true) {
+                          _playlistSortFocusNode.requestFocus();
+                        }
+                        return KeyEventResult.handled;
+                      }
+                    }
+                    return KeyEventResult.ignored;
+                  },
+                  child: AnimatedBuilder(
+                    animation: _playlistClearFiltersFocusNode,
+                    builder: (context, _) {
+                      final isFocused = _playlistClearFiltersFocusNode.hasFocus;
+                      return TextButton(
+                        focusNode: _playlistClearFiltersFocusNode,
+                        style: TextButton.styleFrom(
+                          side: isFocused
+                              ? BorderSide(color: AppColorScheme.accent, width: 2)
+                              : null,
+                          backgroundColor: isFocused
+                              ? AppColorScheme.accent.withValues(alpha: 0.15)
+                              : null,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _playlistPlayedFilter = PlayedStatusFilter.all;
+                            _playlistFavoriteFilter = false;
+                            _playlistMediaTypeFilter = null;
+                          });
+                          if (_playlistSortFocusNode.context?.mounted == true) {
+                            _playlistSortFocusNode.requestFocus();
+                          }
+                        },
+                        child: Text(l10n.clearFilters),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ] else ...[
+          const SizedBox(height: 12),
+          DetailTrackList(
+            tracks: displayedTracks,
+            getFocusNode: _getTrackFocusNode,
+            onFirstTrackUp: () {
+              if (isPlaylist) {
+                if (_playlistSortFocusNode.context?.mounted == true) {
+                  _playlistSortFocusNode.requestFocus();
+                  return;
+                }
+              }
+              final targetNode = _albumPlayButtonNode;
+              if (!targetNode.canRequestFocus) return;
+              targetNode.requestFocus();
+            },
+            onTrackFocused: onBackdropItemFocused,
+            isAudiobook: isAudiobook,
+            groupByDisc: item.type == 'MusicAlbum',
+            reorderable: canManagePlaylistTracks && isDefaultPlaylistOrder,
+            isPlaylist: isPlaylist,
+            imageApi: viewModel.imageApi,
+            onPlayTrack: (index) {
+              final manager = GetIt.instance<PlaybackManager>();
+              unawaited(() async {
+                final isAudio = displayedTracks.every(_isAudioItem);
+                await launchPlayerWhilePreparing(
+                  context,
+                  manager: manager,
+                  destination: isAudio
+                      ? Destinations.audioPlayer
+                      : Destinations.videoPlayer,
+                  startPlayback: (launchSession) async {
+                    await runPlaybackStart(
+                      launchSession,
+                      () =>
+                          manager.playItems(displayedTracks, startIndex: index),
+                    );
+                    return true;
+                  },
+                );
+              }());
+            },
+            onReorder: canManagePlaylistTracks && isDefaultPlaylistOrder
+                ? (oldIndex, newIndex) {
+                    var target = newIndex;
+                    if (target > oldIndex) {
+                      target -= 1;
+                    }
+                    viewModel.reorderPlaylistTrack(oldIndex, target);
+                  }
+                : null,
+            onRemoveFromPlaylist: canManagePlaylistTracks
+                ? (track) => viewModel.removeTrackFromPlaylist(track)
+                : null,
+            onMoveUp: canManagePlaylistTracks && isDefaultPlaylistOrder
+                ? (index) => viewModel.reorderPlaylistTrack(index, index - 1)
+                : null,
+            onMoveDown: canManagePlaylistTracks && isDefaultPlaylistOrder
+                ? (index) => viewModel.reorderPlaylistTrack(index, index + 1)
+                : null,
+          ),
+        ],
         SizedBox(
           height: PlatformDetection.isTV
               ? MediaQuery.of(context).size.height * 0.2
@@ -4442,6 +4676,10 @@ class DetailActionButtons extends StatefulWidget {
   final bool? actionsExpanded;
   final ValueChanged<bool>? onActionsExpandedChanged;
 
+  /// When set, overrides the tracks played by the primary Play action and
+  /// shuffle action for playlist items (e.g. honoring active sorting or filtering).
+  final List<AggregatedItem>? playlistTracksOverride;
+
   const DetailActionButtons({
     super.key,
     required this.viewModel,
@@ -4465,6 +4703,7 @@ class DetailActionButtons extends StatefulWidget {
     this.onFocusExtra,
     this.actionsExpanded,
     this.onActionsExpandedChanged,
+    this.playlistTracksOverride,
   });
 
   @override
@@ -5783,6 +6022,7 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
     if (button is _DownloadButton) {
       return _DownloadButton(
         item: button.item,
+        resolveAudioStreamIndex: button.resolveAudioStreamIndex,
         viewModel: button.viewModel,
         focusNode: focusNode,
         onFocused: onFocused,
@@ -6012,7 +6252,7 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
   }
 
   void _ensureTvPlayFocus(String itemId) {
-    if (!PlatformDetection.isTV) return;
+    if (PlatformDetection.useMobileUi) return;
     if (_tvPlayFocusAppliedForItemId == itemId) return;
     _tryRequestPlayFocus(itemId, 0);
   }
@@ -6031,6 +6271,7 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
           return;
         }
       }
+      if (!PlatformDetection.isTV) return;
       if (attempt + 1 >= 60) return;
       Future<void>.delayed(const Duration(milliseconds: 50), () {
         if (!mounted) return;
@@ -6114,7 +6355,11 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
       return button;
     }
     if (button is _DownloadButton) {
-      return _buildDownloadDetailAction(context, button.item);
+      return _buildDownloadDetailAction(
+        context,
+        button.item,
+        button.resolveAudioStreamIndex,
+      );
     }
     if (button is _DeleteDownloadButton) {
       return _buildDeleteDetailAction(context, button.item);
@@ -6125,6 +6370,7 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
   _DetailActionButton _buildDownloadDetailAction(
     BuildContext context,
     AggregatedItem item,
+    int? Function()? resolveAudioStreamIndex,
   ) {
     final l10n = AppLocalizations.of(context);
     final downloadService = GetIt.instance.isRegistered<DownloadService>()
@@ -6170,7 +6416,12 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
         activeColor: const Color(0xFF4CAF50),
         onPressed: () {
           if (downloadService != null) {
-            _DownloadButton.showDownloadOptions(context, item, downloadService);
+            _DownloadButton.showDownloadOptions(
+              context,
+              item,
+              downloadService,
+              audioStreamIndex: resolveAudioStreamIndex?.call(),
+            );
           }
         },
       );
@@ -6181,7 +6432,12 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
       icon: Icons.download_for_offline,
       onPressed: () {
         if (downloadService != null) {
-          _DownloadButton.showDownloadOptions(context, item, downloadService);
+          _DownloadButton.showDownloadOptions(
+            context,
+            item,
+            downloadService,
+            audioStreamIndex: resolveAudioStreamIndex?.call(),
+          );
         }
       },
     );
@@ -6237,6 +6493,26 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
       needsOverflow: countCapped && secondaryCount > overflowThreshold,
     );
   }
+
+  /// Whether a Series or Season row puts its everyday buttons inline and only
+  /// the management ones behind More. The Modern mobile layout, the
+  /// menu-overflow (Spotlight) mode, a button count the user picked and an
+  /// order the user arranged all use the count split instead, the same as
+  /// every other type. The management split ignores the order, so a button
+  /// moved to the front would still end up behind More.
+  @visibleForTesting
+  static bool usesTwoColumnLayout({
+    required String? itemType,
+    required bool isModernMobile,
+    required bool overflowAsMenu,
+    required int buttonLimit,
+    required bool userArranged,
+  }) =>
+      (itemType == 'Series' || itemType == 'Season') &&
+      !isModernMobile &&
+      !overflowAsMenu &&
+      buttonLimit == 0 &&
+      !userArranged;
 
   int _calculateMaxVisibleButtons(BuildContext context) {
     final override = widget.maxVisibleButtonsOverride;
@@ -6460,7 +6736,7 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
     // open panel, and without this guard the play button would autofocus and
     // pull focus off the panel and onto the media page.
     final autofocusPlay =
-        PlatformDetection.isTV && !SettingsPanel.isOpenNotifier.value;
+        !PlatformDetection.useMobileUi && !SettingsPanel.isOpenNotifier.value;
 
     if (item.type == 'Person') {
       final normalizedPrimaryButtons = [
@@ -6836,7 +7112,12 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
         ),
       if (canShowDownloadActions && shows(DetailButton.download))
         DetailButton.download: _DownloadButton(
-          item: item,
+          // Led by the picked version so the size estimate and the download
+          // follow it.
+          item: withPreferredMediaSource(item, widget.selectedMediaSourceId),
+          resolveAudioStreamIndex: () => _effectiveAudioStreamIndex(
+            _mediaStreamsForCurrentSelection(item),
+          ),
           viewModel: viewModel,
         ),
       if (canShowDownloadActions &&
@@ -7171,17 +7452,17 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
     final List<Widget> extraButtons;
     final bool needsOverflow;
 
-    final bool isTvShow = item.type == 'Series' || item.type == 'Season';
     final bool isTvSeries = item.type == 'Series';
     final bool isTvSeason = item.type == 'Season';
-    // Series uses the two-column (inline-Play) layout on TV/desktop, but on the
-    // modern mobile layout it should match movies: full-width primary + overflow.
     final bool isModernMobile = widget.modernStyle && _isCompact(context);
-    // Series/Season keep the two-column inline-Play layout on TV/desktop; on the
-    // compact (mobile) layout every type uses the full-width primary + overflow.
-    // The menu-overflow (Spotlight) mode uses the count split for every type.
-    final bool isTwoColumnLayout =
-        !widget.overflowAsMenu && !isModernMobile && isTvShow;
+    final prefLimit = prefs.get(UserPreferences.detailButtonsMaxVisible);
+    final bool isTwoColumnLayout = usesTwoColumnLayout(
+      itemType: item.type,
+      isModernMobile: isModernMobile,
+      overflowAsMenu: widget.overflowAsMenu,
+      buttonLimit: prefLimit,
+      userArranged: prefs.get(detailButtonLayout.orderPreference).isNotEmpty,
+    );
 
     // The buttons only fold into More once they stop fitting on one line.
     // Measuring the worst case, where whichever button is focused has grown
@@ -7194,7 +7475,6 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
         .where((button) => button.isPrimary)
         .map((button) => button.label)
         .firstOrNull;
-    final prefLimit = prefs.get(UserPreferences.detailButtonsMaxVisible);
     final fitsOneLine = prefLimit == -1
         ? true
         : (widget.modernStyle && rowBudget != null
@@ -7656,7 +7936,6 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
 
   Set<DetailAdminAction> _adminActionsFor(AggregatedItem item) =>
       detailAdminActions(
-        serverType: GetIt.instance<MediaServerClient>().serverType,
         isAdministrator:
             GetIt.instance<UserRepository>().currentUser?.isAdministrator ??
             false,
@@ -8074,11 +8353,8 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
     final resume =
         !forceStartOver && (item.playbackPosition?.inMilliseconds ?? 0) > 0;
 
-    final client = GetIt.instance<MediaServerClient>();
-    final isAdmin =
-        GetIt.instance<UserRepository>().currentUser?.isAdministrator ?? false;
     final canChangeArtwork =
-        client.serverType == ServerType.jellyfin && isAdmin;
+        GetIt.instance<UserRepository>().currentUser?.isAdministrator ?? false;
 
     final options = [
       if (canChangeArtwork)
@@ -8265,7 +8541,12 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
         return true;
       case 'MusicAlbum':
       case 'Playlist':
-        if (viewModel.tracks.isNotEmpty) return viewModel.tracks.length > 1;
+        if (item.type == 'Playlist' && widget.playlistTracksOverride != null) {
+          return widget.playlistTracksOverride!.length > 1;
+        }
+        final playlistTracks =
+            widget.playlistTracksOverride ?? viewModel.tracks;
+        if (playlistTracks.isNotEmpty) return playlistTracks.length > 1;
         final childCount =
             item.rawData['ChildCount'] ??
             item.rawData['SongCount'] ??
@@ -8359,7 +8640,28 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
     }
   }
 
-  /// Starts [queue] with any [prerolls] playing ahead of [target].
+  /// The other files of a movie or episode split across several, like DVD1
+  /// and DVD2, so they play on after it.
+  Future<List<AggregatedItem>> _additionalPartsFor(
+    AggregatedItem item,
+    String? mediaSourceId,
+  ) async {
+    if (item.partCount < 2) return const [];
+    // A picked alternate version has its own parts under its own id.
+    final partsId = (mediaSourceId?.isNotEmpty ?? false)
+        ? mediaSourceId!
+        : item.id;
+    try {
+      final client = _clientForItem(item);
+      final parts = await client.itemsApi.getAdditionalParts(partsId);
+      return _mapRawItemsForServer(parts, item.serverId);
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// Starts [queue] with any [prerolls] playing ahead of [target] and its
+  /// additional parts after it.
   ///
   /// The prerolls go in front of the target rather than in front of the queue,
   /// which can open on an earlier episode, so [startIndex] ends up pointing at
@@ -8380,6 +8682,12 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
     bool audioSelectionExplicit = false,
     bool subtitleSelectionExplicit = false,
   }) async {
+    queue = queueWithAdditionalParts(
+      queue,
+      startIndex: startIndex,
+      target: target,
+      parts: await _additionalPartsFor(target, mediaSourceId),
+    );
     final applyNow = prerolls.isEmpty;
     Future<void> playItems() => manager.playItems(
       applyNow
@@ -8472,6 +8780,9 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
         );
         return _mapRawItemsForServer(data['Items'], item.serverId);
       case 'Playlist':
+        if (widget.playlistTracksOverride != null) {
+          return widget.playlistTracksOverride!;
+        }
         if (viewModel.tracks.isNotEmpty) {
           return viewModel.tracks;
         }
@@ -8779,6 +9090,10 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
     }
 
     if (_isReadableBookItem(item)) {
+      if (PlatformDetection.isAppleTV) {
+        await showBookReadingUnavailableDialog(context);
+        return;
+      }
       final extension = BookReaderService.detectExtension(item);
       if (extension != null &&
           !BookReaderService.isSupportedExtension(extension)) {
@@ -9237,8 +9552,8 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
             break;
 
           case 'Playlist':
-            var tracks = viewModel.tracks;
-            if (tracks.isEmpty) {
+            var tracks = widget.playlistTracksOverride ?? viewModel.tracks;
+            if (tracks.isEmpty && widget.playlistTracksOverride == null) {
               final client = _clientForItem(item);
               final data = await client.itemsApi.getPlaylistItems(item.id);
               tracks = _mapRawItemsForServer(data['Items'], item.serverId);
@@ -9809,15 +10124,14 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
   ) async {
     final messenger = ScaffoldMessenger.of(context);
     final client = GetIt.instance<MediaServerClient>();
-    final language = remoteSubtitleLanguage(subtitleStreams, audioStreams);
+    final languages = remoteSubtitleLanguages(subtitleStreams, audioStreams);
 
     List<Map<String, dynamic>> results;
     try {
       results = await withProgressSnackBar(
         messenger,
         AppLocalizations.of(context).searchingSubtitles,
-        () =>
-            client.itemsApi.searchRemoteSubtitles(item.id, language: language),
+        () => searchRemoteSubtitlesIn(client.itemsApi, item.id, languages),
       );
     } catch (error) {
       if (!context.mounted) {
@@ -9846,7 +10160,9 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
         messenger,
         SnackBar(
           content: Text(
-            AppLocalizations.of(context).noRemoteSubtitlesFound(language),
+            AppLocalizations.of(
+              context,
+            ).noRemoteSubtitlesFound(languages.join(', ')),
           ),
         ),
       );
@@ -10303,6 +10619,26 @@ Future<bool> _anyItemHasCompletedDownload(
   return false;
 }
 
+/// [queue] with [parts] playing right after [target], or unchanged when the
+/// target isn't the item at [startIndex]. Public for its tests. Every
+/// production caller lives in this file.
+@visibleForTesting
+List<AggregatedItem> queueWithAdditionalParts(
+  List<AggregatedItem> queue, {
+  required int startIndex,
+  required AggregatedItem target,
+  required List<AggregatedItem> parts,
+}) {
+  if (parts.isEmpty || queue.elementAtOrNull(startIndex)?.id != target.id) {
+    return queue;
+  }
+  return [
+    ...queue.take(startIndex + 1),
+    ...parts,
+    ...queue.skip(startIndex + 1),
+  ];
+}
+
 /// Whether Android TV playback of [queue] must stream a Dolby Vision
 /// transcode instead of direct playing the original. Public and annotated for
 /// the gate regression tests; every production caller lives in this file.
@@ -10568,6 +10904,10 @@ bool _isDownloadable(String? type) {
 
 class _DownloadButton extends StatefulWidget {
   final AggregatedItem item;
+
+  /// Reads the track the Audio button shows when Download is pressed, since a
+  /// transcode keeps only that one.
+  final int? Function()? resolveAudioStreamIndex;
   final ItemDetailViewModel viewModel;
   final FocusNode? focusNode;
   final VoidCallback? onFocused;
@@ -10579,6 +10919,7 @@ class _DownloadButton extends StatefulWidget {
 
   const _DownloadButton({
     required this.item,
+    this.resolveAudioStreamIndex,
     required this.viewModel,
     this.focusNode,
     this.onFocused,
@@ -10592,8 +10933,14 @@ class _DownloadButton extends StatefulWidget {
   static void showDownloadOptions(
     BuildContext context,
     AggregatedItem item,
-    DownloadService service,
-  ) => _DownloadButtonState._showDownloadOptionsFor(context, item, service);
+    DownloadService service, {
+    int? audioStreamIndex,
+  }) => _DownloadButtonState._showDownloadOptionsFor(
+    context,
+    item,
+    service,
+    audioStreamIndex: audioStreamIndex,
+  );
 
   @override
   State<_DownloadButton> createState() => _DownloadButtonState();
@@ -10881,7 +11228,12 @@ class _DownloadButtonState extends State<_DownloadButton> {
   );
 
   void _showDownloadOptions(BuildContext context, DownloadService service) {
-    _showDownloadOptionsFor(context, widget.item, service);
+    _showDownloadOptionsFor(
+      context,
+      widget.item,
+      service,
+      audioStreamIndex: widget.resolveAudioStreamIndex?.call(),
+    );
   }
 
   /// Entry point for the download button. Series, seasons and collections
@@ -10890,12 +11242,18 @@ class _DownloadButtonState extends State<_DownloadButton> {
   static void _showDownloadOptionsFor(
     BuildContext context,
     AggregatedItem item,
-    DownloadService service,
-  ) {
+    DownloadService service, {
+    int? audioStreamIndex,
+  }) {
     if (_isBatchType(item.type)) {
       _showScopePicker(context, item, service);
     } else {
-      _showQualityPicker(context, item, service);
+      _showQualityPicker(
+        context,
+        item,
+        service,
+        audioStreamIndex: audioStreamIndex,
+      );
     }
   }
 
@@ -11017,6 +11375,7 @@ class _DownloadButtonState extends State<_DownloadButton> {
                       );
                     },
                   ),
+                  ?_keepDownloadedRow(item),
                   if (autoDownloads != null)
                     _autoDownloadRow(
                       sheetContext,
@@ -11076,7 +11435,65 @@ class _DownloadButtonState extends State<_DownloadButton> {
     );
   }
 
-  /// Third row of a series' scope sheet: subscribe to new episodes, or stop.
+  /// Keeps a downloaded movie or episode, or every episode of a series, out
+  /// of the remove-watched rules. Null when no rule could remove it: movies
+  /// only go by the remove-watched setting, episodes also by smart downloads
+  /// and a followed series' delete setting.
+  static Widget? _keepDownloadedRow(AggregatedItem item) {
+    final prefs = GetIt.instance<UserPreferences>();
+    final removeWatched =
+        prefs.get(UserPreferences.downloadRemoveWatchedAfterHours) >= 0;
+    final autoDownloads = GetIt.instance.isRegistered<AutoDownloadService>();
+    final episodeRules =
+        autoDownloads &&
+        (prefs.get(UserPreferences.smartDownloadsEnabled) ||
+            (prefs.get(UserPreferences.autoDownloadEnabled) &&
+                prefs.get(UserPreferences.autoDownloadDeleteAfterHours) >= 0));
+    final applies = switch (item.type) {
+      'Movie' => removeWatched,
+      'Episode' || 'Series' => removeWatched || episodeRules,
+      _ => false,
+    };
+    if (!applies) return null;
+    // Keys use the id the rules read them by, which needs the client.
+    final factory = GetIt.instance<MediaServerClientFactory>();
+    final client = factory.getClientIfExists(item.serverId);
+    if (client == null) return null;
+    final serverId = factory.serverIdOf(client);
+    final isTV = PlatformDetection.isTV;
+    return ListenableBuilder(
+      listenable: prefs,
+      builder: (context, _) {
+        final l10n = AppLocalizations.of(context);
+        final seriesId = item.type == 'Episode' ? item.seriesId : null;
+        // A kept series keeps this episode whatever its own switch says.
+        final seriesKept =
+            seriesId != null && prefs.isDownloadKept(serverId, seriesId);
+        return DpadSwitchListTile(
+          secondary: AdaptiveIcon(
+            Icons.push_pin_outlined,
+            color: isTV ? null : Colors.white70,
+          ),
+          title: Text(
+            l10n.keepDownloaded,
+            style: isTV ? null : const TextStyle(color: Colors.white),
+          ),
+          subtitle: Text(
+            l10n.keepDownloadedSubtitle,
+            style: isTV
+                ? null
+                : TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+          ),
+          value: seriesKept || prefs.isDownloadKept(serverId, item.id),
+          onChanged: seriesKept
+              ? null
+              : (keep) => prefs.setDownloadKept(serverId, item.id, keep: keep),
+        );
+      },
+    );
+  }
+
+  /// Last row of a series' scope sheet: subscribe to new episodes, or stop.
   /// Reports the current subscription through [onSubscription] so the
   /// caller knows which of the two [onTap] meant.
   static Widget _autoDownloadRow(
@@ -11179,12 +11596,17 @@ class _DownloadButtonState extends State<_DownloadButton> {
     AggregatedItem item,
     DownloadService service, {
     List<AggregatedItem>? items,
+    int? audioStreamIndex,
   }) async {
     final isMulti = _isBatchType(item.type);
     if (!isMulti && !_supportsTranscoding(item.type)) {
       _startDownload(context, item, service, DownloadQuality.original);
       return;
     }
+    final keepRow = isMulti || !await service.hasDownloadedFiles(item)
+        ? null
+        : _keepDownloadedRow(item);
+    if (!context.mounted) return;
     final quality = await _pickQuality(
       context,
       item,
@@ -11192,9 +11614,17 @@ class _DownloadButtonState extends State<_DownloadButton> {
           ? AppLocalizations.of(context).downloadAllQuality
           : AppLocalizations.of(context).downloadQuality,
       items: items ?? const [],
+      header: keepRow,
     );
     if (quality == null || !context.mounted) return;
-    _startDownload(context, item, service, quality, items: items);
+    _startDownload(
+      context,
+      item,
+      service,
+      quality,
+      items: items,
+      audioStreamIndex: audioStreamIndex,
+    );
   }
 
   static bool _supportsTranscoding(String? type) =>
@@ -11213,6 +11643,7 @@ class _DownloadButtonState extends State<_DownloadButton> {
     required String title,
     List<AggregatedItem> items = const [],
     String? note,
+    Widget? header,
   }) {
     final isMulti = _isBatchType(item.type);
     final supportsTranscoding = isMulti || _supportsTranscoding(item.type);
@@ -11268,6 +11699,7 @@ class _DownloadButtonState extends State<_DownloadButton> {
               children: [
                 _sheetTitle(sheetContext, title),
                 if (note != null) _sheetNote(sheetContext, note),
+                ?header,
                 Flexible(
                   child: ListView(
                     shrinkWrap: true,
@@ -11309,6 +11741,7 @@ class _DownloadButtonState extends State<_DownloadButton> {
           children: [
             _sheetTitle(context, title),
             if (note != null) _sheetNote(context, note),
+            ?header,
             ...availableQualities.map(
               (quality) => ListTile(
                 leading: AdaptiveIcon(
@@ -11343,6 +11776,7 @@ class _DownloadButtonState extends State<_DownloadButton> {
     DownloadService service,
     DownloadQuality quality, {
     List<AggregatedItem>? items,
+    int? audioStreamIndex,
   }) {
     final l10n = AppLocalizations.of(context);
     final String message;
@@ -11359,7 +11793,13 @@ class _DownloadButtonState extends State<_DownloadButton> {
       if (item.type == 'MusicAlbum') {
         service.downloadAlbum(item.id, quality: quality);
       } else {
-        service.downloadItem(item, quality: quality);
+        // The button's item leads with the picked version.
+        service.downloadItem(
+          item,
+          quality: quality,
+          mediaSourceId: item.mediaSources.firstOrNull?['Id']?.toString(),
+          audioStreamIndex: audioStreamIndex,
+        );
       }
       message = l10n.downloadingItem(item.name, quality.label);
     }
@@ -14097,16 +14537,13 @@ class _EpisodeListCardState extends State<_EpisodeListCard>
     showContextMenu(context, widget.episode, onChanged: widget.onChanged);
   }
 
+  // The row only shows on an episode, so the one picked takes this page's place.
   void _open() {
-    context.push(
-      Destinations.item(
-        widget.episode.id,
-        serverId: widget.episode.serverId,
-        seasonContext: seasonContextParam(
-          contextSeasonId: widget.contextSeasonId,
-          episodeSeasonId: widget.episode.seasonId,
-        ),
-      ),
+    _openEpisodeDetails(
+      context,
+      widget.episode,
+      contextSeasonId: widget.contextSeasonId,
+      replacePage: true,
     );
   }
 
@@ -14295,8 +14732,11 @@ class _EpisodeListCardState extends State<_EpisodeListCard>
                               : Border.fromBorderSide(
                                   ThemeRegistry.active.borders.focusBorder
                                       .copyWith(
-                                        color: AppColorScheme.onSurface,
-                                        width: 2.5,
+                                        color: isNeon
+                                            ? const Color(0xFF00FFFF)
+                                            : AppColorScheme.accent
+                                                  .withValues(alpha: 0.7),
+                                        width: 1.5,
                                       ),
                                 ),
                         ),
@@ -14312,6 +14752,25 @@ class _EpisodeListCardState extends State<_EpisodeListCard>
   }
 }
 
+/// With [replacePage] the episode takes the current page's place, so Back
+/// leaves the run of episodes in one press.
+void _openEpisodeDetails(
+  BuildContext context,
+  AggregatedItem episode, {
+  String? contextSeasonId,
+  bool replacePage = false,
+}) {
+  final location = Destinations.item(
+    episode.id,
+    serverId: episode.serverId,
+    seasonContext: seasonContextParam(
+      contextSeasonId: contextSeasonId,
+      episodeSeasonId: episode.seasonId,
+    ),
+  );
+  replacePage ? context.pushReplacement(location) : context.push(location);
+}
+
 class DetailNextUpCard extends StatefulWidget {
   final AggregatedItem episode;
   final ImageApi imageApi;
@@ -14322,12 +14781,16 @@ class DetailNextUpCard extends StatefulWidget {
   /// [DetailEpisodeCard.contextSeasonId].
   final String? contextSeasonId;
 
+  /// See [DetailEpisodeCard.replacePage].
+  final bool replacePage;
+
   const DetailNextUpCard({
     required this.episode,
     required this.imageApi,
     this.focusNode,
     this.onKeyEvent,
     this.contextSeasonId,
+    this.replacePage = false,
   });
 
   @override
@@ -14337,15 +14800,11 @@ class DetailNextUpCard extends StatefulWidget {
 class DetailNextUpCardState extends State<DetailNextUpCard>
     with FocusStateMixin {
   void _open() {
-    context.push(
-      Destinations.item(
-        widget.episode.id,
-        serverId: widget.episode.serverId,
-        seasonContext: seasonContextParam(
-          contextSeasonId: widget.contextSeasonId,
-          episodeSeasonId: widget.episode.seasonId,
-        ),
-      ),
+    _openEpisodeDetails(
+      context,
+      widget.episode,
+      contextSeasonId: widget.contextSeasonId,
+      replacePage: widget.replacePage,
     );
   }
 
@@ -14548,6 +15007,9 @@ class DetailEpisodeCard extends StatefulWidget {
 
   final bool isActive;
 
+  /// Set on an episode's own page, so the episode picked takes that page's place.
+  final bool replacePage;
+
   const DetailEpisodeCard({
     required this.episode,
     required this.imageApi,
@@ -14556,6 +15018,7 @@ class DetailEpisodeCard extends StatefulWidget {
     this.onKeyEvent,
     this.contextSeasonId,
     this.isActive = false,
+    this.replacePage = false,
   });
 
   @override
@@ -14577,15 +15040,11 @@ class DetailEpisodeCardState extends State<DetailEpisodeCard>
   }
 
   void _open() {
-    context.push(
-      Destinations.item(
-        widget.episode.id,
-        serverId: widget.episode.serverId,
-        seasonContext: seasonContextParam(
-          contextSeasonId: widget.contextSeasonId,
-          episodeSeasonId: widget.episode.seasonId,
-        ),
-      ),
+    _openEpisodeDetails(
+      context,
+      widget.episode,
+      contextSeasonId: widget.contextSeasonId,
+      replacePage: widget.replacePage,
     );
   }
 
@@ -15467,7 +15926,7 @@ class FilmographyRow extends StatelessWidget {
                 : item.name;
           } else {
             title = item.name;
-            subtitle = year?.toString();
+            subtitle = item.personRole ?? year?.toString();
           }
 
           return MediaCard(
@@ -16006,29 +16465,33 @@ class _AlbumActions extends StatelessWidget {
     bool hasDownloadedTracks,
   ) {
     final l10n = AppLocalizations.of(context);
+    final hasPlay = tracks.isNotEmpty;
     final rawButtons = <_DetailActionButton>[
-      _DetailActionButton(
-        label: l10n.play,
-        icon: Icons.play_arrow,
-        focusNode: playFocusNode,
-        autofocus: autofocusPlay,
-        onArrowDown: onPlayDown,
-        onPressed: () {
-          if (tracks.isEmpty) return;
-          _playAndOpen(context, manager, tracks);
-        },
-      ),
-      _DetailActionButton(
-        label: l10n.shuffle,
-        icon: Icons.shuffle,
-        onArrowDown: onPlayDown,
-        onPressed: () {
-          if (tracks.isEmpty) return;
-          final shuffled = List<AggregatedItem>.from(tracks)..shuffle();
-          _playAndOpen(context, manager, shuffled);
-        },
-      ),
-      if (onDownloadAll != null)
+      if (hasPlay) ...[
+        _DetailActionButton(
+          label: l10n.play,
+          icon: Icons.play_arrow,
+          focusNode: playFocusNode,
+          autofocus: autofocusPlay,
+          onArrowDown: onPlayDown,
+          onPressed: () {
+            if (tracks.isEmpty) return;
+            _playAndOpen(context, manager, tracks);
+          },
+        ),
+        if (tracks.length > 1)
+          _DetailActionButton(
+            label: l10n.shuffle,
+            icon: Icons.shuffle,
+            onArrowDown: onPlayDown,
+            onPressed: () {
+              if (tracks.isEmpty) return;
+              final shuffled = List<AggregatedItem>.from(tracks)..shuffle();
+              _playAndOpen(context, manager, shuffled);
+            },
+          ),
+      ],
+      if (onDownloadAll != null && hasPlay)
         _DetailActionButton(
           label: l10n.download,
           icon: Icons.download_for_offline,
@@ -16061,6 +16524,28 @@ class _AlbumActions extends StatelessWidget {
           ),
         ),
     ];
+
+    if (!hasPlay && rawButtons.isNotEmpty) {
+      final first = rawButtons.first;
+      rawButtons[0] = _DetailActionButton(
+        label: first.label,
+        icon: first.icon,
+        iconBuilder: first.iconBuilder,
+        onPressed: first.onPressed,
+        onLongPress: first.onLongPress,
+        onFocused: first.onFocused,
+        onArrowUp: first.onArrowUp,
+        onArrowDown: first.onArrowDown,
+        onArrowLeft: first.onArrowLeft,
+        onArrowRight: first.onArrowRight,
+        isActive: first.isActive,
+        activeColor: first.activeColor,
+        neonAccentColor: first.neonAccentColor,
+        focusNode: playFocusNode,
+        autofocus: autofocusPlay,
+        suppressAutoScrollToTop: first.suppressAutoScrollToTop,
+      );
+    }
 
     final processedButtons = <Widget>[];
     for (var i = 0; i < rawButtons.length; i++) {
@@ -16206,7 +16691,7 @@ class DetailTrackList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (reorderable && onReorder != null) {
+    if (!PlatformDetection.isTV && reorderable && onReorder != null) {
       return ReorderableListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -16215,11 +16700,17 @@ class DetailTrackList extends StatelessWidget {
         onReorder: onReorder!,
         itemBuilder: (context, index) {
           final track = tracks[index];
-          final keyId = track.rawData['PlaylistItemId']?.toString() ?? track.id;
+          final playlistItemId = track.rawData['PlaylistItemId']?.toString();
+          final keyId = (playlistItemId != null && playlistItemId.isNotEmpty)
+              ? '${playlistItemId}_$index'
+              : '${track.id}_$index';
+          final focusId = (playlistItemId != null && playlistItemId.isNotEmpty)
+              ? playlistItemId
+              : track.id;
           return TrackTile(
             key: ValueKey('playlist-track-$keyId'),
             track: track,
-            focusNode: getFocusNode(track.id),
+            focusNode: getFocusNode(focusId),
             onArrowUp: index == 0 ? onFirstTrackUp : null,
             onFocused: onTrackFocused == null
                 ? null
@@ -16268,10 +16759,19 @@ class DetailTrackList extends StatelessWidget {
         );
       }
 
+      final playlistItemId = track.rawData['PlaylistItemId']?.toString();
+      final keyId = (playlistItemId != null && playlistItemId.isNotEmpty)
+          ? '${playlistItemId}_$index'
+          : '${track.id}_$index';
+      final focusId = (playlistItemId != null && playlistItemId.isNotEmpty)
+          ? playlistItemId
+          : track.id;
+
       children.add(
         TrackTile(
+          key: ValueKey('playlist-track-$keyId'),
           track: track,
-          focusNode: getFocusNode(track.id),
+          focusNode: getFocusNode(focusId),
           onArrowUp: index == 0 ? onFirstTrackUp : null,
           onFocused: onTrackFocused == null
               ? null
@@ -16279,7 +16779,7 @@ class DetailTrackList extends StatelessWidget {
           index: index + 1,
           totalCount: tracks.length,
           currentIndex: index,
-          reorderable: false,
+          reorderable: reorderable,
           reorderIndex: index,
           onTap: () => onPlayTrack(index),
           onRemoveFromPlaylist: onRemoveFromPlaylist,

@@ -208,6 +208,7 @@ extension IosPiPController: AVPictureInPictureControllerDelegate {
     ) {
         Task { @MainActor in
             AetherPlayerWrapper.sharedEngine()?.pictureInPictureActive = false
+            wrapper?.nowPlaying.reclaim()
             channel.invokeMethod("onPiPChanged", arguments: false)
         }
     }

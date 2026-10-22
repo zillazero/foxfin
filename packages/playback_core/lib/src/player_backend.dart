@@ -2,6 +2,18 @@ import 'letterbox_crop.dart';
 
 enum SubtitleRendererMode { native, assOverlay }
 
+/// The part of a live stream that can be sought back into, on the same clock
+/// as the player's position: from the oldest moment the stream still keeps to
+/// its live edge.
+class LiveSeekWindow {
+  const LiveSeekWindow({required this.start, required this.edge});
+
+  final Duration start;
+  final Duration edge;
+
+  Duration get length => edge - start;
+}
+
 /// A caption track the player found inside the video itself, like the CEA-608
 /// captions broadcasters carry in H.264 SEI data.
 ///
@@ -103,6 +115,16 @@ abstract class PlayerBackend {
     String? externalSubtitleUrl,
   });
   Future<void> disableSubtitleTrack();
+
+  /// Selects an independent text sidecar for the Android Media3 overlay.
+  /// Backends without a separate subtitle layer leave it disabled.
+  Future<void> setSecondarySubtitle({String? url, String? codec}) async {}
+  Future<void> setSecondarySubtitleDelay(double seconds) async {}
+  Future<void> configureSecondarySubtitleStyle({
+    double? fontSize,
+    double? verticalOffset,
+    int? textColor,
+  }) async {}
   Future<void> waitForTracksReady();
   Future<void> waitForEmbeddedSubtitleCount(int count);
   Future<void> setVolume(double volume);
@@ -170,6 +192,10 @@ abstract class PlayerBackend {
   /// did nothing, and the caller must escalate rather than wait for a recovery
   /// that is never coming.
   Future<bool> resumeLiveEdge() async => false;
+
+  /// Where a live stream can be sought within, or null when it keeps nothing
+  /// to go back to, as a tuner's raw transport stream doesn't.
+  LiveSeekWindow? get liveSeekWindow => null;
 
   /// Fires when the player's own track list changes. Captions carried inside
   /// the video turn up part way through playback, so a menu built when the

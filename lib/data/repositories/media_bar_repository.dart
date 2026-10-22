@@ -37,11 +37,9 @@ class MediaBarRepository {
     }
 
     final contentType = _prefs.get(UserPreferences.mediaBarContentType);
-    final pluginSyncEnabled = _prefs.get(UserPreferences.pluginSyncEnabled);
 
-    final maxItems = pluginSyncEnabled
-        ? (int.tryParse(_prefs.get(UserPreferences.mediaBarItemCount)) ?? 10)
-        : 5;
+    final maxItems =
+        int.tryParse(_prefs.get(UserPreferences.mediaBarItemCount)) ?? 10;
     // The pickers in settings are open to everyone and the filtering below is
     // plain item queries, so a plugin is not needed to honour the choice.
     final libraryIds = _splitCsv(UserPreferences.mediaBarLibraryIds);
@@ -356,7 +354,7 @@ class MediaBarRepository {
             limit: windowSize,
             fields: _fields,
             enableTotalRecordCount: false,
-            enableImageTypes: 'Backdrop,Logo',
+            enableImageTypes: 'Backdrop,Logo,Banner',
           )
           .timeout(const Duration(seconds: 15));
 
@@ -408,7 +406,7 @@ class MediaBarRepository {
                   recursive: true,
                   limit: _poolSize,
                   fields: _fields,
-                  enableImageTypes: 'Backdrop,Logo',
+                  enableImageTypes: 'Backdrop,Logo,Banner',
                 )
                 .timeout(const Duration(seconds: 15))
           : await _client.itemsApi
@@ -417,7 +415,7 @@ class MediaBarRepository {
                   parentId: parentId,
                   limit: _poolSize,
                   fields: _fields,
-                  enableImageTypes: 'Backdrop,Logo',
+                  enableImageTypes: 'Backdrop,Logo,Banner',
                 )
                 .timeout(const Duration(seconds: 15));
 
@@ -465,7 +463,7 @@ class MediaBarRepository {
             limit: reducedLimit,
             fields: _fields,
             enableTotalRecordCount: false,
-            enableImageTypes: 'Backdrop,Logo',
+            enableImageTypes: 'Backdrop,Logo,Banner',
           )
           .timeout(const Duration(seconds: 15));
       final rawItems = fallbackResponse['Items'] as List? ?? [];
@@ -531,6 +529,15 @@ class MediaBarRepository {
           )
         : null;
 
+    final bannerTag = (data['ImageTags'] as Map?)?['Banner'] as String?;
+    final bannerUrl = bannerTag != null
+        ? _client.imageApi.getBannerImageUrl(
+            itemId,
+            tag: bannerTag,
+            maxWidth: 1280,
+          )
+        : null;
+
     final logoTag = (data['ImageTags'] as Map?)?['Logo'] as String?;
     final logoUrl = logoTag != null
         ? _client.imageApi.getLogoImageUrl(itemId, tag: logoTag, maxWidth: 600)
@@ -551,6 +558,7 @@ class MediaBarRepository {
       title: data['Name'] as String? ?? '',
       overview: data['Overview'] as String?,
       backdropUrl: backdropUrl,
+      bannerUrl: bannerUrl,
       logoUrl: logoUrl,
       posterUrl: posterUrl,
       officialRating: data['OfficialRating'] as String?,

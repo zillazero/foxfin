@@ -95,6 +95,18 @@ class _PlaybackCategoryScreen extends StatelessWidget {
                         subtitle: l10n.useNativeEmulatorSubtitle,
                         icon: Icons.sports_esports,
                       ),
+                    if (usesOnScreenControls)
+                      EnumPreferenceTile<GamePlaybackOrientation>(
+                        preference: UserPreferences.gamePlaybackOrientation,
+                        title: l10n.gameOrientation,
+                        description: l10n.gameOrientationSubtitle,
+                        icon: Icons.screen_rotation_outlined,
+                        labelOf: (v) => switch (v) {
+                          GamePlaybackOrientation.landscape => l10n.landscape,
+                          GamePlaybackOrientation.portrait => l10n.portrait,
+                          GamePlaybackOrientation.auto => l10n.auto,
+                        },
+                      ),
                     if (supportsCoreDownloads && usesNativeGameBackend)
                       _TvSettingsListTile(
                         leading: const Icon(Icons.videogame_asset),

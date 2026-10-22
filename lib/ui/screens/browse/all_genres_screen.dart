@@ -60,7 +60,8 @@ class _AllGenresScreenState extends State<AllGenresScreen> {
 
   ImageType get _imageType => _prefs.get(UserPreferences.allGenresImageType);
 
-  PosterSize get _posterSize => _prefs.resolveLibraryPosterSize();
+  PosterSize get _posterSize =>
+      _prefs.resolveScreenPosterSize(UserPreferences.allGenresPosterSize);
 
   List<GenreCardData> _genres = [];
   bool _isLoading = true;
@@ -351,7 +352,7 @@ class _AllGenresScreenState extends State<AllGenresScreen> {
       builder: (_) => PosterSizeSettingsDialog(
         prefs: _prefs,
         imageTypePreference: UserPreferences.allGenresImageType,
-        posterSizePreference: UserPreferences.libraryPosterSize,
+        posterSizePreference: UserPreferences.allGenresPosterSize,
       ),
     );
 

@@ -6,10 +6,25 @@ class MoonfinProxyConfig {
   final String jellyfinBaseUrl;
   final String jellyfinToken;
 
+  /// Foxfin direct mode: talk to a Jellyseerr/Seerr server directly instead of
+  /// through the Moonfin server plugin. Null or empty keeps the plugin proxy.
+  final String? directUrl;
+
+  /// Optional Seerr API key (direct mode). Never logged or shown unmasked.
+  final String? apiKey;
+
+  /// Session cookie from a direct Jellyfin/local sign in (direct mode).
+  final String? sessionCookie;
+
   const MoonfinProxyConfig({
     required this.jellyfinBaseUrl,
     required this.jellyfinToken,
+    this.directUrl,
+    this.apiKey,
+    this.sessionCookie,
   });
+
+  bool get isDirect => directUrl != null && directUrl!.trim().isNotEmpty;
 }
 
 /// Outcome of the password-less Quick Connect sign in. Parsed by hand from any

@@ -605,7 +605,7 @@ class _CollectionRequestSheetState extends State<_CollectionRequestSheet> {
                 child: SeerrDialogButton(
                   label: l10n.requestMoviesCount(_selected.length),
                   primary: true,
-                  primaryColor: const Color(0xFF6366F1),
+                  primaryColor: Theme.of(context).colorScheme.primary,
                   busy: _submitting && s.isRequesting,
                   busyLabel: l10n.requestingProgress(
                     s.requestProgressCurrent,

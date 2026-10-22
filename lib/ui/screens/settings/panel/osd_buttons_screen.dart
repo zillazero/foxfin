@@ -38,6 +38,9 @@ class _OsdButtonsScreen extends StatelessWidget {
                     ButtonLayoutEntry(
                       id: button.id,
                       title: button.label(l10n),
+                      subtitle: button == OsdButton.syncPlay
+                          ? l10n.buttonShownInSyncPlayGroup
+                          : null,
                       icon: button.icon,
                     ),
                 ],

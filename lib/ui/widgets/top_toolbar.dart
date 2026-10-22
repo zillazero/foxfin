@@ -1046,7 +1046,7 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
                   focusNode: _homeFocus,
                   onPressed: () {
                     if (_isActive(Destinations.home)) {
-                      homeRefreshBus.request();
+                      homeRefreshBus.request(newMediaBar: true);
                       return;
                     }
                     homeRefreshBus.requestAfterNavigation();
@@ -2295,7 +2295,7 @@ class _LibrariesDropdownState extends State<_LibrariesDropdown> {
         },
         child: ExpandableIconButton(
           baseColor: widget.iconColor,
-          forceExpanded: widget.alwaysExpanded,
+          forceExpanded: widget.alwaysExpanded || _overlayEntry != null,
           focusNode: _buttonFocusNode,
           onFocusChanged: (_) => _handleManagedFocusChange(),
           onKeyEvent: (_, event) {

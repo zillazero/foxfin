@@ -30,7 +30,7 @@
     <application
         android:allowBackup="false"
         android:label="${appName}"
-        android:name="${applicationName}"
+        android:name=".MoonfinApplication"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"
         android:banner="@drawable/moonfin_tv_banner"

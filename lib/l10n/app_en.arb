@@ -85,6 +85,52 @@
   "@quickConnectInstruction": {
     "description": "Instruction text for Quick Connect code entry"
   },
+  "quickConnectScanHint": "Or scan this with a phone that's signed in to your server",
+  "@quickConnectScanHint": {
+    "description": "Caption under the Quick Connect QR code that opens the server's web page with the code filled in"
+  },
+  "quickConnectTapOrScanHint": "Tap to approve in your browser, or scan this with another device",
+  "@quickConnectTapOrScanHint": {
+    "description": "Caption under the Quick Connect QR code on a phone or tablet, where tapping the code opens the server's web page with the code filled in"
+  },
+  "timesUpTitle": "Time's up",
+  "@timesUpTitle": {
+    "description": "Title of the screen that covers the app when the user's access schedule doesn't allow the current time"
+  },
+  "timesUpMessage": "This account isn't available right now.",
+  "@timesUpMessage": {
+    "description": "Explanation on the Time's up screen"
+  },
+  "timesUpResumesToday": "You can use it again today at {time}.",
+  "@timesUpResumesToday": {
+    "description": "When access returns, on the Time's up screen, for a time later today",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timesUpResumesTomorrow": "You can use it again tomorrow at {time}.",
+  "@timesUpResumesTomorrow": {
+    "description": "When access returns, on the Time's up screen, for a time tomorrow",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timesUpResumesOn": "You can use it again on {day} at {time}.",
+  "@timesUpResumesOn": {
+    "description": "When access returns, on the Time's up screen, for a time on a later day",
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "waitingForAuthorization": "Waiting for authorization...",
   "@waitingForAuthorization": {
     "description": "Quick Connect polling status text"
@@ -100,6 +146,10 @@
   "loginFailed": "Login failed",
   "@loginFailed": {
     "description": "Generic login failure message"
+  },
+  "loginForbidden": "This account can't sign in right now. It may be outside its allowed hours, locked or disabled. Try again later or ask an administrator.",
+  "@loginForbidden": {
+    "description": "Sign in error when the server refuses the account with a 403, which Jellyfin does for an access schedule, a lockout or a disabled account without saying which"
   },
   "quickConnectUnavailable": "QuickConnect unavailable: {detail}",
   "@quickConnectUnavailable": {
@@ -579,6 +629,22 @@
   "@performanceModeReduced": {
     "description": "Performance option: always hold back"
   },
+  "rendererMode": "Renderer",
+  "@rendererMode": {
+    "description": "Label for the TV graphics renderer setting"
+  },
+  "rendererModeSubtitle": "Auto uses Impeller on boxes whose graphics run it smoothly and Skia everywhere else. Pick Skia if animations or video look wrong. Takes effect on the next launch.",
+  "@rendererModeSubtitle": {
+    "description": "Explanation under the TV graphics renderer setting"
+  },
+  "rendererModeAuto": "Auto",
+  "@rendererModeAuto": {
+    "description": "Renderer option: let the app choose per device"
+  },
+  "rendererModeSkia": "Skia",
+  "@rendererModeSkia": {
+    "description": "Renderer option: always use the Skia renderer"
+  },
   "trailerPreviewHeldBack": "Off because Performance is set to Reduced for this device",
   "@trailerPreviewHeldBack": {
     "description": "Shown under the trailer preview switch when the device tier suppresses trailers"
@@ -744,6 +810,22 @@
   "@gameFastForward": {
     "description": "In-game menu action to toggle fast-forward"
   },
+  "gameOrientation": "Game orientation",
+  "@gameOrientation": {
+    "description": "Setting and in-game menu row for how the device is held while playing games"
+  },
+  "gameOrientationSubtitle": "Screen orientation while playing games",
+  "@gameOrientationSubtitle": {
+    "description": "Subtitle of the game orientation setting"
+  },
+  "landscape": "Landscape",
+  "@landscape": {
+    "description": "Orientation choice: the device held sideways"
+  },
+  "portrait": "Portrait",
+  "@portrait": {
+    "description": "Orientation choice: the device held upright"
+  },
   "gameEmulatorSettings": "Emulator settings",
   "@gameEmulatorSettings": {
     "description": "In-game menu action opening the emulator settings"
@@ -755,6 +837,26 @@
   "gameHoldToOpenMenu": "Hold to open menu",
   "@gameHoldToOpenMenu": {
     "description": "Hint shown while holding the gamepad combo to open the in-game menu"
+  },
+  "gameKeepPlaying": "Keep playing",
+  "@gameKeepPlaying": {
+    "description": "Exit confirmation choice that returns to the game"
+  },
+  "gameSaveAndExit": "Save & exit",
+  "@gameSaveAndExit": {
+    "description": "Exit confirmation choice that saves the game state and then leaves, staying in the game if the save fails"
+  },
+  "gameExitGame": "Exit game",
+  "@gameExitGame": {
+    "description": "Exit confirmation choice that leaves the game"
+  },
+  "gameSavingBeforeExit": "Saving…",
+  "@gameSavingBeforeExit": {
+    "description": "Shown over the paused game while it saves on the way out"
+  },
+  "gameSaveFailedStillPlaying": "Could not save state. Still playing.",
+  "@gameSaveFailedStillPlaying": {
+    "description": "Message shown when Save & exit could not save, so the game keeps running"
   },
   "gamePlaybackUnsupported": "Game playback is not supported on this device yet.",
   "@gamePlaybackUnsupported": {
@@ -1669,6 +1771,10 @@
   "extras": "Extras",
   "@extras": {
     "description": "Tab label for special features / extras"
+  },
+  "additionalParts": "Additional Parts",
+  "@additionalParts": {
+    "description": "Heading for the other files of a movie split across several files, like DVD1 and DVD2"
   },
   "behindTheScenes": "Behind the Scenes",
   "@behindTheScenes": {
@@ -2692,6 +2798,10 @@
   "@keyNameBackspace": {
     "description": "Key cap label for the Backspace key"
   },
+  "keyNameDelete": "Delete",
+  "@keyNameDelete": {
+    "description": "Key cap label for the Delete key"
+  },
   "keyNamePageUp": "Page Up",
   "@keyNamePageUp": {
     "description": "Key cap label for the Page Up key"
@@ -2800,6 +2910,10 @@
   "@shortcutLeaveFullscreenOrStop": {
     "description": "What Esc does in the player"
   },
+  "shortcutHideControls": "Hide controls",
+  "@shortcutHideControls": {
+    "description": "What Backspace and Delete do in the player: hide the controls or the panel on top of them"
+  },
   "shortcutStopPlayback": "Stop playback",
   "@shortcutStopPlayback": {
     "description": "Player shortcut action"
@@ -2811,6 +2925,10 @@
   "shortcutPreviousItem": "Previous item",
   "@shortcutPreviousItem": {
     "description": "Player shortcut action for the previous-track media key"
+  },
+  "shortcutSkipSegment": "Skip intro or credits when offered",
+  "@shortcutSkipSegment": {
+    "description": "Player shortcut action that presses the skip intro or credits button while it is showing"
   },
   "shortcutShowShortcuts": "Show this list",
   "@shortcutShowShortcuts": {
@@ -2909,29 +3027,37 @@
   "@hdrOutputActiveTonemapped": {
     "description": "Stream info value when native output is engaged but the window sits on a display without HDR, so the renderer is tone-mapping"
   },
-  "hdrOutputDisplayNotHdr": "Inactive — display is not in HDR mode",
-  "@hdrOutputDisplayNotHdr": {
-    "description": "Stream info value when the display has not been switched into HDR"
-  },
   "hdrOutputContentSdr": "Inactive — content is SDR",
   "@hdrOutputContentSdr": {
     "description": "Stream info value when the title itself is not HDR"
   },
   "hdrOutputDisabled": "Inactive — turned off in settings",
   "@hdrOutputDisabled": {
-    "description": "Stream info value when the native HDR output preference is off"
+    "description": "Stream info value when the video renderer setting keeps video inside the app"
   },
   "hdrOutputFailed": "Inactive — could not start, using the standard path",
   "@hdrOutputFailed": {
     "description": "Stream info value when the native HDR window could not be created"
   },
-  "nativeHdrOutput": "Native HDR Output",
-  "@nativeHdrOutput": {
-    "description": "Settings label for sending HDR to the display untouched"
+  "videoRenderer": "Video Renderer",
+  "@videoRenderer": {
+    "description": "Settings label for choosing where Windows draws video, in its own window or inside the app"
   },
-  "nativeHdrOutputDescription": "Sends HDR video to the display untouched instead of converting it to SDR. Used only when the display is already in HDR mode and the title is HDR.",
-  "@nativeHdrOutputDescription": {
-    "description": "Settings description for native HDR output"
+  "videoRendererDescription": "Native window gives the smoothest motion and sends HDR to the display untouched. Try another option if video misbehaves.",
+  "@videoRendererDescription": {
+    "description": "Settings description for the video renderer choice"
+  },
+  "videoRendererNativeWindow": "Native window (recommended)",
+  "@videoRendererNativeWindow": {
+    "description": "Video renderer option that plays every title in its own window"
+  },
+  "videoRendererNativeHdrOnly": "Native window for HDR only",
+  "@videoRendererNativeHdrOnly": {
+    "description": "Video renderer option that uses its own window for HDR titles and the in-app renderer for SDR"
+  },
+  "videoRendererInApp": "In-app (legacy)",
+  "@videoRendererInApp": {
+    "description": "Video renderer option that draws every title inside the app and converts HDR to SDR"
   },
   "codec": "Codec",
   "@codec": {
@@ -2990,6 +3116,14 @@
   "epubUnavailableOnPlatform": "EPUB rendering in-app is not available on this platform yet.",
   "@epubUnavailableOnPlatform": {
     "description": "Fallback message when EPUB cannot render on current platform"
+  },
+  "bookReadingUnavailableTitle": "Books can't be read on Apple TV",
+  "@bookReadingUnavailableTitle": {
+    "description": "Title of the dialog shown on Apple TV when the user tries to open a book or comic, which tvOS has no reader for"
+  },
+  "bookReadingUnavailableMessage": "Open it in Foxfin on a phone, tablet or computer to read it. Audiobooks still play here.",
+  "@bookReadingUnavailableMessage": {
+    "description": "Body of the dialog shown on Apple TV when the user tries to open a book or comic"
   },
   "formatCannotRenderInApp": "This format (.{extension}) cannot be rendered in-app yet.",
   "@formatCannotRenderInApp": {
@@ -3259,6 +3393,10 @@
   "@liveBadge": {
     "description": "Badge label shown on currently airing programs"
   },
+  "liveTvJumpToLive": "Jump to Live",
+  "@liveTvJumpToLive": {
+    "description": "Live TV player button that leaves a rewound or paused stream and returns to what is airing now"
+  },
   "guideNextProgram": "Next: {time}  {title}",
   "@guideNextProgram": {
     "description": "Guide card line for the upcoming program, e.g. 'Next: 9:00 PM  The News'",
@@ -3411,6 +3549,10 @@
   "playbackStreamLost": "Playback stopped and could not be recovered.",
   "@playbackStreamLost": {
     "description": "Shown in place of an internal sentinel error code when playback gives up trying to recover a stalled or starved stream"
+  },
+  "playbackVideoUnsupported": "This device can't play this video's format. Try an external player.",
+  "@playbackVideoUnsupported": {
+    "description": "Shown when the player can't show an item's video and no transcode is left to try, instead of playing the audio over a black screen"
   },
   "liveReconnecting": "Reconnecting… ({attempt} of {total})",
   "@liveReconnecting": {
@@ -4451,9 +4593,9 @@
   "@fit": {
     "description": "Zoom mode: fit"
   },
-  "autoCrop": "Auto Crop",
+  "autoCrop": "Zoom to Fill",
   "@autoCrop": {
-    "description": "Zoom mode: auto crop"
+    "description": "Zoom mode: scales the video to fill the screen and cuts off the edges. It doesn't detect or remove black bars."
   },
   "cropBlackBars": "Crop Black Bars",
   "@cropBlackBars": {
@@ -4888,6 +5030,10 @@
   "@buttonOrderHint": {
     "description": "Explains how to reorder the buttons in a row"
   },
+  "buttonShownInSyncPlayGroup": "Only shows while you're in a SyncPlay group",
+  "@buttonShownInSyncPlayGroup": {
+    "description": "Hint under the SyncPlay and Watch with group buttons in the button settings, which only appear once the user has joined a group"
+  },
   "orientationLock": "Orientation Lock",
   "@orientationLock": {
     "description": "Player button that locks the screen orientation"
@@ -5047,6 +5193,14 @@
   "settingsAudioFallbackCodecDescription": "Select the target format to transcode multi-channel audio when the source stream cannot be direct-played or passed through.",
   "@settingsAudioFallbackCodecDescription": {
     "description": "Description for audio fallback codec setting"
+  },
+  "transcodeAudioCodecs": "Transcode Audio Codecs",
+  "@transcodeAudioCodecs": {
+    "description": "Setting that lists the audio codecs the server converts instead of the device playing them"
+  },
+  "transcodeAudioCodecsDescription": "The server converts audio in these formats instead of sending it as is.",
+  "@transcodeAudioCodecsDescription": {
+    "description": "Description for the transcode audio codecs setting"
   },
   "settingsAudioFallbackCodecAuto": "Auto Detect\n(Recommended)",
   "@settingsAudioFallbackCodecAuto": {
@@ -5414,6 +5568,18 @@
   "@defaultSubtitleLanguage": {
     "description": "Setting for default subtitle language"
   },
+  "subtitleDownloadLanguages": "Subtitle Download Languages",
+  "@subtitleDownloadLanguages": {
+    "description": "Setting that picks which languages a subtitle download searches"
+  },
+  "subtitleDownloadLanguagesDescription": "Languages to search when downloading subtitles, up to 5. Auto searches one language picked from your default subtitle language or the video.",
+  "@subtitleDownloadLanguagesDescription": {
+    "description": "Description for the subtitle download languages setting"
+  },
+  "preferredSecondarySubtitleLanguage": "Preferred Secondary Subtitle Language",
+  "@preferredSecondarySubtitleLanguage": {
+    "description": "Preferred language used to sort secondary subtitle tracks in the picker. It doesn't turn subtitles on."
+  },
   "defaultToNoSubtitles": "Default to No Subtitles",
   "@defaultToNoSubtitles": {
     "description": "Setting for defaulting to no subtitles"
@@ -5425,6 +5591,36 @@
   "subtitleSize": "Subtitle Size",
   "@subtitleSize": {
     "description": "Setting for subtitle size"
+  },
+  "primarySubtitleSlot": "Primary",
+  "@primarySubtitleSlot": {
+    "description": "Label for the primary subtitle selection slot"
+  },
+  "secondarySubtitleSlot": "Secondary",
+  "@secondarySubtitleSlot": {
+    "description": "Label for the secondary subtitle selection slot"
+  },
+  "secondarySubtitleTrack": "Secondary Subtitle Track",
+  "@secondarySubtitleTrack": {
+    "description": "Title of the picker for the secondary subtitle track"
+  },
+  "decreaseValue": "Decrease {setting}",
+  "@decreaseValue": {
+    "description": "Tooltip for the button that lowers a setting's value",
+    "placeholders": {
+      "setting": {
+        "type": "String"
+      }
+    }
+  },
+  "increaseValue": "Increase {setting}",
+  "@increaseValue": {
+    "description": "Tooltip for the button that raises a setting's value",
+    "placeholders": {
+      "setting": {
+        "type": "String"
+      }
+    }
   },
   "textFillColor": "Text Fill Color",
   "@textFillColor": {
@@ -5939,6 +6135,123 @@
   "@libraryView": {
     "description": "Section title for library view settings"
   },
+  "libraryStyle": "Video Library Style",
+  "@libraryStyle": {
+    "description": "Label for the setting that picks the library page header layout"
+  },
+  "libraryStyleDescription": "Classic is the original header with icon buttons. Modern puts search and labeled sort, group and filter buttons in one bar. Docked moves the controls and the letters into a side panel.",
+  "@libraryStyleDescription": {
+    "description": "Explanation under the library style setting on TV and desktop"
+  },
+  "libraryStyleDescriptionPhone": "Classic is the original header with icon buttons. Modern adds labeled sort, group and filter chips under the search. Docked keeps the controls in a bar at the bottom of the screen.",
+  "@libraryStyleDescriptionPhone": {
+    "description": "Explanation under the library style setting on phones"
+  },
+  "libraryStyleClassic": "Classic",
+  "@libraryStyleClassic": {
+    "description": "Library style option: the original header"
+  },
+  "libraryStyleModern": "Modern",
+  "@libraryStyleModern": {
+    "description": "Library style option: one bar with labeled buttons"
+  },
+  "libraryStyleDocked": "Docked",
+  "@libraryStyleDocked": {
+    "description": "Library style option: a side panel on TV and desktop, a bottom bar on phones"
+  },
+  "bookLibraryStyle": "Book Library Style",
+  "@bookLibraryStyle": {
+    "description": "Label for the setting that picks the book and audiobook library layout"
+  },
+  "bookLibraryStyleDescription": "Classic is the original shelves under a featured title. Reading Room leads with what you're reading on large cards. Bookstore browses the whole library in a grid.",
+  "@bookLibraryStyleDescription": {
+    "description": "Explanation under the book library style setting"
+  },
+  "bookLibraryStyleClassic": "Classic",
+  "@bookLibraryStyleClassic": {
+    "description": "Book library style option: the original shelves"
+  },
+  "bookLibraryStyleReadingRoom": "Reading Room",
+  "@bookLibraryStyleReadingRoom": {
+    "description": "Book library style option: large Continue cards over a few shelves"
+  },
+  "bookLibraryStyleBookstore": "Bookstore",
+  "@bookLibraryStyleBookstore": {
+    "description": "Book library style option: browse entries over a title grid"
+  },
+  "musicLibraryStyle": "Music Library Style",
+  "@musicLibraryStyle": {
+    "description": "Label for the setting that picks the music library layout"
+  },
+  "musicLibraryStyleDescription": "Classic is the original rows under a Jump Back In card. Quick Access starts with a grid of your recent albums and playlists. Immersive leads with the album you're listening to.",
+  "@musicLibraryStyleDescription": {
+    "description": "Explanation under the music library style setting"
+  },
+  "musicLibraryStyleClassic": "Classic",
+  "@musicLibraryStyleClassic": {
+    "description": "Music library style option: the original rows"
+  },
+  "musicLibraryStyleQuickAccess": "Quick Access",
+  "@musicLibraryStyleQuickAccess": {
+    "description": "Music library style option: a grid of recent albums and playlists over the rows"
+  },
+  "musicLibraryStyleImmersive": "Immersive",
+  "@musicLibraryStyleImmersive": {
+    "description": "Music library style option: a full-width album hero over the rows"
+  },
+  "jumpBackIn": "Jump Back In",
+  "@jumpBackIn": {
+    "description": "Heading over the albums and playlists the user played recently in a music library"
+  },
+  "yourPlaylists": "Your Playlists",
+  "@yourPlaylists": {
+    "description": "Heading over the user's playlists in a music library"
+  },
+  "fromThisAlbum": "From This Album",
+  "@fromThisAlbum": {
+    "description": "Heading over the track list of the album shown in the music library hero"
+  },
+  "searchMusic": "Search Music",
+  "@searchMusic": {
+    "description": "Placeholder and label for the search control in a music library"
+  },
+  "bookSeriesCount": "{count, plural, =1{1 series} other{{count} series}}",
+  "@bookSeriesCount": {
+    "description": "How many series a book library holds",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "bookInProgressCount": "{count} in progress",
+  "@bookInProgressCount": {
+    "description": "How many books or audiobooks are started but not finished",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "bookBrowseAllTitles": "{count, plural, =1{Browse 1 title} other{Browse all {count} titles}}",
+  "@bookBrowseAllTitles": {
+    "description": "Link from the book library to the full title grid",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "searchBooks": "Search books",
+  "@searchBooks": {
+    "description": "Button in the book library that opens search within it"
+  },
+  "libraryShowLabel": "Show",
+  "@libraryShowLabel": {
+    "description": "Library button that opens the played status filter, followed by its current value such as All or Unwatched"
+  },
+  "libraryAToZ": "A to Z",
+  "@libraryAToZ": {
+    "description": "Library bottom bar button that turns the alphabet on and off"
+  },
+  "libraryJumpToLetter": "Jump to letter",
+  "@libraryJumpToLetter": {
+    "description": "Label of the alphabet in a library, which scrolls to the first item starting with the chosen letter"
+  },
   "enableFolderView": "Enable Folder View",
   "@enableFolderView": {
     "description": "Setting for enabling folder view"
@@ -6148,6 +6461,14 @@
   "@enableTrailerAudio": {
     "description": "Description for trailer audio"
   },
+  "trailerVolume": "Trailer Volume",
+  "@trailerVolume": {
+    "description": "Setting for how loud media bar trailers play"
+  },
+  "trailerVolumeDescription": "How loud media bar trailers play",
+  "@trailerVolumeDescription": {
+    "description": "Description for the trailer volume slider"
+  },
   "trailerCaptions": "Trailer Captions",
   "@trailerCaptions": {
     "description": "Setting for YouTube trailer captions"
@@ -6179,6 +6500,14 @@
   "enablePreviewAudio": "Enable audio for media previews",
   "@enablePreviewAudio": {
     "description": "Description for preview audio"
+  },
+  "previewVolume": "Preview Volume",
+  "@previewVolume": {
+    "description": "Setting for how loud media previews on cards play"
+  },
+  "previewVolumeDescription": "How loud media previews on cards play",
+  "@previewVolumeDescription": {
+    "description": "Description for the preview volume slider"
   },
   "latestMedia": "Recently Added Media",
   "@latestMedia": {
@@ -6283,6 +6612,14 @@
   "@homeRowsPaddingDescription": {
     "description": "Description for home rows padding setting"
   },
+  "homeRowsGenresAndStudios": "Genres and Studios",
+  "@homeRowsGenresAndStudios": {
+    "description": "Home Rows editor: heading of the group of disabled genre and studio rows"
+  },
+  "homeRowsExternalLists": "External Lists",
+  "@homeRowsExternalLists": {
+    "description": "Home Rows editor: heading of the group of disabled rows from IMDb, TMDB, Letterboxd and MDBList lists"
+  },
   "perRowSettings": "Per-Row Settings",
   "@perRowSettings": {
     "description": "Section title for per-row settings"
@@ -6334,6 +6671,14 @@
   "enablePinCode": "Enable PIN Code",
   "@enablePinCode": {
     "description": "Setting for enabling PIN code"
+  },
+  "pinSynced": "PIN synced",
+  "@pinSynced": {
+    "description": "Shown under the PIN switch when the PIN is kept on the server, so it applies on every device"
+  },
+  "pinResetFailed": "The PIN on the server could not be cleared. If it is still set, ask a server administrator to remove it.",
+  "@pinResetFailed": {
+    "description": "Shown on sign in when Forgot PIN could not clear a PIN kept on the server"
   },
   "requirePinToAccess": "Require a PIN to access your account",
   "@requirePinToAccess": {
@@ -7651,6 +7996,441 @@
   "adminDrawerLiveTv": "Live TV",
 
   "adminExitTooltip": "Exit Admin",
+  "adminPremiereNoteLiveTv": "Live TV needs Emby Premiere. Without it the server doesn't import channels or record anything.",
+  "adminPremiereNoteBackups": "Backup & Restore needs Emby Premiere once its trial ends.",
+  "adminGeneralRunAtStartup": "Run the server at startup",
+  "adminGeneralLaunchWebApp": "Open the web app in a browser when the server starts",
+  "adminGeneralBannerText": "Home screen banner text",
+  "adminGeneralBannerTextHelp": "Shown to every user on their home screen",
+  "adminGeneralSectionMaintenance": "Maintenance mode",
+  "adminGeneralMaintenanceMode": "Put the server into maintenance mode",
+  "adminGeneralMaintenanceModeHelp": "Users only see the maintenance message.",
+  "adminGeneralMaintenanceMessage": "Maintenance message",
+  "adminGeneralMaintenanceMessageHelp": "Leave it blank for a general message in each user's language.",
+  "adminGeneralSectionUpdates": "Automatic updates",
+  "adminGeneralAutoUpdate": "Update the server automatically",
+  "adminGeneralAutoRestart": "Restart automatically to apply updates",
+  "adminGeneralAutoRestartHelp": "The server only restarts while no users are active.",
+  "adminTaskTriggerSystemEvent": "After a system event ({event})",
+  "@adminTaskTriggerSystemEvent": {"placeholders": {"event": {"type": "String"}}},
+  "adminPluginNeedsPremiere": "Needs Emby Premiere after a 14-day free trial",
+  "adminEmbyBackupsHelp": "Emby backs up through its Backup & Restore plugin.",
+  "adminEmbyBackupsNoPlugin": "The Backup & Restore plugin isn't installed. Install it from the plugin catalog to back up this server.",
+  "adminEmbyBackupNow": "Back up now",
+  "adminEmbyFullBackup": "Full backup",
+  "adminEmbyLightBackups": "Database backups",
+  "adminEmbyBackupServerVersion": "Emby {version}",
+  "@adminEmbyBackupServerVersion": {"placeholders": {"version": {"type": "String"}}},
+  "adminEmbyRestoreConfirm": "Restore {name}? It replaces this server's libraries, settings, users and passwords, and the server shuts down when it's done. You may need to start it again yourself.",
+  "@adminEmbyRestoreConfirm": {"placeholders": {"name": {"type": "String"}}},
+  "adminEmbyRestoreServerId": "Restore the server ID",
+  "adminEmbyRestoreServerIdHelp": "Turn this off when you restore the same backup onto more than one server.",
+  "adminEmbyRestoreShuttingDown": "The restore is done and the server is shutting down. Start it again if it doesn't restart by itself.",
+  "adminHiddenRemotely": "Hide from login screens when connected remotely",
+  "adminHiddenFromUnusedDevices": "Hide from login screens on devices they've never signed in on",
+  "adminSimultaneousStreamLimitHelp": "Limits how many videos this user can play at once.",
+  "adminUnlimited": "Unlimited",
+  "adminAutoRemoteQuality": "Auto remote quality (Mbps)",
+  "adminAutoRemoteQualityHelp": "Used remotely when the player is set to auto quality. Leave empty to detect it.",
+  "adminAllowCameraUpload": "Allow camera upload",
+  "adminAllowSubtitleDownloading": "Allow subtitle downloading",
+  "adminAllowMediaConversion": "Allow media conversion",
+  "adminAllowSyncTranscoding": "Allow downloads that need transcoding",
+  "adminAllowSharingPersonalItems": "Allow sharing playlists with other users",
+  "adminAllowPreferenceAccess": "Allow changing their own password and profile image",
+  "adminTagMode": "Tag mode",
+  "adminEmbyConnect": "Emby Connect",
+  "adminEmbyConnectUser": "Emby Connect username or email",
+  "adminEmbyConnectHelp": "Lets this user sign in from any Emby app without knowing the server address.",
+  "adminEmbyConnectLink": "Link",
+  "adminEmbyConnectUnlink": "Unlink",
+  "adminEmbyConnectLinked": "Linked to Emby Connect",
+  "adminEmbyConnectPending": "Invitation sent. The link is made once they accept it.",
+  "adminEmbyConnectUnlinked": "Emby Connect link removed",
+  "adminEmbyConnectNotFound": "No Emby Connect account has that username or email.",
+  "adminLibImportPlaylists": "Import playlist files",
+  "adminLibExcludeFromSearch": "Exclude from global search",
+  "adminLibForcedSubtitlesOnly": "Download forced subtitles only",
+  "adminLibImportCollections": "Import collections from metadata downloaders",
+  "adminLibThumbnailInterval": "Preview thumbnail interval",
+  "adminLibThumbnailEverySeconds": "Every {count} seconds",
+  "@adminLibThumbnailEverySeconds": {"placeholders": {"count": {"type": "int"}}},
+  "adminLibThumbnailAtChapters": "At chapter markers",
+  "adminLibSaveThumbnailsWithMedia": "Save preview thumbnails into media folders",
+  "adminLibrarySectionMarkers": "Intro markers",
+  "adminLibIntroDetection": "Detect intros",
+  "adminLibIntroDetectionDuringScan": "Detect intros during the library scan",
+  "adminProviderEmbyGuide": "Emby Guide Data",
+  "adminLiveTvEmbyGuideSelectLineup": "Select a lineup. If none are listed, check the postal code. Lineups need Emby Premiere.",
+  "adminLiveTvWakeServer": "Wake the server for recordings",
+  "adminDrawerLiveTvChannels": "Live TV Channels",
+  "adminPageDescLiveTvChannels": "Turn channels on and off and set their order",
+  "adminLiveTvChannelsEmpty": "No channels yet. They show up here once a tuner is set up and the server has imported its channels.",
+  "adminTranscodingHwaAdvanced": "Advanced",
+  "adminTranscodingHwaHelp": "Advanced lets you pick and order the hardware codecs.",
+  "adminTranscodingHwDecoders": "Preferred hardware decoders",
+  "adminTranscodingHwEncoders": "Preferred hardware encoders",
+  "adminTranscodingTempPathHelp": "Where the transcoder keeps its working files. Leave it empty to use the server's data folder.",
+  "adminTranscodingThrottleHelp": "Slows transcoding down once enough is buffered, to lower CPU use.",
+  "adminTranscodingDownmixHelp": "Raises the volume when audio is downmixed. 1 keeps the original volume.",
+  "adminTranscodingFontExtraction": "Allow font extraction on the fly",
+  "adminTranscodingMaxResolution": "Max transcoding resolution",
+  "adminTranscodingMaxResolutionHelp": "A limit on every transcode, whatever quality the app asks for.",
+  "adminTranscodingToneMapSoftware": "Tone mapping in software transcodes",
+  "adminTranscodingToneMapHardware": "Tone mapping in hardware transcodes",
+  "adminTranscodingToneMapHelp": "Keeps HDR video from looking dim and washed out when it's transcoded.",
+  "adminNetworkingLocalAddress": "Local IP address",
+  "adminNetworkingLocalAddressHelp": "The local address the server gives to apps. Leave it empty to detect it automatically.",
+  "adminNetworkingBehindProxy": "HTTPS is handled by a reverse proxy",
+  "adminNetworkingExternalDomain": "External domain",
+  "adminNetworkingExternalDomainHelp": "A domain or dynamic DNS name for remote connections, without the protocol or port. A custom certificate needs it.",
+  "adminNetworkingUpnp": "Enable automatic port mapping",
+  "adminNetworkingUpnpHelp": "Tries to map the public port to the local port with UPnP. Some routers don't support it.",
+  "adminNetworkingProxyHeaders": "Read proxy headers for client addresses",
+  "adminNetworkingProxyHeadersHelp": "Uses headers like X-Forwarded-For to find each client's address. Only turn this on behind a reverse proxy.",
+  "adminNetworkingProxyHeadersRemote": "Only when they hold remote addresses",
+  "adminNetworkingIpv4Only": "Use IPv4 for outgoing requests",
+  "adminNetworkingIpv4OnlyHelp": "For when metadata providers and other services can't be reached over IPv6.",
+  "adminOnePerLine": "One per line",
+  "adminStreamingStreamLimit": "Max simultaneous video streams",
+  "adminStreamingStreamLimitHelp": "How many videos can play at once across the server. 0 means no limit.",
+  "adminSyncJobsConversions": "Conversion jobs",
+  "adminSyncJobsDownloads": "Download jobs",
+  "adminSyncJobsEmpty": "No jobs",
+  "adminSyncJobCancel": "Cancel job",
+  "adminSyncJobCancelConfirm": "Cancel {name} and remove it from the list?",
+  "@adminSyncJobCancelConfirm": {"placeholders": {"name": {"type": "String"}}},
+  "adminSyncJobConverting": "Converting",
+  "adminSyncJobReady": "Ready to transfer",
+  "adminSyncJobTransferring": "Transferring",
+  "adminSyncJobCompletedWithError": "Completed with errors",
+  "adminSyncJobItemCount": "{count, plural, =1{1 item} other{{count} items}}",
+  "@adminSyncJobItemCount": {"placeholders": {"count": {"type": "int"}}},
+  "adminDrawerDatabase": "Database",
+  "adminPageDescDatabase": "Cache size and upkeep",
+  "adminDatabaseWarning": "These are advanced options. Leave them at their defaults unless you have a reason to change them.",
+  "adminDatabaseCacheSize": "Database cache size (MB)",
+  "adminDatabaseCacheSizeHelp": "How much of each database file the server keeps in memory. More can make the server faster. Takes effect after a restart.",
+  "adminDatabaseOptimize": "Optimize the database when the server shuts down",
+  "adminDatabaseOptimizeHelp": "Usually this does nothing, but now and then it runs an analysis that helps the server's queries. Shutdowns can take longer.",
+  "adminDatabaseAnalysisLimit": "Analysis row limit",
+  "adminDatabaseAnalysisLimitHelp": "About how many rows of each index the optimize step reads. More rows work better but can slow shutdowns.",
+  "adminDatabaseVacuum": "Vacuum the database on the next startup",
+  "adminDatabaseVacuumHelp": "Rebuilds the database file so it takes up the least space, which can help performance. The server can't be used while it runs and shows no progress, so don't force it closed. It turns itself back off after that startup.",
+  "adminDrawerCinemaIntros": "Cinema Intros",
+  "adminPageDescCinemaIntros": "Trailers and intros before playback",
+  "adminCinemaIntrosPlayBefore": "Play intros before",
+  "adminCinemaIntrosUpcoming": "Include trailers from new and upcoming movies",
+  "adminCinemaIntrosOlder": "Include trailers from older movies",
+  "adminCinemaIntrosLibrary": "Include trailers from movies in my libraries",
+  "adminCinemaIntrosLibraryHelp": "Needs local trailers set up.",
+  "adminCinemaIntrosCount": "Number of trailers to play",
+  "adminCinemaIntrosParental": "Smart parental control",
+  "adminCinemaIntrosParentalHelp": "Only picks trailers rated the same as or lower than what's being watched.",
+  "adminCinemaIntrosUnwatchedOnly": "Only play intros before unwatched content",
+  "adminCinemaIntrosSimilarOnly": "Only play trailers similar to what's being watched",
+  "adminCinemaIntrosSimilarOnlyHelp": "Based on shared genres, tags, studios and so on.",
+  "adminCinemaIntrosCustom": "Custom intros",
+  "adminCinemaIntrosCustomPath": "Custom intros folder",
+  "adminCinemaIntrosCustomPathHelp": "A folder of videos. One is picked at random and plays after the trailers.",
+  "adminCinemaIntrosCodecPath": "Codec intros folder",
+  "adminCinemaIntrosCodecPathHelp": "A folder of videos. One whose file name matches the video codec, audio codec, audio profile or a tag plays before the main feature.",
+  "adminDrawerDlna": "DLNA",
+  "adminPageDescDlna": "Play To and the DLNA server",
+  "adminDlnaPlayTo": "Enable DLNA Play To",
+  "adminDlnaPlayToHelp": "Emby can find devices on your network and control them remotely.",
+  "adminDlnaServer": "Enable the DLNA server",
+  "adminDlnaServerHelp": "Lets the server stream media to DLNA devices.",
+  "adminDlnaDefaultUser": "Default user",
+  "adminDlnaDefaultUserHelp": "Whose libraries connected devices see. A device profile can override it.",
+  "adminDlnaDebugLog": "Enable DLNA debug logging",
+  "adminDlnaDebugLogHelp": "Makes large log files. Only turn it on while troubleshooting.",
+  "adminDrawerCameraUpload": "Camera Upload",
+  "adminPageDescCameraUpload": "Where photos from phones are saved",
+  "adminCameraUploadPath": "Camera upload folder",
+  "adminCameraUploadPathHelp": "Leave it blank to use the default folder. A custom folder also has to be added as a library.",
+  "adminCameraUploadSubfolders": "Make a subfolder for each device",
+  "adminDrawerConversions": "Conversions",
+  "adminPageDescConversions": "Converted media and downloads",
+  "adminConversionsTempPath": "Temporary file folder",
+  "adminConversionsTempPathHelp": "Where media is kept while it's being converted.",
+  "adminConversionsFullSpeed": "Convert at full speed",
+  "adminConversionsFullSpeedHelp": "Conversions run slowly by default to keep the load down.",
+  "adminDrawerPremiere": "Emby Premiere",
+  "adminPageDescPremiere": "License status and key",
+  "adminPremiereActive": "Premiere is active on this server.",
+  "adminPremiereInactive": "This server has no Premiere key.",
+  "adminPremiereKeyInvalid": "A key is set but isn't active. It may be mistyped or expired.",
+  "adminPremiereCurrentKey": "Current key",
+  "adminPremiereNewKey": "New key",
+  "adminPremiereNewKeyHint": "Paste the key from your Emby Premiere email.",
+  "adminPremiereSaveKey": "Save key",
+  "adminPremiereRemoveKey": "Remove key",
+  "adminPremiereKeyRejected": "Emby saved the key but didn't accept it.",
+  "adminPremiereLoadFailed": "Couldn't load the Premiere status",
+  "embyPremiereRequiredTitle": "Emby Premiere required",
+  "embyPremiereRequiredBody": "This needs an active Emby Premiere subscription on the server.",
+  "embyPremiereRequiredSaveBody": "This needs an active Emby Premiere subscription. Emby keeps the setting but won't use it until Premiere is active.",
+  "embyPremiereLearnMore": "Learn more",
+  "embyPremiereSaveAnyway": "Save anyway",
+  "embyPremiereEnterKey": "Enter key",
+  "adminPremiereNote": "Needs Emby Premiere. The server keeps this setting but won't use it until Premiere is active.",
+  "adminExternalIdLabel": "{name} Id",
+  "@adminExternalIdLabel": {"placeholders": {"name": {"type": "String"}}},
+  "adminExternalIdTypePerson": "Person",
+  "adminExternalIdTypeArtist": "Artist",
+  "adminExternalIdTypeAlbumArtist": "Album Artist",
+  "adminExternalIdTypeOtherArtist": "Other Artist",
+  "adminExternalIdTypeReleaseGroup": "Release Group",
+  "adminExternalIdTypeBook": "Book",
+  "adminPlaybackHwAccelWarning": "Hardware acceleration can be unstable on some systems. Keep the operating system and video drivers up to date, and set this back to None if video stops playing.",
+  "adminLibMetadataChangeHelp": "Changes to metadata settings apply to new content. To update existing content, refresh it from its detail page or refresh the library.",
+  "adminLibFetcherSettings": "Fetcher settings",
+  "adminLibImageOptionsTitle": "Image options for {type}",
+  "@adminLibImageOptionsTitle": {"placeholders": {"type": {"type": "String"}}},
+  "adminLibFetchImages": "Fetch images",
+  "adminLibMaxBackdrops": "Maximum number of backdrops per item",
+  "adminLibMinBackdropWidth": "Minimum backdrop download width",
+  "adminImageTypeArt": "Clearart",
+  "adminImageTypeBox": "Box",
+  "adminImageTypeBoxRear": "Box (back)",
+  "adminImageTypeDisc": "Disc",
+  "adminImageTypeMenu": "Menu",
+  "adminActivityMediaDetails": "Media details",
+  "adminNetworkingOtherPublishedUriHint": "e.g. 192.168.1.0/24=http://192.168.1.5:8096",
+  "adminMetadataFieldOriginalLanguage": "Original language",
+  "adminMetadataFieldDateAdded": "Date added",
+  "adminMetadataFieldArtists": "Artists",
+  "adminMetadataFieldAlbumArtists": "Album artists",
+  "adminMetadataFieldAlbum": "Album",
+  "adminMetadataFieldSeriesName": "Series name",
+  "adminMetadataFieldEpisodeNumber": "Episode number",
+  "adminMetadataFieldSeasonNumber": "Season number",
+  "adminMetadataFieldTrackNumber": "Track number",
+  "adminMetadataFieldDiscNumber": "Disc number",
+  "adminMetadataFieldAirTime": "Air time",
+  "adminMetadataFieldRuntime": "Runtime in minutes",
+  "adminMetadataFieldPlaceOfBirth": "Place of birth",
+  "adminMetadataFieldBirthDate": "Birth date",
+  "adminMetadataFieldBirthYear": "Birth year",
+  "adminMetadataFieldDeathDate": "Death date",
+  "adminMetadataFieldAspectRatio": "Original aspect ratio",
+  "adminMetadataFieldAirsBeforeSeason": "Airs before season",
+  "adminMetadataFieldAirsAfterSeason": "Airs after season",
+  "adminMetadataFieldAirsBeforeEpisode": "Airs before episode",
+  "adminMetadataNamesHelp": "Separate several names with a semicolon.",
+  "adminMetadataSectionRatings": "Ratings",
+  "adminMetadataItemLocked": "This item's metadata is locked. Unlock it before you identify it.",
+  "adminMetadataNameOrIdRequired": "Enter a name or an external ID.",
+  "adminLibMetadataReaders": "Metadata readers",
+  "adminLibSimilarProvidersFor": "Similar item providers: {type}",
+  "@adminLibSimilarProvidersFor": {"placeholders": {"type": {"type": "String"}}},
+  "adminLibMediaSegmentProviders": "Media segment providers",
+  "adminLibEnableLibrary": "Enable the library",
+  "adminLibEnableLibraryHelp": "Disabling the library hides it from all user views.",
+  "adminLibSaveLyricsWithMedia": "Save lyrics into media folders",
+  "adminLibUseCustomTagDelimiters": "Use custom tag delimiter",
+  "adminLibCustomTagDelimiters": "Custom tag delimiter",
+  "adminLibCustomTagDelimitersHelp": "Characters to treat as delimiters that separate tags.",
+  "adminLibDelimiterWhitelist": "Delimiter whitelist",
+  "adminLibDelimiterWhitelistHelp": "Items to leave out of tag splitting, one per line.",
+  "adminLibDownloadLanguages": "Download languages",
+  "adminLibraryFolderRequired": "Add at least one folder to this library.",
+  "adminRenameLibraryWarning": "Renaming a library loses all of its metadata. Proceed with caution.",
+  "adminDeleteLibraryConfirm": "Remove the library \"{name}\"? Files on disk are not deleted.",
+  "@adminDeleteLibraryConfirm": {"placeholders": {"name": {"type": "String"}}},
+  "adminDeleteLibraryLocations": "These media locations will be removed from the library:",
+  "adminRefreshMode": "Refresh mode",
+  "adminRefreshModeScan": "Scan for new and updated files",
+  "adminRefreshModeMissing": "Search for missing metadata",
+  "adminReplaceTrickplayImages": "Replace existing trickplay images",
+  "adminRefreshDialogHelp": "Metadata is refreshed based on the settings and internet services enabled in the dashboard.",
+  "adminActivityCount": "{shown} of {total}",
+  "@adminActivityCount": {"placeholders": {"shown": {"type": "String"}, "total": {"type": "String"}}},
+  "adminLiveTvTabSources": "Tuners and guide",
+  "adminLiveTvTabRecordings": "Recordings",
+  "adminLiveTvAddTuner": "Add tuner device",
+  "adminLiveTvEditTuner": "Edit tuner device",
+  "adminLiveTvTunerType": "Tuner type",
+  "adminLiveTvDetectDevices": "Detect my devices",
+  "adminLiveTvNoNewDevices": "No new devices found",
+  "adminLiveTvDrmNote": "Channels with DRM will not be imported.",
+  "adminLiveTvTunerSaved": "Tuner saved",
+  "adminLiveTvDeleteTuner": "Delete tuner device",
+  "adminLiveTvDeleteTunerConfirm": "Are you sure you want to delete this tuner device?",
+  "adminLiveTvDeleteProvider": "Delete guide provider",
+  "adminLiveTvDeleteProviderConfirm": "Are you sure you want to delete this guide provider?",
+  "adminLiveTvProviderSaved": "Guide provider saved",
+  "adminLiveTvAddProvider": "Add provider",
+  "adminLiveTvRefreshGuide": "Refresh guide data",
+  "adminLiveTvMapChannels": "Map channels",
+  "adminLiveTvNoTunerChannels": "No tuner channels found",
+  "adminLiveTvXmltvPathHelp": "A path or URL to an XMLTV file. The server reads it and checks it for updates. You are responsible for creating and updating the file.",
+  "adminLiveTvSdCreateAccount": "Create an account at {url}",
+  "@adminLiveTvSdCreateAccount": {"placeholders": {"url": {"type": "String"}}},
+  "adminLiveTvSdSignIn": "Sign in",
+  "adminLiveTvSdLineup": "Lineup",
+  "adminLiveTvSdSelectLineup": "Select a lineup. If none are listed, check your username, password and postal code.",
+  "adminLiveTvGuideDays": "Number of days of guide data to download",
+  "adminLiveTvGuideDaysHelp": "More days let you schedule further ahead and see more listings, but the download takes longer. Automatic picks a value from the number of channels.",
+  "adminLiveTvRecordingPath": "Default recording path",
+  "adminLiveTvRecordingPathHelp": "Where recordings are saved. If empty, the server's program data folder is used.",
+  "adminLiveTvStartWhenPossible": "Start when possible",
+  "adminLiveTvStopWhenPossible": "Stop when possible",
+  "adminLiveTvMinutesBefore": "minutes before",
+  "adminLiveTvMinutesAfter": "minutes after",
+  "adminLiveTvSectionGuide": "Guide data",
+  "adminLiveTvSectionDefaultRecording": "Default recording settings",
+  "adminLiveTvSectionMetadata": "Recording metadata",
+  "adminUserLastActivity": "Last activity {time}",
+  "@adminUserLastActivity": {"placeholders": {"time": {"type": "String"}}},
+  "adminCurrentPassword": "Current password",
+  "adminChannelAccess": "Channel access",
+  "adminDeviceAccess": "Device access",
+  "adminDeleteFromAllLibraries": "All libraries",
+  "adminUserDisabledBanner": "This user is disabled. Turn off Disabled under Permissions to let them sign in again.",
+  "adminNewPasswordEmpty": "New password cannot be empty",
+  "adminScheduleStartBeforeEnd": "The start time must be before the end time",
+  "adminDashboardAlerts": "Alerts",
+  "adminSessionGoHome": "Go to home screen",
+  "adminPlayMethodRemux": "Remuxing",
+  "adminPlayMethodDirectStream": "Direct streaming",
+  "adminPlayMethodDirectPlay": "Direct playing",
+  "adminLogLevelTrace": "Trace",
+  "adminLogLevelDebug": "Debug",
+  "adminLogLevelInformation": "Information",
+  "adminLogLevelWarning": "Warning",
+  "adminLogLevelError": "Error",
+  "adminLogLevelCritical": "Critical",
+  "adminLogLevelNone": "None",
+  "adminActivityAllUsers": "All users",
+  "adminTaskLastRan": "Last ran {time}, taking {duration}.",
+  "@adminTaskLastRan": {"placeholders": {"time": {"type": "String"}, "duration": {"type": "String"}}},
+  "adminTaskResultFailed": "Failed",
+  "adminTaskResultCancelled": "Cancelled",
+  "adminTaskResultAborted": "Aborted by server shutdown",
+  "adminDurationSecondsShort": "{seconds}s",
+  "@adminDurationSecondsShort": {"placeholders": {"seconds": {"type": "String"}}},
+  "adminDeleteTaskTrigger": "Delete task trigger",
+  "adminDeleteTaskTriggerConfirm": "Are you sure you want to delete this task trigger?",
+  "adminTaskTriggerEveryMinutes": "Every {minutes} minutes",
+  "@adminTaskTriggerEveryMinutes": {"placeholders": {"minutes": {"type": "String"}}},
+  "adminTaskTriggerEveryHours": "Every {hours} hours",
+  "@adminTaskTriggerEveryHours": {"placeholders": {"hours": {"type": "String"}}},
+  "adminTaskMinutesValue": "{minutes} minutes",
+  "@adminTaskMinutesValue": {"placeholders": {"minutes": {"type": "String"}}},
+  "adminTaskHoursValue": "{hours} hours",
+  "@adminTaskHoursValue": {"placeholders": {"hours": {"type": "String"}}},
+  "adminTimeLimitHours": "Time limit (hours)",
+  "adminTranscodingDecodingFor": "Enable hardware decoding for",
+  "adminTranscodingThreadCountHelp": "The most threads a transcode can use. Fewer threads lower CPU use but may be too slow for smooth playback.",
+  "adminTranscodingThreadMax": "Max",
+  "adminTranscodingFfmpegPath": "FFmpeg path",
+  "adminTranscodingFfmpegPathHelp": "The FFmpeg the server runs. It is set on the server, not here.",
+  "adminTranscodingAudioSeek": "Audio seek strategy",
+  "adminTranscodingAudioSeekHelp": "How the server handles audio when you seek in an HLS stream.",
+  "adminTranscodingTrimCopiedAudio": "Trim copied audio",
+  "adminTranscodingTranscodeAudio": "Transcode audio",
+  "adminResumeMinAudiobookMinutes": "Minimum audiobook resume (minutes)",
+  "adminResumeMinAudiobookHelp": "Audiobooks stopped before this time count as unplayed.",
+  "adminResumeAudiobookRemaining": "Audiobook remaining minutes to resume",
+  "adminResumeAudiobookRemainingHelp": "Audiobooks stopped with less than this many minutes left count as played.",
+  "adminBrandingSplashSection": "Splash screen",
+  "adminBrandingSectionWebClient": "Web client",
+  "adminBrandingSplashSizeHint": "Custom images should be in a 16x9 aspect ratio at a minimum size of 1920x1080.",
+  "adminNetworkingSectionServerAddress": "Server address settings",
+  "adminNetworkingSectionHttps": "HTTPS settings",
+  "adminNetworkingSectionRemoteAccess": "Remote access settings",
+  "adminNetworkingSectionIpProtocols": "IP protocols",
+  "adminNetworkingSectionDiscovery": "Network discovery",
+  "adminNetworkingSectionFirewall": "Firewall and proxy settings",
+  "adminNetworkingLocalHttpPort": "Local HTTP port number",
+  "adminNetworkingLocalHttpPortHelp": "The TCP port number for the HTTP server.",
+  "adminNetworkingEnableHttpsHelp": "Listen on the HTTPS port. A valid certificate must also be set for this to take effect.",
+  "adminNetworkingLocalHttpsPort": "Local HTTPS port number",
+  "adminNetworkingLocalHttpsPortHelp": "The TCP port number for the HTTPS server.",
+  "adminNetworkingBaseUrlHelp": "Adds a subdirectory to the server URL, for example https://example.com/jellyfin.",
+  "adminNetworkingBindAddress": "Bind to local network address",
+  "adminNetworkingBindAddressHelp": "Overrides the local IP address of the HTTP server. Leave it empty to bind to all addresses. A change needs a restart.",
+  "adminNetworkingLanNetworksHelp": "IP addresses or IP/netmask entries of networks treated as local for bandwidth and remote access limits. Leave it empty to treat all RFC1918 addresses as local.",
+  "adminNetworkingKnownProxiesHelp": "IP addresses or host names of the proxies in front of this server. Needed to read X-Forwarded-For headers. A change needs a restart.",
+  "adminNetworkingCustomCertPath": "Custom SSL certificate path",
+  "adminNetworkingCertPathHelp": "Path to a PKCS #12 file with a certificate and private key, for TLS on a custom domain.",
+  "adminNetworkingCertPasswordHelp": "Enter the password if your certificate needs one.",
+  "adminNetworkingAllowRemote": "Allow remote connections to this server",
+  "adminNetworkingAllowRemoteHelp": "When off, all remote connections are blocked.",
+  "adminNetworkingRemoteIpFilterHelp": "IP addresses or IP/netmask entries of remote networks. Leave it empty to allow every remote address.",
+  "adminNetworkingRemoteIpFilterMode": "Remote IP address filter mode",
+  "adminNetworkingPublicHttpPortHelp": "The public port mapped to the local HTTP port.",
+  "adminNetworkingPublicHttpsPortHelp": "The public port mapped to the local HTTPS port.",
+  "adminNetworkingAutoDiscoveryLabel": "Enable auto discovery",
+  "adminNetworkingAutoDiscoveryHelp": "Lets apps find this server on UDP port 7359.",
+  "adminNetworkingSamePublishedUri": "Use the same published server URI for internal and external access",
+  "adminNetworkingPublishedUri": "Published server URI",
+  "adminNetworkingPublishedUriHelp": "Overrides the URI the server gives out, based on the interface or the client IP address.",
+  "adminNetworkingInternalUri": "Internal URI",
+  "adminNetworkingInternalUriHelp": "Published server URI for internal access.",
+  "adminNetworkingExternalUri": "External URI",
+  "adminNetworkingExternalUriHelp": "Published server URI for external access.",
+  "adminNetworkingOtherPublishedUris": "Other published URIs",
+  "adminNetworkingOtherPublishedUrisHelp": "URIs for one subnet or interface, written as subnet=URI.",
+  "adminBackupsHelp": "Create and restore snapshots of your server. They can include the database, metadata, subtitles and trickplay images.",
+  "adminBackupDisclaimer": "Depending on the size of your library, the backup can take a while.",
+  "adminBackupTasksWarningTitle": "Scheduled tasks are running",
+  "adminBackupTasksWarning": "Stop these tasks or wait for them to finish before you create a backup.",
+  "adminBackupArchiveNotFound": "The server could not find this backup archive.",
+  "adminRestoreInProgress": "Restore in progress",
+  "adminRestoreWaitingForServer": "Waiting for the server to come back.",
+  "adminRestoreSucceeded": "Restore completed",
+  "adminLogWatch": "Watch",
+  "adminLogStopWatching": "Stop watching",
+  "adminPluginInstallConfirmTitle": "Confirm plugin installation",
+  "adminPluginInstallDisclaimer": "Installing a third party plugin carries risks. It may contain unstable or malicious code, and it can change at any time. Only install plugins from authors you trust, and know what they can do, such as query outside services, slow down library scans or add background work.",
+  "adminGroupOverview": "Overview",
+  "adminGroupLibrary": "Library",
+  "adminGroupPlayback": "Playback",
+  "adminGroupPeople": "People",
+  "adminGroupSystem": "System",
+  "adminAreasLabel": "Admin areas",
+  "adminPagesLabel": "Pages",
+  "adminPageDescDashboard": "Server health, sessions and recent activity",
+  "adminPageDescAnalytics": "Library sizes, codecs and formats",
+  "adminPageDescActivity": "Everything that happened on the server",
+  "adminPageDescTasks": "Scans, cleanups and their triggers",
+  "adminPageDescLibraries": "Folders, scanners and metadata fetchers",
+  "adminPageDescDisplay": "How libraries show to users",
+  "adminPageDescMetadata": "Default language, country and images",
+  "adminPageDescNfo": "Kodi NFO reading and saving",
+  "adminPageDescLiveTv": "Tuners, guide data and recordings",
+  "adminPageDescTranscoding": "Hardware acceleration, encoders, tone mapping",
+  "adminPageDescResume": "When items count as started or played",
+  "adminPageDescStreaming": "Remote bitrate limit",
+  "adminPageDescTrickplay": "Seek preview thumbnails",
+  "adminPageDescUsers": "Accounts, access and parental control",
+  "adminPageDescDevices": "Signed in devices and their names",
+  "adminPageDescApiKeys": "Keys for apps and scripts",
+  "adminPageDescSettings": "Server name, language, paths, performance",
+  "adminPageDescBranding": "Login message, custom CSS, splash screen",
+  "adminPageDescNetworking": "Ports, HTTPS, LAN and remote access",
+  "adminPageDescPlugins": "Installed plugins and the catalog",
+  "adminPageDescRepositories": "Where plugins come from",
+  "adminPageDescBackups": "Create and restore server backups",
+  "adminPageDescLogs": "Server log files",
+  "adminSearchSettingsHint": "Search {count} settings",
+  "@adminSearchSettingsHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminSearchNoResults": "No settings match",
+  "adminSearchClear": "Clear search",
+  "adminUnsavedChanges": "Unsaved changes",
+  "adminDiscard": "Discard",
+  "adminLeaveTitle": "Discard unsaved changes?",
+  "adminLeaveMessage": "The changes on this page haven't been saved yet.",
+  "adminKeepEditing": "Keep editing",
 
   "adminDashboardLoadFailed": "Failed to load dashboard",
   "adminMediaOverview": "Media Overview",
@@ -7674,12 +8454,6 @@
       "count": {"type": "int"}
     }
   },
-  "adminRecentAlertEntries": "Recent warning/error entries: {count}",
-  "@adminRecentAlertEntries": {
-    "placeholders": {
-      "count": {"type": "int"}
-    }
-  },
 
   "analyticsMediaDistribution": "Media Distribution",
   "analyticsVideoCodecs": "Video Codecs",
@@ -7698,7 +8472,6 @@
   "adminServerActions": "Server Actions",
   "adminRestartServer": "Restart Server",
   "adminShutdownServer": "Shutdown Server",
-  "adminScanLibraries": "Scan Libraries",
   "adminLibraryScanStarted": "Library scan started",
   "errorGeneric": "Error: {error}",
   "@errorGeneric": {
@@ -7738,8 +8511,6 @@
   "audioCodec": "Audio Codec",
   "hwAccel": "HW Accel",
   "completion": "Completion",
-  "direct": "Direct",
-  "adminDisconnect": "Disconnect",
 
   "adminClearDates": "Clear dates",
   "adminActivitySeverityAll": "All severities",
@@ -7764,7 +8535,7 @@
   "adminDeleteDevice": "Delete Device",
   "adminDeviceDeleted": "Device deleted",
   "adminDeviceDeleteFailed": "Failed to delete device: {error}",
-  "adminRemoveDeviceConfirm": "Remove device '{name}'? The user will need to sign in again on this device.",
+  "adminRemoveDeviceConfirm": "Remove device \"{name}\"? The user will need to sign in again on this device.",
   "@adminRemoveDeviceConfirm": {
     "placeholders": {
       "name": {
@@ -7858,18 +8629,10 @@
       "error": {"type": "String"}
     }
   },
-  "adminLibraryOptionsSaved": "Library options saved",
-  "adminLibraryOptionsSaveFailed": "Failed to save options: {error}",
-  "@adminLibraryOptionsSaveFailed": {
-    "placeholders": {
-      "error": {"type": "String"}
-    }
-  },
   "adminLibraryLoadFailed": "Failed to load library",
   "adminNoMediaPaths": "No media paths configured",
   "adminAddPath": "Add Path",
   "adminBrowseFilesystem": "Browse server filesystem:",
-  "adminSaveOptions": "Save Options",
   "adminPreferredMetadataLanguage": "Preferred metadata language",
   "adminMetadataLanguageHint": "e.g. en, de, fr",
   "adminMetadataCountryCode": "Metadata country code",
@@ -7907,7 +8670,6 @@
   "adminLibrarySectionMovies": "Movies",
   "adminLibRealtimeMonitor": "Enable real-time monitoring",
   "adminLibRealtimeMonitorHint": "Detect file changes and process them automatically.",
-  "adminLibArchiveMediaFiles": "Treat archives as media files",
   "adminLibEnablePhotos": "Display photos",
   "adminLibSaveLocalMetadata": "Save artwork into media folders",
   "adminLibRefreshInterval": "Automatic metadata refresh",
@@ -7977,7 +8739,6 @@
   },
   "adminLibraryName": "Library Name",
   "adminSelectedPaths": "Selected Paths:",
-  "adminNoPathsAdded": "No paths added (can be added later)",
   "adminCreateLibrary": "Create Library",
   "paths": "Paths:",
 
@@ -8028,15 +8789,12 @@
   "adminPasswordOptional": "Password (optional)",
 
   "adminUsernameRequired": "Username cannot be empty",
-  "adminNoProfileChanges": "No profile changes to save",
-  "adminProfileSaved": "Profile saved",
   "adminSaveFailed": "Failed to save: {error}",
   "@adminSaveFailed": {
     "placeholders": {
       "error": {"type": "String"}
     }
   },
-  "adminPermissionsSaved": "Permissions saved",
   "adminPasswordsMismatch": "Passwords do not match",
   "adminFailed": "Failed: {error}",
   "@adminFailed": {
@@ -8045,8 +8803,6 @@
     }
   },
   "adminUserLoadFailed": "Failed to load user",
-  "adminBackToUsers": "Back to Users",
-  "adminSaveProfile": "Save Profile",
   "adminDeleteUser": "Delete User",
   "admin": "Admin",
   "adminFullAccessWarning": "Administrators have complete access to the server. Grant with caution.",
@@ -8057,13 +8813,11 @@
   "adminAllowVideoTranscoding": "Allow video transcoding",
   "adminAllowRemuxing": "Allow remuxing",
   "adminForceRemoteTranscoding": "Force remote source transcoding",
-  "adminAllowContentDeletion": "Allow content deletion",
   "adminAllowContentDownloading": "Allow content downloading",
   "adminAllowPublicSharing": "Allow public sharing",
   "adminAllowRemoteControl": "Allow remote control of other users",
   "adminAllowSharedDeviceControl": "Allow shared device control",
   "adminAllowRemoteAccess": "Allow remote access",
-  "adminRemoteBitrateLimit": "Remote client bitrate limit (bps)",
   "adminLeaveEmptyNoLimit": "Leave empty for no limit",
   "adminMaxActiveSessions": "Max active sessions",
   "adminAllowLiveTvAccess": "Allow Live TV access",
@@ -8071,9 +8825,7 @@
   "adminAllowCollectionManagement": "Allow collection management",
   "adminAllowSubtitleManagement": "Allow subtitle management",
   "adminAllowLyricManagement": "Allow lyric management",
-  "adminSavePermissions": "Save Permissions",
   "adminEnableAllLibraryAccess": "Enable access to all libraries",
-  "adminSaveAccess": "Save Access",
   "adminChangePassword": "Change Password",
   "adminNewPassword": "New Password",
   "adminConfirmPassword": "Confirm Password",
@@ -8083,7 +8835,6 @@
   "adminPasswordUpdated": "Password updated",
   "adminUserSettings": "User Settings",
   "adminLibraryAccess": "Library Access",
-  "adminDeviceAndChannelAccess": "Device & Channel Access",
   "adminEnableAllDevices": "Enable access to all devices",
   "adminEnableAllChannels": "Enable access to all channels",
   "adminParentalControl": "Parental Control",
@@ -8119,8 +8870,6 @@
   "adminBlockedTags": "Blocked tags",
   "adminBlockedTagsHint": "Content with these tags is hidden from this user.",
   "adminAddTag": "Add tag",
-  "adminEnabledDevices": "Enabled devices",
-  "adminEnabledChannels": "Enabled channels",
   "adminAuthProvider": "Authentication provider",
   "adminPasswordResetProvider": "Password reset provider",
   "adminLoginAttemptsBeforeLockout": "Maximum failed login attempts before lockout",
@@ -8203,7 +8952,6 @@
   },
 
   "adminBackupOptionsTitle": "Create Backup",
-  "adminBackupInclude": "Choose what to include in the backup.",
   "adminBackupDatabase": "Database",
   "adminBackupDatabaseAlways": "Always included",
   "adminBackupMetadata": "Metadata",
@@ -8315,7 +9063,6 @@
   "adminAddTrigger": "Add Trigger",
   "adminNoTriggers": "No triggers configured",
   "adminTriggerType": "Trigger Type",
-  "adminTimeLimit": "Time limit (optional)",
   "adminNoLimit": "No limit",
   "adminHours": "{hours} hour(s)",
   "@adminHours": {
@@ -8402,7 +9149,6 @@
       "version": {"type": "String"}
     }
   },
-  "adminMissingAuthToken": "Unable to open settings: missing auth token.",
   "adminPluginLoadFailed": "Failed to load plugin: {error}",
   "@adminPluginLoadFailed": {
     "placeholders": {
@@ -8469,7 +9215,6 @@
   "adminParallelImageEncodingLimit": "Parallel image encoding limit",
   "adminSlowResponseThreshold": "Slow response threshold (ms)",
 
-  "adminBrandingSaved": "Branding settings saved",
   "adminBrandingLoadFailed": "Failed to load branding settings",
   "adminLoginDisclaimer": "Login disclaimer",
   "adminLoginDisclaimerHint": "HTML displayed below the login form",
@@ -8477,15 +9222,12 @@
   "adminCustomCssHint": "Custom CSS applied to the web interface",
   "adminEnableSplashScreen": "Enable splash screen",
 
-  "adminStreamingSaved": "Streaming settings saved",
   "adminStreamingLoadFailed": "Failed to load streaming settings",
   "adminStreamingDescription": "Set global streaming bitrate limits for remote connections.",
   "adminRemoteBitrateLimitMbps": "Remote client bitrate limit (Mbps)",
   "adminLeaveEmptyForUnlimited": "Leave empty or 0 for unlimited",
 
-  "adminPlaybackSaved": "Playback settings saved",
   "adminPlaybackLoadFailed": "Failed to load playback settings",
-  "adminPlaybackTranscoding": "Playback / Transcoding",
   "adminHardwareAcceleration": "Hardware acceleration",
   "adminVaapiDevice": "VA-API device",
   "adminEnableHardwareEncoding": "Enable hardware encoding",
@@ -8499,7 +9241,6 @@
   "adminSegmentKeepSeconds": "Segment keep (seconds)",
   "adminThrottleBuffering": "Throttle buffering",
 
-  "adminTrickplaySaved": "Trickplay settings saved",
   "adminTrickplayLoadFailed": "Failed to load trickplay settings",
   "adminEnableHardwareAcceleration": "Enable hardware acceleration",
   "adminEnableKeyFrameExtraction": "Enable key frame only extraction",
@@ -8515,7 +9256,6 @@
   "adminQualitySubtitle": "Lower values = better quality, larger files",
   "adminProcessThreads": "Process threads",
 
-  "adminResumeSaved": "Resume settings saved",
   "adminResumeLoadFailed": "Failed to load resume settings",
   "adminResumeDescription": "Configure when content should be marked as partially played or fully played.",
   "adminMinResumePercentage": "Minimum resume percentage",
@@ -8527,7 +9267,6 @@
   "adminMinAudiobookResume": "Minimum audiobook resume percentage",
   "adminMaxAudiobookResume": "Maximum audiobook resume percentage",
 
-  "adminNetworkingSaved": "Networking settings saved. A server restart may be required.",
   "adminNetworkingLoadFailed": "Failed to load networking settings",
   "adminNetworkingWarning": "Changes to networking settings may require a server restart.",
   "adminEnableRemoteAccess": "Enable remote access",
@@ -8549,15 +9288,8 @@
   "blacklist": "Blacklist",
   "notSet": "Not set",
 
-  "adminMetadataSaved": "Metadata saved",
   "adminMetadataLoadFailed": "Failed to load metadata: {error}",
   "@adminMetadataLoadFailed": {
-    "placeholders": {
-      "error": {"type": "String"}
-    }
-  },
-  "adminMetadataSaveFailed": "Failed to save metadata: {error}",
-  "@adminMetadataSaveFailed": {
     "placeholders": {
       "error": {"type": "String"}
     }
@@ -8565,7 +9297,6 @@
   "adminRefreshMetadata": "Refresh Metadata",
   "recursive": "Recursive",
   "adminReplaceAllMetadata": "Replace all metadata",
-  "adminReplaceAllImages": "Replace all images",
   "adminMetadataRefreshRequested": "Metadata refresh requested",
   "adminMetadataRefreshFailed": "Failed to refresh metadata: {error}",
   "@adminMetadataRefreshFailed": {
@@ -8647,8 +9378,6 @@
       "error": {"type": "String"}
     }
   },
-  "adminAddTuner": "Add Tuner",
-  "adminEditTuner": "Edit Tuner",
   "adminTunerTypeM3u": "M3U Tuner",
   "adminTunerTypeHdHomerun": "HDHomeRun",
   "adminTunerFileOrUrl": "File or URL",
@@ -8665,7 +9394,6 @@
   "adminTunerEnableStreamLooping": "Enable stream looping",
   "adminTunerIgnoreDts": "Ignore DTS",
   "adminTunerReadAtNativeFramerate": "Read input at native frame rate",
-  "adminEditProvider": "Edit Provider",
   "adminProviderXmltv": "XMLTV",
   "adminProviderSchedulesDirect": "Schedules Direct",
   "adminXmltvPath": "File or URL",
@@ -8680,90 +9408,30 @@
   "adminSdCountry": "Country",
   "adminSdCountrySelect": "Select a country",
   "adminSdPostalCode": "Postal code",
-  "adminSdGetListings": "Get listings",
-  "adminSdListings": "Listings",
   "adminEnableAllTuners": "Enable all tuners",
-  "adminTunerType": "Tuner Type",
-  "adminTunerAdded": "Tuner added",
-  "adminTunerAddFailed": "Failed to add tuner: {error}",
-  "@adminTunerAddFailed": {
-    "placeholders": {
-      "error": {"type": "String"}
-    }
-  },
-  "adminAddGuideProvider": "Add Guide Provider",
-  "adminProviderType": "Provider Type",
-  "adminProviderAdded": "Provider added",
-  "adminProviderAddFailed": "Failed to add provider: {error}",
-  "@adminProviderAddFailed": {
-    "placeholders": {
-      "error": {"type": "String"}
-    }
-  },
   "adminTunerRemoveFailed": "Failed to remove tuner: {error}",
   "@adminTunerRemoveFailed": {
     "placeholders": {
       "error": {"type": "String"}
     }
   },
-  "adminTunerResetRequested": "Tuner reset requested",
-  "adminTunerResetFailed": "Failed to reset tuner: {error}",
-  "@adminTunerResetFailed": {
-    "placeholders": {
-      "error": {"type": "String"}
-    }
-  },
-  "adminTunerResetNotSupported": "This tuner type does not support resetting.",
   "adminProviderRemoveFailed": "Failed to remove provider: {error}",
   "@adminProviderRemoveFailed": {
     "placeholders": {
       "error": {"type": "String"}
     }
   },
-  "adminRecordingSettings": "Recording Settings",
-  "adminPrePadding": "Pre-padding (minutes)",
-  "adminPostPadding": "Post-padding (minutes)",
-  "adminRecordingPath": "Recording path",
   "adminSeriesRecordingPath": "Series recording path",
   "adminMovieRecordingPath": "Movie recording path",
-  "adminGuideDays": "Guide data days",
   "adminGuideDaysAuto": "Automatic",
-  "adminGuideDaysValue": "{days} days",
-  "@adminGuideDaysValue": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
   "adminRecordingPostProcessor": "Post-processing application path",
   "adminRecordingPostProcessorArgs": "Post-processor arguments",
   "adminSaveRecordingNfo": "Save recording NFO metadata",
   "adminSaveRecordingImages": "Save recording images",
-  "adminLiveTvSectionTiming": "Timing",
   "adminLiveTvSectionPaths": "Recording paths",
   "adminLiveTvSectionPostProcessing": "Post-processing",
-  "adminGuideDaysDisplay": "Guide data: {value}",
-  "@adminGuideDaysDisplay": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "adminRecordingSettingsSaved": "Recording settings saved",
   "adminSettingsSaveFailed": "Failed to save settings: {error}",
   "@adminSettingsSaveFailed": {
-    "placeholders": {
-      "error": {"type": "String"}
-    }
-  },
-  "adminSetChannelMappings": "Set Channel Mappings",
-  "adminMappingJson": "Mapping JSON",
-  "adminMappingJsonHint": "Example: mappings JSON payload",
-  "adminChannelMappingsUpdated": "Channel mappings updated",
-  "adminMappingsUpdateFailed": "Failed to update mappings: {error}",
-  "@adminMappingsUpdateFailed": {
     "placeholders": {
       "error": {"type": "String"}
     }
@@ -8772,38 +9440,9 @@
   "adminTunerDevices": "Tuner Devices",
   "adminNoTunerHosts": "No tuner hosts configured",
   "adminGuideProviders": "Guide Providers",
-  "adminRefreshGuideData": "Refresh Guide Data",
   "adminGuideRefreshStarted": "Guide data refresh started",
   "adminGuideRefreshUnavailable": "Guide refresh task is not available on this server.",
-  "adminAddProvider": "Add Provider",
   "adminNoListingProviders": "No listing providers configured",
-  "adminRecordingPathDisplay": "Recording path: {path}",
-  "@adminRecordingPathDisplay": {
-    "placeholders": {
-      "path": {"type": "String"}
-    }
-  },
-  "adminSeriesPathDisplay": "Series path: {path}",
-  "@adminSeriesPathDisplay": {
-    "placeholders": {
-      "path": {"type": "String"}
-    }
-  },
-  "adminPrePaddingDisplay": "Pre-padding: {minutes} min",
-  "@adminPrePaddingDisplay": {
-    "placeholders": {
-      "minutes": {"type": "int"}
-    }
-  },
-  "adminPostPaddingDisplay": "Post-padding: {minutes} min",
-  "@adminPostPaddingDisplay": {
-    "placeholders": {
-      "minutes": {"type": "int"}
-    }
-  },
-  "adminTunerDiscovery": "Tuner Discovery",
-  "adminChannelMappings": "Channel Mappings",
-  "adminNoDiscoveredTuners": "No discovered tuners yet",
 
   "adminSettingsSaved": "Settings saved",
 
@@ -8817,16 +9456,11 @@
       "name": {"type": "String"}
     }
   },
-  "adminRestoreRequested": "Restore requested. Server restart may disconnect this session.",
   "adminBackupsTitle": "Backups",
   "adminUnknownDate": "Unknown date",
   "adminUnnamedBackup": "Unnamed Backup",
 
-  "adminLiveTvNotAvailable": "Live TV administration is not available on this server build.",
-  "adminLiveTvTitle": "Live TV Administration",
   "adminApply": "Apply",
-  "adminNotSet": "Not set",
-  "adminReset": "Reset",
 
   "adminLogsTitle": "Server Logs",
   "adminLogsNewestFirst": "Newest First",
@@ -8903,7 +9537,6 @@
   "adminMetadataCountryRegion": "Country/Region",
   "adminMetadataInheritHelp": "Leave this on Default to inherit the setting from a parent item, or from the server default.",
   "adminMetadataField3DFormat": "3D format",
-  "adminMetadataPersonKindUnknown": "Unknown",
   "adminMetadataPersonKindActor": "Actor",
   "adminMetadataPersonKindDirector": "Director",
   "adminMetadataPersonKindComposer": "Composer",
@@ -8958,7 +9591,6 @@
   "adminMetadataImageLogo": "Logo",
   "adminMetadataImageBanner": "Banner",
   "adminMetadataImageThumb": "Thumb",
-  "adminMetadataRecursive": "Recursive",
   "adminMetadataProvider": "Provider",
   "adminMetadataImageUpdated": "{imageType} image updated",
   "@adminMetadataImageUpdated": {
@@ -9123,13 +9755,7 @@
 
   "adminNetworkingTitle": "Networking",
   "adminNetworkingRestartWarning": "Changes to networking settings may require a server restart.",
-  "adminNetworkingRemoteAccess": "Enable remote access",
-  "adminNetworkingPorts": "Ports",
-  "adminNetworkingHttpPort": "HTTP port",
-  "adminNetworkingHttpsPort": "HTTPS port",
   "adminNetworkingEnableHttps": "Enable HTTPS",
-  "adminNetworkingLocalNetwork": "Local Network",
-  "adminNetworkingLocalAddresses": "Local network addresses",
   "adminNetworkingAddressHint": "e.g. 192.168.1.0/24",
   "adminNetworkingKnownProxies": "Known proxies",
   "adminNetworkingProxyHint": "e.g. 10.0.0.1",
@@ -9152,11 +9778,9 @@
   "adminPlaybackHwAccel": "Hardware Acceleration",
   "adminPlaybackHwAccelLabel": "Hardware acceleration",
   "adminPlaybackEnableHwEncoding": "Enable hardware encoding",
-  "adminPlaybackEnableHwDecoding": "Enable hardware decoding for:",
   "adminPlaybackQsvDevice": "QSV device",
   "adminPlaybackEnhancedNvdec": "Enable enhanced NVDEC decoder",
   "adminPlaybackPreferNativeDecoder": "Prefer system native hardware decoder",
-  "adminPlaybackColorDepth": "Hardware decoding color depth",
   "adminPlaybackColorDepth10Hevc": "10-bit HEVC decoding",
   "adminPlaybackColorDepth10Vp9": "10-bit VP9 decoding",
   "adminPlaybackColorDepth10HevcRext": "HEVC RExt 8/10-bit decoding",
@@ -9178,7 +9802,6 @@
   "adminPlaybackTonemappingParam": "Tone mapping parameter",
   "adminPlaybackVppTonemappingBrightness": "VPP tone mapping brightness",
   "adminPlaybackVppTonemappingContrast": "VPP tone mapping contrast",
-  "adminPlaybackPresetsQuality": "Presets & Quality",
   "adminPlaybackEncoderPreset": "Encoder preset",
   "adminPlaybackH264Crf": "H.264 encoding CRF",
   "adminPlaybackH265Crf": "H.265 (HEVC) encoding CRF",
@@ -9198,8 +9821,6 @@
 
   "adminResumeVideo": "Video",
   "adminResumeAudiobooks": "Audiobooks",
-  "adminResumeMinAudiobookPct": "Minimum audiobook resume percentage",
-  "adminResumeMaxAudiobookPct": "Maximum audiobook resume percentage",
 
   "adminStreamingBitrateLimit": "Remote client bitrate limit (Mbps)",
   "adminStreamingBitrateLimitHint": "Leave empty or 0 for unlimited",
@@ -9251,22 +9872,12 @@
       "time": {"type": "String"}
     }
   },
-  "adminTaskTriggerInterval": "Every {duration}",
-  "@adminTaskTriggerInterval": {
-    "placeholders": {
-      "duration": {"type": "String"}
-    }
-  },
   "adminTaskTriggerStartup": "On application startup",
   "adminTaskTriggerTypeDaily": "Daily",
   "adminTaskTriggerTypeWeekly": "Weekly",
   "adminTaskTriggerTypeInterval": "On an interval",
   "adminTaskTriggerIntervalLabel": "Interval",
   "adminTaskTriggerEveryHour": "Every hour",
-  "adminTaskTriggerEvery6Hours": "Every 6 hours",
-  "adminTaskTriggerEvery12Hours": "Every 12 hours",
-  "adminTaskTriggerEvery24Hours": "Every 24 hours",
-  "adminTaskTriggerEvery2Days": "Every 2 days",
   "adminTaskTriggerHours": "{count, plural, one{1 hour} other{{count} hours}}",
   "@adminTaskTriggerHours": {
     "placeholders": {
@@ -9274,7 +9885,6 @@
     }
   },
   "adminTaskTriggerTime": "Time",
-  "adminTaskTriggerNoLimit": "No limit",
 
   "adminActivityJustNow": "Just now",
   "adminActivityLastHour": "Last hour",
@@ -9331,21 +9941,13 @@
   "adminNetworkingPublicHttpsPort": "Public HTTPS port",
   "adminNetworkingBaseUrl": "Base URL",
   "adminNetworkingBaseUrlHint": "e.g. /jellyfin",
-  "adminNetworkingHttps": "HTTPS",
   "adminNetworkingPublicHttpPort": "Public HTTP port",
   "adminNetworkingRequireHttps": "Require HTTPS",
   "adminNetworkingRequireHttpsHint": "Redirect all remote requests to HTTPS. Has no effect if the server has no valid certificate.",
   "adminNetworkingCertPassword": "Certificate password",
-  "adminNetworkingIpSettings": "IP Settings",
   "adminNetworkingEnableIpv4": "Enable IPv4",
   "adminNetworkingEnableIpv6": "Enable IPv6",
-  "adminNetworkingAutoDiscovery": "Enable automatic port mapping",
   "adminNetworkingLocalSubnets": "LAN networks",
-  "adminNetworkingLocalSubnetsHint": "Comma or line separated list of IP addresses or CIDR subnets treated as being on the local network.",
-  "adminNetworkingPublishedUris": "Published server URIs",
-  "adminNetworkingPublishedUriHint": "Map a subnet or address to a published URL, e.g. all=https://example.com",
-  "adminNetworkingCertPath": "Certificate path",
-  "adminNetworkingRemoteIpFilter": "Remote IP Filter",
   "adminNetworkingRemoteIpFilterLabel": "Remote IP filter",
 
   "adminPlaybackVaapiDevice": "VA-API device",
@@ -9392,7 +9994,6 @@
   "adminGeneralServerName": "Server name",
   "adminGeneralDisplayLanguage": "Preferred display language",
   "adminSettingsLoadFailed": "Failed to load settings",
-  "adminDiscover": "Discover",
   "adminChannelMappingsUpdateFailed": "Failed to update mappings: {error}",
   "@adminChannelMappingsUpdateFailed": {
     "placeholders": {
@@ -9508,7 +10109,6 @@
   "offlineSavedMedia": "Downloads",
   "offlineBannerTitle": "You're offline",
   "offlineBannerSubtitle": "Showing your downloads",
-  "offlineBannerAction": "Downloads",
   "serverUnreachableBannerTitle": "Can't reach your server",
   "serverUnreachableBannerSubtitle": "Playing from downloads until it's back",
 
@@ -9825,6 +10425,113 @@
   "@untrustedServerCertificate": {
     "description": "Shown on the sign-in screens when a server's TLS certificate is rejected, above a button that turns on Allow self-signed certificates"
   },
+  "clientCertTitle": "Client certificate",
+  "@clientCertTitle": {
+    "description": "Title of the dialog that imports a TLS client certificate for a server"
+  },
+  "clientCertHost": "Certificate for {host}",
+  "@clientCertHost": {
+    "description": "Names the server host the client certificate will be presented to",
+    "placeholders": {
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "clientCertChooseFile": "Choose file",
+  "@clientCertChooseFile": {
+    "description": "Button that picks a .p12 or .pfx file"
+  },
+  "clientCertPassword": "Certificate password",
+  "@clientCertPassword": {
+    "description": "Label for the password that unlocks the .p12 or .pfx file"
+  },
+  "clientCertStartUpload": "Send from phone",
+  "@clientCertStartUpload": {
+    "description": "Button on a TV that opens a one-time page a phone on the same network can send the certificate to"
+  },
+  "clientCertUploadHint": "Scan this code with your phone, or open the address in its browser, then pick the file and enter its password.",
+  "@clientCertUploadHint": {
+    "description": "Shown under the QR code while the TV waits for the phone to send the certificate"
+  },
+  "clientCertStopUpload": "Stop waiting",
+  "@clientCertStopUpload": {
+    "description": "Button that closes the phone upload page before a certificate arrives"
+  },
+  "clientCertNoFileData": "Couldn't read the file. Try again.",
+  "@clientCertNoFileData": {
+    "description": "Shown when the picked file has no contents"
+  },
+  "clientCertPickFailed": "Couldn't open the file picker.",
+  "@clientCertPickFailed": {
+    "description": "Shown when the file picker fails to open"
+  },
+  "clientCertUploadFailed": "Couldn't start the upload page. Try again.",
+  "@clientCertUploadFailed": {
+    "description": "Shown when the TV can't open the page the phone sends the certificate to"
+  },
+  "clientCertNoSecureStorage": "This device has no secure storage, so the certificate can't be saved. On Linux, install libsecret and try again.",
+  "@clientCertNoSecureStorage": {
+    "description": "Shown when there is no keychain or secret store to keep the certificate in"
+  },
+  "clientCertDecodeFailed": "Couldn't read that file as a certificate. Make sure it's a .p12 or .pfx.",
+  "@clientCertDecodeFailed": {
+    "description": "Shown when the file isn't a usable .p12 or .pfx"
+  },
+  "clientCertWrongPassword": "That password doesn't unlock this certificate.",
+  "@clientCertWrongPassword": {
+    "description": "Shown when the password for the .p12 or .pfx file is wrong"
+  },
+  "clientCertRequired": "This server needs a client certificate (mTLS). Add one for this host to continue.",
+  "@clientCertRequired": {
+    "description": "Shown on the sign-in screens when the server turned the connection away for lack of a client certificate"
+  },
+  "clientCertExpired": "The certificate for this server expired on {date}. Replace it to continue.",
+  "@clientCertExpired": {
+    "description": "Shown on the sign-in screen when the server turned the connection away and the stored certificate has expired",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "clientCertAddButton": "Add client certificate",
+  "@clientCertAddButton": {
+    "description": "Button that opens the certificate import from the add-server and sign-in screens"
+  },
+  "settingsClientCertificates": "Client certificates",
+  "@settingsClientCertificates": {
+    "description": "Settings entry that lists the imported client certificates"
+  },
+  "settingsClientCertificatesSubtitle": "Certificates this app presents to servers that require one (mTLS)",
+  "@settingsClientCertificatesSubtitle": {
+    "description": "Subtitle for the client certificates settings entry"
+  },
+  "clientCertSubject": "Subject",
+  "@clientCertSubject": {
+    "description": "Label for the name on a client certificate"
+  },
+  "clientCertExpires": "Expires {date}",
+  "@clientCertExpires": {
+    "description": "When a client certificate stops being valid",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "clientCertReplace": "Replace",
+  "@clientCertReplace": {
+    "description": "Button that imports a new certificate in place of the stored one for a host"
+  },
+  "clientCertAdd": "Add certificate",
+  "@clientCertAdd": {
+    "description": "Button that starts importing a certificate for a new host"
+  },
+  "clientCertAddHostPrompt": "Which server host needs a certificate?",
+  "@clientCertAddHostPrompt": {
+    "description": "Title of the prompt that asks which host a new certificate is for"
+  },
   "itemBlockedByParentalControls": "This isn't available",
   "@itemBlockedByParentalControls": {
     "description": "Shown instead of a title whose rating the viewer has blocked. Deliberately says nothing about what the title is."
@@ -9992,7 +10699,7 @@
   "settingsDoNothing": "Do Nothing",
   "settingsMaxBitrateDescription": "Cap the streaming bitrate. Content above this threshold will be transcoded to fit.",
   "settingsMaxResolutionDescription": "Limit the maximum resolution the player will request. Higher-resolution content will be transcoded down.",
-  "settingsPlayerZoomDescription": "How video should be scaled to fit the screen.",
+  "settingsPlayerZoomDescription": "How video is scaled to the screen. Zoom to Fill enlarges the picture until it fills the screen and cuts off the edges. It doesn't detect black bars.",
   "settingsPlaybackEngineAndroidTv": "Playback Engine (Android TV)",
   "settingsPlaybackEngineAndroidTvDescription": "Choose the default playback engine on Android TV devices. Changes apply to the next playback session.",
   "settingsPlaybackEngineMedia3Recommended": "Media3 (recommended)",
@@ -10050,7 +10757,7 @@
       }
     }
   },
-  "settingsLiveTvDirect": "Live TV Direct",
+  "settingsLiveTvDirect": "Live TV Direct Play",
   "settingsLiveTvDirectSubtitle": "Enable direct play for Live TV",
   "settingsOpenGroups": "Open Groups",
   "settingsOpenGroupsSubtitle": "Create, join, or manage SyncPlay groups",
@@ -10242,7 +10949,7 @@
     }
   },
   "savedThemesTitle": "Saved Themes",
-  "savedThemesDescription": "These are themes downloaded from the Moonfin plugin for the current server. Deleting removes only this local copy.",
+  "savedThemesDescription": "These are themes downloaded from the Foxfin plugin for the current server. Deleting removes only this local copy.",
   "savedThemesEmpty": "No saved themes were found for this server.",
   "savedThemesCurrentThemeId": "{themeId} • Currently active",
   "@savedThemesCurrentThemeId": {
@@ -10256,7 +10963,7 @@
   "savedThemesDeleteTooltip": "Delete saved theme",
   "savedThemesManageSubtitle": "Manage downloaded plugin themes on this device",
   "themeEditor": "Theme Editor",
-  "themeEditorSubtitle": "Open the Moonfin Theme Editor in your browser",
+  "themeEditorSubtitle": "Open the Foxfin Theme Editor in your browser",
   "homeScreen": "Home Screen",
   "bottomBar": "Bottom Bar",
   "homeRowsStyleClassic": "Classic",
@@ -10423,8 +11130,6 @@
   "appearancesSeerr": "Appearances (Seerr)",
   "crewContributionsSeerr": "Crew Contributions (Seerr)",
   "watchWithGroup": "Watch with group",
-  "errors": "Errors",
-  "warnings": "Warnings",
   "disk": "Disk",
   "openInBrowser": "Open in Browser",
   "achievementBadges": "Achievement Badges",
@@ -11471,8 +12176,6 @@
   "adminNoUsersMatchSearch": "No users match your search",
   "adminNoDevicesFound": "No devices found",
   "adminNoDevicesMatchCurrentFilters": "No devices match the current filters",
-  "passwordSet": "Password set",
-  "noPasswordConfigured": "No password configured",
   "remoteAccess": "Remote Access",
   "localOnly": "Local Only",
   "adminMediaAnalyticsLoadFailed": "Failed to load media analytics",
@@ -11492,6 +12195,17 @@
   "analyticsLibraryDetails": "Library Details",
   "analyticsLibraryBreakdown": "Library Breakdown",
   "analyticsNoLibrariesAvailable": "No libraries are available.",
+  "analyticsLibraryShare": "Share of items by library",
+  "analyticsTopRating": "Most common rating",
+  "analyticsTypicalRuntime": "Typical runtime",
+  "analyticsShareOfItems": "{percent}% of items",
+  "@analyticsShareOfItems": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
   "adminServerAdministrationTitle": "Server Administration",
   "adminServerPathData": "Data",
   "adminServerPathImageCache": "Image Cache",
@@ -11512,18 +12226,10 @@
   "userActivity": "User Activity",
   "systemEvents": "System Events",
   "needsAttention": "Needs Attention",
-  "adminDrawerSectionServer": "Server",
-  "adminDrawerSectionPlayback": "Playback",
-  "adminDrawerSectionDevices": "Devices",
-  "adminDrawerSectionAdvanced": "Advanced",
-  "adminDrawerSectionPlugins": "Plugins",
-  "adminDrawerSectionLiveTv": "Live TV",
   "homeVideos": "Home Videos",
   "mixedContent": "Mixed Content",
   "homeVideosAndPhotos": "Home Videos & Photos",
   "mixedMoviesAndShows": "Mixed Movies & Shows",
-  "intelQuickSync": "Intel Quick Sync",
-  "rockchipMpp": "Rockchip MPP",
   "dolbyVision": "Dolby Vision",
   "noRecordingsFound": "No recordings found",
   "noImagePagesFoundInArchive": "No image pages found inside .{extension} archive.",
@@ -11793,7 +12499,7 @@
   "@dismiss": {
     "description": "Dismiss button text"
   },
-  "libraryWriteAccessProactiveBody": "Your '{libraryName}' library is configured to save artwork directly into the media folders ('Save artwork into media folders' is enabled). However, Jellyfin has tested write access and does not have permission to write files into this directory:\n\n{failedPath}",
+  "libraryWriteAccessProactiveBody": "Your \"{libraryName}\" library is configured to save artwork directly into the media folders ('Save artwork into media folders' is enabled). However, Jellyfin has tested write access and does not have permission to write files into this directory:\n\n{failedPath}",
   "@libraryWriteAccessProactiveBody": {
     "description": "Proactive warning message about server write access",
     "placeholders": {
@@ -11987,30 +12693,6 @@
   "adminLabelYear": "Year",
   "@adminLabelYear": {
     "description": "Label for the release year field in the Identify dialog"
-  },
-  "adminLabelImdbId": "IMDb Id",
-  "@adminLabelImdbId": {
-    "description": "Label for the IMDb identifier field in the Identify dialog. IMDb is a brand name and is normally left untranslated"
-  },
-  "adminLabelTmdbMovieId": "TheMovieDb Movie Id",
-  "@adminLabelTmdbMovieId": {
-    "description": "Label for the TheMovieDb movie identifier field in the Identify dialog. TheMovieDb is a brand name and is normally left untranslated"
-  },
-  "adminLabelTmdbBoxSetId": "TheMovieDb Box Set Id",
-  "@adminLabelTmdbBoxSetId": {
-    "description": "Label for the TheMovieDb collection identifier field in the Identify dialog. TheMovieDb is a brand name and is normally left untranslated"
-  },
-  "adminLabelTvdbBoxSetId": "TheTVDB Box Set Id",
-  "@adminLabelTvdbBoxSetId": {
-    "description": "Label for the TheTVDB collection identifier field in the Identify dialog. TheTVDB is a brand name and is normally left untranslated"
-  },
-  "adminLabelTvdbId": "TheTVDB Numerical Id",
-  "@adminLabelTvdbId": {
-    "description": "Label for the numeric TheTVDB identifier field in the Identify dialog. TheTVDB is a brand name and is normally left untranslated"
-  },
-  "adminLabelTvdbSlug": "TheTVDB Slug Movie Id",
-  "@adminLabelTvdbSlug": {
-    "description": "Label for the TheTVDB slug identifier field in the Identify dialog. TheTVDB is a brand name and is normally left untranslated"
   },
   "adminReplaceImages": "Replace existing images",
   "@adminReplaceImages": {
@@ -12586,8 +13268,8 @@
   "@smartDownloadsEnable": {
     "description": "Switch that swaps a watched downloaded episode for the next episodes of the series"
   },
-  "smartDownloadsEnableSubtitle": "When you finish an episode on any device, Foxfin downloads the next ones. Downloaded episodes are deleted once watched.",
-  "@smartDownloadsEnableSubtitle": {
+  "smartDownloadsEnableDescription": "When you finish an episode on any device, Foxfin downloads the next ones. Episodes it downloads are deleted once watched.",
+  "@smartDownloadsEnableDescription": {
     "description": "Explains the smart downloads switch, including that watched episodes are deleted"
   },
   "smartDownloadsKeepReady": "Episodes to Keep Downloaded",
@@ -12631,9 +13313,25 @@
   "@autoDownloadDelete": {
     "description": "Setting that picks how soon an auto-downloaded episode is removed after it was watched"
   },
-  "autoDownloadDeleteSubtitle": "When to remove automatically downloaded episodes after you watch them",
-  "@autoDownloadDeleteSubtitle": {
+  "autoDownloadDeleteFollowedSubtitle": "When to remove episodes downloaded for series you follow, after you watch them",
+  "@autoDownloadDeleteFollowedSubtitle": {
     "description": "Explains the delete-after-watching setting"
+  },
+  "removeWatchedDownloads": "Remove Watched Downloads",
+  "@removeWatchedDownloads": {
+    "description": "Storage setting that picks how soon an episode or movie the user downloaded themselves is removed after it was watched"
+  },
+  "removeWatchedDownloadsSubtitle": "When to remove episodes and movies you downloaded yourself. Only those you watch after turning this on are removed",
+  "@removeWatchedDownloadsSubtitle": {
+    "description": "Explains the remove-watched-downloads setting"
+  },
+  "keepDownloaded": "Keep Downloaded",
+  "@keepDownloaded": {
+    "description": "Toggle on the download sheet that stops watched downloads of this title from being removed automatically"
+  },
+  "keepDownloadedSubtitle": "Never remove this automatically after watching",
+  "@keepDownloadedSubtitle": {
+    "description": "Explains the keep-downloaded toggle"
   },
   "autoDownloadDeleteNever": "Never",
   "@autoDownloadDeleteNever": {
@@ -13037,6 +13735,8 @@
   "@navYou": {
     "description": "Bottom bar tab that opens the user's own menu with their profile, extra destinations and settings"
   },
+  "cinemaSkipPrerolls": "Cinema Mode Skip Button",
+  "cinemaSkipPrerollsDescription": "Show a Skip button during Cinema Mode trailers, commercials, and other pre-rolls.",
   "detailsPage": "Details Page",
   "@detailsPage": {
     "description": "Settings entry and screen for options that shape the details page"
@@ -13192,5 +13892,90 @@
   "playerSettingsSubtitle": "Controls, seeking, player buttons, and trick play",
   "@playerSettingsSubtitle": {
     "description": "Subtitle for the Player entry on the Playback settings screen"
+  },
+  "playlistSortReleaseDate": "Release Date",
+  "@playlistSortReleaseDate": {
+    "description": "Label for sorting playlist items by release date"
+  },
+  "playlistSortCriticRating": "Critic Rating",
+  "@playlistSortCriticRating": {
+    "description": "Label for sorting playlist items by critic rating"
+  },
+  "playlistSortRuntime": "Runtime",
+  "@playlistSortRuntime": {
+    "description": "Label for sorting playlist items by runtime"
+  },
+  "playlistSortLastPlayed": "Last Played",
+  "@playlistSortLastPlayed": {
+    "description": "Label for sorting playlist items by last played date"
+  },
+  "playlistSortPlayCount": "Play Count",
+  "@playlistSortPlayCount": {
+    "description": "Label for sorting playlist items by play count"
+  },
+  "playlistSortRandom": "Random",
+  "@playlistSortRandom": {
+    "description": "Label for sorting playlist items randomly"
+  },
+  "playlistFilterActiveCount": "{count, plural, =1{1 active} other{{count} active}}",
+  "@playlistFilterActiveCount": {
+    "description": "Indicator of how many filters are currently active on a playlist",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playlistNoMatchingTracks": "No tracks match the active filters",
+  "@playlistNoMatchingTracks": {
+    "description": "Empty state message shown when playlist filters match no items"
+  },
+  "librarySortPlaylistOrder": "Playlist Order",
+  "@librarySortPlaylistOrder": {
+    "description": "Sort option: the playlist's own track order"
+  },
+  "librarySortDateAdded": "Date Added",
+  "@librarySortDateAdded": {
+    "description": "Sort option: when an item was added to the server library"
+  },
+  "librarySortDateEpisodeAdded": "Date Episode Added",
+  "@librarySortDateEpisodeAdded": {
+    "description": "Sort option for series: when the newest episode was added"
+  },
+  "librarySortParentalRating": "Parental Rating",
+  "@librarySortParentalRating": {
+    "description": "Sort option: by parental (age) rating such as PG-13"
+  },
+  "librarySortMyRating": "My Rating",
+  "@librarySortMyRating": {
+    "description": "Sort option: by the viewer's own like or dislike"
+  },
+  "librarySortAlbumArtist": "Album Artist",
+  "@librarySortAlbumArtist": {
+    "description": "Sort option for music: by album artist"
+  },
+  "librarySortAlbum": "Album",
+  "@librarySortAlbum": {
+    "description": "Sort option for music: by album name"
+  },
+  "librarySortArtist": "Artist",
+  "@librarySortArtist": {
+    "description": "Sort option for music: by track artist"
+  },
+  "librarySortTrackNumber": "Track Number",
+  "@librarySortTrackNumber": {
+    "description": "Sort option for music: by track number"
+  },
+  "librarySortGenre": "Genre",
+  "@librarySortGenre": {
+    "description": "Sort option: by genre"
+  },
+  "librarySortFoldersFirst": "Folders First",
+  "@librarySortFoldersFirst": {
+    "description": "Sort option for folder libraries: folders before files, then by name"
+  },
+  "librarySortLength": "Length",
+  "@librarySortLength": {
+    "description": "Sort option for music: by track or album length"
   }
 }

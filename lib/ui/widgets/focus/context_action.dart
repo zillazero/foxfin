@@ -63,6 +63,27 @@ const _identifiableTypes = <String>{
 
 bool canIdentifyItemType(String? type) => _identifiableTypes.contains(type);
 
+/// Takes [item] off the server's resume list and keeps its progress where the
+/// server can do that (Emby), or clears the progress that keeps it there where
+/// it can't. Audio always resets, because an audiobook library's Continue row
+/// falls back to an IsResumable query that ignores Emby's flag. A failed
+/// server call resets nothing.
+Future<void> _hideFromResumeOrReset(
+  ItemMutationRepository mutations,
+  AggregatedItem item,
+) async {
+  if (!item.isAudioLike) {
+    try {
+      if (await mutations.hideFromResume(item.id)) return;
+    } catch (_) {
+      return;
+    }
+  }
+  try {
+    await mutations.setPlayed(item.id, isPlayed: false);
+  } catch (_) {}
+}
+
 List<ItemContextAction> contextActionsFor(
   BuildContext context,
   AggregatedItem item, {
@@ -81,8 +102,6 @@ List<ItemContextAction> contextActionsFor(
       !requiresCollectionPermission ||
       currentUser?.canManageCollections == true ||
       isAdminUser;
-  final canRefreshMetadata =
-      client.serverType == ServerType.jellyfin && isAdminUser;
   final actions = <ItemContextAction>[];
   final type = item.type;
 
@@ -137,9 +156,7 @@ List<ItemContextAction> contextActionsFor(
           } else {
             await prefs.hideFromContinueWatching(item.id);
           }
-          try {
-            await mutations.setPlayed(item.id, isPlayed: false);
-          } catch (_) {}
+          await _hideFromResumeOrReset(mutations, item);
           onChanged?.call();
         },
       ));
@@ -155,9 +172,7 @@ List<ItemContextAction> contextActionsFor(
           final prefs = GetIt.instance<UserPreferences>();
           await prefs.hideFromNextUp(item.seriesId!);
           await prefs.hideFromContinueWatching(item.seriesId!);
-          try {
-            await mutations.setPlayed(item.id, isPlayed: false);
-          } catch (_) {}
+          await _hideFromResumeOrReset(mutations, item);
           onChanged?.call();
         },
       ));
@@ -224,7 +239,7 @@ List<ItemContextAction> contextActionsFor(
       },
     ));
 
-    if (canRefreshMetadata) {
+    if (isAdminUser) {
       actions.add(ItemContextAction(
         icon: Icons.refresh,
         label: l10n.adminRefreshMetadata,
@@ -318,7 +333,6 @@ List<ItemContextAction> contextActionsFor(
           type == 'MusicGenre' ||
           type == 'Studio' ||
           type == 'Network') &&
-      client.serverType == ServerType.jellyfin &&
       isAdminUser;
 
   if (canChangeArtwork) {

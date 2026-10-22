@@ -38,6 +38,9 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
     @Published var currentAudioTrackIndex: Int32 = -1
     @Published var currentSubtitleTrackIndex: Int32 = -1
     @Published var rate: Float = 1.0
+    /// Where a live stream can be rewound within, on the same clock as
+    /// `currentTime`. Nil when it keeps nothing to go back to.
+    @Published var seekableLiveRange: ClosedRange<Double>?
     @Published internal(set) var zoomMode: ZoomMode = .fit
 
     private(set) var videoView: PlatformView?
@@ -80,10 +83,12 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
         private var audioNowPlayingInfo: [String: Any] = [:]
         private var audioArtworkURL: String?
         private var audioArtwork: MPMediaItemArtwork?
+        private var pendingAudioMetadata: [String: Any]?
     #endif
     private var isLiveSession = false
     private var forceSubtitlesDisabledOnStart = false
     private var didEmitLoadError = false
+    private var didEmitAudioDrop = false
     private var lastErrorMessage: String?
     private var lastPhase: PlaybackPhase = .idle
     private var sawPlaybackThisLoad = false
@@ -121,6 +126,7 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
     // ASS rendering (only active when a libass build is linked).
     private let assRenderer = AssRenderer()
     private var assConfiguredForTrackID: Int?
+    private var assConfiguredHeader: String?
     private var assSeenCueIDs = Set<Int>()
 
     // ASS render cadence: engine.clock.$sourceTime arrives on the engine's
@@ -135,11 +141,11 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
     private var lastKnownSourceTime: Double = 0
     private var lastKnownSourceTimeHostTime: CFTimeInterval = 0
 
-    /// On iOS, `audio_service` (Flutter) owns MPRemoteCommandCenter and the
-    /// Now Playing card, and the wrapper driving them too would
-    /// double-register handlers. Only tvOS drives Now Playing natively.
+    /// Video gets a Now Playing session bound to its AVPlayer. On iOS the
+    /// shared centers stay with `audio_service`, but they can't win Now Playing
+    /// back once Picture in Picture or another app has taken it.
     private static var drivesNowPlaying: Bool {
-        #if os(tvOS)
+        #if os(iOS) || os(tvOS)
             return true
         #else
             return false
@@ -149,8 +155,8 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
     override init() {
         super.init()
         #if os(iOS) || os(tvOS)
-            // On iOS the handlers only ever land on the engine's music
-            // session, which audio_service has no way to reach.
+            // On iOS the handlers only ever land on a session, the video
+            // player's or the engine's music one, never the shared center.
             wireNowPlaying()
         #endif
         subscribeToEngine()
@@ -252,6 +258,11 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
             }
             .store(in: &cancellables)
 
+        engine.clock.$seekableLiveRange
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] range in self?.seekableLiveRange = range }
+            .store(in: &cancellables)
+
         engine.clock.$bufferedPosition
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
@@ -293,13 +304,21 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
             .sink { [weak self] id in
                 guard let self else { return }
                 self.currentSubtitleTrackIndex = self.ordinal(for: id, in: self.subtitleTable)
-                if id == nil { self.resetAssState() }
+                self.subtitleOverlay.keepsVideoComposited = id != nil
+                self.resetAssState()
             }
             .store(in: &cancellables)
 
         engine.$subtitleCues
+            .combineLatest(engine.$sidecarASSHeader)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] cues in self?.applySubtitleCues(cues) }
+            .sink { [weak self, weak engine] _ in
+                guard let engine else { return }
+                // Sidecar decoding publishes cues before their ASS header. Read
+                // the current pair after delivery, including when a track switch
+                // has superseded a queued publication.
+                self?.applySubtitleCues(engine.subtitleCues)
+            }
             .store(in: &cancellables)
 
         // Rebind Now Playing on EVERY player republish: the engine swaps
@@ -320,6 +339,21 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 self?.emitError(kind: "live_source_reset", recoverable: true, message: "Live source reset")
+            }
+            .store(in: &cancellables)
+
+        // When the engine can't deliver the audio it keeps playing without
+        // sound instead of failing, so the transcode has to be asked for here.
+        engine.$audioDelivery
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] delivery in
+                guard let self, delivery == .droppedNoPipeline,
+                    !self.didEmitLoadError, !self.didEmitAudioDrop
+                else { return }
+                self.didEmitAudioDrop = true
+                self.emitError(
+                    kind: "unsupported_audio", recoverable: true,
+                    message: "The audio track couldn't be played")
             }
             .store(in: &cancellables)
     }
@@ -447,6 +481,7 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
             self.onNowPlayingCommand?([
                 "event": "seek",
                 "positionMs": Int((target * 1000).rounded()),
+                "isForwardSkip": delta > 0,
             ])
         }
         nowPlaying.onNext = { [weak self] in
@@ -466,8 +501,7 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
         let title = (args["topTitle"] as? String) ?? ""
         let subtitle = (args["topSubtitle"] as? String) ?? ""
         let logo = args["logoUrl"] as? String
-        // The engine's music session only exists on iOS and tvOS, and only tvOS
-        // drives Now Playing for video.
+        // The engine's music session only exists on iOS and tvOS.
         #if os(iOS) || os(tvOS)
             nowPlaying.setQueueCapabilities(
                 hasNext: (args["hasNext"] as? Bool) ?? false,
@@ -487,6 +521,13 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
                 loadAudioArtwork(logo)
                 publishAudioNowPlaying()
                 return
+            }
+            // Flutter sends the first song's info before its play(audioOnly:),
+            // so hold it until the music session opens. Info that comes in
+            // while a video plays belongs to that video.
+            switch state {
+            case .idle, .stopped, .ended, .error: pendingAudioMetadata = args
+            default: break
             }
         #endif
         guard Self.drivesNowPlaying else { return }
@@ -513,7 +554,7 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
             audioArtwork = nil
             guard let urlString = wanted, let url = URL(string: urlString) else { return }
             Task { [weak self] in
-                guard let (data, _) = try? await URLSession.shared.data(from: url),
+                guard let (data, _) = try? await MoonfinURLSession.shared.data(from: url),
                     let artwork = Self.audioArtwork(from: data),
                     let self, self.audioArtworkURL == urlString
                 else { return }
@@ -727,8 +768,15 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
             engine.stop(resetDisplayCriteria: false)
         }
         isAudioOnlySession = audioOnly
+        #if os(iOS) || os(tvOS)
+            if audioOnly, let pending = pendingAudioMetadata {
+                applyNowPlayingMetadata(pending)
+            }
+            pendingAudioMetadata = nil
+        #endif
         isLiveSession = sourceConfiguration.isLive
         didEmitLoadError = false
+        didEmitAudioDrop = false
         resetStallTracking()
         resetAssState()
         subtitleOverlay.clear()
@@ -800,6 +848,12 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
                 // can only be adopted once the load returns.
                 if audioOnly {
                     nowPlaying.adopt(session: engine.audioNowPlayingSession)
+                } else {
+                    #if os(iOS)
+                        // A load into the same AVPlayer keeps its session, which
+                        // another app may have taken in the meantime.
+                        nowPlaying.reclaim()
+                    #endif
                 }
                 nowPlaying.setIntervalSkipsEnabled(!audioOnly)
             #endif
@@ -916,6 +970,10 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
 
     func seek(to seconds: TimeInterval) {
         Task { await Self.sharedEngine()?.seek(to: seconds) }
+    }
+
+    func seekToLiveEdge() {
+        Task { await Self.sharedEngine()?.seekToLiveEdge() }
     }
 
     func seekBy(_ delta: TimeInterval) {
@@ -1162,8 +1220,11 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
         let activeTrack = subtitleTable.first { $0.id == engine.activeSubtitleTrackIndex }
 
         #if canImport(Libass)
-            if let track = activeTrack, track.assHeader != nil {
-                configureAssIfNeeded(for: track, engine: engine)
+            if let track = activeTrack,
+                let header = track.isExternal ? engine.sidecarASSHeader : track.assHeader,
+                configureAssIfNeeded(for: track, header: header, engine: engine)
+            {
+                subtitleOverlay.setEvents([])
                 for cue in cues where !assSeenCueIDs.contains(cue.id) {
                     assSeenCueIDs.insert(cue.id)
                     if let line = cue.text {
@@ -1178,6 +1239,7 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
             }
         #endif
 
+        resetAssState()
         let events = cues.map { cue -> SubtitleEvent in
             switch cue.body {
             case .text(let text):
@@ -1227,17 +1289,23 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
     #endif
 
     #if canImport(Libass)
-        private func configureAssIfNeeded(for track: TrackInfo, engine: AetherEngine) {
-            guard assConfiguredForTrackID != track.id else { return }
+        private func configureAssIfNeeded(
+            for track: TrackInfo, header: String, engine: AetherEngine
+        ) -> Bool {
+            if assConfiguredForTrackID == track.id && assConfiguredHeader == header {
+                return true
+            }
+            resetAssState()
             let attachments = engine.fontAttachments.map { ($0.filename, $0.data) }
             let fontsDir = SubtitleFontLocator.materializeFontsDirectory(attachments: attachments)
-            if assRenderer.configure(
-                header: track.assHeader.flatMap { $0.data(using: .utf8) },
+            guard assRenderer.configure(
+                header: header.data(using: .utf8),
                 fontsDir: fontsDir
-            ) {
-                assConfiguredForTrackID = track.id
-                startAssDisplayLinkIfNeeded()
-            }
+            ) else { return false }
+            assConfiguredForTrackID = track.id
+            assConfiguredHeader = header
+            startAssDisplayLinkIfNeeded()
+            return true
         }
 
         /// Drives libass at display rate. See comment on `assDisplayLink`.
@@ -1299,6 +1367,7 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
             stopAssDisplayLink()
         #endif
         assConfiguredForTrackID = nil
+        assConfiguredHeader = nil
         assSeenCueIDs.removeAll()
         subtitleOverlay.showAssImage(nil)
     }
@@ -1338,7 +1407,7 @@ final class AetherPlayerWrapper: NSObject, ObservableObject {
         guard let engine = Self.sharedEngine() else { return }
         switch mode {
         case .fit: engine.videoGravity = .resizeAspect
-        case .autoCrop: engine.videoGravity = .resizeAspectFill
+        case .zoomToFill: engine.videoGravity = .resizeAspectFill
         case .stretch: engine.videoGravity = .resize
         }
     }

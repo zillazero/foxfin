@@ -14,6 +14,7 @@ import '../../../data/services/plugin_sync_service.dart';
 import '../../../data/services/seerr/seerr_api_models.dart';
 import '../../../data/services/seerr/seerr_models.dart';
 import '../../../l10n/app_localizations.dart';
+import 'fox_seerr_direct_tile.dart';
 import '../../../preference/preference_constants.dart';
 import '../../../preference/seerr_preferences.dart';
 import '../../../preference/seerr_row_config.dart';
@@ -135,7 +136,8 @@ class _SeerrConfigScreenState extends State<SeerrConfigScreen> {
   }
 
   Future<void> _loadSeerrStatus({bool showLoading = false}) async {
-    if (!_syncService.pluginAvailable || !_syncService.seerrEnabled) {
+    if (!_syncService.directSeerr &&
+        (!_syncService.pluginAvailable || !_syncService.seerrEnabled)) {
       if (!mounted) return;
       setState(() {
         _seerrStatus = null;
@@ -427,8 +429,8 @@ class _SeerrConfigScreenState extends State<SeerrConfigScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final seerrAvailable =
-        _syncService.pluginAvailable && _syncService.seerrEnabled;
+    final seerrAvailable = _syncService.directSeerr ||
+        (_syncService.pluginAvailable && _syncService.seerrEnabled);
     final showSeerrSettings = seerrAvailable && _seerrPrefs.enabled;
     final seerrLabel = _seerrPrefs.labelOrDefault(l10n.seerr);
 
@@ -467,6 +469,13 @@ class _SeerrConfigScreenState extends State<SeerrConfigScreen> {
   ) {
     return Column(
       children: [
+        FoxSeerrDirectTile(
+          onChanged: () async {
+            await _syncService.refreshDirectSeerr();
+            if (mounted) setState(() {});
+            await _loadSeerrStatus(showLoading: true);
+          },
+        ),
         if (seerrAvailable)
           TvFocusHighlight(
             builder: (context, focused) => SwitchListTile.adaptive(

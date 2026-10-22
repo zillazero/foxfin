@@ -1,3 +1,5 @@
+import 'access_schedule.dart';
+
 class UserPolicy {
   final bool isAdministrator;
   final bool isHidden;
@@ -36,6 +38,9 @@ class UserPolicy {
   final int? maxActiveSessions;
   final String authenticationProviderId;
   final String passwordResetProviderId;
+
+  /// The policy exactly as the server sent it, every key included.
+  final Map<String, dynamic> _raw;
 
   const UserPolicy({
     this.isAdministrator = false,
@@ -77,7 +82,8 @@ class UserPolicy {
         'Jellyfin.Server.Implementations.Users.DefaultAuthenticationProvider',
     this.passwordResetProviderId =
         'Jellyfin.Server.Implementations.Users.DefaultPasswordResetProvider',
-  });
+    Map<String, dynamic> raw = const {},
+  }) : _raw = raw;
 
   factory UserPolicy.fromJson(Map<String, dynamic> json) => UserPolicy(
         isAdministrator: json['IsAdministrator'] as bool? ?? false,
@@ -136,9 +142,16 @@ class UserPolicy {
             'Jellyfin.Server.Implementations.Users.DefaultAuthenticationProvider',
         passwordResetProviderId: json['PasswordResetProviderId'] as String? ??
             'Jellyfin.Server.Implementations.Users.DefaultPasswordResetProvider',
+        raw: json,
       );
 
-  Map<String, dynamic> toJson() => {
+  /// The server replaces the whole policy on POST and resets every key the
+  /// body leaves out, so a policy read from the server goes back as it came.
+  /// The class has no copyWith, so that map is always the current value.
+  Map<String, dynamic> toJson() =>
+      _raw.isNotEmpty ? Map<String, dynamic>.from(_raw) : _typedJson();
+
+  Map<String, dynamic> _typedJson() => {
         'IsAdministrator': isAdministrator,
         'IsHidden': isHidden,
         'IsDisabled': isDisabled,
@@ -181,6 +194,18 @@ class UserPolicy {
         'AuthenticationProviderId': authenticationProviderId,
         'PasswordResetProviderId': passwordResetProviderId,
       };
+
+  /// The hours the user may use the server, empty for no limit. Read from the
+  /// server's own policy, so entries this client can't read are left out.
+  List<AccessSchedule> get accessSchedules {
+    final entries = _raw['AccessSchedules'];
+    if (entries is! List) return const [];
+    return [
+      for (final entry in entries)
+        if (entry is Map)
+          AccessSchedule.fromJson(Map<String, dynamic>.from(entry)),
+    ];
+  }
 
   /// Whether the user may search for and pull in subtitles from a provider.
   ///
