@@ -5,6 +5,7 @@ import 'package:flutter_tvos/flutter_tvos.dart'
 import 'package:moonfin_design/moonfin_design.dart';
 
 import 'seerr/seerr_media_type_badge.dart';
+import '../../preference/fox_ui_prefs.dart';
 import '../../preference/preference_constants.dart';
 import '../../util/platform_detection.dart';
 import '../../util/focus/dpad_keys.dart';
@@ -718,8 +719,18 @@ class _CardImage extends StatelessWidget {
             ? Colors.white
             : Theme.of(context).colorScheme.primary);
     final borders = ThemeRegistry.active.borders;
-    final showGlow =
-        showBorder && !suppressFocusGlow && borders.focusGlow.isNotEmpty;
+    // Foxfin 2.8.5: Fokus-Glow in Theme-Akzentfarbe, respektiert Effekt-Schalter.
+    final foxGlowOk = !FoxUi.hideEffects && !FoxUi.lowMemoryDevice;
+    final glowShadows = borders.focusGlow.isNotEmpty
+        ? borders.focusGlow
+        : <BoxShadow>[
+            BoxShadow(
+              color: borderColor.withValues(alpha: 0.45),
+              blurRadius: 14,
+              spreadRadius: 1,
+            ),
+          ];
+    final showGlow = showBorder && !suppressFocusGlow && foxGlowOk;
 
     return AspectRatio(
       aspectRatio: aspectRatio,
@@ -740,7 +751,7 @@ class _CardImage extends StatelessWidget {
                         ? AppRadius.circular(radius + _focusRingInset)
                         : borders.cardRadius +
                               AppRadius.circular(_focusRingInset),
-                    boxShadow: borders.focusGlow,
+                    boxShadow: glowShadows,
                   ),
                 ),
               ),

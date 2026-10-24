@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'preference/fox_ui_prefs.dart';
 import 'fox/fox_focus_guard.dart';
+import 'fox/fox_start_splash.dart';
 import 'fox/fox_focus_guard.dart';
 import 'integrations/fox_sso/fox_sync_service.dart';
 
@@ -301,6 +302,7 @@ class _MoonfinAppState extends State<MoonfinApp> {
                                       ],
                                     ),
                                   ),
+                                  const Positioned.fill(child: FoxStartSplash()),
                                 ],
                               ),
                             ),

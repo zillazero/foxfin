@@ -121,7 +121,17 @@ class _HorizontalScrollSectionState extends State<HorizontalScrollSection> {
               children: [
                 if (widget.title.isEmpty)
                   const Spacer()
-                else
+                else ...[
+                  // Foxfin 2.8.5: FOX-Zeilenkopf mit Akzentbalken.
+                  Container(
+                    width: 4,
+                    height: 20,
+                    margin: const EdgeInsetsDirectional.only(end: 10),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
                   Expanded(
                     child: Text(
                       widget.title,
@@ -129,6 +139,7 @@ class _HorizontalScrollSectionState extends State<HorizontalScrollSection> {
                           Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
+                ],
                 if (widget.trailing != null) widget.trailing!,
                 // Hidden rather than left out, so a section without them keeps
                 // the same header height and its row starts as far under the

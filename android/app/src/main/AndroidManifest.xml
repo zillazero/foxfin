@@ -25,6 +25,7 @@
     <uses-permission android:name="site.pk187.permission.SSO" />
     <queries>
         <package android:name="site.pk187.foxstore" />
+        <package android:name="site.pk187.foxplayer" />
         <provider android:authorities="site.pk187.foxstore.sso" />
     </queries>
     <application

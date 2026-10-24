@@ -999,6 +999,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   @override
   void dispose() {
+    _foxSleepTimer?.cancel();
     if (kIsWeb) unawaited(BrowserContextMenu.enableContextMenu());
     _cancelPopAfterBackKeyUp?.call();
     _trickplayLoadGeneration++;
@@ -6075,6 +6076,18 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                   ? l10n.playerTooltipUnlockOrientation
                   : l10n.playerTooltipLockLandscape,
             ),
+          if (shows(OsdButton.sleepTimer))
+            OsdButton.sleepTimer: _controlButton(
+              _foxSleepTimer != null
+                  ? Icons.bedtime_rounded
+                  : Icons.bedtime_outlined,
+              onPressed: _showFoxSleepTimer,
+              size: secondaryIconSize,
+              extent: secondaryExtent,
+              tooltip: _foxSleepTimer != null
+                  ? 'Sleep-Timer: endet ${TimeOfDay.fromDateTime(_foxSleepEnd!).format(context)}'
+                  : 'Sleep-Timer',
+            ),
           if (shows(OsdButton.info))
             OsdButton.info: _controlButton(
               Icons.info_outline_rounded,
@@ -8169,6 +8182,55 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       1 => l10n.mono,
       _ => l10n.channelsCount(channels),
     };
+  }
+
+  // Foxfin 2.8.5: Sleep-Timer für Videos (pausiert die Wiedergabe).
+  Timer? _foxSleepTimer;
+  DateTime? _foxSleepEnd;
+
+  void _setFoxSleep(Duration? d) {
+    _foxSleepTimer?.cancel();
+    _foxSleepTimer = null;
+    _foxSleepEnd = null;
+    if (d != null && d > Duration.zero) {
+      _foxSleepEnd = DateTime.now().add(d);
+      _foxSleepTimer = Timer(d, () {
+        _foxSleepTimer = null;
+        _foxSleepEnd = null;
+        _manager.pause();
+        if (mounted) setState(() {});
+      });
+    }
+    if (mounted) setState(() {});
+  }
+
+  Future<void> _showFoxSleepTimer() async {
+    final pos = _state.position;
+    final dur = _state.duration;
+    final options = <(String, Duration?)>[
+      ('Aus', null),
+      ('15 Minuten', const Duration(minutes: 15)),
+      ('30 Minuten', const Duration(minutes: 30)),
+      ('45 Minuten', const Duration(minutes: 45)),
+      ('60 Minuten', const Duration(minutes: 60)),
+      ('90 Minuten', const Duration(minutes: 90)),
+      if (dur > pos && dur > Duration.zero) ('Ende dieses Titels', dur - pos),
+    ];
+    final picked = await showDialog<int>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        title: const Text('Sleep-Timer'),
+        children: [
+          for (var i = 0; i < options.length; i++)
+            SimpleDialogOption(
+              onPressed: () => Navigator.of(ctx).pop(i),
+              child: Text(options[i].$1),
+            ),
+        ],
+      ),
+    );
+    if (picked == null) return;
+    _setFoxSleep(options[picked].$2);
   }
 
   void _showStreamInfo() {

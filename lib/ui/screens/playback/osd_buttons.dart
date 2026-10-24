@@ -29,6 +29,7 @@ enum OsdButton {
   zoom('zoom'),
   orientation('orientation'),
   info('info'),
+  sleepTimer('sleepTimer'),
   fullscreen('fullscreen'),
   floatOnTop('floatOnTop');
 
@@ -65,6 +66,7 @@ enum OsdButton {
     OsdButton.zoom => Icons.zoom_out_map,
     OsdButton.orientation => Icons.screen_rotation_outlined,
     OsdButton.info => Icons.info_outline_rounded,
+    OsdButton.sleepTimer => Icons.bedtime_outlined,
     OsdButton.fullscreen => Icons.fullscreen_rounded,
     OsdButton.floatOnTop => Icons.push_pin_outlined,
   };
@@ -85,6 +87,7 @@ enum OsdButton {
     OsdButton.zoom => l10n.playerZoomMode,
     OsdButton.orientation => l10n.orientationLock,
     OsdButton.info => l10n.playbackInformation,
+    OsdButton.sleepTimer => 'Sleep-Timer',
     OsdButton.fullscreen => l10n.fullscreen,
     OsdButton.floatOnTop => l10n.playerTooltipFloatOnTop,
   };

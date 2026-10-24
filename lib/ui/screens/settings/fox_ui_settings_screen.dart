@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
 
+import '../../../fox/fox_settings_backup.dart';
 import '../../../fox/fox_ui_runtime.dart';
 import '../../../preference/fox_ui_prefs.dart';
 import '../../../preference/preference_constants.dart';
@@ -248,11 +249,61 @@ class _FoxUiSettingsScreenState extends State<FoxUiSettingsScreen> {
                     '${limit > 0 ? ' von ${limit >= 1024 ? '${limit ~/ 1024} GB' : '$limit MB'}' : ''}'),
             onTap: _clearing ? null : _clearCache,
           ),
+          const SettingsSectionHeader('FOX-Apps'),
+          DpadListTile(
+            useSettingsIconShell: true,
+            leading: const Icon(Icons.live_tv_rounded),
+            title: const Text('Im FOX-Player öffnen'),
+            subtitle: const Text('Live-TV im FOX-Player – sonst Installation über den FOX Store'),
+            onTap: () async {
+              final r = await foxOpenFoxPlayer();
+              if (!mounted) return;
+              _foxSnack(switch (r) {
+                'player' => 'FOX-Player wird geöffnet …',
+                'store' => 'FOX-Player nicht installiert – FOX Store wird geöffnet.',
+                'web' => 'FOX-Player nicht installiert – Download-Seite wird geöffnet.',
+                _ => 'FOX-Player und FOX Store konnten nicht geöffnet werden.',
+              });
+            },
+          ),
+          DpadListTile(
+            useSettingsIconShell: true,
+            leading: const Icon(Icons.save_alt_rounded),
+            title: const Text('Einstellungen sichern'),
+            subtitle: const Text('Als JSON-Datei – ohne Server, Konten, Tokens oder Passwörter'),
+            onTap: () async {
+              try {
+                final r = await foxExportSettings();
+                if (mounted && r == 'saved') _foxSnack('Einstellungen gesichert.');
+              } catch (e) {
+                if (mounted) _foxSnack('Sichern fehlgeschlagen.');
+              }
+            },
+          ),
+          DpadListTile(
+            useSettingsIconShell: true,
+            leading: const Icon(Icons.settings_backup_restore_rounded),
+            title: const Text('Einstellungen wiederherstellen'),
+            subtitle: const Text('Foxfin-Sicherung laden – danach App neu starten'),
+            onTap: () async {
+              try {
+                final n = await foxImportSettings();
+                if (mounted && n >= 0) {
+                  _foxSnack('$n Einstellungen übernommen – bitte App neu starten.');
+                }
+              } catch (e) {
+                if (mounted) _foxSnack('Datei ist keine gültige Foxfin-Sicherung.');
+              }
+            },
+          ),
           const SizedBox(height: 32),
         ]),
       ),
     );
   }
+
+  void _foxSnack(String t) =>
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(SnackBar(content: Text(t)));
 
   static String _dur(int m) => m < 1440 ? '${m ~/ 60} Std.' : '${m ~/ 1440} Tage';
 }

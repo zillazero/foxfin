@@ -58,7 +58,33 @@ class FoxSsoChannel(context: Context) : MethodChannel.MethodCallHandler {
         }
     }
 
+    // Foxfin 2.8.5: "Im FOX-Player öffnen". Startet FOX-Player (foxplayer://live),
+    // sonst die FOX-Store-Seite des Pakets, sonst den Browser.
+    private fun openFoxPlayer(): String {
+        val pm = app.packageManager
+        val flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+        val player = "site.pk187.foxplayer"
+        runCatching {
+            val i = android.content.Intent(android.content.Intent.ACTION_VIEW,
+                android.net.Uri.parse("foxplayer://live")).setPackage(player).addFlags(flags)
+            if (i.resolveActivity(pm) != null) { app.startActivity(i); return "player" }
+        }
+        runCatching {
+            pm.getLaunchIntentForPackage(player)?.let { app.startActivity(it.addFlags(flags)); return "player" }
+        }
+        val page = android.net.Uri.parse("https://apps.pk187.site/app/foxplayer")
+        runCatching {
+            val i = android.content.Intent(android.content.Intent.ACTION_VIEW, page)
+                .setPackage(FoxSso.STORE_PACKAGE).addFlags(flags)
+            if (i.resolveActivity(pm) != null) { app.startActivity(i); return "store" }
+        }
+        return runCatching {
+            app.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, page).addFlags(flags)); "web"
+        }.getOrDefault("none")
+    }
+
     private suspend fun handle(call: MethodCall): Any? = when (call.method) {
+        "openFoxPlayer" -> withContext(Dispatchers.Main) { openFoxPlayer() }
         "status" -> mapOf(
             "storeAvailable" to FoxSsoClient.isStoreAvailable(app),
             "storeLoggedIn" to runCatching { FoxSsoClient.isStoreLoggedIn(app) }.getOrDefault(false),

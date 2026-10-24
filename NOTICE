@@ -60,3 +60,6 @@ Changes in Foxfin 2.8.4 (2026-10-24):
 - First-start navigation per device: sidebar on TV and tablet, bottom bar
   on phones (explicit choices are kept).
 - Sidebar: smoother expand, FOX accent edge, glass off with effects off.
+
+Foxfin 2.8.5: Video-Sleep-Timer, Einstellungs-Sicherung (ohne Geheimnisse),
+"Im FOX-Player öffnen" (Fallback FOX Store), FOX-Zeilenköpfe und Akzent-Fokus-Glow.
