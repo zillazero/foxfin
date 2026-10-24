@@ -3,14 +3,40 @@ import 'dart:async';
 
 import '../preference/fox_ui_prefs.dart';
 import '../preference/user_preferences.dart';
+import 'package:flutter/widgets.dart' show WidgetsBinding;
+
+import '../preference/preference_constants.dart';
 import '../util/device_performance.dart';
+import '../util/platform_detection.dart';
 import '../util/tv_image_cache_stub.dart'
     if (dart.library.io) '../util/tv_image_cache_io.dart';
 
 /// "auto" resolves by device class: a low-memory device (e.g. waipu.tv 4K
 /// Stick, ~2 GB) gets small images and reduced animations, a strong one
 /// (e.g. Shield Pro) medium images and full animations.
+/// Erststart: Navigation passend zum Gerät – Seitenleiste auf TV und Tablet,
+/// untere Leiste auf dem Handy. Eine eigene Wahl wird nie überschrieben.
+void _foxSeedNavbar(UserPreferences p) {
+  try {
+    if (p.containsPreferenceKey(UserPreferences.navbarPosition.key)) return;
+    NavbarPosition pos;
+    if (PlatformDetection.isTV) {
+      pos = NavbarPosition.left;
+    } else if (PlatformDetection.useMobileUi && !PlatformDetection.isWeb) {
+      final views = WidgetsBinding.instance.platformDispatcher.views;
+      if (views.isEmpty) return;
+      final v = views.first;
+      final size = v.physicalSize / v.devicePixelRatio;
+      pos = size.shortestSide >= 600 ? NavbarPosition.left : NavbarPosition.bottom;
+    } else {
+      return;
+    }
+    p.set(UserPreferences.navbarPosition, pos);
+  } catch (_) {}
+}
+
 void foxUiLoad(UserPreferences p) {
+  _foxSeedNavbar(p);
   final weak = p.resolveDevicePerformanceTier() == DevicePerformanceTier.reduced;
   FoxUi.lowMemoryDevice = weak;
   final size = p.get(FoxUiPrefs.imageSize);

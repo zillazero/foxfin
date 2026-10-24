@@ -184,13 +184,14 @@ class HomeSectionConfig {
   bool get isPluginDynamic => kind == HomeSectionKind.pluginDynamic;
 
   static List<HomeSectionConfig> defaults() => const [
+    // Foxfin: „Weiterschauen“ zuerst, dann „Als Nächstes“, dann Bibliotheken.
+    HomeSectionConfig(type: HomeSectionType.resume, enabled: true, order: 0),
+    HomeSectionConfig(type: HomeSectionType.nextUp, enabled: true, order: 1),
     HomeSectionConfig(
       type: HomeSectionType.libraryTilesSmall,
       enabled: true,
-      order: 0,
+      order: 2,
     ),
-    HomeSectionConfig(type: HomeSectionType.resume, enabled: true, order: 1),
-    HomeSectionConfig(type: HomeSectionType.nextUp, enabled: true, order: 2),
     HomeSectionConfig(
       type: HomeSectionType.latestMedia,
       enabled: true,

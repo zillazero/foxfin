@@ -53,3 +53,10 @@ Changes in Foxfin 2.8.3 (2026-10-24):
     Copyright (c) 2021 Advanced Micro Devices, Inc. – MIT License.
   * Anime4K by bloc97 (Anime4K_*.glsl), Copyright (c) 2019 bloc97 – MIT
     License, see assets/shaders/LICENSE-Anime4K.txt.
+
+Changes in Foxfin 2.8.4 (2026-10-24):
+- Home: "Weiterschauen" and "Als Nächstes" first in the default layout;
+  static skeleton placeholders on weak devices / with effects off.
+- First-start navigation per device: sidebar on TV and tablet, bottom bar
+  on phones (explicit choices are kept).
+- Sidebar: smoother expand, FOX accent edge, glass off with effects off.

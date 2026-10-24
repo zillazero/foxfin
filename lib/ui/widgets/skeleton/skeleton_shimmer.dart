@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
+import '../../../preference/fox_ui_prefs.dart';
+
 class _ShimmerScope extends InheritedWidget {
   const _ShimmerScope({required super.child});
 
@@ -26,6 +28,13 @@ class SkeletonShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     if (context.getInheritedWidgetOfExactType<_ShimmerScope>() != null) {
       return child;
+    }
+    // Foxfin: auf schwachen Geräten / ohne Effekte statisch (kein Ticker).
+    if (FoxUi.lowMemoryDevice ||
+        FoxUi.hideEffects ||
+        FoxUi.animations == FoxAnimationLevel.aus ||
+        MediaQuery.maybeDisableAnimationsOf(context) == true) {
+      return _ShimmerScope(child: Opacity(opacity: 0.7, child: child));
     }
     return _ShimmerScope(child: _ShimmerAnimation(child: child));
   }

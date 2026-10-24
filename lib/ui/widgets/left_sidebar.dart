@@ -16,6 +16,7 @@ import '../../data/repositories/user_views_repository.dart';
 import '../../data/services/achievements_service.dart';
 import '../../data/services/library_scope_service.dart';
 import '../../data/services/plugin_sync_service.dart';
+import '../../preference/fox_ui_prefs.dart';
 import '../../preference/preference_constants.dart';
 import '../../preference/seerr_preferences.dart';
 import '../../preference/user_preferences.dart';
@@ -55,7 +56,10 @@ import 'adaptive/sf_symbol.dart';
 
 const _kExpandedWidthDesktop = 240.0;
 const _kExpandedWidthMobile = 260.0;
-const _kExpandDuration = Duration(milliseconds: 200);
+// Foxfin: weicheres Aufklappen; bei "Aus" sofort.
+Duration get _kExpandDuration => FoxUi.animations == FoxAnimationLevel.aus
+    ? Duration.zero
+    : const Duration(milliseconds: 240);
 const _kExpandedWidthTV = 280.0;
 const _kCollapsedWidthTV = 72.0;
 const _kExpandedBackdropWidthTV = _kExpandedWidthTV - 16.0;
@@ -633,7 +637,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
           ),
         AnimatedPositioned(
           duration: _kExpandDuration,
-          curve: Curves.easeInOut,
+          curve: Curves.easeOutCubic,
           left: _isExpanded ? 0 : -expandedWidth,
           top: 0,
           bottom: 0,
@@ -773,7 +777,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
 
     final rail = AnimatedContainer(
       duration: _kExpandDuration,
-      curve: Curves.easeInOut,
+      curve: Curves.easeOutCubic,
       width: railWidth,
       child: ClipRect(
         child: FocusScope(
@@ -789,7 +793,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                     width: _kExpandedWidthTV,
                     child: Stack(
                       children: [
-                        if (AppColorScheme.isGlass)
+                        if (AppColorScheme.isGlass && !FoxUi.hideEffects && !FoxUi.lowMemoryDevice)
                           SizedBox(
                             width: _kExpandedBackdropWidthTV,
                             child: const GlassSurface(
@@ -802,8 +806,16 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                             width: _kExpandedBackdropWidthTV,
                             decoration: BoxDecoration(
                               color: backdropColor,
-                              border: isNeon
+                              // Foxfin: dezente Akzentkante im FOX-Stil.
+                              border: !isNeon
                                   ? Border(
+                                      right: BorderSide(
+                                        color: AppColorScheme.accent
+                                            .withValues(alpha: 0.35),
+                                        width: 1,
+                                      ),
+                                    )
+                                  : Border(
                                       right: ThemeRegistry
                                           .active
                                           .borders
@@ -812,11 +824,10 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                                             color: AppColorScheme.accent,
                                             width: 1.2,
                                           ),
-                                    )
-                                  : null,
+                                    ),
                             ),
                           ),
-                        if (!AppColorScheme.isGlass)
+                        if (!AppColorScheme.isGlass || FoxUi.hideEffects || FoxUi.lowMemoryDevice)
                           Positioned(
                             left: _kExpandedBackdropWidthTV,
                             top: 0,
@@ -840,7 +851,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                 alignment: Alignment.centerLeft,
                 child: AnimatedContainer(
                   duration: _kExpandDuration,
-                  curve: Curves.easeInOut,
+                  curve: Curves.easeOutCubic,
                   width: _isExpanded ? _kExpandedBackdropWidthTV : _kCollapsedWidthTV,
                   child: _buildContent(),
                 ),
