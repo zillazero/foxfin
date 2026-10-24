@@ -15,6 +15,7 @@ import 'overlay_sheet.dart';
 import 'remote_search_sheet.dart';
 import 'remote_navigation_pad.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 void showRemoteControlDialog(BuildContext context) {
   showFocusRestoringModalBottomSheet<void>(
     context: context,
@@ -292,13 +293,17 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet>
         strictSessions = await _sessionApi.getSessions(
           controllableByUserId: client.userId,
         );
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
       List<Map<String, dynamic>> fallbackSessions = const [];
       if (strictSessions.isEmpty) {
         try {
           fallbackSessions = await _sessionApi.getSessions();
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
 
       final sessions = _mergeUniqueSessions([

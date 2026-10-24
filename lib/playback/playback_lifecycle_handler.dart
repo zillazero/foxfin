@@ -7,6 +7,7 @@ import '../data/models/aggregated_item.dart';
 import '../util/platform_detection.dart';
 import 'media3_player_backend.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class _StaleVideoClaim {
   _StaleVideoClaim({
     required this.item,
@@ -291,6 +292,8 @@ class PlaybackLifecycleHandler with WidgetsBindingObserver {
       if (wasPlaying && !_manager.state.isPlaying) {
         await _manager.resume();
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 }

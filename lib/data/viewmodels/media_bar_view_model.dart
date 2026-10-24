@@ -10,6 +10,7 @@ import '../models/media_bar_state.dart';
 import '../repositories/mdblist_repository.dart';
 import '../repositories/media_bar_repository.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class MediaBarViewModel extends ChangeNotifier {
   final MediaBarRepository _repository;
   final MdbListRepository _mdbListRepository;
@@ -215,6 +216,8 @@ class MediaBarViewModel extends ChangeNotifier {
       if (result != null && result.isNotEmpty) {
         _ratings[item.itemId] = result;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 }

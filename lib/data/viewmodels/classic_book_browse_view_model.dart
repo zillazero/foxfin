@@ -8,6 +8,7 @@ import '../../l10n/current_app_localizations.dart';
 import '../models/aggregated_item.dart';
 import '../models/home_row.dart';
 import '../services/row_data_source.dart';
+import 'package:moonfin/fox/fox_errors.dart';
 import 'book_browse_view_model.dart'
     show BookLibraryHelpers, BookScope, bookSeriesEntries;
 
@@ -158,7 +159,9 @@ class ClassicBookBrowseViewModel extends ChangeNotifier
       if (fetchedType != null && fetchedType.isNotEmpty) {
         _collectionType = fetchedType;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     try {
       final resumeTitle = isAudiobookLibrary
@@ -481,7 +484,9 @@ class ClassicBookBrowseViewModel extends ChangeNotifier
         _scope = BookScope.all;
       }
       _composeRows();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     _isLoading = false;
     notifyListeners();

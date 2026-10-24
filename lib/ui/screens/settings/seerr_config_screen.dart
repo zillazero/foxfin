@@ -31,6 +31,7 @@ import '../../widgets/settings/clean_settings_typography.dart';
 import '../../widgets/settings/preference_tiles.dart';
 import 'settings_app_bar.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 typedef _SeerrSignInAction =
     Future<String?> Function(String username, String password, String authType);
 typedef _SeerrAction = Future<String?> Function();
@@ -162,7 +163,9 @@ class _SeerrConfigScreenState extends State<SeerrConfigScreen> {
       } catch (_) {
         canManageRequests = false;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     if (!mounted) return;
     setState(() {
@@ -333,7 +336,9 @@ class _SeerrConfigScreenState extends State<SeerrConfigScreen> {
                 IOSFlutterLocalNotificationsPlugin>()
             ?.requestPermissions(alert: true, badge: true, sound: true);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _setSeerrEnabled(bool value) async {

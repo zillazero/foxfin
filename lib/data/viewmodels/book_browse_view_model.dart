@@ -10,6 +10,7 @@ import '../models/aggregated_item.dart';
 import '../models/home_row.dart';
 import '../services/row_data_source.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Which formats the library tab is currently showing. Only meaningful for
 /// mixed libraries; single-format libraries always behave like [all].
 enum BookScope { all, books, audiobooks, comics }
@@ -173,7 +174,9 @@ class BookBrowseViewModel extends ChangeNotifier with BookLibraryHelpers {
       if (fetchedType != null && fetchedType.isNotEmpty) {
         _collectionType = fetchedType;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     // The grid asks for the library's types, so it starts once they're known.
     unawaited(reloadPane());
@@ -240,7 +243,9 @@ class BookBrowseViewModel extends ChangeNotifier with BookLibraryHelpers {
         _scope = BookScope.all;
         if (_pane == BookPane.titles) unawaited(reloadPane());
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     _isLoading = false;
     notifyListeners();

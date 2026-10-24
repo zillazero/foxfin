@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:playback_core/playback_core.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 enum SleepTimerMode {
   off,
   duration,
@@ -158,7 +159,9 @@ class SleepTimerController extends ChangeNotifier {
   void _completeAndStop() {
     try {
       unawaited(_manager.pause());
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _expiryController.add(null);
     cancel();
   }

@@ -21,6 +21,7 @@ import '../../theme/app_theme_controller.dart';
 import '../../widgets/live_tv/channel_carousel_overlay.dart';
 import 'osd_buttons.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class AppleTvLiveTvPlayerHostScreen extends StatefulWidget {
   final List<GuideChannel> channels;
   final int startIndex;
@@ -89,7 +90,9 @@ class _AppleTvLiveTvPlayerHostScreenState
     super.initState();
     try {
       _screensaverController = GetIt.instance<ScreensaverController>();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _screensaverController?.setNativePlayerPresented(true);
     _currentIndex = widget.startIndex;
     _exitSub = _backend?.userExitStream.listen((_) => _handleExit());
@@ -168,7 +171,9 @@ class _AppleTvLiveTvPlayerHostScreenState
     unawaited(_backend?.dismissPlayer() ?? Future<void>.value());
     try {
       GetIt.instance<PlaybackManager>().stop(userInitiated: true);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     super.dispose();
   }
 
@@ -191,7 +196,9 @@ class _AppleTvLiveTvPlayerHostScreenState
         fontWeight: style.fontWeight,
         verticalOffset: style.verticalOffset,
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _playCurrentChannel() async {
@@ -272,7 +279,9 @@ class _AppleTvLiveTvPlayerHostScreenState
         try {
           await pip.open(streamUrl, live: true, volume: 100);
           await pip.resume();
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }());
     }
 

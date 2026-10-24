@@ -30,6 +30,7 @@ import 'game_playback_ui.dart';
 import 'playback_takeover.dart';
 import 'game_audio_owner.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 @visibleForTesting
 Future<void> persistGameEmulatorExit({
   required bool saveState,
@@ -292,7 +293,9 @@ class _GameEmulatorScreenState extends State<GameEmulatorScreen>
         forceEmulatorJs: true,
       );
       hasSave = existing != null && existing.isNotEmpty;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _hasSave = hasSave;
 
     // Restore synced EmulatorJS settings into localStorage before the emulator initializes.
@@ -303,12 +306,14 @@ class _GameEmulatorScreenState extends State<GameEmulatorScreen>
         _userScripts.add(
           UserScript(
             source:
-                "try { localStorage.setItem('ejs-settings', ${jsonEncode(json)}); } catch (e) {}",
+                "try { localStorage.setItem('ejs-settings', ${jsonEncode(json)}); } catch (_) {}",
             injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
           ),
         );
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     final url = games.playerUrl(
       libraryId: widget.libraryId,
@@ -956,7 +961,9 @@ class _GameEmulatorScreenState extends State<GameEmulatorScreen>
       if (value is String && value.isNotEmpty) {
         options = _parseOptions(value);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     if (!mounted) return;
     setState(() {
       _options = options;
@@ -1260,7 +1267,9 @@ class _GameEmulatorScreenState extends State<GameEmulatorScreen>
       if (value is String && value.isNotEmpty) {
         await games.putSave(_settingsId, utf8.encode(value), kind: 'settings');
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Reports a failure that ends the session.
@@ -1284,7 +1293,9 @@ class _GameEmulatorScreenState extends State<GameEmulatorScreen>
       await _persistOnExit(
         saveState: !stateAlreadySaved,
       ).timeout(const Duration(seconds: 3));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     await _restoreSystemUi();
     _releaseScreensaverBlock();
     if (!mounted) return;

@@ -21,6 +21,7 @@ import '../utils/bounded_concurrency.dart';
 import '../utils/genre_browse_utils.dart';
 import '../utils/playlist_utils.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 enum LibraryBrowseState { loading, ready, error }
 
 /// The filters that hold several values at once, each of which the Sort &
@@ -575,7 +576,9 @@ class LibraryBrowseViewModel extends ChangeNotifier {
                 .getItem(libraryId, fields: _libraryMetaFields);
             _collectionType = (parentData['CollectionType'] as String?)
                 ?.toLowerCase();
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         }
       }
       if (!isFilterBrowse && !_libraryMetaResolved && libraryId.isNotEmpty) {
@@ -586,7 +589,9 @@ class LibraryBrowseViewModel extends ChangeNotifier {
           _collectionType = (parentData['CollectionType'] as String?)
               ?.toLowerCase();
           _libraryMetaResolved = true;
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
 
       if (_collectionType == null || _collectionType!.isEmpty) {
@@ -690,7 +695,9 @@ class LibraryBrowseViewModel extends ChangeNotifier {
         _totalCount = _items.length;
         _hasMoreFromPageSize = false;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     _loadingMore = false;
     if (notify) notifyListeners();
@@ -1145,7 +1152,9 @@ class LibraryBrowseViewModel extends ChangeNotifier {
         return type == 'movies' || type == 'tvshows' || type == null;
       }).toList();
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> setLibraryFilter(String? value) async {
@@ -1158,7 +1167,9 @@ class LibraryBrowseViewModel extends ChangeNotifier {
             .getItem(value, fields: _libraryMetaFields);
         _collectionType = (parentData['CollectionType'] as String?)
             ?.toLowerCase();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     await load();
   }
@@ -1557,7 +1568,9 @@ class LibraryBrowseViewModel extends ChangeNotifier {
           );
         }
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _syncImageTypeToServer(ImageType value) async {
@@ -1579,7 +1592,9 @@ class LibraryBrowseViewModel extends ChangeNotifier {
         updated,
         client: 'moonfin',
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> setPosterSize(PosterSize value) async {

@@ -67,6 +67,7 @@ import '../../ui/screensaver/screensaver_controller.dart';
 import '../../ui/screens/home/home_view_model.dart';
 import '../../ui/screens/setup/setup_wizard_gate.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 final _getIt = GetIt.instance;
 
 void resetUserScopedSingletons() {
@@ -123,12 +124,16 @@ Future<void> _stopPlaybackForAccessSchedule() async {
   // Each step is best effort, so one that fails doesn't leave the rest undone.
   try {
     await _getIt<PlaybackManager>().stop(userInitiated: false);
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   try {
     if (_getIt.isRegistered<ThemeMusicService>()) {
       _getIt<ThemeMusicService>().stop();
     }
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   // A trailer, a photo or a game plays in its own screen, which only leaving
   // that screen stops. A player is pushed over whichever tab launched it, so
   // the router's uri stays on that tab and only the match list names what is

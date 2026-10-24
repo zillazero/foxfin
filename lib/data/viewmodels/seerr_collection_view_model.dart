@@ -4,6 +4,7 @@ import '../repositories/seerr_repository.dart';
 import '../services/seerr/seerr_api_models.dart';
 import '../services/seerr/seerr_error.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class SeerrCollectionRequestResult {
   final int requested;
   final int total;
@@ -126,7 +127,9 @@ class SeerrCollectionViewModel extends ChangeNotifier {
       if (user == null) {
         try {
           user = await _repo.getCurrentUser();
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
 
       final collection = await _repo.getCollectionDetails(collectionId);
@@ -150,7 +153,9 @@ class SeerrCollectionViewModel extends ChangeNotifier {
       final quota = await _repo.getUserQuota(user.id);
       _state = _state.copyWith(quota: quota);
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Fires one request per movie sequentially. Duplicates count as success

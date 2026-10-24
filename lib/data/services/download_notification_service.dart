@@ -6,6 +6,7 @@ import '../../l10n/current_app_localizations.dart';
 import '../../util/platform_detection.dart';
 import 'local_notification_bootstrap.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class DownloadNotificationService {
   static const _channelId = 'moonfin_downloads';
   static const _channelName = 'Downloads';
@@ -37,7 +38,9 @@ class DownloadNotificationService {
             .resolvePlatformSpecificImplementation<
                 AndroidFlutterLocalNotificationsPlugin>()
             ?.requestNotificationsPermission();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
   }
 
@@ -57,7 +60,9 @@ class DownloadNotificationService {
             IOSFlutterLocalNotificationsPlugin
           >()
           ?.requestPermissions(alert: true, badge: true, sound: true);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> showProgress({

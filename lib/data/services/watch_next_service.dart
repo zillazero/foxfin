@@ -10,6 +10,7 @@ import '../models/aggregated_item.dart';
 import '../models/home_row.dart';
 import 'deep_link_service.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class WatchNextService {
   static const _channel = MethodChannel('org.moonfin.androidtv/watch_next');
   static const _maxItems = 20;
@@ -65,7 +66,9 @@ class WatchNextService {
       await CarArtwork.instance.persistHosts();
       await _channel.invokeMethod('publish', {'items': items});
       _lastPublishedSignature = signature;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// A stable fingerprint of everything that can change the published payload,
@@ -280,7 +283,9 @@ class WatchNextService {
     () async {
       try {
         dispatch(await _channel.invokeMethod<String>('getInitialDeepLink'));
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }();
   }
 }

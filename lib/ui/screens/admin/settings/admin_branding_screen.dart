@@ -168,7 +168,7 @@ class _AdminBrandingScreenState extends State<AdminBrandingScreen>
             decoration: BoxDecoration(
               color: AppColorScheme.onSurface.withValues(alpha: 0.05),
             ),
-            child: Image.network(
+            child: Image.network(cacheWidth: 600, 
               url,
               key: ValueKey(_splashVersion),
               headers: serverImageHeaders,

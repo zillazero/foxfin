@@ -4,6 +4,7 @@ import '../repositories/seerr_repository.dart';
 import '../services/seerr/seerr_api_models.dart';
 import '../services/seerr/seerr_models.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 enum SeerrIssueFilter { open, resolved, all }
 
 extension SeerrIssueFilterApi on SeerrIssueFilter {
@@ -93,7 +94,9 @@ class SeerrIssuesViewModel extends ChangeNotifier {
       final user = _state.currentUser ?? await _repo.getCurrentUser();
       _state = _state.copyWith(currentUser: user);
       await _loadCounts(user);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> load({bool isRefresh = false}) async {
@@ -224,7 +227,9 @@ class SeerrIssuesViewModel extends ChangeNotifier {
       final counts = await _repo.getIssueCount();
       _state = _state.copyWith(counts: counts);
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> refresh() => load(isRefresh: true);
@@ -280,7 +285,9 @@ class SeerrIssuesViewModel extends ChangeNotifier {
     try {
       final issue = await _repo.getIssue(issueId);
       _patchIssue(issue);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> addComment(int issueId, String message) async {

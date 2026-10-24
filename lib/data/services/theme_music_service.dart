@@ -9,6 +9,7 @@ import '../../preference/user_preferences.dart';
 import '../models/aggregated_item.dart';
 import 'theme_audio_player.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class ThemeMusicService implements AudioOwnable {
   final MediaServerClient _client;
   final UserPreferences _prefs;
@@ -191,13 +192,19 @@ class ThemeMusicService implements AudioOwnable {
   Future<void> _safeDispose(ThemeAudioPlayer player) async {
     try {
       await player.setVolume(0);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     try {
       await player.pause();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     try {
       await player.dispose();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   String _buildAudioUrl(String songId) {
@@ -264,10 +271,14 @@ class ThemeMusicService implements AudioOwnable {
     if (player != null) {
       try {
         player.setVolume(0);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       try {
         player.pause();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       unawaited(_safeDispose(player));
     }
     if (_fadeCompleter != null && !_fadeCompleter!.isCompleted) {

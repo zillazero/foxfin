@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:server_core/server_core.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class _Measurement {
   final int offset;
   final int roundTripTime;
@@ -111,7 +112,9 @@ class TimeSyncManager {
         _timeOffset = best.offset;
         _roundTripTime = best.roundTripTime;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   int _nowMs() => DateTime.now().toUtc().millisecondsSinceEpoch;

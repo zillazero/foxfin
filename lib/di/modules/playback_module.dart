@@ -55,6 +55,7 @@ import '../../integrations/tracking/tracking_player_service.dart';
 import '../../integrations/tracking/tracking_service.dart';
 import '../../util/secondary_subtitle_track_selection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 final _getIt = GetIt.instance;
 
 bool _needsDolbyVisionFallback(StreamResolutionResult resolution) {
@@ -838,7 +839,9 @@ void setActiveStreamResolver(MediaServerClient client) {
     unawaited(Future<void>.delayed(const Duration(seconds: 20), () async {
       try {
         await tracking.maybeAutoSync();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }));
   } else {
     service = localAware;
@@ -853,7 +856,9 @@ void setActiveStreamResolver(MediaServerClient client) {
       if (FoxSyncService.instance.loggedIn) {
         await FoxSyncService.instance.syncAll();
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }));
 
   _getIt.registerSingleton<MediaStreamResolver>(resolver);

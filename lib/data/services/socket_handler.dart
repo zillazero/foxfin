@@ -10,6 +10,7 @@ import 'package:server_core/server_core.dart';
 import 'log_service.dart';
 import 'websocket_message_parser.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 abstract class ServerWebSocketClient {
   Stream<ServerWebSocketMessage> get messages;
 
@@ -143,7 +144,9 @@ abstract class _ReconnectingWebSocketClient implements ServerWebSocketClient {
     if (socket == null) return;
     try {
       await socket.sink.close().timeout(_closeTimeout);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Keeps trying for as long as the session lasts. A server can be down far
@@ -220,7 +223,9 @@ abstract class _ReconnectingWebSocketClient implements ServerWebSocketClient {
 
     try {
       await subscription?.cancel().timeout(_closeTimeout);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     await _closeQuietly(open);
   }
 

@@ -13,6 +13,7 @@ import '../../../util/error_message.dart';
 import '../../../../util/platform_detection.dart';
 import '../widgets/admin_form_styles.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class AdminLogViewerScreen extends StatefulWidget {
   final String fileName;
 
@@ -90,7 +91,9 @@ class _AdminLogViewerScreenState extends State<AdminLogViewerScreen> {
       final follow = _atBottom;
       setState(() => _content = text);
       if (follow) _scrollToBottom();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _loadLog() async {

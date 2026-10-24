@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// A broadcast stream over a platform event channel that copes with the
 /// channel having no native handler yet. An engine the system starts with no
 /// Activity, for a car head unit or a media button, has none until an
@@ -84,7 +85,9 @@ Stream<dynamic> resilientEventChannelStream(
         isSubscribed = false;
         try {
           await methodChannel.invokeMethod<void>('cancel', arguments);
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
     },
   );

@@ -65,6 +65,7 @@ import 'util/process_exit_reporter.dart';
 import 'util/system_ui.dart';
 import 'fox/fox_hidden_items.dart';
 import 'util/cert_pin_store.dart';
+import 'package:moonfin/fox/fox_errors.dart';
 import 'util/tv_image_cache_stub.dart'
     if (dart.library.io) 'util/tv_image_cache_io.dart';
 
@@ -294,7 +295,9 @@ Future<void> _applyInterfaceLayoutOverride() async {
     PlatformDetection.setInterfaceLayout(
       store.get(UserPreferences.interfaceLayout),
     );
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 /// The user's performance choice, read the same way and for the same reason:
@@ -307,7 +310,9 @@ Future<void> _readPerformanceModeOverride() async {
     final store = PreferenceStore();
     await store.init();
     _startupPerformanceMode = store.get(UserPreferences.performanceMode);
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 /// Resolves whether this Android device is a TV, which decides the leanback UI
@@ -327,7 +332,9 @@ Future<void> _detectAndSetTvMode() async {
         PlatformDetection.setTvMode(isTV);
         return;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     if (attempt < attempts - 1) {
       await Future<void>.delayed(const Duration(milliseconds: 200));
     }
@@ -392,7 +399,9 @@ Future<bool> _retryOffLaunchPath(Future<bool> Function() attempt) async {
     delay *= 2;
     try {
       if (await attempt()) return true;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
   return false;
 }
@@ -419,7 +428,9 @@ Future<void> _detectAndSetDeviceMemory() async {
         memory,
       ),
     );
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 /// Runs before the first frame, so only the single attempt is awaited here.
@@ -441,7 +452,9 @@ Future<void> _detectAndSetDisplayCapabilities() async {
     // A chain that is still asleep when the retries run out heals from here
     // instead of waiting for the app to be restarted.
     DisplayHdrProbe.listenForDisplayChanges();
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 Future<Map<String, dynamic>?> _queryCodecCaps(MethodChannel channel) async {
@@ -513,7 +526,9 @@ Future<void> _detectAndSetSystemUptime() async {
         .invokeMethod<int>('uptimeMillis')
         .timeout(const Duration(seconds: 2));
     if (uptimeMs != null) PlatformDetection.setSystemUptime(uptimeMs);
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 /// The renderer is fixed before Dart runs, so the diagnostic report asks the
@@ -527,7 +542,9 @@ Future<void> _detectAndSetRenderer() async {
           .invokeMethod<String>('renderer')
           .timeout(const Duration(seconds: 2)),
     );
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 Future<void> _detectAndSetCodecCapabilities() async {
@@ -643,7 +660,9 @@ Future<Map<String, dynamic>?> _queryAppleVideoCaps(
       );
       return caps;
     }
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   return DeviceCapabilityCache.readMap(
     DeviceCapabilityCache.appleVideoKey,
     build: build,
@@ -702,7 +721,9 @@ Future<void> _detectAndApplyAudioCapabilities(UserPreferences prefs) async {
     // Re-probe whenever the audio route changes (e.g. the AVR is powered on
     // after launch) so detection self-heals without an app restart.
     AudioCapabilityProbe.listenForRouteChanges();
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 Future<void> _retryAudioCapsOffLaunchPath() =>
@@ -790,7 +811,9 @@ class _CapabilityRefreshObserver with WidgetsBindingObserver {
         await _applyCodecProbe(
           const MethodChannel('org.moonfin.androidtv/platform'),
         );
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     if (AudioCapabilityProbe.isSupported) {
       // The guard inside apply keeps a null or unenumerated answer from
@@ -876,7 +899,9 @@ void main() async {
               '--autoplay-policy=no-user-gesture-required',
         ),
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   if (PlatformDetection.isAppleTV) {
@@ -971,7 +996,9 @@ void main() async {
         manager: GetIt.instance<PlaybackManager>(),
       )..start();
       GetIt.instance.registerSingleton<CarPlayService>(carPlayService);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   final prefs = GetIt.instance<UserPreferences>();
@@ -1024,7 +1051,9 @@ void main() async {
         backend: GetIt.instance<AppleTvBackend>(),
       )..start();
       GetIt.instance.registerSingleton<AppleTvAudioNowPlayingFeeder>(feeder);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   if (!GetIt.instance.isRegistered<PlaybackLifecycleHandler>()) {
@@ -1035,7 +1064,9 @@ void main() async {
 
   try {
     GetIt.instance<AirPlayCommandBridge>().start();
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
   runApp(const MoonfinApp());
 }
@@ -1071,23 +1102,31 @@ Future<void> _initDeferredStartupServices(UserPreferences prefs) async {
 
   try {
     await GetIt.instance<DownloadNotificationService>().initialize();
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
   // Starts the native download engine and re-attaches to any downloads that
   // ran while the app was suspended or dead. No-op where unsupported.
   try {
     await GetIt.instance<BackgroundDownloadCoordinator>().ensureInitialized();
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
   try {
     await GetIt.instance<SeerrNotificationService>().initialize();
     await GetIt.instance<SeerrNotificationService>().handleColdStart();
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
   if (PlatformDetection.isMobile) {
     try {
       await GetIt.instance<PushMessagingService>().initialize();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   // Audio session ownership differs per platform:
@@ -1113,10 +1152,14 @@ Future<void> _initDeferredStartupServices(UserPreferences prefs) async {
       session.becomingNoisyEventStream.listen((_) {
         GetIt.instance<PlaybackManager>().pause();
       });
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   } else if (PlatformDetection.isIOS) {
     try {
       _attachIosAudioRouteHandling();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 }

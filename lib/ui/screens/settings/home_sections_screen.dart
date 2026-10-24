@@ -33,6 +33,7 @@ import '../../widgets/settings/settings_section_header.dart';
 import '../../../l10n/app_localizations.dart';
 import 'settings_app_bar.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 const double _kHomeSectionTileRadius = 16;
 const EdgeInsets _kHomeSectionTileContentPadding = EdgeInsets.symmetric(
   horizontal: 16,
@@ -173,7 +174,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 );
                 final items = response['Items'] as List? ?? [];
                 setEmpty(stableId, items.isEmpty);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.resumeBook:
@@ -185,7 +188,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 );
                 final items = response['Items'] as List? ?? [];
                 setEmpty(stableId, items.isEmpty);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.nextUp:
@@ -201,7 +206,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 );
                 final total = response['TotalRecordCount'] as int? ?? 0;
                 setEmpty(stableId, total == 0);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.favoriteMovies:
@@ -223,7 +230,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 );
                 final total = response['TotalRecordCount'] as int? ?? 0;
                 setEmpty(stableId, total == 0);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.collections:
@@ -236,7 +245,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 );
                 final total = response['TotalRecordCount'] as int? ?? 0;
                 setEmpty(stableId, total == 0);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.genres:
@@ -253,7 +264,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 );
                 final total = response['TotalRecordCount'] as int? ?? 0;
                 setEmpty(stableId, total == 0);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.studios:
@@ -266,7 +279,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 );
                 final total = response['TotalRecordCount'] as int? ?? 0;
                 setEmpty(stableId, total == 0);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.audioArtists:
@@ -280,7 +295,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 final total = response['TotalRecordCount'] as int? ?? 0;
                 final items = response['Items'] as List? ?? [];
                 setEmpty(stableId, total == 0 && items.isEmpty);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.audioAlbums:
@@ -294,7 +311,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 final total = response['TotalRecordCount'] as int? ?? 0;
                 final items = response['Items'] as List? ?? [];
                 setEmpty(stableId, total == 0 && items.isEmpty);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.audioPlaylists:
@@ -320,7 +339,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                   mediaType: 'Audio',
                 );
                 setEmpty(stableId, filtered.isEmpty);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.activeRecordings:
@@ -329,7 +350,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 final response = await client.liveTvApi.getRecordings(limit: 1);
                 final items = response['Items'] as List? ?? [];
                 setEmpty(stableId, items.isEmpty);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.liveTv:
@@ -342,7 +365,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 final items = response['Items'] as List? ?? [];
                 setEmpty(stableId, items.isEmpty);
                 hasLiveTv = items.isNotEmpty;
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.onNow:
@@ -354,7 +379,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 );
                 final items = response['Items'] as List? ?? [];
                 setEmpty(stableId, items.isEmpty);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.libraryTilesSmall:
@@ -364,7 +391,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 final response = await client.userViewsApi.getUserViews();
                 final items = response['Items'] as List? ?? [];
                 setEmpty(stableId, items.isEmpty);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
             break;
           case HomeSectionType.latestMedia:
@@ -389,7 +418,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 );
                 final total = response['TotalRecordCount'] as int? ?? 0;
                 setEmpty(stableId, total == 0);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
           }
         } else if (section.pluginSource == HomeSectionPluginSource.genres) {
@@ -409,7 +440,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                 );
                 final total = response['TotalRecordCount'] as int? ?? 0;
                 setEmpty(stableId, total == 0);
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }());
           }
         }
@@ -1005,7 +1038,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
               normalizeServerBaseUrl(active.baseUrl))
             session,
       ];
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _otherServerNames = {
       for (final session in others)
         normalizeServerBaseUrl(session.client.baseUrl): session.server.name,
@@ -2957,7 +2992,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
           rowConfig =
               jsonDecode(section.pluginAdditionalData ?? '{}')
                   as Map<String, dynamic>;
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         final source = rowConfig['source'] as String? ?? 'imdb';
         final type = rowConfig['type'] as String? ?? 'user_list';
         final sourceLabel = switch (source) {

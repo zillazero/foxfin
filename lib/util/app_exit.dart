@@ -6,6 +6,7 @@ import 'package:window_manager/window_manager.dart';
 import '../data/database/offline_database.dart';
 import 'platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class AppExit {
   static const MethodChannel _platformChannel = MethodChannel(
     'org.moonfin.androidtv/platform',
@@ -28,7 +29,9 @@ class AppExit {
     if (GetIt.instance.isRegistered<OfflineDatabase>()) {
       try {
         await GetIt.instance<OfflineDatabase>().close();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
   }
 
@@ -58,7 +61,9 @@ class AppExit {
       try {
         await windowManager.close();
         return;
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     await SystemNavigator.pop();

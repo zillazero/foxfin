@@ -12,6 +12,7 @@ import '../../../util/system_ui.dart';
 import '../../widgets/adaptive/sf_symbol.dart';
 import '../../widgets/offline_aware_image.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class PhotoPlayerScreen extends StatefulWidget {
   final String itemId;
 
@@ -90,7 +91,9 @@ class _PhotoPlayerScreenState extends State<PhotoPlayerScreen>
           _currentIndex = 0;
         });
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   String? _getImageUrl(AggregatedItem item) {

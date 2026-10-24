@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 
 import '../data/services/log_service.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Inline preview player for Apple TV backed by a native AVPlayer rendering
 /// into a Flutter texture, so previews composite inside the Flutter UI
 /// (media bar trailers, episode focus previews) without presenting the
@@ -96,7 +97,9 @@ class AppleTvPreviewPlayer {
         'playerId': _playerId,
         'volume': volume,
       });
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> dispose() async {
@@ -107,13 +110,17 @@ class AppleTvPreviewPlayer {
     textureIdListenable.dispose();
     try {
       await _control.invokeMethod<void>('dispose', {'playerId': _playerId});
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _invoke(String method) async {
     if (_disposed) return;
     try {
       await _control.invokeMethod<void>(method, {'playerId': _playerId});
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 }

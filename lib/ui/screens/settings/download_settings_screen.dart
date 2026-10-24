@@ -38,6 +38,7 @@ import '../../widgets/settings/clean_settings_typography.dart';
 import '../../widgets/settings/preference_tiles.dart';
 import '../../widgets/settings/settings_section_header.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class DownloadSettingsScreen extends ConsumerWidget {
   const DownloadSettingsScreen({super.key});
 
@@ -667,7 +668,9 @@ class DownloadSettingsScreen extends ConsumerWidget {
       if (await oldStaging.exists() && await oldStaging.list().isEmpty) {
         await oldStaging.delete();
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     if (getIt.isRegistered<BackgroundDownloadCoordinator>()) {
       await getIt<BackgroundDownloadCoordinator>().applyStagingDirectory();
     }

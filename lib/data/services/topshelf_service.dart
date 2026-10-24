@@ -13,6 +13,7 @@ import '../models/home_row.dart';
 import '../utils/latest_media_row_normalizer.dart';
 import 'deep_link_service.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Bridges the Apple TV Top Shelf extension: writes a cached snapshot of the
 /// "Latest" home content into the shared App Group container (consumed by the
 /// MoonfinTopShelf extension) and routes the `moonfin://` deep links the shelf
@@ -121,7 +122,9 @@ class TopShelfService {
           },
         ],
       });
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Map<String, dynamic>? _itemPayload(AggregatedItem item, ImageApi imageApi) {
@@ -229,7 +232,9 @@ class TopShelfService {
     () async {
       try {
         dispatch(await _channel.invokeMethod<String>('getInitialDeepLink'));
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }();
   }
 }

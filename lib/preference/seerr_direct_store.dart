@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Foxfin: credentials for a directly connected Jellyseerr/Seerr server.
 ///
 /// The server URL is not secret; the API key and the session cookie live in
@@ -25,7 +26,9 @@ class SeerrDirectStore {
       } else {
         await _storage.write(key: key, value: value);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   static Future<String?> url(String userId) => _read(_k(userId, 'url'));

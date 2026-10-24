@@ -17,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../preference/user_preferences.dart';
 import '../../ui/theme/app_theme_controller.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class FoxSyncService extends ChangeNotifier {
   FoxSyncService._();
   static final FoxSyncService instance = FoxSyncService._();
@@ -108,7 +109,9 @@ class FoxSyncService extends ChangeNotifier {
     if (!supported) return;
     try {
       await _ch.invokeMethod('signOut', {'all': all});
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     await refreshStatus();
   }
 
@@ -165,9 +168,13 @@ class FoxSyncService extends ChangeNotifier {
         _settingsUpdatedAt = null;
         try {
           await _call<String>('putSettings', {'theme': key});
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> pullSettings() async {
@@ -273,12 +280,16 @@ class FoxSyncService extends ChangeNotifier {
     for (final id in addLocal) {
       try {
         await c.userLibraryApi.markFavorite(id);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     for (final id in removeLocal) {
       try {
         await c.userLibraryApi.unmarkFavorite(id);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     if (addRemote.isNotEmpty) {
       await _call<String>('addFavorites', {'ids': addRemote.take(2000).toList()});
@@ -359,7 +370,9 @@ class FoxSyncService extends ChangeNotifier {
         if (remote > localPos + 600000000 && await _setResume(c, id, remote)) {
           applied++;
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     if (m['server_time'] != null) await sp.setString(k, m['server_time']);
     return 'Fortschritt: $applied übernommen';

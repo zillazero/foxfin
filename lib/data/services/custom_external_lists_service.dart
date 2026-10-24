@@ -10,6 +10,7 @@ import '../../l10n/current_app_localizations.dart';
 import '../../preference/home_section_config.dart';
 import '../../util/platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class ImdbExternalListItem {
   final String imdbId;
   final String tmdbId;
@@ -352,7 +353,9 @@ class CustomExternalListsService {
               DateTime.now().difference(lastModified) > maxAge) {
             return [];
           }
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         final content = await file.readAsString();
         final decoded = jsonDecode(content) as List;
         final items = decoded
@@ -369,7 +372,9 @@ class CustomExternalListsService {
           debugPrint('[CustomService] Invalid or buggy custom row cache detected, invalidating...');
           try {
             await file.delete();
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
           return [];
         }
         return _applySorting(items, config);
@@ -386,7 +391,9 @@ class CustomExternalListsService {
     Map<String, dynamic> rowConfig = {};
     try {
       rowConfig = jsonDecode(config.pluginAdditionalData ?? '{}') as Map<String, dynamic>;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     final sortBy = rowConfig['sort_by'] as String? ?? 'none';
     final sortOrder = rowConfig['sort_order'] as String? ?? 'desc';

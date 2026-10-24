@@ -26,6 +26,7 @@ import '../../preference/seerr_row_config.dart';
 import '../../preference/user_preferences.dart';
 import '../../util/platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 enum _PluginAvailabilityStatus { available, unavailable, unknown }
 
 /// Bounds for the plugin's own requests.
@@ -544,7 +545,9 @@ class PluginSyncService extends ChangeNotifier {
         return;
       }
       await _dispatchServerEvent(client, parsed);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   // Entry point for plugin events delivered over the session websocket
@@ -555,7 +558,9 @@ class PluginSyncService extends ChangeNotifier {
   ) async {
     try {
       await _dispatchServerEvent(client, payload);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   // Reads a key tolerating PascalCase, since the websocket path may
@@ -813,7 +818,9 @@ class PluginSyncService extends ChangeNotifier {
       );
       // Only after the POST lands, so a failed push retries on the next change.
       _lastSyncedProfileJson[snapshotKey] = payloadJson;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> pushNotificationPrefs(MediaServerClient client) async {
@@ -841,7 +848,9 @@ class PluginSyncService extends ChangeNotifier {
           headers: {...headers, 'Content-Type': 'application/json'},
         ),
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Returns true when the registration POST succeeded and false when it was
@@ -899,7 +908,9 @@ class PluginSyncService extends ChangeNotifier {
           headers: {...headers, 'Content-Type': 'application/json'},
         ),
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Pass `requireAvailable: false` from callers that run before the plugin
@@ -922,7 +933,9 @@ class PluginSyncService extends ChangeNotifier {
       if (response.statusCode == 200 && response.data is List) {
         return List<String>.from(response.data as List);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 
@@ -944,7 +957,9 @@ class PluginSyncService extends ChangeNotifier {
         ),
       );
       return response.statusCode == 200 || response.statusCode == 204;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return false;
   }
 
@@ -1079,7 +1094,9 @@ class PluginSyncService extends ChangeNotifier {
       if (response.data is Map<String, dynamic>) {
         return response.data as Map<String, dynamic>;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 
@@ -1097,7 +1114,9 @@ class PluginSyncService extends ChangeNotifier {
       if (response.data is Map<String, dynamic>) {
         return response.data as Map<String, dynamic>;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 
@@ -1116,7 +1135,9 @@ class PluginSyncService extends ChangeNotifier {
       if (response.data is Map<String, dynamic>) {
         return response.data as Map<String, dynamic>;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 
@@ -1262,7 +1283,9 @@ class PluginSyncService extends ChangeNotifier {
         }
 
         specs.add(ThemeSpec.fromJson(Map<String, dynamic>.from(decoded)));
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     return specs;
@@ -1299,7 +1322,9 @@ class PluginSyncService extends ChangeNotifier {
       if (!desiredFileNames.contains(fileName)) {
         try {
           await file.delete();
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
     }
   }
@@ -1356,7 +1381,9 @@ class PluginSyncService extends ChangeNotifier {
       if (entry is! Map) continue;
       try {
         specs.add(ThemeSpec.fromJson(Map<String, dynamic>.from(entry)));
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     ThemeRegistry.replaceCustomThemes(specs);
@@ -1364,7 +1391,9 @@ class PluginSyncService extends ChangeNotifier {
     if (cacheDirectory != null) {
       try {
         await _writeCachedCustomThemes(cacheDirectory, specs);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     _clearMissingCustomThemeSelection();
@@ -1412,7 +1441,9 @@ class PluginSyncService extends ChangeNotifier {
       _lastSyncedProfileJson[_snapshotKey(client, profile)] = jsonEncode(
         _buildProfileFromLocal(),
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _applyServerSettingsUnbatched(

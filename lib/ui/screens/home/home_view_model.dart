@@ -44,6 +44,7 @@ import '../../../util/seasonal_country.dart';
 import '../../../util/seerr_genre_art.dart';
 import '../../util/home_row_title_localizer.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class HomeViewModel extends ChangeNotifier {
   /// Cards in a merged row, matching what a single library row shows.
   static const _mergedRowItemLimit = 15;
@@ -1578,7 +1579,9 @@ class HomeViewModel extends ChangeNotifier {
           }
           final favorites = await _dataSource.loadFavoritesChannels(_serverId);
           if (favorites.items.isNotEmpty) rows.add(favorites);
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         return rows;
       case HomeSectionType.onNow:
         if (!await _dataSource.hasLiveTvChannels()) return [];
@@ -3329,7 +3332,9 @@ class HomeViewModel extends ChangeNotifier {
       if (parts.isNotEmpty) {
         return int.tryParse(parts[0]);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 
@@ -3550,7 +3555,9 @@ class HomeViewModel extends ChangeNotifier {
           debugPrint('[RadarrCalendarCache] Old cache detected, invalidating to force fresh fetch');
           try {
             await file.delete();
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
           return const [];
         }
         return items;
@@ -3584,7 +3591,9 @@ class HomeViewModel extends ChangeNotifier {
           debugPrint('[SonarrCalendarCache] Old cache detected, invalidating to force fresh fetch');
           try {
             await file.delete();
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
           return const [];
         }
         return items;
@@ -3695,7 +3704,9 @@ class HomeViewModel extends ChangeNotifier {
               final details = await repo.getMovieDetails(int.parse(tmdbId));
               posterPath = _tmdbImageUrl(details.posterPath, 300) ?? '';
               backdropPath = _tmdbImageUrl(details.backdropPath, 1280) ?? '';
-            } catch (_) {}
+            } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
           }
 
           return _CalendarItemWithDate(
@@ -3793,7 +3804,9 @@ class HomeViewModel extends ChangeNotifier {
             try {
               final tvDetails = await repo.getTvDetailsByTvdb(tvdbId);
               tmdbId = tvDetails.id;
-            } catch (_) {}
+            } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
           }
 
           if (tmdbId == null || tmdbId == 0) return null;
@@ -3823,7 +3836,9 @@ class HomeViewModel extends ChangeNotifier {
               final details = await repo.getTvDetails(tmdbId);
               posterPath = _tmdbImageUrl(details.posterPath, 300) ?? '';
               backdropPath = _tmdbImageUrl(details.backdropPath, 1280) ?? '';
-            } catch (_) {}
+            } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
           }
 
           final sNum = (episodeInfo['seasonNumber'] ?? 0).toString();

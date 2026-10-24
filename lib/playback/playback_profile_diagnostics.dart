@@ -8,6 +8,7 @@ import '../data/services/log_service.dart';
 import '../util/platform_detection.dart';
 import 'audio_capability_profile.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class PlaybackProfileDiagnostics {
   PlaybackProfileDiagnostics._();
 
@@ -175,7 +176,9 @@ class PlaybackProfileDiagnostics {
           return id;
         }
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     if (item is Map) {
       final raw = item['Id'] ?? item['id'];
@@ -200,7 +203,9 @@ class PlaybackProfileDiagnostics {
           return name;
         }
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     if (item is Map) {
       final raw = item['Name'] ?? item['name'];

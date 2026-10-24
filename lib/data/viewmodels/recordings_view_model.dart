@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:server_core/server_core.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class RecordingItem {
   final String id;
   final String name;
@@ -235,7 +236,9 @@ class RecordingsViewModel extends ChangeNotifier {
             );
           })
           .toList();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   List<RecordingItem> _parseRecordings(Map<String, dynamic> response) {

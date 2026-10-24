@@ -12,6 +12,7 @@ import 'gamepad_axis_gate.dart';
 import 'gamepad_key_synthesizer.dart';
 import 'gamepad_suppressor.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Drives the UI from a game controller by turning pad input into the same key
 /// events a keyboard or TV remote would produce.
 ///
@@ -123,7 +124,9 @@ class _GamepadNavigationScopeState extends State<GamepadNavigationScope> {
           enabled,
         );
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _startListening() {

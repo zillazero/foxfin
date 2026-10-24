@@ -25,6 +25,7 @@ import 'mpv_frame_sampler.dart';
 import 'pending_subtitle_choice.dart';
 import 'server_transcode_capabilities.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class _ParsedMpvConfCacheEntry {
   final DateTime modified;
   final int length;
@@ -368,7 +369,9 @@ class MediaKitPlayerBackend extends PlayerBackend
           _isStale = false;
         }
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<String?> _tryNativeGetProperty(Object native, String key) async {
@@ -470,7 +473,9 @@ class MediaKitPlayerBackend extends PlayerBackend
     try {
       final dynamic dyn = native;
       await Future<void>.value(dyn.setProperty(key, value));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   static Future<bool> _tryNativeSetProperty(
@@ -507,7 +512,9 @@ class MediaKitPlayerBackend extends PlayerBackend
     try {
       final dynamic dyn = native;
       await Future<void>.value(dyn.command(command));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   static bool get _useLibass =>
@@ -1673,7 +1680,9 @@ class MediaKitPlayerBackend extends PlayerBackend
               .firstWhere((t) => t.video.isNotEmpty)
               .timeout(const Duration(milliseconds: 800));
           hasVideoTrack = tracks.video.isNotEmpty;
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
       if (!hasVideoTrack) {
         return;
@@ -1688,8 +1697,12 @@ class MediaKitPlayerBackend extends PlayerBackend
           await _player.seek(resumePosition);
         }
         await _player.play();
-      } catch (_) {}
-    } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Maps the effective passthrough codec set to mpv spdif names. Downmixing
@@ -1783,7 +1796,9 @@ class MediaKitPlayerBackend extends PlayerBackend
       } else {
         _appliedAudioPassthroughProperties = null;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _sizeTextureToCrop(MpvCropGeometry? geometry) async {
@@ -1899,12 +1914,16 @@ class MediaKitPlayerBackend extends PlayerBackend
 
         try {
           await _nativeSetProperty(native, key, value);
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
 
       _appliedCustomMpvConfPath = path;
       _appliedCustomMpvConfMtime = stat.modified;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<List<(String, String)>> _loadParsedMpvConf({
@@ -1950,14 +1969,18 @@ class MediaKitPlayerBackend extends PlayerBackend
       if (await candidate.exists()) {
         return candidate.path;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     try {
       final local = File('${Directory.current.path}/mpv.conf');
       if (await local.exists()) {
         return local.path;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     return null;
   }
@@ -2168,7 +2191,9 @@ class MediaKitPlayerBackend extends PlayerBackend
       await _nativeSetProperty(native, 'sub-ass', 'yes');
       await _nativeSetProperty(native, 'sub-visibility', 'yes');
       _didConfigureAppleMobileLibassFont = true;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   static const String _subtitleFontAssetDir = 'assets/subtitle_fonts';
@@ -2186,7 +2211,9 @@ class MediaKitPlayerBackend extends PlayerBackend
         final data = await rootBundle.load(asset);
         await target.writeAsBytes(data.buffer.asUint8List(), flush: true);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   static const List<String> _androidScriptFontPrefixes = [
@@ -2243,7 +2270,9 @@ class MediaKitPlayerBackend extends PlayerBackend
         await target.writeAsBytes(await source.readAsBytes(), flush: true);
       }
       _didConfigureAndroidLibassFonts = true;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   // Match by filename prefix, but the following character must not be a digit so
@@ -2271,7 +2300,9 @@ class MediaKitPlayerBackend extends PlayerBackend
         'sub-ass-override',
         assEnabled ? 'no' : 'force',
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _notifyNativeHandleReady() async {
@@ -2286,7 +2317,9 @@ class MediaKitPlayerBackend extends PlayerBackend
       final handle = await _player.handle;
       await onNativeHandleReady(handle);
       _didNotifyNativeHandle = true;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -2315,7 +2348,9 @@ class MediaKitPlayerBackend extends PlayerBackend
     try {
       final native = _player.platform as NativePlayer;
       await _nativeSetProperty(native, 'vid', enabled ? 'auto' : 'no');
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -2479,7 +2514,9 @@ class MediaKitPlayerBackend extends PlayerBackend
           ]);
         }
         return;
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     await _player.setRate(speed);
   }
@@ -2520,7 +2557,9 @@ class MediaKitPlayerBackend extends PlayerBackend
       if (aidAfter != aidToApply) {
         await _nativeSetProperty(native, 'aid', aidToApply);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -2549,7 +2588,9 @@ class MediaKitPlayerBackend extends PlayerBackend
       if (idx >= 0) {
         return idx + 1;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 
@@ -2856,7 +2897,9 @@ class MediaKitPlayerBackend extends PlayerBackend
       await _nativeSetProperty(native, 'secondary-sid', 'no');
       if (!_isLatestSubtitleSelection(generation)) return;
       await _nativeSetProperty(native, 'sub-visibility', 'no');
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -2873,7 +2916,9 @@ class MediaKitPlayerBackend extends PlayerBackend
           })
           .timeout(const Duration(seconds: 5));
       if (tracks.audio.isEmpty) return;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Whether an mpv track id (a sid rendered as a string) is the CC track
@@ -2903,7 +2948,9 @@ class MediaKitPlayerBackend extends PlayerBackend
             return !_isStale && _realSubtitleTrackCount(t.subtitle) >= count;
           })
           .timeout(const Duration(seconds: 5));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -2991,7 +3038,9 @@ class MediaKitPlayerBackend extends PlayerBackend
 
     try {
       await _writeSubtitleStyle(_player.platform as NativePlayer);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Writes the cached style rather than any arguments, so the replay after a
@@ -3058,7 +3107,9 @@ class MediaKitPlayerBackend extends PlayerBackend
         await _nativeSetProperty(native, 'sub-forced-events-only', 'no');
         // Opening a stream resets the style mpv was holding.
         await _writeSubtitleStyle(native);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     });
   }
 

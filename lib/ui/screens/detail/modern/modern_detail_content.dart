@@ -90,6 +90,7 @@ import '../../../widgets/seerr/seerr_status_pill.dart';
 import '../../../widgets/seerr/seerr_stats_card.dart';
 import '../../../widgets/seerr_icons.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 double _desktopUiScale({UserPreferences? prefs}) {
   final effectivePrefs = prefs ?? GetIt.instance<UserPreferences>();
   return effectivePrefs.get(UserPreferences.desktopUiScale).scaleFactor;
@@ -765,7 +766,9 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
           _seriesLogoId = seriesId;
         });
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   // Fetch the item's production companies from TMDB so the Studios tab can show
@@ -5020,7 +5023,9 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
       } else if (!seasonAllUnwatched) {
         try {
           episode = _vm.episodes.firstWhere((e) => !e.isPlayed);
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
     } else if (item.type == 'BoxSet') {
       episode = _vm.nextUp;

@@ -1186,7 +1186,7 @@ class _IdentifyDialogState extends State<IdentifyDialog> {
                           ClipRRect(
                             borderRadius: AppRadius.circular(6),
                             child: imageUrl != null && imageUrl.isNotEmpty
-                                ? Image.network(
+                                ? Image.network(cacheWidth: 600, 
                                     imageUrl,
                                     headers: serverImageHeaders,
                                     width: 50,

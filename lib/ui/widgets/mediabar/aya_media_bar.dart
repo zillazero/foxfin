@@ -8,6 +8,7 @@ import '../../../util/platform_detection.dart';
 import '../focus/glass_focus_halo.dart';
 import '../offline_aware_image.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class AyaMediaBar extends StatefulWidget {
   static const _cornerRadius = 18.0;
 
@@ -549,7 +550,9 @@ class _AyaSlideTransitionState extends State<_AyaSlideTransition>
     if (artworkUrl != null && artworkUrl.isNotEmpty) {
       try {
         await precacheImage(offlineAwareImageProvider(artworkUrl), context);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     if (!mounted ||

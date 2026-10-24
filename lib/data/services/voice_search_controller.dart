@@ -5,6 +5,7 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../l10n/current_app_localizations.dart';
 import '../../util/platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 typedef VoiceSearchTextListener =
     void Function(String text, {required bool isFinal});
 
@@ -110,14 +111,18 @@ class VoiceSearchController extends ChangeNotifier {
     if (!_isListening) return;
     try {
       await _speechToText.stop();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _setListening(false);
   }
 
   Future<void> cancelListening() async {
     try {
       await _speechToText.cancel();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _setListening(false);
   }
 

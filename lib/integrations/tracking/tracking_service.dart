@@ -17,6 +17,7 @@ import 'tracker.dart';
 import 'tracking_config.dart';
 import 'trakt_tracker.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class TrackerSettings {
   bool scrobble;
   bool syncWatched;
@@ -106,7 +107,9 @@ class TrackingService extends ChangeNotifier {
       String? raw;
       try {
         raw = await _storage.read(key: _key(t.id, 'token'));
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       final tok = raw == null ? null : jsonDecode(raw) as Map<String, dynamic>;
       _tokens[t.id] = tok;
       t.useToken(tok);
@@ -151,7 +154,9 @@ class TrackingService extends ChangeNotifier {
     try {
       final fresh = await t.refreshIfNeeded(tok);
       if (fresh != null) await storeToken(id, fresh);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return t;
   }
 
@@ -217,7 +222,9 @@ class TrackingService extends ChangeNotifier {
         }
       }
       if (action == ScrobbleAction.stop) _itemCache.remove(itemId);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   // -------------------------------------------------------------------- sync
@@ -244,7 +251,7 @@ class TrackingService extends ChangeNotifier {
       final local = await _loadLocal();
       for (final id in trackers.keys.where(isLinked)) {
         final r = await _syncOne(id, local);
-        parts.add('${trackers[id]!.displayName}: $r');
+        parts.add('${trackers[id]?.displayName ?? id}: $r');
       }
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt(
@@ -338,7 +345,9 @@ class TrackingService extends ChangeNotifier {
             try {
               await c.userLibraryApi.markPlayed(l.id);
               rep.importedWatched++;
-            } catch (_) {}
+            } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
           }
         }
         final toExport = playable
@@ -357,7 +366,9 @@ class TrackingService extends ChangeNotifier {
             try {
               await c.userLibraryApi.markFavorite(l.id);
               rep.importedFavorites++;
-            } catch (_) {}
+            } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
           }
         }
         final toExport = candidates

@@ -24,6 +24,7 @@ import '../downloads_nav_slot.dart';
 import '../friends_nav_slot.dart';
 import 'bottom_nav_model.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Everything the bottom navbar knows beyond its own layout: which tabs are
 /// on offer, the libraries behind the Libraries tab, the signed in user and
 /// the unread count. Each bar owns one.
@@ -78,7 +79,9 @@ class BottomNavController extends ChangeNotifier {
       for (final server in _maybe<ServerRepository>()?.servers ?? const []) {
         if (server.id == serverId) return server.name;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 
@@ -248,7 +251,9 @@ class BottomNavController extends ChangeNotifier {
       if (_disposed || _sameLibraries(_libraries, filtered)) return;
       _libraries = filtered;
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   static bool _sameLibraries(
@@ -272,7 +277,9 @@ class BottomNavController extends ChangeNotifier {
       _messages?.removeListener(notifyListeners);
       _achievements?.removeListener(notifyListeners);
       _savedMedia?.removeListener(notifyListeners);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _userSub?.cancel();
     _librariesReloadDebounce?.cancel();
     super.dispose();

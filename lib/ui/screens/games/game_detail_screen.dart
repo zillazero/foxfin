@@ -32,6 +32,7 @@ import '../../../util/game_artwork_cache.dart';
 import '../../../util/game_cores.dart';
 import '../../../util/game_library.dart';
 import '../../../util/platform_detection.dart';
+import 'package:moonfin/fox/fox_errors.dart';
 import '../../../util/tv_image_cache_stub.dart'
     if (dart.library.io) '../../../util/tv_image_cache_io.dart';
 
@@ -348,7 +349,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> with RouteAware {
             .take(20)
             .toList(growable: false);
       });
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _retrySaveCheck() {

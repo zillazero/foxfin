@@ -1410,7 +1410,7 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen>
               constraints: BoxConstraints(maxWidth: maxPreviewWidth),
               child: AspectRatio(
                 aspectRatio: aspectRatio,
-                child: Image.network(
+                child: Image.network(cacheWidth: 600, 
                   url,
                   headers: serverImageHeaders,
                   fit: BoxFit.contain,
@@ -1965,7 +1965,7 @@ class _RemoteImagePickerDialogState extends State<_RemoteImagePickerDialog> {
                                                         ),
                                                       ),
                                                     )
-                                                    : Image.network(
+                                                    : Image.network(cacheWidth: 600, 
                                                       previewUrl,
                                                       headers:
                                                           serverImageHeaders,

@@ -43,6 +43,7 @@ import '../../widgets/reader/reader_chrome_bar.dart';
 import '../../widgets/reader/reader_contents_hub.dart';
 import '../../widgets/reader/reader_settings_sheet.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class BookReaderScreen extends StatefulWidget {
   final String itemId;
   final String? serverId;
@@ -468,7 +469,9 @@ class _BookReaderScreenState extends State<BookReaderScreen>
         _reportedEpubTicks = ticks;
         await prefs.setString(placeKey, place(ticks));
         if (atEnd) await api.markPlayed(item.id);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     });
   }
 
@@ -508,7 +511,9 @@ class _BookReaderScreenState extends State<BookReaderScreen>
         await api.markPlayed(item.id);
       }
       _reportedPageIndex = pageIndex;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _loadAndPrepare() async {
@@ -1250,7 +1255,9 @@ class _BookReaderScreenState extends State<BookReaderScreen>
           if (entries.isNotEmpty) {
             return entries;
           }
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
 
       if (!_supportsRarExtraction) {

@@ -64,6 +64,7 @@ import '../models/user.dart';
 import 'server_repository.dart';
 import 'user_repository.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 enum SessionState { ready, restoring, switching }
 
 class SessionRepository {
@@ -308,7 +309,9 @@ class SessionRepository {
         }
         // Anything else is the server being unreachable, and startup still
         // has to reach the offline experience.
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     setActiveServerClient(client);
@@ -375,7 +378,9 @@ class SessionRepository {
     // A server is signed in now, so crash reports from earlier runs can go.
     try {
       unawaited(GetIt.instance<CrashReportService>().flushPending());
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     try {
       final serverUser =
@@ -416,7 +421,9 @@ class SessionRepository {
         );
         return;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     // The settings entry and the friends button stay hidden until this
     // answers. It doesn't wait for the settings sync, which on a first
@@ -442,7 +449,9 @@ class SessionRepository {
               .registerWithCurrentToken();
         }
         await _pluginSyncService.pushNotificationPrefs(client);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     final seerrCameUp = await _pluginSyncService.configureSeerr(
@@ -546,7 +555,9 @@ class SessionRepository {
     if (!GetIt.instance.isRegistered<PlaybackManager>()) return;
     try {
       await GetIt.instance<PlaybackManager>().stop(userInitiated: false);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> destroyCurrentSession({bool tokenKnownInvalid = false}) async {
@@ -567,7 +578,9 @@ class SessionRepository {
         if (GetIt.instance.isRegistered<PushMessagingService>()) {
           await GetIt.instance<PushMessagingService>().unregister();
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     _pluginSyncService.resetState();
@@ -582,7 +595,9 @@ class SessionRepository {
       try {
         final client = _clientFactory.getClientIfExists(serverId);
         await client?.authApi.logout();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     _remoteCommandSubscription?.cancel();
@@ -641,7 +656,9 @@ class SessionRepository {
       if (GetIt.instance.isRegistered<CarPlayService>()) {
         GetIt.instance<CarPlayService>().notifySignInChanged(signedIn: signedIn);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _setState(SessionState state) {
@@ -685,7 +702,9 @@ class SessionRepository {
               .handleServerEvent(client, event.data)
               .catchError((_) {}),
         );
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     });
   }
 
@@ -696,7 +715,9 @@ class SessionRepository {
         'SupportsMediaControl': true,
         'SupportedCommands': _supportedRemoteCommands,
       });
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _handleRemoteCommand(ServerWebSocketMessage event) async {

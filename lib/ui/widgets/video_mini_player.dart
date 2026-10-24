@@ -39,6 +39,7 @@ import 'playback/trickplay.dart';
 import 'playback/trickplay_tile_image.dart';
 import 'syncplay/syncplay_player_button.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Whether the video player has been shrunk into the bar along the bottom of
 /// the app. Playback keeps running in [PlaybackManager] the whole time; this
 /// tracks that the viewer left the full player without stopping it, and holds
@@ -429,7 +430,9 @@ class _VideoMiniPlayerBarState extends State<_VideoMiniPlayerBar> {
             width: _trickplayFrameWidth,
           );
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     if (!mounted || generation != _trickplayGeneration) return;
     setState(() {
@@ -533,7 +536,9 @@ class _VideoMiniPlayerBarState extends State<_VideoMiniPlayerBar> {
         await _manager.seekTo(
           current > rewind ? current - rewind : Duration.zero,
         );
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     await _manager.resume();
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class MediaStoreService {
   static const _channel = MethodChannel('com.moonfin/media_store');
 
@@ -25,6 +26,8 @@ class MediaStoreService {
   static Future<void> scanFile(String path) async {
     try {
       await _channel.invokeMethod('scanFile', {'path': path});
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 }

@@ -30,6 +30,7 @@ import '../viewmodels/live_tv_guide_view_model.dart';
 import 'custom_external_lists_service.dart';
 import 'plugin_sync_service.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class RowDataSource {
   final MediaServerClient _client;
 
@@ -1306,7 +1307,9 @@ class RowDataSource {
           serverId: serverId,
           rowType: HomeRowType.resume,
         );
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     if (row.items.isEmpty) {
       try {
@@ -1339,7 +1342,9 @@ class RowDataSource {
             rowType: HomeRowType.resume,
           );
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     return row;
   }
@@ -2271,7 +2276,9 @@ class RowDataSource {
           Map<String, dynamic> rowConfig = {};
           try {
             rowConfig = jsonDecode(additionalData ?? '{}') as Map<String, dynamic>;
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
           final showUserRatings = rowConfig['show_user_ratings'] == true;
 
           final aggregatedItems = items.map((item) {
@@ -2832,7 +2839,9 @@ class RowDataSource {
               final id = item['Id']?.toString() ?? '';
               if (id.isNotEmpty) candidatesMap[id] = item;
             }
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         }());
       }
 
@@ -2868,7 +2877,9 @@ class RowDataSource {
               final id = item['Id']?.toString() ?? '';
               if (id.isNotEmpty) candidatesMap[id] = item;
             }
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         }());
       }
 
@@ -2909,7 +2920,9 @@ class RowDataSource {
               final id = item['Id']?.toString() ?? '';
               if (id.isNotEmpty) candidatesMap[id] = item;
             }
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         }());
       }
 
@@ -3023,7 +3036,9 @@ class RowDataSource {
               }
             }
           }
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
 
       // Sort by score desc, then by premiere date desc
@@ -3068,7 +3083,9 @@ class RowDataSource {
                     tmdbId = searchPage.results.first.id.toString();
                   }
                 }
-              } catch (_) {}
+              } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             }
           }
         } catch (e) {
@@ -3122,7 +3139,9 @@ class RowDataSource {
                 );
               }).take(limit).toList();
             }
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
           final apiKey = prefs.get(UserPreferences.tmdbApiKey);
           if (recommendedItems.isEmpty && apiKey.isNotEmpty) {
@@ -3338,7 +3357,9 @@ class RowDataSource {
             merge: _byLastPlayed,
           ),
         );
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     // 2. Shows
@@ -3413,7 +3434,9 @@ class RowDataSource {
           final filteredSeries = checkedResults.whereType<AggregatedItem>().toList();
           watchedItems.addAll(filteredSeries);
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     // 3. Collections
@@ -3453,7 +3476,9 @@ class RowDataSource {
                 'lastPlayed': maxLp,
               };
             }
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
           return {
             'col': col,
             'isPlayed': false,
@@ -3468,7 +3493,9 @@ class RowDataSource {
             collectionLastPlayedDates[(info['col'] as AggregatedItem).id] = info['lastPlayed'] as String;
           }
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     // Sort the watchedItems
@@ -3514,7 +3541,9 @@ class RowDataSource {
           if (eps.isNotEmpty) {
             return eps.first;
           }
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         return item;
       }
       return item;

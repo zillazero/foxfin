@@ -17,6 +17,7 @@ import 'home_section_config.dart';
 import 'preference_constants.dart';
 import 'seerr_row_config.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class UserPreferences extends ChangeNotifier {
   static const _lastServerIdPreferenceKey = 'pref_last_server_id';
   static const _lastUserIdPreferenceKey = 'pref_last_user_id';
@@ -196,7 +197,9 @@ class UserPreferences extends ChangeNotifier {
         _store.setBool(to, asBool);
         return;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     try {
       final asInt = _store.getInt(from);
@@ -204,12 +207,16 @@ class UserPreferences extends ChangeNotifier {
         _store.setInt(to, asInt);
         return;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     try {
       final asString = _store.getString(from);
       if (asString != null) _store.setString(to, asString);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   // Media bar item types and media bar source once shared a key with other clients, so a

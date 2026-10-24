@@ -8,6 +8,7 @@ import '../../../util/platform_detection.dart';
 import '../playback/appletv_livetv_player_host_screen.dart';
 import 'live_tv_player_screen.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Resolves a bare channel id into the full channel lineup before showing the
 /// live TV player, so entries that only know an item id (favorites, search,
 /// deep links) still get channel zapping in guide order.
@@ -49,7 +50,9 @@ class _LiveTvChannelPlayerLoaderState extends State<LiveTvChannelPlayerLoader> {
           .map(GuideChannel.fromRawItem)
           .toList()
         ..sort(LiveTvGuideViewModel.comparatorFor(sortBy));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     var index = channels.indexWhere((c) => c.id == widget.channelId);
     if (index < 0) {

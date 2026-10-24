@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:jellyfin_preference/jellyfin_preference.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// A rating set while the server was unreachable, waiting to be pushed.
 ///
 /// Exactly one of the shapes applies: [clear] removes the rating, [rating]
@@ -61,7 +62,9 @@ class PendingRatingStore {
         if (decoded is! Map<String, dynamic>) continue;
         final entry = PendingRating.fromJson(decoded);
         if (entry != null) entries.add(entry);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     return entries;
   }

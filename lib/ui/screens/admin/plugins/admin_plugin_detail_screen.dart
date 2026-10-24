@@ -536,7 +536,7 @@ class _PluginImage extends StatelessWidget {
     if (imageUrl == null) return _fallback(context);
     return ClipRRect(
       borderRadius: AppRadius.circular(12),
-      child: Image.network(
+      child: Image.network(cacheWidth: 600, 
         imageUrl!,
         headers: serverImageHeaders,
         width: size,

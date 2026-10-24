@@ -13,6 +13,7 @@ import '../repositories/seerr_repository.dart';
 import 'seerr/seerr_http_client.dart';
 import 'seerr/seerr_models.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// iOS category tying the approve/decline buttons to request notifications.
 const String seerrRequestCategoryId = 'seerr_request';
 
@@ -67,7 +68,9 @@ String? _routeFromPayload(String? payload) {
     if (decoded is Map && decoded['route'] is String) {
       return (decoded['route'] as String).trim();
     }
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   return raw;
 }
 
@@ -79,7 +82,9 @@ String? _requestIdFromPayload(String? payload) {
       final id = (decoded['requestId'] as String).trim();
       return id.isNotEmpty ? id : null;
     }
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   return null;
 }
 
@@ -239,7 +244,9 @@ Future<void> showSeerrActionFailure({
         linux: LinuxNotificationDetails(),
       ),
     );
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 class LocalNotificationBootstrap {
@@ -354,7 +361,9 @@ class LocalNotificationBootstrap {
             description: seerrNotificationChannelDesc,
             importance: Importance.high,
           ));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _initialized = true;
   }
 

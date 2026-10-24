@@ -6,6 +6,7 @@ import 'package:server_core/server_core.dart';
 
 import '../../integrations/tracking/tmdb_direct.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// A studio for the details screen: its name and, when the plugin has a cached
 /// logo, an authenticated URL to that logo image.
 typedef StudioCompany = ({String name, String? imageUrl});
@@ -133,7 +134,9 @@ class TmdbRepository {
           'season': season,
           'episode': episode,
         });
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       // Foxfin: direct TMDB fallback when the server plugin is missing.
       if (response == null && TmdbDirect.instance.available) {
         final v = await TmdbDirect.instance.episodeRating(tmdbId, season, episode);
@@ -185,7 +188,9 @@ class TmdbRepository {
           'tmdbId': tmdbId,
           'season': season,
         });
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       // Foxfin: direct TMDB fallback when the server plugin is missing.
       if (response == null && TmdbDirect.instance.available) {
         final m = await TmdbDirect.instance.seasonRatings(tmdbId, season);

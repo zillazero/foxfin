@@ -7,6 +7,7 @@ import 'package:sqlite3/open.dart';
 import '../../util/platform_detection.dart';
 import 'offline_database_location.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 QueryExecutor openConnection() {
   return LazyDatabase(() async {
     final file = await offlineDatabaseFile();
@@ -51,7 +52,9 @@ DynamicLibrary _openAppleSqlite() {
   for (final name in const ['libsqlite3.dylib', 'libsqlite3.0.dylib']) {
     try {
       return DynamicLibrary.open(name);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
   return DynamicLibrary.process();
 }

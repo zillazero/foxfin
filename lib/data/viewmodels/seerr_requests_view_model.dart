@@ -8,6 +8,7 @@ import '../services/seerr/seerr_api_models.dart';
 import '../services/seerr/seerr_download_progress.dart';
 import '../services/seerr/seerr_models.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 enum SeerrRequestFilter { all, pending, approved, processing, available, failed }
 
 extension SeerrRequestFilterApi on SeerrRequestFilter {
@@ -332,7 +333,9 @@ class SeerrRequestsViewModel extends ChangeNotifier {
       final counts = await _repo.getRequestCount();
       _state = _state.copyWith(counts: counts);
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> refresh() => load(isRefresh: true);

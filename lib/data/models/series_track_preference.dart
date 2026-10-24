@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class SeriesTrackPreference {
   final String language;
   final String title;
@@ -43,7 +44,9 @@ class SeriesTrackPreference {
       try {
         final decoded = jsonDecode(trimmed) as Map<String, dynamic>;
         return SeriesTrackPreference.fromJson(decoded);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     return SeriesTrackPreference(language: trimmed);
   }

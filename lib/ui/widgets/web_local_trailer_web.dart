@@ -5,6 +5,7 @@ import 'dart:ui_web' as ui_web;
 import 'package:flutter/widgets.dart';
 import 'package:web/web.dart' as web;
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// hls.js bridge injected on the web host (also used by HtmlVideoBackend). Lets
 /// Jellyfin/Emby HLS transcode streams play in browsers without native HLS.
 extension type _MoonfinHlsBridge._(JSObject _) implements JSObject {
@@ -159,13 +160,17 @@ class _WebLocalTrailerState extends State<WebLocalTrailer> {
       _video.pause();
       _video.removeAttribute('src');
       _video.load();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     final controller = _hlsController;
     _hlsController = null;
     if (controller != null) {
       try {
         _resolveHlsBridge()?.destroy(controller);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     if (identical(_owners[_viewType], this)) {
       _owners.remove(_viewType);

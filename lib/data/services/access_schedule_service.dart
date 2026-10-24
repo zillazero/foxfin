@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' show AppLifecycleListener;
 import 'package:server_core/server_core.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Whether the signed in user may use the server right now, and when they may
 /// next.
 class AccessScheduleStatus {
@@ -164,7 +165,9 @@ class AccessScheduleService extends ChangeNotifier {
     if (fresh.isNotEmpty && ask != null) {
       try {
         refused = await ask();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       if (generation != _generation || look < _appliedLook) return;
     }
     _appliedLook = look;

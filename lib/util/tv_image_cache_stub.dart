@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'device_performance.dart';
 import 'image_file_service.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// The browser owns the connections, but the cache manager still counts a
 /// fetch as running until it finishes, so artwork that never arrives would
 /// hold its slot and queue every later image behind it.
@@ -18,7 +19,9 @@ Future<void> configureImageDiskCache({
         fileService: BoundedImageFileService(http.Client()),
       ),
     );
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 Future<void> enforceImageCacheBudget(

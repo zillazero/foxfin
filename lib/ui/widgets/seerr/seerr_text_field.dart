@@ -8,6 +8,7 @@ import '../../../preference/user_preferences.dart';
 import '../../../util/focus/dpad_keys.dart';
 import '../../../util/platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Text input for seerr dialogs that uses the TV keyboard (honoring the
 /// system IME preference) on TV and a plain TextField elsewhere.
 class SeerrTextField extends StatefulWidget {
@@ -66,7 +67,9 @@ class _SeerrTextFieldState extends State<SeerrTextField> {
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
         );
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     });
   }
 

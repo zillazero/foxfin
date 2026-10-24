@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 enum ReaderPageTheme { original, paper, quiet, calm, night }
 
 enum ReaderFontFamily { system, serif, sans, mono }
@@ -236,7 +237,9 @@ class ReaderSettings {
       if (decoded is Map<String, dynamic>) {
         return ReaderSettings.fromJson(decoded);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return defaults;
   }
 

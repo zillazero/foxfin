@@ -26,6 +26,7 @@ import '../../widgets/quick_return_wrapper.dart';
 import '../../widgets/skeleton/skeleton_library_grid.dart';
 import '../../../l10n/app_localizations.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 Color get _navyBackground => AppColorScheme.background;
 const _horizontalPadding = 60.0;
 const _kCompactBreakpoint = 600.0;
@@ -311,7 +312,9 @@ class _AllGenresScreenState extends State<AllGenresScreen> {
       if (usedId != null) _usedArtworkIds.add(usedId);
 
       if (!_disposed && mounted) setState(() {});
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   int _genreCardRequestMaxWidth() {

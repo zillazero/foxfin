@@ -37,6 +37,7 @@ import '../../widgets/client_certificate_dialog.dart';
 import '../../widgets/login_scaffold.dart';
 import '../../widgets/pin_entry_dialog.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 final _kAccent = AppColorScheme.accent;
 
 /// Asks for the PIN after a sign in when the user set one. A sign in that
@@ -482,7 +483,9 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         }
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _stopQuickConnect() {

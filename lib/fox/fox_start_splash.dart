@@ -2,6 +2,7 @@
 // Theme-Akzentfarbe und blendet aus. Bei reduzierten/aus Animationen nur
 // kurzes Ausblenden bzw. gar nichts.
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../preference/fox_ui_prefs.dart';
 
@@ -54,7 +55,10 @@ class _FoxStartSplashState extends State<FoxStartSplash>
         builder: (context, _) {
           final t = c.value;
           final fade = t < 0.7 ? 1.0 : 1.0 - (t - 0.7) / 0.3;
-          final pulse = reduced ? 0.0 : Curves.easeInOut.transform(t < 0.5 ? t * 2 : 2 - t * 2);
+          // 2.10.0: gleiche Choreografie wie die AnimatedVectorDrawable der
+          // Kotlin-Apps: Einzoomen 0,86 -> 1 (0-50 %), danach Puls 1 -> 1,05 -> 1.
+          final zoom = reduced ? 1.0 : 0.86 + 0.14 * Curves.fastOutSlowIn.transform((t / 0.5).clamp(0.0, 1.0));
+          final pulse = reduced || t < 0.5 ? 0.0 : Curves.easeInOut.transform(t < 0.75 ? (t - 0.5) * 4 : (1 - t) * 4);
           return Opacity(
             opacity: fade.clamp(0.0, 1.0),
             child: ColoredBox(
@@ -76,9 +80,10 @@ class _FoxStartSplashState extends State<FoxStartSplash>
                           ],
                   ),
                   child: Transform.scale(
-                    scale: 1.0 + 0.06 * pulse,
-                    child: Image.asset('assets/images/foxfin_splash.png',
-                        width: 144, height: 144, cacheWidth: 288),
+                    scale: zoom * (1.0 + 0.05 * pulse),
+                    child: SvgPicture.asset('assets/images/foxfin_logo_a.svg',
+                        width: 144, height: 144,
+                        semanticsLabel: 'Foxfin'),
                   ),
                 ),
               ),

@@ -8,6 +8,7 @@ import 'dart:ui_web' as ui_web;
 import 'package:flutter/widgets.dart';
 import 'package:web/web.dart' as web;
 
+import 'package:moonfin/fox/fox_errors.dart';
 @JS('YT.Player')
 extension type _YTPlayer._(JSObject _) implements JSObject {
   external factory _YTPlayer(JSAny idOrElement, JSObject options);
@@ -134,7 +135,9 @@ class _WebYouTubeTrailerState extends State<WebYouTubeTrailer> {
     if (oldWidget.muted != widget.muted && _player != null) {
       try {
         widget.muted ? _player!.mute() : _player!.unMute();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
   }
 
@@ -151,10 +154,14 @@ class _WebYouTubeTrailerState extends State<WebYouTubeTrailer> {
       // Pause before destroy so audio stops even if the iframe lingers.
       try {
         player.pauseVideo();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       try {
         player.destroy();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     if (identical(_owners[_viewType], this)) {
       _owners.remove(_viewType);
@@ -305,7 +312,9 @@ class _WebYouTubeTrailerState extends State<WebYouTubeTrailer> {
           ..border = '0'
           ..pointerEvents = widget.ignorePointer ? 'none' : 'auto';
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _onReady() {
@@ -314,7 +323,9 @@ class _WebYouTubeTrailerState extends State<WebYouTubeTrailer> {
       _player?.mute();
       _player?.playVideo();
       _applyIframeStyle();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _onStateChange(JSObject event) {
@@ -349,7 +360,9 @@ class _WebYouTubeTrailerState extends State<WebYouTubeTrailer> {
       case 'onReady':
         try {
           _player?.playVideo();
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         _applyIframeStyle();
         return;
       case 'onStateChange':
@@ -392,7 +405,9 @@ class _WebYouTubeTrailerState extends State<WebYouTubeTrailer> {
         player.unloadModule('captions'.toJS);
         player.unloadModule('cc'.toJS);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _handleErrorCode(int? code) {
@@ -417,7 +432,9 @@ class _WebYouTubeTrailerState extends State<WebYouTubeTrailer> {
     if (!widget.muted) {
       try {
         _player?.unMute();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     widget.onPlaybackStarted?.call();
   }

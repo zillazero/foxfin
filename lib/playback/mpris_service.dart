@@ -12,6 +12,7 @@ import '../util/audio_artwork_url.dart';
 import '../util/platform_detection.dart';
 import 'car_artwork.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 const _busName = 'org.mpris.MediaPlayer2.moonfin';
 const _objectPath = '/org/mpris/MediaPlayer2';
 const _rootInterface = 'org.mpris.MediaPlayer2';
@@ -116,10 +117,14 @@ class MprisService {
     if (client != null) {
       try {
         await client.releaseName(_busName);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       try {
         await client.close();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
   }
 }
@@ -523,14 +528,18 @@ class _MprisPlayer extends DBusObject {
     if (changed.isEmpty) return;
     try {
       await emitPropertiesChanged(_playerInterface, changedProperties: changed);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> emitSeeked(Duration position) async {
     try {
       await emitSignal(
           _playerInterface, 'Seeked', [DBusInt64(position.inMicroseconds)]);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 }
 

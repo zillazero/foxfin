@@ -5,6 +5,7 @@ import 'package:web/web.dart' as web;
 
 import 'web_playback_capabilities_model.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 WebPlaybackCapabilities? _cached;
 
 class _BrowserInfo {
@@ -267,7 +268,9 @@ bool _supportsAnyType(web.HTMLMediaElement media, List<String> mimeTypes) {
       if (_isProbablyOrMaybe(verdict)) {
         return true;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   return false;
@@ -283,7 +286,9 @@ bool _supportsAnyTypeDirect(
       if (_isProbablyOrMaybe(verdict)) {
         return true;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   return false;

@@ -15,6 +15,7 @@ import 'media_server_client_factory.dart';
 import 'row_data_source.dart';
 import 'watch_next_service.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// The two library kinds that get their own recently released launcher row.
 enum _ReleaseCollection {
   movies(collectionTypes: ['movies'], itemTypes: ['Movie']),
@@ -75,7 +76,9 @@ class TvChannelsService {
       await CarArtwork.instance.persistHosts();
       await _channel.invokeMethod('publishChannels', {'channels': channels});
       _lastPublishedSignature = signature;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void clear() {
@@ -91,7 +94,9 @@ class TvChannelsService {
       for (final entry in factory.clients.entries) {
         if (identical(entry.value, client)) return entry.key;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return client.baseUrl;
   }
 

@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'storage_path_service.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class ThemeStoreCatalogEntry {
   final String id;
   final String displayName;
@@ -76,7 +77,9 @@ class ThemeStoreService {
     try {
       final decoded = jsonDecode(prefs.getString(_prefsKey) ?? '{}');
       if (decoded is Map) return Map<String, dynamic>.from(decoded);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return {};
   }
 
@@ -100,12 +103,16 @@ class ThemeStoreService {
           if (decoded is! Map) continue;
           final spec = ThemeSpec.fromJson(Map<String, dynamic>.from(decoded));
           saved.putIfAbsent(spec.id, spec.toJson);
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
       if (await prefs.setString(_prefsKey, jsonEncode(saved))) {
         await dir.delete(recursive: true);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Loads saved store themes and registers them. Call once at startup,
@@ -121,9 +128,13 @@ class ThemeStoreService {
           final spec = ThemeSpec.fromJson(Map<String, dynamic>.from(json));
           if (ThemeRegistry.builtInIds.contains(spec.id)) continue;
           ThemeRegistry.registerStoreTheme(spec);
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> saveStoreTheme(ThemeSpec spec) async {

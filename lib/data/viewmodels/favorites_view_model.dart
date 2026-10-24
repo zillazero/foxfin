@@ -10,6 +10,7 @@ import '../repositories/mdblist_repository.dart';
 import '../services/user_data_sync.dart';
 import '../utils/blocked_ratings.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 enum FavoritesState { loading, ready, error }
 
 class FavoritesViewModel extends ChangeNotifier {
@@ -372,7 +373,9 @@ class FavoritesViewModel extends ChangeNotifier {
       if (_gridFetchedCount <= prevFetched) {
         _gridTotalCount = _gridFetchedCount;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     _loadingMoreGrid = false;
     notifyListeners();

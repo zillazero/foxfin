@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../preference/preference_constants.dart';
 import 'platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class AutoHdrSwitcher {
   static const MethodChannel _channel = MethodChannel('moonfin/hdr_display');
 
@@ -83,7 +84,9 @@ class AutoHdrSwitcher {
       }
     } on MissingPluginException {
       _channelUnavailable = true;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return false;
   }
 
@@ -106,7 +109,9 @@ class AutoHdrSwitcher {
       return ok == true;
     } on MissingPluginException {
       _channelUnavailable = true;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return false;
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// The last known-good hardware capability probes, persisted across launches.
 ///
 /// The probes race the HDMI handshake on a cold boot: the app can be asking
@@ -60,7 +61,9 @@ class DeviceCapabilityCache {
       if (build != null) {
         await store.setString('$key.build', build);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   static Future<List<String>?> readStringList(String key) async {
@@ -74,7 +77,9 @@ class DeviceCapabilityCache {
   static Future<void> writeStringList(String key, List<String> values) async {
     try {
       await (await _store).setStringList(key, values);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   static Future<void> remove(String key) async {
@@ -82,6 +87,8 @@ class DeviceCapabilityCache {
       final store = await _store;
       await store.remove(key);
       await store.remove('$key.build');
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 }

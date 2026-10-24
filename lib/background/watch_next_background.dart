@@ -12,6 +12,7 @@ import '../playback/car_artwork.dart';
 import '../playback/headless_session_bootstrap.dart';
 import '../preference/user_preferences.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 Future<void> watchNextBackgroundMain() async {
   WidgetsFlutterBinding.ensureInitialized();
   const channel = MethodChannel('org.moonfin.androidtv/watch_next');
@@ -41,11 +42,15 @@ Future<void> watchNextBackgroundMain() async {
       try {
         final r = await dataSource.loadResume(serverId);
         rows.add(r.copyWith(items: prefs.filterContinueWatching(r.items)));
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       try {
         final r = await dataSource.loadNextUp(serverId);
         rows.add(r.copyWith(items: prefs.filterNextUp(r.items)));
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
       await CarArtwork.instance.ensureReady();
       final items = WatchNextService.buildItems(rows, client);
@@ -66,14 +71,20 @@ Future<void> watchNextBackgroundMain() async {
         } else {
           await channel.invokeMethod('publishChannels', {'channels': channels});
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
       ok = true;
     }
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
   try {
     await channel
         .invokeMethod('backgroundComplete', {'ok': ok, 'permanent': permanent});
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }

@@ -11,6 +11,7 @@ import '../di/modules/server_module.dart';
 import '../playback/headless_session_bootstrap.dart';
 import 'auto_download_background.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Android: the auto-download worker's headless engine lands here when the
 /// app process is not running. Brings up the downloads storage, restores
 /// the saved sign-in and runs one budgeted check, then reports back so the
@@ -46,7 +47,9 @@ Future<void> autoDownloadBackgroundMain() async {
       // posts for transfers it runs.
       try {
         await GetIt.instance<DownloadNotificationService>().initialize();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       ok = await runAutoDownloadBackgroundRefresh(
         Duration(seconds: budgetSeconds),
       );
@@ -61,5 +64,7 @@ Future<void> autoDownloadBackgroundMain() async {
       'ok': ok,
       'permanent': permanent,
     });
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }

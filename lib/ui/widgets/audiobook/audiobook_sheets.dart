@@ -12,6 +12,7 @@ import '../../../util/platform_detection.dart';
 import '../overlay_sheet.dart';
 import 'audiobook_time.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 Future<void> showAudiobookSpeedSheet({
   required BuildContext context,
   required double current,
@@ -947,7 +948,9 @@ class _NoteEditorSheetState extends State<_NoteEditorSheet> {
                   _isSubmitting = true;
                   try {
                     Navigator.pop(widget.dialogContext ?? context, null);
-                  } catch (_) {}
+                  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
                 },
               ),
               const SizedBox(width: 8),
@@ -959,7 +962,9 @@ class _NoteEditorSheetState extends State<_NoteEditorSheet> {
                   final text = _controller.text.trim();
                   try {
                     Navigator.pop(widget.dialogContext ?? context, text);
-                  } catch (_) {}
+                  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
                 },
                 isFilled: true,
               ),

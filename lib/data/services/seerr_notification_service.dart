@@ -7,6 +7,7 @@ import '../../ui/widgets/floating_notification.dart';
 import '../../util/platform_detection.dart';
 import 'local_notification_bootstrap.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class SeerrNotificationService {
   Future<void> initialize() async {
     await LocalNotificationBootstrap.instance.initialize();
@@ -96,7 +97,9 @@ class SeerrNotificationService {
         ),
         payload: payload,
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _showBanner(String title, String body, String route) {

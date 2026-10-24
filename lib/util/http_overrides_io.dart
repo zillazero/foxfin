@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:server_core/server_core.dart';
 import 'package:server_core/src/network/cert_pins_io.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 void configureHttpOverrides() {
   // Some strict or older Nginx reverse proxies on 443 abort the handshake unless
   // the client allows legacy TLS renegotiation, so enable it for every connection.
@@ -11,7 +12,9 @@ void configureHttpOverrides() {
   // TLS config, so revisit this if that changes.
   try {
     SecurityContext.defaultContext.allowLegacyUnsafeRenegotiation = true;
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   HttpOverrides.global = _MoonfinHttpOverrides();
 }
 
@@ -21,7 +24,9 @@ class _MoonfinHttpOverrides extends HttpOverrides {
     final secContext = context ?? SecurityContext.defaultContext;
     try {
       secContext.allowLegacyUnsafeRenegotiation = true;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     final client = super.createHttpClient(secContext);
     client.maxConnectionsPerHost = 12;
     // Certificates the system rejects are accepted only when the user pinned

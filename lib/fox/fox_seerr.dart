@@ -14,6 +14,7 @@ import '../data/services/seerr/seerr_api_models.dart';
 import '../ui/navigation/destinations.dart';
 import '../ui/widgets/seerr/seerr_image_urls.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Schalter pro Bibliothek (lokal, keine Secrets).
 class FoxSeerrLib {
   static const _key = 'fox_seerr_lib_off_v1';
@@ -296,7 +297,9 @@ class _FoxSeerrHubScreenState extends State<FoxSeerrHubScreen> {
         final u = await repo.getCurrentUser();
         final a = u.hasPermission(SeerrPermission.manageRequests);
         if (mounted) setState(() => _admin = a);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }());
   }
 

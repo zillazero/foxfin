@@ -89,6 +89,7 @@ import '../../widgets/seerr/seerr_genre_label.dart';
 import '../../widgets/skeleton/skeleton_home_row.dart';
 import '../../widgets/skeleton/skeleton_shimmer.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 Color get _homeBackground => AppColorScheme.background;
 
 /// How far the rows have to scroll before the return is worth offering.
@@ -1385,7 +1386,9 @@ class _ContentRowsState extends State<_ContentRows>
     _finishSharedPreview(releaseResources: true);
     try {
       await _media3PreviewBackend?.release();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -1929,7 +1932,9 @@ class _ContentRowsState extends State<_ContentRows>
       try {
         final dynamic native = platform;
         native.setProperty('network-timeout', '120');
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     _previewPlayer = player;
     _previewController = VideoController(
@@ -4080,7 +4085,9 @@ class _ContentRowsState extends State<_ContentRows>
       Map<String, dynamic> rowConfig = {};
       try {
         rowConfig = jsonDecode(config.pluginAdditionalData ?? '{}') as Map<String, dynamic>;
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       final source = rowConfig['source'] as String? ?? 'imdb';
       final type = rowConfig['type'] as String? ?? 'user_list';
       final sourceLabel = switch (source) {

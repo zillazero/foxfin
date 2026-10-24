@@ -8,6 +8,7 @@ import '../util/native_controller_mapping.dart';
 import 'appletv_game_player.dart';
 import 'native_game_player_channel.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Result of loading a game into a native libretro session.
 class GameLoadInfo {
   const GameLoadInfo({
@@ -255,7 +256,9 @@ class MethodChannelGamePlayer implements NativeGamePlayer {
   Future<void> setFastForward(int factor) async {
     try {
       await _control.invokeMethod<void>('setFastForward', {'factor': factor});
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   // Briefly holds a RetroPad button (index) so the overlay can send Start/Select.
@@ -266,7 +269,9 @@ class MethodChannelGamePlayer implements NativeGamePlayer {
         'index': index,
         'durationMs': durationMs,
       });
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -276,7 +281,9 @@ class MethodChannelGamePlayer implements NativeGamePlayer {
         'port': port,
         'mask': mask,
       });
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -299,7 +306,9 @@ class MethodChannelGamePlayer implements NativeGamePlayer {
         'l2': l2,
         'r2': r2,
       });
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -320,7 +329,9 @@ class MethodChannelGamePlayer implements NativeGamePlayer {
         'x': x,
         'y': y,
       });
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -374,7 +385,9 @@ class MethodChannelGamePlayer implements NativeGamePlayer {
         'id': id,
         'value': value,
       });
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -442,6 +455,8 @@ class MethodChannelGamePlayer implements NativeGamePlayer {
   Future<void> _invoke(String method, [Map<String, dynamic>? arguments]) async {
     try {
       await _control.invokeMethod<void>(method, arguments);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 }

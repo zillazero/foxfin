@@ -40,6 +40,7 @@ import '../../widgets/skeleton/skeleton_home_row.dart';
 import '../../widgets/skeleton/skeleton_shimmer.dart';
 import '../../widgets/offline_aware_image.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w300';
 const _tmdbBackdropBase = 'https://image.tmdb.org/t/p/w1280';
 
@@ -159,7 +160,9 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
       if (mounted && count != _badgeCount) {
         setState(() => _badgeCount = count);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _openRequests() async {

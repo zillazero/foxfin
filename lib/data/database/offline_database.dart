@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 part 'offline_database.g.dart';
 
 extension DownloadedItemMetadata on DownloadedItem {
@@ -9,7 +10,9 @@ extension DownloadedItemMetadata on DownloadedItem {
     try {
       final raw = jsonDecode(metadataJson);
       if (raw is Map<String, dynamic>) return raw;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return const {};
   }
 }
@@ -90,7 +93,9 @@ class OfflineDatabase extends _$OfflineDatabase {
           'CREATE INDEX IF NOT EXISTS idx_dl_series ON downloaded_items (server_id, series_id, season_id)',
         );
         await customStatement('PRAGMA optimize');
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     },
     onCreate: (m) => m.createAll(),
     onUpgrade: (m, from, to) async {

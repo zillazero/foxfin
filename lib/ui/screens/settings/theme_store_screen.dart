@@ -17,6 +17,7 @@ import '../../widgets/settings/clean_settings_typography.dart';
 import '../../widgets/settings/preference_tiles.dart';
 import 'settings_app_bar.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class ThemeStoreScreen extends StatefulWidget {
   const ThemeStoreScreen({super.key});
 
@@ -105,7 +106,9 @@ class _ThemeStoreScreenState extends State<ThemeStoreScreen> {
       if (wasCurrent && mounted) {
         await controller.applyCustomTheme(_prefs, '');
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     if (!mounted) return;
     setState(() => _busyId = null);
     _showMessage(l10n.savedThemesDeletedMessage(entry.displayName));

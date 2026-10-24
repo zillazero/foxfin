@@ -4,6 +4,7 @@ import 'package:media_kit/media_kit.dart';
 import '../../playback/mpv_client_certificate.dart';
 import '../../util/platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 abstract class ThemeAudioPlayer {
   Future<void> setVolume(double volume);
   Future<void> open(String url);
@@ -55,7 +56,9 @@ class AppleTvThemeAudioPlayer implements ThemeAudioPlayer {
   Future<void> _send(String method, [Map<String, dynamic>? extra]) async {
     try {
       await _channel.invokeMethod(method, {'token': _token, ...?extra});
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override

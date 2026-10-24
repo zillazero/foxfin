@@ -4,6 +4,7 @@ import 'package:app_links/app_links.dart';
 
 import '../../util/platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Routes OS-registered `moonfin://` deep links into the app. tvOS and web
 /// are gated off, they have no app_links backend.
 class DeepLinkService {
@@ -85,7 +86,9 @@ class DeepLinkService {
     if ((id == null || id.isEmpty) && q >= 0) {
       try {
         id = Uri.splitQueryString(frag.substring(q + 1))['id'];
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     if (id == null || !RegExp(r'^[0-9a-fA-F-]{32,36}$').hasMatch(id)) {
       return null; // no item: the app simply opens

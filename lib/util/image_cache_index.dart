@@ -9,6 +9,7 @@ import 'package:path/path.dart' as p;
 
 import 'artwork_timing.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// The artwork cache's index of what is on disk, kept in memory.
 ///
 /// The cache manager asks its repository for a row on every image it shows,
@@ -394,7 +395,9 @@ class ImageCacheIndex extends CacheInfoRepository {
     for (final f in [file, temp]) {
       try {
         if (await f.exists()) await f.delete();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
   }
 

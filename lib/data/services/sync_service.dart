@@ -10,6 +10,7 @@ import '../database/offline_database.dart';
 import '../repositories/offline_repository.dart';
 import 'pending_rating_store.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 enum SyncState { idle, syncing, done, error }
 
 class SyncResult {
@@ -210,7 +211,9 @@ class SyncService extends ChangeNotifier {
           }
         }
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return result;
   }
 

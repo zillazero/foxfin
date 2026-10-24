@@ -11,6 +11,7 @@ import '../../preference/user_preferences.dart';
 import '../../util/platform_detection.dart';
 import 'storage_path_service.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// App-lifetime owner of the background_downloader [FileDownloader] singleton.
 ///
 /// [FileDownloader] is a process singleton whose group callbacks must be
@@ -229,7 +230,9 @@ class BackgroundDownloadCoordinator {
     if (!isSupported) return;
     try {
       await FileDownloader().rescheduleKilledTasks();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _route(TaskUpdate update) {

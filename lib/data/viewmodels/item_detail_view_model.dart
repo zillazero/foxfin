@@ -28,6 +28,7 @@ import 'seerr_media_detail_view_model.dart';
 import '../models/upcoming_episode_info.dart';
 import '../services/upcoming_episode_service.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 enum CollectionSortOption {
   alphabetical,
   releaseAscending,
@@ -525,7 +526,9 @@ class ItemDetailViewModel extends ChangeNotifier {
                   : seriesItem.imdbId;
           mediaType = 'tv';
           title = seriesItem.name;
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
     }
 
@@ -539,7 +542,9 @@ class ItemDetailViewModel extends ChangeNotifier {
         mediaType,
         title: title,
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// One child view model for the life of this one. [load] is re-entered when
@@ -853,7 +858,9 @@ class ItemDetailViewModel extends ChangeNotifier {
               break;
             }
           }
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
         if (_localPersonId != null) {
           try {
@@ -869,7 +876,9 @@ class ItemDetailViewModel extends ChangeNotifier {
               serverId: _serverId ?? _client.baseUrl,
               rawData: mergedData,
             );
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         }
       } else {
         final data = await _client.itemsApi.getItem(itemId, mediaSourceId: mediaSourceId);
@@ -1089,7 +1098,9 @@ class ItemDetailViewModel extends ChangeNotifier {
           nextUp = candidate;
         }
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     _nextUp = nextUp;
     if (previousId != _nextUp?.id) {
@@ -1128,7 +1139,9 @@ class ItemDetailViewModel extends ChangeNotifier {
       final items = (data['Items'] as List?) ?? [];
       _albums = _mapItems(items);
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _loadTracks({String? artistId}) async {
@@ -1152,7 +1165,9 @@ class ItemDetailViewModel extends ChangeNotifier {
       final items = (data['Items'] as List?) ?? [];
       _tracks = _mapItems(items);
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _loadLyrics() async {
@@ -1357,7 +1372,9 @@ class ItemDetailViewModel extends ChangeNotifier {
         // that haven't been paged in yet belong.
         await syncService.saveCustomCollectionOrder(_client, itemId, order);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Pulls one item out of this collection and rebuilds every list that
@@ -1453,7 +1470,9 @@ class ItemDetailViewModel extends ChangeNotifier {
   Future<void> _loadCollectionItems() async {
     try {
       await _fetchCollectionPage();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Fetches the next page of BoxSet top-level items for the **grid**.
@@ -1521,7 +1540,9 @@ class ItemDetailViewModel extends ChangeNotifier {
       if (_isDisposed || _item?.id != item.id) return;
       _missingCollectionItems = missing;
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Seerr's missing-title pass for the parent collections, run after they
@@ -1558,7 +1579,9 @@ class ItemDetailViewModel extends ChangeNotifier {
         ];
         notifyListeners();
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// TMDB's collection id for a set of library members: the box set's own
@@ -1652,7 +1675,9 @@ class ItemDetailViewModel extends ChangeNotifier {
             _flattenedIds = List<String>.from(customOrder);
             _collectionSort = CollectionSortOption.custom;
           }
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
 
       if (_flattenedIds == null) {
@@ -1662,7 +1687,9 @@ class ItemDetailViewModel extends ChangeNotifier {
       }
 
       _resetPlaylistPaging();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     _playlistIndexBuilding = false;
     notifyListeners();
@@ -1735,7 +1762,9 @@ class ItemDetailViewModel extends ChangeNotifier {
             ),
           )
           .toList();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Reads the next run of ids into [_playlistItems].
@@ -1802,7 +1831,9 @@ class ItemDetailViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       await _fetchCollectionPage();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _collectionLoadingMore = false;
     notifyListeners();
   }
@@ -1816,7 +1847,9 @@ class ItemDetailViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       await _fetchPlaylistPage();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _playlistLoadingMore = false;
     notifyListeners();
   }
@@ -1852,7 +1885,9 @@ class ItemDetailViewModel extends ChangeNotifier {
           .toList(growable: false);
 
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Re-reads [ids] a page at a time. One request carrying every loaded id
@@ -1911,7 +1946,9 @@ class ItemDetailViewModel extends ChangeNotifier {
       _resolveNextUp();
 
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _loadParentCollection() async {
@@ -1993,7 +2030,9 @@ class ItemDetailViewModel extends ChangeNotifier {
       notifyListeners();
       final load = ++_parentCollectionsLoad;
       unawaited(_loadMissingParentCollectionItems(collections, load));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<bool> _boxSetContainsItem(String boxSetId, String itemId) async {
@@ -2076,7 +2115,9 @@ class ItemDetailViewModel extends ChangeNotifier {
         }
         startIndex += boxSets.length;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     return result;
   }
@@ -2178,7 +2219,9 @@ class ItemDetailViewModel extends ChangeNotifier {
           ),
       ];
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _loadSimilar() async {
@@ -2254,7 +2297,9 @@ class ItemDetailViewModel extends ChangeNotifier {
         final items = (data['Items'] as List?) ?? [];
         _similar = _mapItems(items);
         _similarSource = SimilarSource.jellyfin;
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     } finally {
       _similarInitialLoadComplete = true;
       notifyListeners();
@@ -2287,7 +2332,9 @@ class ItemDetailViewModel extends ChangeNotifier {
               notifyListeners();
             }
           }
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
       return;
     }
@@ -2310,7 +2357,9 @@ class ItemDetailViewModel extends ChangeNotifier {
         _ratings = result;
         notifyListeners();
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _loadUpcomingEpisode() async {
@@ -2460,7 +2509,9 @@ class ItemDetailViewModel extends ChangeNotifier {
         rawData: data,
       );
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   List<Map<String, dynamic>> get directors {

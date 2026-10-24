@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:server_core/server_core.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Reads the cached probe result for the active server. False whenever the
 /// service is not registered, so profile builds outside a full app session
 /// keep the H264-first offer.
@@ -34,6 +35,8 @@ class ServerTranscodeCapabilities {
       // A server switch mid-probe means this result belongs to the old server.
       if (generation != _generation) return;
       _hevcEncodeAllowed = config['AllowHevcEncoding'] == true;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 }

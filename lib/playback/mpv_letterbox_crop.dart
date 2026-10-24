@@ -5,6 +5,7 @@ import 'package:playback_core/playback_core.dart';
 
 import 'mpv_frame_sample.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// libmpv cropdetect helpers. One-shot matches stock mpv `autocrop.lua`.
 /// Continuous matches `dynamic-crop.lua` without Lua.
 class MpvLetterboxCrop {
@@ -188,7 +189,9 @@ class MpvLetterboxCrop {
       if (value is Map) {
         return value.map((key, v) => MapEntry(key.toString(), v));
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 }

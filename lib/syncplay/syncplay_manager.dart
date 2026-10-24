@@ -18,6 +18,7 @@ import 'sync_correction_policy.dart';
 import 'syncplay_state.dart';
 import 'time_sync_manager.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class SyncPlayManager extends ChangeNotifier {
   static const int _pingIntervalMs = 15000;
   static const int _commandLeadToleranceMs = 120;
@@ -322,7 +323,9 @@ class SyncPlayManager extends ChangeNotifier {
     if (api != null) {
       try {
         await api.leaveGroup();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     _resetState();
   }
@@ -373,7 +376,9 @@ class SyncPlayManager extends ChangeNotifier {
         final rtt = _timeSync?.roundTripTime ?? 0;
         try {
           await _api?.sendPing(rtt);
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       },
     );
   }
@@ -771,7 +776,9 @@ class SyncPlayManager extends ChangeNotifier {
       for (final entry in entries) {
         if (identical(entry.value, client)) return entry.key;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 
@@ -1463,7 +1470,9 @@ class SyncPlayManager extends ChangeNotifier {
     try {
       final id = item.id;
       if (id is String) return id;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 
@@ -1535,7 +1544,9 @@ class SyncPlayManager extends ChangeNotifier {
     try {
       _trace(() => 'requesting Pause');
       await _api?.sendPause();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> requestUnpause() async {
@@ -1543,7 +1554,9 @@ class SyncPlayManager extends ChangeNotifier {
     try {
       _trace(() => 'requesting Unpause');
       await _api?.sendUnpause();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> requestSeek(Duration position) async {
@@ -1551,14 +1564,18 @@ class SyncPlayManager extends ChangeNotifier {
     _trace(() => 'requesting Seek to ${position.inMilliseconds}ms');
     try {
       await _api?.sendSeek(SyncPlayUtils.msToTicks(position.inMilliseconds));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> requestStop() async {
     if (!_state.enabled || !syncPlayEnabled) return;
     try {
       await _api?.sendStop();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> requestNext() async {
@@ -1566,7 +1583,9 @@ class SyncPlayManager extends ChangeNotifier {
     if (!_state.enabled || !syncPlayEnabled || id == null) return;
     try {
       await _api?.nextItem(id);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> requestPrevious() async {
@@ -1574,7 +1593,9 @@ class SyncPlayManager extends ChangeNotifier {
     if (!_state.enabled || !syncPlayEnabled || id == null) return;
     try {
       await _api?.previousItem(id);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> requestSetCurrentItem(String playlistItemId) async {

@@ -8,6 +8,7 @@ import 'package:server_core/server_core.dart';
 
 import 'book_reader_service.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 enum BookDocumentTheme {
   light,
   dark,
@@ -408,7 +409,8 @@ class BookDocumentService {
       final idref =
           RegExp(r'idref="([^"]+)"').firstMatch(m.group(1)!)?.group(1);
       if (idref != null && manifest.containsKey(idref)) {
-        chapterHrefs.add(manifest[idref]!.href);
+        final fxHref = manifest[idref]?.href;
+        if (fxHref != null) chapterHrefs.add(fxHref);
       }
     }
 
@@ -524,7 +526,9 @@ class BookDocumentService {
     if (query >= 0) path = path.substring(0, query);
     try {
       path = Uri.decodeFull(path);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     if (path.isEmpty) return null;
 
     final mime = _imageMimeFor(path);

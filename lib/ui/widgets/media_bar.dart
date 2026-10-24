@@ -56,6 +56,7 @@ import 'rating_display.dart';
 import 'web_local_trailer.dart';
 import 'web_youtube_trailer.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 final Logger _trailerLog = Logger();
 
 List<Shadow> get _textShadows => [
@@ -307,13 +308,19 @@ class _MediaBarState extends State<MediaBar>
     }
     try {
       await _trailerPlayer?.stop();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     try {
       await _appleTvTrailerPlayer?.stop();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     try {
       await _media3TrailerBackend?.release();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -665,7 +672,9 @@ class _MediaBarState extends State<MediaBar>
               );
             }
           }
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
     });
   }
@@ -1074,7 +1083,9 @@ class _MediaBarState extends State<MediaBar>
             (fullItem['RemoteTrailers'] as List?)
                 ?.cast<Map<String, dynamic>>() ??
             const [];
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     if (streamUrl == null && remoteTrailers.isNotEmpty) {
@@ -1560,7 +1571,9 @@ class _MediaBarState extends State<MediaBar>
       final native = player.platform;
       final dynamic dyn = native;
       dyn.setProperty('sub-margin-y', '108');
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     return player;
   }

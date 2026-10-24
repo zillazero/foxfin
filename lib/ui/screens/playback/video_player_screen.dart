@@ -101,6 +101,7 @@ import 'episode_browser_panel.dart';
 import 'osd_buttons.dart';
 import 'trickplay_housing_inset.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class _SubtitleLoadingSpinner extends StatefulWidget {
   const _SubtitleLoadingSpinner();
 
@@ -1062,7 +1063,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
             await ScreenBrightnessPlatform.instance
                 .resetApplicationScreenBrightness();
           }
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       });
     }
     _positionSub?.cancel();
@@ -2834,7 +2837,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
             userData['Played'] = true;
             raw['UserData'] = userData;
           }
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
     }
     if (replaceSkipOutroWithNextUp && isOutro && _shouldShowNextUpOverlay()) {
@@ -3417,7 +3422,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       final target = current > rewind ? current - rewind : Duration.zero;
       try {
         await _manager.seekTo(target);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     await _manager.resume();
   }
@@ -3508,13 +3515,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
     try {
       await _manager.setPlaybackSpeed(_tvTemporarySpeed);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _restoreTvTemporarySpeed(double speed) async {
     try {
       await _manager.setPlaybackSpeed(speed);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _cancelTvTemporarySpeedHold() {
@@ -6222,7 +6233,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       if (!mounted) return;
       setState(() => _isDesktopFullscreen = full);
       unawaited(_syncAutoHdrSwitching());
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Asks the window rather than reading [_isDesktopFullscreen], because
@@ -6251,7 +6264,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       if (!mounted) return;
       setState(() => _isDesktopFullscreen = full);
       unawaited(_syncAutoHdrSwitching());
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _toggleDesktopFullscreen() async {
@@ -6260,7 +6275,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       final full = await FullscreenHelper.isFullscreen();
       _wasDesktopFullscreenOnEntry ??= full;
       await _setDesktopFullscreen(!full);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _syncAlwaysOnTopState() async {
@@ -6270,7 +6287,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       _wasAlwaysOnTopOnEntry ??= onTop;
       if (!mounted) return;
       setState(() => _isAlwaysOnTop = onTop);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _setAlwaysOnTop(bool value) async {
@@ -6279,7 +6298,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       await windowManager.setAlwaysOnTop(value);
       if (!mounted) return;
       setState(() => _isAlwaysOnTop = value);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _toggleAlwaysOnTop() async {
@@ -6452,7 +6473,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                 }
               });
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     });
   }
 
@@ -6465,7 +6488,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         if (mounted && (current - _brightnessValue).abs() > 0.01) {
           setState(() => _brightnessValue = current);
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     });
   }
 
@@ -6587,7 +6612,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
           clamped,
         );
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   // Desktop double-click is timed here because onDoubleTap delays every click.

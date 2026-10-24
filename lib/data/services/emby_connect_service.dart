@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:server_core/server_core.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class EmbyConnectService {
   static const _connectBaseUrl = 'https://connect.emby.media/service/';
 
@@ -310,7 +311,9 @@ class EmbyConnectServer {
       if (sanitized.endsWith('/')) {
         sanitized = sanitized.substring(0, sanitized.length - 1);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     if (sanitized.startsWith('http://') || sanitized.startsWith('https://')) {
       yield sanitized;

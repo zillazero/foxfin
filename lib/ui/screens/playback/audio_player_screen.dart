@@ -37,6 +37,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../util/error_message.dart';
 import 'audiobook_player_view.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class AudioPlayerScreen extends StatefulWidget {
   const AudioPlayerScreen({super.key});
 
@@ -789,7 +790,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     _isExitingPlayback = true;
     try {
       await _manager.stop(userInitiated: false);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     if (mounted) {
       Navigator.of(context).pop();
     }
@@ -843,7 +846,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
           }
           return;
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     if (_manager.isOfflinePlayback) {

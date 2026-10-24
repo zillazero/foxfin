@@ -2,6 +2,7 @@ import 'package:window_manager/window_manager.dart';
 
 import 'platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 bool _wasMaximized = false;
 
 Future<bool> isFullscreen() async {
@@ -52,7 +53,9 @@ Future<void> setFullscreen(bool value) async {
     if (visible && !await windowManager.isVisible()) {
       await windowManager.show();
     }
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 Future<bool> _waitUntilVisible() async {

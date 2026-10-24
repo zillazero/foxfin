@@ -9,6 +9,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../navigation/destinations.dart';
 import 'admin_user_providers.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class AdminMediaMetricDefinition {
   final String key;
   final List<String> includeItemTypes;
@@ -198,7 +199,9 @@ final adminMediaAnalyticsProvider = StreamProvider<AdminAnalyticsLoadingState>((
         cachedData = _detailFromJson(decoded);
       }
     }
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
   if (cachedData != null) {
     yield AdminAnalyticsLoadingState(
@@ -249,7 +252,9 @@ final adminMediaAnalyticsProvider = StreamProvider<AdminAnalyticsLoadingState>((
       try {
         final serialized = jsonEncode(_detailToJson(detail));
         await prefs.setString(cacheKey, serialized);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     yield AdminAnalyticsLoadingState(
@@ -270,7 +275,9 @@ Future<void> reloadAdminMediaAnalytics(WidgetRef ref) async {
   try {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_analyticsCacheKey(client));
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   ref
     ..invalidate(adminLibraryItemsProvider)
     ..invalidate(adminMediaAnalyticsProvider);

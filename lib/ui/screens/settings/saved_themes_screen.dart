@@ -20,6 +20,7 @@ import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/settings/preference_tiles.dart';
 import '../../widgets/overlay_sheet.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class SavedThemesScreen extends StatefulWidget {
   const SavedThemesScreen({super.key});
 
@@ -109,7 +110,9 @@ class _SavedThemesScreenState extends State<SavedThemesScreen> {
           }
 
           themes.add(_SavedThemeFile(spec: spec, file: file));
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
     }
 

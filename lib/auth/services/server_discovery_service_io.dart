@@ -9,6 +9,7 @@ import '../../data/services/log_service.dart';
 
 import 'server_discovery_types.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class ServerDiscoveryService {
   static const _discoveryPort = 7359;
   static const _jellyfinMessage = 'who is JellyfinServer?';
@@ -36,7 +37,9 @@ class ServerDiscoveryService {
           try {
             socket!.send(jellyfinData, addr, _discoveryPort);
             socket.send(embyData, addr, _discoveryPort);
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         }
       }
 
@@ -122,7 +125,9 @@ class ServerDiscoveryService {
           }
         }
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return addresses;
   }
 }

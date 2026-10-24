@@ -12,6 +12,7 @@ import 'html_video_backend_profile.dart';
 import 'letterbox_croppers.dart';
 import 'web_subtitle_overlay_web.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 extension type _MoonfinHlsBridge._(JSObject _) implements JSObject {
   external JSBoolean canUseHlsJs(
     web.HTMLVideoElement video,
@@ -194,7 +195,9 @@ class HtmlVideoBackend extends PlayerBackend {
         if (track.kind != 'captions') continue;
         found.add(track);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return found;
   }
 
@@ -300,7 +303,9 @@ class HtmlVideoBackend extends PlayerBackend {
 
     try {
       bridge.destroy(controller);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   static bool _isCrossOrigin(String url) {
@@ -576,7 +581,9 @@ class HtmlVideoBackend extends PlayerBackend {
           element.remove();
         }
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -620,7 +627,9 @@ class HtmlVideoBackend extends PlayerBackend {
     _tracksReadyCompleter ??= Completer<void>();
     try {
       await _tracksReadyCompleter!.future.timeout(const Duration(seconds: 2));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override
@@ -756,7 +765,9 @@ class HtmlVideoBackend extends PlayerBackend {
       for (var i = 0; i < tracks.length; i++) {
         action(tracks[i]);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// `::cue` cannot move a cue, so the position comes from the cue's own line,

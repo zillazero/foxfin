@@ -569,7 +569,7 @@ class _InstalledPluginTile extends StatelessWidget {
               : Container(
                   color: theme.colorScheme.surfaceContainerHighest,
                   padding: const EdgeInsets.all(2),
-                  child: Image.network(
+                  child: Image.network(cacheWidth: 600, 
                     imageUrl!,
                     headers: serverImageHeaders,
                     fit: BoxFit.contain,

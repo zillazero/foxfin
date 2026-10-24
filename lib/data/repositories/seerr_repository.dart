@@ -8,6 +8,7 @@ import '../services/seerr/seerr_http_client.dart';
 import '../services/seerr/seerr_models.dart';
 import '../../preference/seerr_direct_store.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class SeerrRepository {
   final PreferenceStore _store;
   final SessionRepository _session;
@@ -331,7 +332,9 @@ class SeerrRepository {
     // recovers on its own instead of staying logged out until the next login.
     try {
       await loginWithMoonbase(username: username, password: password);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Attempts the password-less Quick Connect sign in through the plugin.
@@ -421,7 +424,9 @@ class SeerrRepository {
     if (client != null) {
       try {
         await client.moonfinLogout();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     await _store.setString(_moonfinDisplayNameKey, '');
@@ -794,14 +799,20 @@ class SeerrRepository {
       if (user.hasPermission(SeerrPermission.manageRequests)) {
         try {
           count += (await getRequestCount()).pending;
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
       if (user.canManageIssues) {
         try {
           count += (await getIssueCount()).open;
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     _cachedBadgeCount = count;
     _lastBadgeCountMs = DateTime.now().millisecondsSinceEpoch;

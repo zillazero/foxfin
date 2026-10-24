@@ -8,6 +8,7 @@ import '../../preference/user_preferences.dart';
 import 'log_service.dart';
 import 'media_server_client_factory.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Holds crash reports captured by the global error handlers until a server
 /// that accepts them is available, then uploads and removes them.
 ///
@@ -89,7 +90,9 @@ class CrashReportService {
         list.removeAt(0);
       }
       await sp.setStringList(foxLocalKey, list);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   static String foxRedact(String t) => t

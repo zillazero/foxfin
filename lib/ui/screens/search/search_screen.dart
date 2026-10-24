@@ -45,6 +45,7 @@ import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/sliding_pill_tabs.dart';
 import '../../widgets/skeleton/skeleton_library_grid.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class SearchScreen extends StatefulWidget {
   final String? initialQuery;
   final String? scopedLibraryId;
@@ -184,7 +185,9 @@ class _SearchScreenState extends State<SearchScreen>
           _vm.searchImmediate(_vm.query);
         }
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _onViewModelChanged() {

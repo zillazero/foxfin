@@ -30,7 +30,6 @@ import '../../../data/services/seerr/seerr_discover_sliders.dart';
 import '../../../di/providers.dart';
 import '../../../util/idiom/app_ui_idiom.dart';
 import '../../widgets/allow_self_signed_dialog.dart';
-import '../../../util/insecure_certificates.dart';
 import '../../../platform/web_runtime_config.dart';
 import '../../../playback/display_hdr_probe.dart';
 import '../../../util/focus/dpad_keys.dart';

@@ -38,6 +38,7 @@ import 'appletv_playback_prompt_controller.dart';
 import 'episode_browser.dart';
 import 'osd_buttons.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class AppleTvPlayerHostScreen extends StatefulWidget {
   const AppleTvPlayerHostScreen({super.key});
 
@@ -148,7 +149,9 @@ class _AppleTvPlayerHostScreenState extends State<AppleTvPlayerHostScreen> {
     );
     try {
       _screensaverController = GetIt.instance<ScreensaverController>();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _screensaverController?.setPlaybackActive(true);
     _screensaverController?.setNativePlayerPresented(true);
     _exitSub = _backend?.userExitStream.listen((_) => _handleExit());
@@ -201,7 +204,9 @@ class _AppleTvPlayerHostScreenState extends State<AppleTvPlayerHostScreen> {
       _lastTrickplayPrefs = _trickplayPrefsSnapshot(prefs);
       _lastTimeSlots = _timeSlotsSnapshot(prefs);
       prefs.addListener(_onPrefsChanged);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _configureCinemaSkip();
     _syncCinemaSkip();
     _cinemaSkip.addListener(_syncCinemaSkipButton);
@@ -320,7 +325,9 @@ class _AppleTvPlayerHostScreenState extends State<AppleTvPlayerHostScreen> {
         fontWeight: style.fontWeight,
         verticalOffset: style.verticalOffset,
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   String _logoUrlForItem(dynamic item) {
@@ -1179,7 +1186,9 @@ class _AppleTvPlayerHostScreenState extends State<AppleTvPlayerHostScreen> {
           );
         }),
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _loadTrickplayForCurrentItem(
@@ -1308,7 +1317,9 @@ class _AppleTvPlayerHostScreenState extends State<AppleTvPlayerHostScreen> {
         userData['Played'] = true;
         raw['UserData'] = userData;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Map<String, dynamic>? _pauseMetaPayload(dynamic item) {
@@ -1317,7 +1328,9 @@ class _AppleTvPlayerHostScreenState extends State<AppleTvPlayerHostScreen> {
       enabled = GetIt.instance<UserPreferences>().get(
         UserPreferences.showDescriptionOnPause,
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     if (!enabled) return null;
     final raw = _rawDataForQueueItem(item);
     final overview =
@@ -1847,7 +1860,9 @@ class _AppleTvPlayerHostScreenState extends State<AppleTvPlayerHostScreen> {
       if (!manager.playbackDeferredToExternalPlayer) {
         manager.stop(userInitiated: true);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     super.dispose();
   }
 

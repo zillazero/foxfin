@@ -56,6 +56,7 @@ import '../../util/focus/input_mode_tracker.dart';
 import '../navigation/app_router.dart';
 import 'adaptive/sf_symbol.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 const _kToolbarHeightTV = 95.0;
 const _kToolbarHeightDesktop = 80.0;
 const _kToolbarHeightMobile = 60.0;
@@ -263,15 +264,21 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     _userSub?.cancel();
     try {
       _viewsRepo.removeListener(_onUserViewsChanged);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     try {
       GetIt.instance<PluginSyncService>().removeListener(_onPrefsChanged);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     try {
       GetIt.instance<AchievementsService>().removeListener(
         _onAchievementsChanged,
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _prefs.removeListener(_onPrefsChanged);
     _currentTime.dispose();
     _playSub?.cancel();
@@ -375,7 +382,9 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
       if (mounted && !_librariesEqual(_libraries, filtered)) {
         setState(() => _libraries = filtered);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   bool _librariesEqual(List<AggregatedLibrary> a, List<AggregatedLibrary> b) {
@@ -486,7 +495,9 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
         final primary = FocusManager.instance.primaryFocus;
         if (_isUsableOutsideToolbar(primary)) return;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     final firstBelow = _findFirstFocusableBelowToolbar(scope);
     if (firstBelow != null && _isReadyForFocus(firstBelow)) {

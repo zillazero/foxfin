@@ -49,6 +49,7 @@ import '../../widgets/skeleton/skeleton_library_grid.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../util/error_message.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 Color get _navyBackground => AppColorScheme.background;
 Color get _jellyfinBlue => AppColorScheme.accent;
 const _horizontalPadding = 60.0;
@@ -1322,7 +1323,9 @@ class _LibraryBrowseScreenState extends State<LibraryBrowseScreen>
       await manager.playItems(mapped);
       if (!mounted) return;
       context.push(Destinations.audioPlayer);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _showGroupByDialog() {

@@ -17,6 +17,7 @@ import 'image_fetch_priority.dart';
 import 'image_file_service.dart';
 import 'platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 final Set<String> _sweepingCacheKeys = <String>{};
 final Map<String, DateTime> _lastSweepByCacheKey = <String, DateTime>{};
 
@@ -67,7 +68,9 @@ Future<void> configureImageDiskCache({
         repo: index,
       ),
     );
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 /// Where the index lives, or null when the platform didn't say in time.
@@ -111,7 +114,9 @@ Future<CacheInfoRepository?> _legacyImageCacheRepository(String key) async {
 Future<void> flushImageCacheIndex() async {
   try {
     await _imageCacheIndex?.flush();
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 // Game artwork has its own fixed budget, so browsing games never displaces
@@ -156,7 +161,9 @@ Future<void> retainGameArtworkCacheScope(String scope) async {
     await File(
       '${dir.path}/$_gameArtworkScopeAccessFileName',
     ).writeAsString('', flush: true);
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 void releaseGameArtworkCacheScope(String scope) {
@@ -245,7 +252,9 @@ Future<List<String>> evictInactiveGameArtworkCaches(
       }
       total -= cache.bytes;
       evicted.add(cache.key);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
   return evicted;
 }
@@ -340,7 +349,9 @@ Future<void> _enforceCacheDirectoryBudget(
         final stat = await entity.stat();
         total += stat.size;
         entries.add((file: entity, size: stat.size, modified: stat.modified));
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     if (total <= budgetBytes) return;
 
@@ -354,7 +365,9 @@ Future<void> _enforceCacheDirectoryBudget(
       try {
         await entry.file.delete();
         total -= entry.size;
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
   } catch (_) {
   } finally {
@@ -382,7 +395,9 @@ Future<void> clearImageDiskCache() async {
     if (await retroArtworkCacheDir.exists()) {
       await retroArtworkCacheDir.delete(recursive: true);
     }
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 /// The client every artwork request goes through.
@@ -467,10 +482,14 @@ Future<int> imageDiskCacheBytes() async {
       if (e is File) {
         try {
           total += await e.length();
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
     }
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   return total;
 }
 
@@ -488,7 +507,11 @@ Future<void> purgeOldImageCacheEntries(Duration maxAge) async {
         final st = await e.stat();
         final last = st.accessed.isAfter(st.modified) ? st.accessed : st.modified;
         if (last.isBefore(cutoff)) await e.delete();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }

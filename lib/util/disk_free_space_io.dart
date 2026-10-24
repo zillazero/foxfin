@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:ffi/ffi.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Bytes available to this process on the filesystem holding [path], or null
 /// when it can't be determined. Callers treat null as "don't block the
 /// operation". A missing answer must never refuse a download a full disk
@@ -13,7 +14,9 @@ Future<int?> availableDiskSpaceBytes(String path) async {
     if (Platform.isLinux || Platform.isMacOS || Platform.isAndroid) {
       return _statvfsAvailableBytes(path);
     }
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   return null;
 }
 

@@ -719,7 +719,7 @@ List<_Segment> _decadeSegments(
       ? decades.length - _ordinalColors.length + 1
       : 0;
 
-  final oldest = [for (final d in decades.take(folded)) ...byDecade[d]!.keys];
+  final oldest = [for (final d in decades.take(folded)) ...?byDecade[d]?.keys];
   final groups = <(String, List<String>)>[
     if (folded > 0)
       (
@@ -728,7 +728,7 @@ List<_Segment> _decadeSegments(
         oldest,
       ),
     for (final decade in decades.skip(folded))
-      ('${decade}s', byDecade[decade]!.keys.toList()),
+      ('${decade}s', byDecade[decade]?.keys.toList() ?? const []),
   ];
   return [
     for (var i = 0; i < groups.length; i++)

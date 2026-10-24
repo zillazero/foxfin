@@ -10,6 +10,7 @@ import 'offline_catalog.dart';
 import 'offline_errors.dart';
 import 'offline_views.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Serves the standard Jellyfin items envelopes from the local downloads
 /// catalog so the regular UI (home rows, search, libraries, details) renders
 /// offline with only downloaded content.
@@ -1082,7 +1083,9 @@ class OfflineItemsApi implements ItemsApi {
         final decoded = jsonDecode(await file.readAsString());
         if (decoded is Map<String, dynamic>) return decoded;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     throw offlineNotFound('/Audio/$itemId/Lyrics');
   }
 

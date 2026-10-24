@@ -45,6 +45,7 @@ import 'channel_tune_observer.dart';
 import 'live_tv_guide_screen.dart';
 import '../../screensaver/screensaver_controller.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 const _kGuideResizeDuration = Duration(milliseconds: 250);
 // PlaybackManager permits a 15-second ready wait and can retry once through a
 // server transcode. Leave enough room for both attempts plus their handoff.
@@ -339,7 +340,9 @@ class _LiveTvPlayerScreenState extends State<LiveTvPlayerScreen>
             await ScreenBrightnessPlatform.instance
                 .resetApplicationScreenBrightness();
           }
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       });
     }
     _tvPlayPauseFocus.removeListener(_onControlFocusChanged);
@@ -454,7 +457,9 @@ class _LiveTvPlayerScreenState extends State<LiveTvPlayerScreen>
                 }
               });
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     });
   }
 
@@ -467,7 +472,9 @@ class _LiveTvPlayerScreenState extends State<LiveTvPlayerScreen>
         if (mounted && (current - _brightnessValue).abs() > 0.01) {
           setState(() => _brightnessValue = current);
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     });
   }
 
@@ -483,7 +490,9 @@ class _LiveTvPlayerScreenState extends State<LiveTvPlayerScreen>
           clamped,
         );
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _initSystemVolume() {

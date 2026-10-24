@@ -22,6 +22,7 @@ import '../../widgets/focus/context_menu_sheet.dart';
 import '../../widgets/skeleton/skeleton_library_grid.dart';
 import '../../../l10n/app_localizations.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 Color get _navyBackground => AppColorScheme.background;
 const _horizontalPadding = 60.0;
 const _mobileHorizontalPadding = 16.0;
@@ -340,7 +341,9 @@ class _LibraryGenresScreenState extends State<LibraryGenresScreen> {
         }
       }
       if (!_disposed && mounted) setState(() {});
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   int _genreCardRequestMaxWidth() {

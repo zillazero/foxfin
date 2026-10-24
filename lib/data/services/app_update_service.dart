@@ -7,6 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../preference/user_preferences.dart';
 import '../../util/app_distribution.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 enum DesktopUpdateCheckStatus {
   updateAvailable,
   upToDate,
@@ -199,7 +200,9 @@ class AppUpdateService {
       if (version.isNotEmpty) {
         return version;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return '0.0.0';
   }
 

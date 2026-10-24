@@ -38,6 +38,7 @@ import 'guide/guide_layout_profile.dart';
 import 'guide/guide_selection.dart';
 import 'guide/guide_window.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 // Start fetching the next batch of channel programs this many rows before the
 // lazily-loaded edge, so rows are usually populated by the time they're visible.
 const _kProgramPrefetchRows = 12;
@@ -313,7 +314,9 @@ class _LiveTvGuideScreenState extends State<LiveTvGuideScreen>
       if (target.hasClients) {
         target.jumpTo(source.offset);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _syncingScroll = false;
   }
 
@@ -344,7 +347,9 @@ class _LiveTvGuideScreenState extends State<LiveTvGuideScreen>
       if ((target.offset - targetOffset).abs() > 0.5) {
         target.jumpTo(targetOffset);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _syncingHorizontalScroll = false;
   }
 

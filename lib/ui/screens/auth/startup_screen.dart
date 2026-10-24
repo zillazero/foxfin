@@ -20,6 +20,7 @@ import '../../widgets/overlay_sheet.dart';
 import '../../widgets/pin_entry_dialog.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class StartupScreen extends StatefulWidget {
   final bool bootstrapActiveSession;
 
@@ -72,7 +73,9 @@ class _StartupScreenState extends State<StartupScreen>
         GetIt.instance.isRegistered<MediaServerClient>()) {
       try {
         await connectivity.recheckNow();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
   }
 

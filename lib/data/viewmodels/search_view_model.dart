@@ -12,6 +12,7 @@ import '../repositories/search_repository.dart';
 import '../repositories/seerr_repository.dart';
 import '../services/seerr/seerr_api_models.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class SearchResultGroup {
   final String title;
   final List<String> itemTypes;
@@ -252,7 +253,9 @@ class SearchViewModel extends ChangeNotifier {
     if (_scopedParentId == null) {
       try {
         if (await _foxKeywordSearch(query, run)) return;
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     try {

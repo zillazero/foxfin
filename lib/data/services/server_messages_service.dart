@@ -11,6 +11,7 @@ import 'package:server_core/server_core.dart';
 import '../models/server_message.dart';
 import 'storage_path_service.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Holds the admin messages for the server the user is signed in to, and which
 /// ones this user has already read.
 /// Messages are cached on disk so the list still opens offline, and so a message
@@ -237,6 +238,8 @@ class ServerMessagesService extends ChangeNotifier {
       await file.writeAsString(
         jsonEncode(messages.map((message) => message.toJson()).toList()),
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 }

@@ -5,6 +5,7 @@ import 'package:web/web.dart' as web;
 
 import 'web_runtime_config_model.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 WebRuntimeConfig webRuntimeConfig = WebRuntimeConfig.defaults;
 
 Future<void> loadWebRuntimeConfig() async {
@@ -26,7 +27,9 @@ Future<void> loadWebRuntimeConfig() async {
         decoded.map((key, value) => MapEntry(key.toString(), value)),
       );
     }
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 String _resolveConfigUrl() {
@@ -34,7 +37,9 @@ String _resolveConfigUrl() {
   if (baseUri.trim().isNotEmpty) {
     try {
       return Uri.parse(baseUri).resolve('config.json').toString();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   return Uri.base.resolve('config.json').toString();

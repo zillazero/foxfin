@@ -3,6 +3,7 @@ import 'package:playback_core/playback_core.dart';
 import '../data/offline/connectivity_aware_media_server_client.dart';
 import 'offline_stream_resolver.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Resolver that serves a completed download's local file instead of a
 /// server stream whenever one exists, falling back to the wrapped server
 /// resolver otherwise.
@@ -144,7 +145,9 @@ class LocalFirstMediaStreamResolver extends MediaStreamResolver {
     if (restore == null || shouldUseOfflineCatalog()) return;
     try {
       await restore(itemId).timeout(const Duration(seconds: 5));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   String? _containerOf(String path) {

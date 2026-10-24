@@ -3,7 +3,6 @@ import 'dart:async';
 import 'preference/fox_ui_prefs.dart';
 import 'fox/fox_focus_guard.dart';
 import 'fox/fox_start_splash.dart';
-import 'fox/fox_focus_guard.dart';
 import 'integrations/fox_sso/fox_sync_service.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -85,6 +84,7 @@ import 'ui/widgets/allow_self_signed_dialog.dart';
 
 import 'package:custom_tv_text_field/custom_tv_text_field.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class MoonfinApp extends StatefulWidget {
   const MoonfinApp({super.key});
 
@@ -277,6 +277,7 @@ class _MoonfinAppState extends State<MoonfinApp> {
                   AppLocalizations.of(context).appTitle,
               theme: AppTheme.buildTheme(_themeController.activeSpec),
               routerConfig: appRouter,
+              scaffoldMessengerKey: FoxErrors.messengerKey,
               debugShowCheckedModeBanner: false,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
@@ -301,7 +302,9 @@ class _MoonfinAppState extends State<MoonfinApp> {
                     appRouter.routerDelegate.currentConfiguration.uri.path;
                 try {
                   path = GoRouterState.of(context).uri.path;
-                } catch (_) {}
+                } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
                 final hidePlayer =
                     path.startsWith('/player/') ||
@@ -975,7 +978,9 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
             isAudio =
                 type == 'Audio' || type == 'AudioBook' || mediaType == 'Audio';
           }
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
       if (isAudio) return;
     }
@@ -1028,7 +1033,9 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
       await prefs.set(UserPreferences.windowHeight, size.height);
       await prefs.set(UserPreferences.windowX, pos.dx);
       await prefs.set(UserPreferences.windowY, pos.dy);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _scheduleSaveGeometry() {
@@ -1070,7 +1077,9 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
     // database and preference teardown finishes.
     try {
       await windowManager.hide();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     await AppExit.prepareForExit();
     await windowManager.destroy();
   }

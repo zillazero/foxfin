@@ -127,6 +127,7 @@ import '../../../util/artwork_request_size.dart';
 import '../../../util/platform_detection.dart';
 import 'detail_layout_metrics.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 const _textShadows = [Shadow(blurRadius: 4, color: Colors.black54)];
 
 bool _isCompact(BuildContext context) => detailIsCompact(context);
@@ -450,7 +451,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen>
     _prefs.removeListener(_onPrefsChanged);
     try {
       GetIt.instance<PluginSyncService>().removeListener(_onPrefsChanged);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _viewModel.dispose();
     _initialContentFocusNode?.dispose();
     super.dispose();
@@ -4826,7 +4829,9 @@ class _BookAuthorDetailScreenState extends State<_BookAuthorDetailScreen> {
           tag: imageTag != null && imageTag.isNotEmpty ? imageTag : null,
           maxHeight: 300,
         );
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     if (photoUrl?.isEmpty ?? true) {
@@ -4860,7 +4865,9 @@ class _BookAuthorDetailScreenState extends State<_BookAuthorDetailScreen> {
             maxHeight: 300,
           );
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     if (biography == null || biography.isEmpty) {
@@ -6868,7 +6875,9 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
       if (!seasonAllWatched && !seasonAllUnwatched) {
         try {
           seasonNextUpEp = viewModel.episodes.firstWhere((e) => !e.isPlayed);
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
     }
     final selectedSource = selectedMediaSourceForItem(
@@ -8908,7 +8917,9 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
             .where(isEligibleNextEpisodeCandidate)
             .toList();
         if (playable.isNotEmpty) return playable;
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     return const <AggregatedItem>[];
   }
@@ -9347,7 +9358,9 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
                     data['Items'],
                     item.serverId,
                   );
-                } catch (_) {}
+                } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
               }
             }
             ensureLaunchStillWanted(launchSession);
@@ -9972,7 +9985,9 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
         );
       }
       return _preferredLocalTrailer(candidates);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 
@@ -13507,7 +13522,7 @@ class _ChapterListCardState extends State<_ChapterListCard>
                         borderRadius: AppRadius.circular(9),
                         child: SizedBox(
                           width: double.infinity,
-                          child: Image.network(
+                          child: Image.network(cacheWidth: 600, 
                             widget.chapterImageUrl,
                             headers: serverImageHeaders,
                             fit: BoxFit.cover,

@@ -10,6 +10,7 @@ import '../../l10n/app_localizations.dart';
 import '../../util/platform_detection.dart';
 import 'status_banner_pill.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Floating glass pill announcing a newer GitHub release. Mirrors the offline
 /// banner: slides in, auto-dismisses on a countdown, and stays non-focusable
 /// on TV so it never steals d-pad focus from the content underneath.
@@ -74,7 +75,9 @@ class _AppUpdateBannerState extends State<AppUpdateBanner>
       setState(() => _update = update);
       _entrance.forward();
       _autoDismissTimer = Timer(_autoDismissDuration, _dismiss);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _dismiss() async {

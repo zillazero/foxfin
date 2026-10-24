@@ -41,6 +41,7 @@ import 'media_store_service.dart';
 import 'storage_path_service.dart';
 import 'web_download_helper.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class DownloadProgress {
   final String itemId;
   final String fileName;
@@ -1231,7 +1232,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
     Future<void> runBestEffort(Future<void> task, Duration timeout) async {
       try {
         await task.timeout(timeout);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     final extensionIndex = fileName.lastIndexOf('.');
@@ -1624,7 +1627,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
           if (savePath != null) {
             try {
               await _deleteFileArtifacts(savePath);
-            } catch (_) {}
+            } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
           }
           await _offlineRepo.updateDownloadStatus(
             itemId,
@@ -2893,7 +2898,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
               ).toJson(),
             );
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }());
   }
 
@@ -3295,7 +3302,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
       final itemDir = Directory('${imageDir.path}/${item.id}');
       if (!await itemDir.exists()) await itemDir.create(recursive: true);
       await File('${itemDir.path}/lyrics.json').writeAsString(jsonEncode(data));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _downloadImages(AggregatedItem item) async {
@@ -3420,7 +3429,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
         logo: logoPath,
         thumb: thumbPath,
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _ensureParentContainers(AggregatedItem episode) async {
@@ -3452,7 +3463,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
             ),
           );
           _downloadImages(seriesItem);
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
     }
 
@@ -3480,7 +3493,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
             ),
           );
           _downloadImages(seasonItem);
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       }
     }
   }
@@ -3510,7 +3525,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
         ),
       );
       _downloadImages(albumItem);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _downloadExternalSubtitles(
@@ -3564,7 +3581,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
       if (await File(subPath).exists()) continue;
       try {
         await _downloadDio.download(subUrl, subPath, options: authOptions);
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
   }
 
@@ -3675,7 +3694,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
         if (await f.exists()) {
           await f.delete();
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     final offlineRoot = await _storagePath.getOfflineRoot();
@@ -3696,7 +3717,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
         if (await dir.exists()) {
           await dir.delete(recursive: true);
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     await _offlineRepo.deleteAllItems();
@@ -3726,7 +3749,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
               _itemIdForTask(record.task)!: record,
         };
         refused.addAll(await _refuseKilledTasksThatCannotFit(pluginRecords));
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     final allItems = await _offlineRepo.getItems();
@@ -3820,10 +3845,14 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
         )) {
           try {
             await entity.delete();
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         }
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   /// Resolves an in-progress drift row against its native task record.
@@ -3849,7 +3878,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
         if (savePath != null) {
           try {
             await _deleteFileArtifacts(savePath);
-          } catch (_) {}
+          } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
         }
         await _offlineRepo.updateDownloadStatus(
           row.itemId,
@@ -3996,7 +4027,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
           } catch (e) {
             try {
               await _deleteFileArtifacts(savePath);
-            } catch (_) {}
+            } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             await _offlineRepo.updateDownloadStatus(
               itemId,
               3,
@@ -4018,7 +4051,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
             _activeDownloads.remove(itemId);
             try {
               await _deleteFileArtifacts(savePath);
-            } catch (_) {}
+            } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             await _offlineRepo.deleteItem(itemId);
           } else {
             final message = e is DioException
@@ -4026,7 +4061,9 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
                 : e.toString();
             try {
               await _deleteFileArtifacts(savePath);
-            } catch (_) {}
+            } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
             await _offlineRepo.updateDownloadStatus(itemId, 3, error: message);
             _activeDownloads[itemId] = DownloadProgress(
               itemId: itemId,

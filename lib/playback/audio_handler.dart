@@ -22,6 +22,7 @@ import 'headless_session_bootstrap.dart';
 import 'last_playback_session_store.dart';
 import 'media_browse_service.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class MoonfinAudioHandler extends BaseAudioHandler
     with QueueHandler, SeekHandler {
   final PlaybackManager _manager;
@@ -249,7 +250,9 @@ class MoonfinAudioHandler extends BaseAudioHandler
         avAudioSessionSetActiveOptions:
             AVAudioSessionSetActiveOptions.notifyOthersOnDeactivation,
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   // Focus-loss handling for backends that do not manage focus themselves
@@ -270,7 +273,9 @@ class MoonfinAudioHandler extends BaseAudioHandler
           _manager.resume();
         }
       });
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   // iOS music plays on the engine's own Now Playing session, which the system

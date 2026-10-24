@@ -13,6 +13,7 @@ import 'car_artwork.dart';
 import 'headless_session_bootstrap.dart';
 import 'last_playback_session_store.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Resolved playback intent for a browse/voice/resume media id.
 class PlayRequest {
   final List<AggregatedItem> items;
@@ -140,7 +141,9 @@ class MediaBrowseService {
     // raw urls without it), so never let it block the browse tree.
     try {
       await CarArtwork.instance.ensureReady().timeout(const Duration(seconds: 3));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     if (parentMediaId == AudioService.recentRootId) {
       // A throw here leaves the resumption card query unanswered; empty is the
@@ -473,7 +476,9 @@ class MediaBrowseService {
     var hasBookLibrary = false;
     try {
       hasBookLibrary = (await _bookViews(client)).isNotEmpty;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     final l10n = _l10n;
     return [
       _browsableNode('tab|home', l10n.home, extras: _listHints),
@@ -518,7 +523,9 @@ class MediaBrowseService {
         limit: 40,
       );
       serverResume = _toItems(resumeResponse, serverId);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     final seen = <String>{};
     final resumeLeaves = <MediaItem>[];
@@ -547,7 +554,9 @@ class MediaBrowseService {
               .map((i) => _bookLeaf(i, serverId, hints: recentShelf)),
         );
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     final recentAlbums = <MediaItem>[];
     try {
@@ -559,7 +568,9 @@ class MediaBrowseService {
         _toItems(latestResponse, serverId)
             .map((a) => _albumNode(a, hints: recentShelf)),
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     return [...resumeLeaves, ...recentBooks, ...recentAlbums];
   }
@@ -577,7 +588,9 @@ class MediaBrowseService {
         limit: 12,
       );
       recentAlbums = _toItems(response, serverId);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     final l10n = _l10n;
     final browse = {..._listHints, ..._shelf(l10n.browse)};
@@ -888,7 +901,9 @@ class MediaBrowseService {
             startPosition: resume.first.playbackPosition ?? Duration.zero,
           );
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
       return resolvePlayRequest('shuffle|$serverId|all');
     }
 
@@ -899,14 +914,14 @@ class MediaBrowseService {
           matches.where((i) => i.type == type).firstOrNull;
 
       final album = pick('MusicAlbum');
-      if (album != null) return resolvePlayRequest('album|$serverId|${album.id}');
+      if (album != null) return await resolvePlayRequest('album|$serverId|${album.id}');
       final artist = pick('MusicArtist') ?? pick('AlbumArtist');
       if (artist != null) {
-        return resolvePlayRequest('artist|$serverId|${artist.id}');
+        return await resolvePlayRequest('artist|$serverId|${artist.id}');
       }
       final playlist = pick('Playlist');
       if (playlist != null) {
-        return resolvePlayRequest('playlist|$serverId|${playlist.id}');
+        return await resolvePlayRequest('playlist|$serverId|${playlist.id}');
       }
       final book = matches.where((i) => i.isAudiobook).firstOrNull;
       final track =
@@ -914,8 +929,10 @@ class MediaBrowseService {
       if (track != null && book == null) {
         return PlayRequest(items: [track]);
       }
-      if (book != null) return resolvePlayRequest('book|$serverId|${book.id}');
-    } catch (_) {}
+      if (book != null) return await resolvePlayRequest('book|$serverId|${book.id}');
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 
@@ -1090,7 +1107,9 @@ class MediaBrowseService {
           ),
         );
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return null;
   }
 

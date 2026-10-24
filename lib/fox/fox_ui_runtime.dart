@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart' show WidgetsBinding;
 import '../preference/preference_constants.dart';
 import '../util/device_performance.dart';
 import '../util/platform_detection.dart';
+import 'package:moonfin/fox/fox_errors.dart';
 import '../util/tv_image_cache_stub.dart'
     if (dart.library.io) '../util/tv_image_cache_io.dart';
 
@@ -33,7 +34,9 @@ void _foxSeedNavbar(UserPreferences p) {
       return;
     }
     p.set(UserPreferences.navbarPosition, pos);
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 void foxUiLoad(UserPreferences p) {

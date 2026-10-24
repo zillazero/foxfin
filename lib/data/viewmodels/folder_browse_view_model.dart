@@ -9,6 +9,7 @@ import '../utils/blocked_ratings.dart';
 import '../utils/genre_browse_utils.dart';
 import '../utils/playlist_utils.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class BreadcrumbEntry {
   final String id;
   final String name;
@@ -180,7 +181,9 @@ class FolderBrowseViewModel extends ChangeNotifier {
         _totalCount = _rawItemsFetched;
         _hasMoreFromPageSize = false;
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     if (_disposed) return;
     _loadingMore = false;

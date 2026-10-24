@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:media_kit/media_kit.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class YouTubeStream {
   final String url;
 
@@ -152,7 +153,9 @@ class YouTubeStreamResolver {
     try {
       final dynamic native = platform;
       await Future<void>.value(native.setProperty('alang', language ?? ''));
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   static Future<YouTubeStream?> _tryInnertube(String videoId) async {
@@ -200,7 +203,9 @@ class YouTubeStreamResolver {
         if (url != null) {
           return YouTubeStream(url, audioLanguage: originalAudioLanguage(data));
         }
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
 
     return null;

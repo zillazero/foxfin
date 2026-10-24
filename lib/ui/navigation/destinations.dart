@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import '../../util/platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 extension NavigationX on BuildContext {
   void popOrHome() {
     final router = GoRouter.of(this);
@@ -12,7 +13,9 @@ extension NavigationX on BuildContext {
       try {
         router.pop();
         return;
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     router.go(Destinations.home);
   }

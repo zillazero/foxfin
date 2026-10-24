@@ -2,6 +2,7 @@ import 'package:playback_core/playback_core.dart';
 
 import '../data/repositories/offline_repository.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Decorates the server play-session service so local-file playback keeps the
 /// downloads DB position current (the source of truth for offline resume) and
 /// only talks to the server when it's reachable.
@@ -30,14 +31,18 @@ class LocalAwarePlayerService implements PlayerService {
     try {
       final itemId = MediaStreamResolver.extractItemId(mediaItem);
       await _offlineRepo.updatePlaybackPosition(itemId, positionTicks);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _forward(Future<void> Function() report) async {
     if (!_canReachServer()) return;
     try {
       await report();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @override

@@ -22,6 +22,7 @@ import '../change_artwork_dialog.dart';
 import '../identify_dialog.dart';
 import '../overlay_sheet.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class ItemContextAction {
   final IconData icon;
   final String label;
@@ -82,7 +83,9 @@ Future<void> _hideFromResumeOrReset(
   }
   try {
     await mutations.setPlayed(item.id, isPlayed: false);
-  } catch (_) {}
+  } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 }
 
 List<ItemContextAction> contextActionsFor(

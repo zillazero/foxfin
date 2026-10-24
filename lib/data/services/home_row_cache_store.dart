@@ -9,6 +9,7 @@ import '../../util/platform_detection.dart';
 import '../models/aggregated_item.dart';
 import '../models/home_row.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Persists the home rows to a single JSON file so a cold start can paint
 /// cached content immediately, then revalidate in the background.
 ///
@@ -96,7 +97,9 @@ class HomeRowCacheStore {
     try {
       if (await read(cacheKey) == null) return;
       await (await _file()).delete();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> _writeEnvelope(Map<String, Object> envelope) async {
@@ -104,7 +107,9 @@ class HomeRowCacheStore {
       final payload = await Isolate.run(() => jsonEncode(envelope));
       final file = await _file();
       await file.writeAsString(payload, flush: true);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Map<String, dynamic> _rowToJson(HomeRow row) => {

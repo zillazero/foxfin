@@ -2,6 +2,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Hält den D-Pad-Fokus am Leben: geht der Fokus verloren (Widget entfernt,
 /// Liste neu geladen, Dialog geschlossen), wird der zuletzt fokussierte
 /// Knoten wiederhergestellt oder – falls weg – das erste fokussierbare
@@ -104,7 +105,9 @@ class FoxFocusGuard {
           return true;
         }
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return false;
   }
 }

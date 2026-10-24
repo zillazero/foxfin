@@ -55,6 +55,7 @@ import 'offline_aware_image.dart';
 import 'paced_network_image.dart';
 import 'adaptive/sf_symbol.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 const _kExpandedWidthDesktop = 240.0;
 const _kExpandedWidthMobile = 260.0;
 // Foxfin: weicheres Aufklappen; bei "Aus" sofort.
@@ -257,15 +258,21 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
     _userSub?.cancel();
     try {
       _viewsRepo.removeListener(_onUserViewsChanged);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     try {
       GetIt.instance<PluginSyncService>().removeListener(_onPrefsChanged);
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     try {
       GetIt.instance<AchievementsService>().removeListener(
         _onAchievementsChanged,
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     _prefs.removeListener(_onPrefsChanged);
     _currentTime.dispose();
     // Only clear the shared flag if this instance held focus, so a torn-down
@@ -350,7 +357,9 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
       if (mounted && !_librariesEqual(_libraries, filtered)) {
         setState(() => _libraries = filtered);
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   bool _librariesEqual(List<AggregatedLibrary> a, List<AggregatedLibrary> b) {

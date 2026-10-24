@@ -4,6 +4,7 @@ import 'dart:js_interop_unsafe';
 
 import 'package:web/web.dart' as web;
 
+import 'package:moonfin/fox/fox_errors.dart';
 class WebSubtitleOverlay {
   WebSubtitleOverlay(this._video);
 
@@ -158,14 +159,18 @@ class WebSubtitleOverlay {
     if (ass != null) {
       try {
         ass.destroy();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     final pgs = _pgsRenderer;
     _pgsRenderer = null;
     if (pgs != null) {
       try {
         pgs.dispose();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
   }
 

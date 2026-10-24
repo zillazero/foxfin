@@ -12,6 +12,7 @@ import 'native_airplay_channel.dart';
 import 'native_cast_channel.dart';
 import 'native_dlna_channel.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class CastService {
   final List<CastProvider> _providers;
   final NativeCastChannel? _nativeCast;
@@ -155,7 +156,9 @@ class CastService {
       remoteStateNotifier.value = snapshot.state;
       remotePositionNotifier.value = snapshot.positionTicks;
       remoteVolumeNotifier.value = snapshot.volume;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void _stopRemotePolling() {

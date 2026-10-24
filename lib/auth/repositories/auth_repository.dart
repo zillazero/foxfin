@@ -12,6 +12,7 @@ import '../store/authentication_preferences.dart';
 import 'session_repository.dart';
 import 'user_repository.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class AuthRepository {
   final AuthenticationStore _authStore;
   final AuthenticationPreferences _authPrefs;
@@ -42,7 +43,7 @@ class AuthRepository {
         username,
         password,
       );
-      return _handleAuthResult(
+      return await _handleAuthResult(
         result: result,
         client: client,
         serverId: serverId,
@@ -66,7 +67,7 @@ class AuthRepository {
     _stateController.add(const Authenticating());
     try {
       final result = await client.authApi.authenticateWithQuickConnect(secret);
-      return _handleAuthResult(
+      return await _handleAuthResult(
         result: result,
         client: client,
         serverId: serverId,
@@ -189,7 +190,9 @@ class AuthRepository {
   Future<void> logout(MediaServerClient client) async {
     try {
       await client.authApi.logout();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     final user = _userRepository.currentUser;
     if (user != null) {

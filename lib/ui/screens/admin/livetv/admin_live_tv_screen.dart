@@ -16,6 +16,7 @@ import '../widgets/admin_settings_search.dart';
 import '../widgets/premiere_note.dart';
 import 'live_tv_dialogs.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Live TV in two tabs: tuners and guide providers, which save at once, and
 /// recording settings, a draft over the named configuration 'livetv'.
 class AdminLiveTvScreen extends StatefulWidget {
@@ -177,7 +178,9 @@ class _AdminLiveTvScreenState extends State<AdminLiveTvScreen>
             (t['Id'].toString(), t['Name']?.toString() ?? t['Id'].toString()),
       ];
       if (types.isNotEmpty) return types;
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     return [
       ('m3u', l10n.adminTunerTypeM3u),
       ('hdhomerun', l10n.adminTunerTypeHdHomerun),

@@ -8,6 +8,7 @@ import 'package:server_core/server_core.dart';
 
 import '../models/achievement_models.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Bounds for these requests, so a server that swallows connection attempts
 /// can't hold the settings panel open on a spinner.
 @visibleForTesting
@@ -167,7 +168,9 @@ class AchievementsService extends ChangeNotifier {
         '${_base(client)}/$_root/users/$userId/login-ping',
         options: Options(headers: headers),
       );
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<dynamic> _get(

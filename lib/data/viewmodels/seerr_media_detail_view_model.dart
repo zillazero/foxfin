@@ -9,6 +9,7 @@ import '../services/seerr/seerr_api_models.dart';
 import '../services/seerr/seerr_download_progress.dart';
 import '../services/seerr/seerr_error.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 /// Reads one flag out of Seerr's public settings.
 ///
 /// A server too old to know about a flag leaves it out of the payload rather
@@ -508,7 +509,9 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
       SeerrUser? user;
       try {
         user = await _repo.getCurrentUser();
-      } catch (_) {}
+      } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
       int tmdbId;
       String resolvedMediaType = mediaType;
@@ -661,7 +664,9 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
       final quota = await _repo.getUserQuota(user.id);
       _state = _state.copyWith(quota: quota);
       notifyListeners();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<bool> submitIssue({

@@ -8,6 +8,7 @@ import '../log_service.dart';
 import 'seerr_error.dart';
 import 'seerr_models.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class SeerrHttpClient {
   final MoonfinProxyConfig proxyConfig;
 
@@ -154,7 +155,9 @@ class SeerrHttpClient {
       try {
         final decoded = jsonDecode(trimmed);
         if (decoded is Map) return Map<String, dynamic>.from(decoded);
-      } on FormatException catch (_) {}
+      } on FormatException catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
     }
     throw DioException(
       requestOptions: response.requestOptions,

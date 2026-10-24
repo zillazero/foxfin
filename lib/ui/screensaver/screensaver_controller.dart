@@ -9,6 +9,7 @@ import '../../preference/preference_constants.dart';
 import '../../preference/user_preferences.dart';
 import '../../util/platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class ScreensaverController {
   ScreensaverController(this._prefs, PlaybackManager playbackManager) {
     if (PlatformDetection.isTV) {
@@ -172,7 +173,9 @@ class ScreensaverController {
       } else {
         await WakelockPlus.disable();
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   @visibleForTesting

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../util/platform_detection.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class PipService {
   static const _androidChannel = MethodChannel('org.moonfin.androidtv/pip');
   static const _iosChannel = MethodChannel('org.moonfin.ios/pip');
@@ -99,7 +100,9 @@ class PipService {
       } else if (PlatformDetection.isIOS && !enabled) {
         await channel.invokeMethod('dismissPiP');
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<bool> startIosPiP() async {
@@ -127,7 +130,9 @@ class PipService {
         'durationMs': durationMs,
         'isPlaying': isPlaying,
       });
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   Future<void> updatePiPActions({required bool isPlaying}) async {
@@ -140,7 +145,9 @@ class PipService {
       } else if (PlatformDetection.isIOS) {
         await channel.invokeMethod('updatePlaybackState', {'isPlaying': isPlaying});
       }
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
   }
 
   void dispose() {

@@ -26,6 +26,7 @@ import 'user_views_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../l10n/current_app_localizations.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class ServerUserSession {
   final Server server;
   final String userId;
@@ -1091,7 +1092,9 @@ class MultiServerRepository {
         try {
           final config = await session.client.usersApi.getUserConfiguration();
           latestExcludes = config.latestItemsExcludes.toSet();
-        } catch (_) {}
+        } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
         for (final view in views) {
           final id = view.id;

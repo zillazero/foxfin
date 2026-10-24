@@ -12,6 +12,7 @@ import '../models/media_bar_state.dart';
 import '../services/library_scope_service.dart';
 import '../utils/blocked_ratings.dart';
 
+import 'package:moonfin/fox/fox_errors.dart';
 class MediaBarRepository {
 
   final MediaServerClient _client;
@@ -282,7 +283,7 @@ class MediaBarRepository {
         return const <Map<String, dynamic>>[];
       }
 
-      return _fetchItems(itemTypes, limit, parentId: libraryId);
+      return await _fetchItems(itemTypes, limit, parentId: libraryId);
     } catch (_) {
       return const <Map<String, dynamic>>[];
     }
@@ -450,7 +451,9 @@ class MediaBarRepository {
           .timeout(const Duration(seconds: 15));
       final rawItems = latestResponse['Items'] as List? ?? [];
       return rawItems.cast<Map<String, dynamic>>();
-    } catch (_) {}
+    } catch (fxE, fxSt) {
+  FoxErrors.report(fxE, fxSt);
+}
 
     try {
       final fallbackResponse = await _client.itemsApi
