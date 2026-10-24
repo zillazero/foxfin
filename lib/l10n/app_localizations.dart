@@ -26638,6 +26638,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Length'**
   String get librarySortLength;
+
+  /// No description provided for @foxHideItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide on this device'**
+  String get foxHideItem;
+
+  /// No description provided for @foxSleepTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep timer'**
+  String get foxSleepTimer;
+
+  /// No description provided for @foxSleepTimerEnds.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep timer: ends {time}'**
+  String foxSleepTimerEnds(String time);
 }
 
 class _AppLocalizationsDelegate

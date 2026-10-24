@@ -7,6 +7,7 @@ import 'package:server_core/server_core.dart';
 
 import '../../../auth/repositories/user_repository.dart';
 import '../../../data/models/aggregated_item.dart';
+import '../../../fox/fox_hidden_items.dart';
 import '../../../data/repositories/item_mutation_repository.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../util/error_message.dart';
@@ -157,6 +158,25 @@ List<ItemContextAction> contextActionsFor(
             await prefs.hideFromContinueWatching(item.id);
           }
           await _hideFromResumeOrReset(mutations, item);
+          onChanged?.call();
+        },
+      ));
+    }
+
+    // Foxfin 2.9.0: lokal ausblenden (Serie statt Folge).
+    {
+      final hideId = (type == 'Episode' && (item.seriesId ?? '').isNotEmpty)
+          ? item.seriesId!
+          : item.id;
+      final hideName = (type == 'Episode'
+              ? item.rawData['SeriesName']?.toString()
+              : null) ??
+          item.name;
+      actions.add(ItemContextAction(
+        icon: Icons.hide_source_rounded,
+        label: l10n.foxHideItem,
+        onSelect: () async {
+          await FoxHidden.hide(hideId, hideName);
           onChanged?.call();
         },
       ));

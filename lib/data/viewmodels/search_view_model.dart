@@ -186,9 +186,74 @@ class SearchViewModel extends ChangeNotifier {
     _executeSearch(trimmed);
   }
 
+  // Foxfin 2.9.0: Schlüsselwörter als Filter ("Anime …", "Musik …",
+  // "Musikvideo …", "Film …", "Serie …"), auch per Sprachsuche.
+  static final _foxFilters = <String, (List<List<String>>, List<String>?)>{
+    'musikvideo': ([['MusicVideo']], null),
+    'musikvideos': ([['MusicVideo']], null),
+    'music video': ([['MusicVideo']], null),
+    'musik': ([['MusicArtist', 'AlbumArtist'], ['MusicAlbum'], ['Audio'], ['MusicVideo']], null),
+    'music': ([['MusicArtist', 'AlbumArtist'], ['MusicAlbum'], ['Audio'], ['MusicVideo']], null),
+    'anime': ([['Series'], ['Movie'], ['Episode']], ['Anime']),
+    'sammlung': ([['BoxSet']], null),
+    'sammlungen': ([['BoxSet']], null),
+    'film': ([['Movie']], null),
+    'filme': ([['Movie']], null),
+    'serie': ([['Series']], null),
+    'serien': ([['Series']], null),
+  };
+
+  Future<bool> _foxKeywordSearch(String query, int run) async {
+    final lower = query.toLowerCase();
+    final keys = _foxFilters.keys.toList()
+      ..sort((a, b) => b.length.compareTo(a.length));
+    for (final k in keys) {
+      if (!lower.startsWith('$k ')) continue;
+      final term = query.substring(k.length).trim();
+      if (term.isEmpty) return false;
+      final (typeGroups, genres) = _foxFilters[k]!;
+      // Fehlende Filme/Serien: Seerr-Treffer zum Anfragen mit anzeigen.
+      final wantsSeerr = typeGroups.any((t) => t.contains('Movie') || t.contains('Series'));
+      final seerrFuture = wantsSeerr
+          ? _fetchSeerrResults(term).catchError((_) => <SeerrDiscoverItem>[])
+          : Future.value(const <SeerrDiscoverItem>[]);
+      final all = _searchGroups();
+      final groups = await Future.wait(typeGroups.map((types) async {
+        final base = all.firstWhere(
+          (g) => g.itemTypes.any(types.contains),
+          orElse: () => SearchResultGroup(title: types.first, itemTypes: types),
+        );
+        List<AggregatedItem> items;
+        try {
+          items = await _searchRepository.search(term,
+              includeItemTypes: types, limit: _resultLimit, genres: genres);
+        } catch (_) {
+          items = const [];
+        }
+        return base.copyWith(items: items);
+      }));
+      if (query != _query || run != _searchRun) return true;
+      final seerr = await seerrFuture;
+      if (query != _query || run != _searchRun) return true;
+      _results = groups;
+      _seerrResults = seerr;
+      _gameResults = const [];
+      _state = SearchState.ready;
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+
   Future<void> _executeSearch(String query) async {
     if (query != _query) return;
     final run = ++_searchRun;
+
+    if (_scopedParentId == null) {
+      try {
+        if (await _foxKeywordSearch(query, run)) return;
+      } catch (_) {}
+    }
 
     try {
         final activeGroups = _scopedParentId != null

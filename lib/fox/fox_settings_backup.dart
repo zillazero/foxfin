@@ -85,3 +85,27 @@ Future<String> foxOpenFoxPlayer() async {
     return 'none';
   }
 }
+
+// Foxfin 2.9.0: lokale Absturzberichte exportieren / löschen.
+const _foxCrashKey = 'fox_local_crash_reports_v1';
+
+Future<int> foxCrashReportCount() async =>
+    ((await SharedPreferences.getInstance()).getStringList(_foxCrashKey) ??
+            const <String>[])
+        .length;
+
+Future<String> foxExportCrashReports() async {
+  final list = (await SharedPreferences.getInstance())
+          .getStringList(_foxCrashKey) ??
+      const <String>[];
+  if (list.isEmpty) return 'empty';
+  final path = await FilePicker.saveFile(
+    dialogTitle: 'Absturzberichte exportieren',
+    fileName: 'foxfin-absturzberichte.txt',
+    bytes: Uint8List.fromList(utf8.encode(list.join('\n\n'))),
+  );
+  return path == null ? 'cancel' : 'saved';
+}
+
+Future<void> foxClearCrashReports() async =>
+    (await SharedPreferences.getInstance()).remove(_foxCrashKey);

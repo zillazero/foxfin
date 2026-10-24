@@ -87,7 +87,7 @@ enum OsdButton {
     OsdButton.zoom => l10n.playerZoomMode,
     OsdButton.orientation => l10n.orientationLock,
     OsdButton.info => l10n.playbackInformation,
-    OsdButton.sleepTimer => 'Sleep-Timer',
+    OsdButton.sleepTimer => l10n.foxSleepTimer,
     OsdButton.fullscreen => l10n.fullscreen,
     OsdButton.floatOnTop => l10n.playerTooltipFloatOnTop,
   };

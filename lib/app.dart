@@ -95,7 +95,10 @@ class _MoonfinAppState extends State<MoonfinApp> {
   @override
   void initState() {
     super.initState();
-    if (PlatformDetection.isTV) FoxFocusGuard.install();
+    if (PlatformDetection.isTV) {
+      FoxFocusGuard.install();
+      FoxFocusGuard.onVoiceKey = () => appRouter.push('/search?voice=1');
+    }
     _prefs = GetIt.instance<UserPreferences>();
     _themeController = AppThemeController.fromPreferences(_prefs);
     // Foxfin: theme sync with the FOX account.

@@ -1065,7 +1065,7 @@
   "@scrollDirectionHorizontal": {
     "description": "Library scroll direction option: horizontal grid for ultrawide displays"
   },
-  "libraryGenresTitle": "{name} \u2014 Genres",
+  "libraryGenresTitle": "{name} — Genres",
   "@libraryGenresTitle": {
     "description": "Header title showing library name with genres suffix",
     "placeholders": {
@@ -1476,9 +1476,9 @@
   "@bookFormatComic": {
     "description": "Semantic label for the comic format badge on library cards"
   },
-  "noBooksFound": "No Books Found",
+  "noBooksFound": "No books found for this author.",
   "@noBooksFound": {
-    "description": "Title shown when a books library has no items"
+    "description": "Placeholder when no books are found for an author"
   },
   "noBooksFoundDescription": "This library does not contain any books, audiobooks, or comics yet.",
   "@noBooksFoundDescription": {
@@ -1628,7 +1628,6 @@
     "description": "Placeholder text for an empty item list screen"
   },
   "failedToLoad": "Failed to load",
-
   "@failedToLoad": {
     "description": "Error message when item detail fails to load"
   },
@@ -1724,10 +1723,6 @@
   "noBiographyAvailable": "No biography available for this author.",
   "@noBiographyAvailable": {
     "description": "Placeholder when no biography text is available"
-  },
-  "noBooksFound": "No books found for this author.",
-  "@noBooksFound": {
-    "description": "Placeholder when no books are found for an author"
   },
   "unableToLoadAuthorDetails": "Unable to load author details right now.",
   "@unableToLoadAuthorDetails": {
@@ -2087,7 +2082,7 @@
     "description": "Subtitle for the download subtitles option"
   },
   "downloadSubtitles": "Download Subtitles",
-  "searchingSubtitles": "Searching for subtitles\u2026",
+  "searchingSubtitles": "Searching for subtitles…",
   "@searchingSubtitles": {
     "description": "Shown while a remote subtitle search is running"
   },
@@ -2095,7 +2090,7 @@
   "@fetchingSubtitles": {
     "description": "Playback status shown while the selected subtitle file is loading"
   },
-  "downloadingSubtitle": "Downloading subtitle\u2026",
+  "downloadingSubtitle": "Downloading subtitle…",
   "@downloadingSubtitle": {
     "description": "Shown while a chosen subtitle is downloaded and the server is picking it up"
   },
@@ -3339,7 +3334,6 @@
   "@readerNotReady": {
     "description": "Error when reader has not finished initializing"
   },
-
   "seriesRecordings": "Series Recordings",
   "@seriesRecordings": {
     "description": "Live TV series recordings label"
@@ -3644,7 +3638,6 @@
   "@failedToCancelSeriesRecording": {
     "description": "Error when cancelling a series recording fails"
   },
-
   "searchThisLibrary": "Search this library...",
   "@searchThisLibrary": {
     "description": "Search hint when scoped to a specific library"
@@ -3675,7 +3668,6 @@
   "@seerr": {
     "description": "Seerr brand name"
   },
-
   "seerrAccountType": "Seerr Account Type",
   "@seerrAccountType": {
     "description": "Header for selecting Seerr authentication account type"
@@ -3688,7 +3680,6 @@
   "@localAccount": {
     "description": "Auth option label for Seerr sign in using local Seerr credentials"
   },
-
   "savedMedia": "Downloads",
   "@savedMedia": {
     "description": "Header title for saved/downloaded media screen"
@@ -4045,7 +4036,6 @@
       }
     }
   },
-
   "settings": "Settings",
   "@settings": {
     "description": "Settings screen title"
@@ -5005,9 +4995,15 @@
   "@upcomingEpisodeNext": {
     "description": "Formatted badge text for an upcoming episode release date",
     "placeholders": {
-      "date": {"type": "String"},
-      "season": {"type": "int"},
-      "episode": {"type": "int"}
+      "date": {
+        "type": "String"
+      },
+      "season": {
+        "type": "int"
+      },
+      "episode": {
+        "type": "int"
+      }
     }
   },
   "upcomingEpisodeToday": "Today",
@@ -6219,21 +6215,27 @@
   "@bookSeriesCount": {
     "description": "How many series a book library holds",
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "bookInProgressCount": "{count} in progress",
   "@bookInProgressCount": {
     "description": "How many books or audiobooks are started but not finished",
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "bookBrowseAllTitles": "{count, plural, =1{Browse 1 title} other{Browse all {count} titles}}",
   "@bookBrowseAllTitles": {
     "description": "Link from the book library to the full title grid",
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "searchBooks": "Search books",
@@ -6593,7 +6595,9 @@
   "@daysValue": {
     "description": "A number of days",
     "placeholders": {
-      "days": {"type": "int"}
+      "days": {
+        "type": "int"
+      }
     }
   },
   "fullScreenRows": "Expanded Rows",
@@ -7917,7 +7921,6 @@
   "@episodesLabel": {
     "description": "Stat label for number of episodes"
   },
-
   "access": "Access",
   "add": "Add",
   "address": "Address",
@@ -7970,7 +7973,6 @@
   "unmute": "Unmute",
   "mute": "Mute",
   "branding": "Branding",
-
   "adminDrawerDashboard": "Dashboard",
   "adminDrawerAnalytics": "Analytics",
   "adminDrawerSettings": "Settings",
@@ -7994,7 +7996,6 @@
   "adminDrawerPlugins": "Plugins",
   "adminDrawerRepositories": "Repositories",
   "adminDrawerLiveTv": "Live TV",
-
   "adminExitTooltip": "Exit Admin",
   "adminPremiereNoteLiveTv": "Live TV needs Emby Premiere. Without it the server doesn't import channels or record anything.",
   "adminPremiereNoteBackups": "Backup & Restore needs Emby Premiere once its trial ends.",
@@ -8012,7 +8013,13 @@
   "adminGeneralAutoRestart": "Restart automatically to apply updates",
   "adminGeneralAutoRestartHelp": "The server only restarts while no users are active.",
   "adminTaskTriggerSystemEvent": "After a system event ({event})",
-  "@adminTaskTriggerSystemEvent": {"placeholders": {"event": {"type": "String"}}},
+  "@adminTaskTriggerSystemEvent": {
+    "placeholders": {
+      "event": {
+        "type": "String"
+      }
+    }
+  },
   "adminPluginNeedsPremiere": "Needs Emby Premiere after a 14-day free trial",
   "adminEmbyBackupsHelp": "Emby backs up through its Backup & Restore plugin.",
   "adminEmbyBackupsNoPlugin": "The Backup & Restore plugin isn't installed. Install it from the plugin catalog to back up this server.",
@@ -8020,9 +8027,21 @@
   "adminEmbyFullBackup": "Full backup",
   "adminEmbyLightBackups": "Database backups",
   "adminEmbyBackupServerVersion": "Emby {version}",
-  "@adminEmbyBackupServerVersion": {"placeholders": {"version": {"type": "String"}}},
+  "@adminEmbyBackupServerVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "adminEmbyRestoreConfirm": "Restore {name}? It replaces this server's libraries, settings, users and passwords, and the server shuts down when it's done. You may need to start it again yourself.",
-  "@adminEmbyRestoreConfirm": {"placeholders": {"name": {"type": "String"}}},
+  "@adminEmbyRestoreConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "adminEmbyRestoreServerId": "Restore the server ID",
   "adminEmbyRestoreServerIdHelp": "Turn this off when you restore the same backup onto more than one server.",
   "adminEmbyRestoreShuttingDown": "The restore is done and the server is shutting down. Start it again if it doesn't restart by itself.",
@@ -8054,7 +8073,13 @@
   "adminLibImportCollections": "Import collections from metadata downloaders",
   "adminLibThumbnailInterval": "Preview thumbnail interval",
   "adminLibThumbnailEverySeconds": "Every {count} seconds",
-  "@adminLibThumbnailEverySeconds": {"placeholders": {"count": {"type": "int"}}},
+  "@adminLibThumbnailEverySeconds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "adminLibThumbnailAtChapters": "At chapter markers",
   "adminLibSaveThumbnailsWithMedia": "Save preview thumbnails into media folders",
   "adminLibrarySectionMarkers": "Intro markers",
@@ -8099,13 +8124,25 @@
   "adminSyncJobsEmpty": "No jobs",
   "adminSyncJobCancel": "Cancel job",
   "adminSyncJobCancelConfirm": "Cancel {name} and remove it from the list?",
-  "@adminSyncJobCancelConfirm": {"placeholders": {"name": {"type": "String"}}},
+  "@adminSyncJobCancelConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "adminSyncJobConverting": "Converting",
   "adminSyncJobReady": "Ready to transfer",
   "adminSyncJobTransferring": "Transferring",
   "adminSyncJobCompletedWithError": "Completed with errors",
   "adminSyncJobItemCount": "{count, plural, =1{1 item} other{{count} items}}",
-  "@adminSyncJobItemCount": {"placeholders": {"count": {"type": "int"}}},
+  "@adminSyncJobItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "adminDrawerDatabase": "Database",
   "adminPageDescDatabase": "Cache size and upkeep",
   "adminDatabaseWarning": "These are advanced options. Leave them at their defaults unless you have a reason to change them.",
@@ -8176,7 +8213,13 @@
   "embyPremiereEnterKey": "Enter key",
   "adminPremiereNote": "Needs Emby Premiere. The server keeps this setting but won't use it until Premiere is active.",
   "adminExternalIdLabel": "{name} Id",
-  "@adminExternalIdLabel": {"placeholders": {"name": {"type": "String"}}},
+  "@adminExternalIdLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "adminExternalIdTypePerson": "Person",
   "adminExternalIdTypeArtist": "Artist",
   "adminExternalIdTypeAlbumArtist": "Album Artist",
@@ -8187,7 +8230,13 @@
   "adminLibMetadataChangeHelp": "Changes to metadata settings apply to new content. To update existing content, refresh it from its detail page or refresh the library.",
   "adminLibFetcherSettings": "Fetcher settings",
   "adminLibImageOptionsTitle": "Image options for {type}",
-  "@adminLibImageOptionsTitle": {"placeholders": {"type": {"type": "String"}}},
+  "@adminLibImageOptionsTitle": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
   "adminLibFetchImages": "Fetch images",
   "adminLibMaxBackdrops": "Maximum number of backdrops per item",
   "adminLibMinBackdropWidth": "Minimum backdrop download width",
@@ -8224,7 +8273,13 @@
   "adminMetadataNameOrIdRequired": "Enter a name or an external ID.",
   "adminLibMetadataReaders": "Metadata readers",
   "adminLibSimilarProvidersFor": "Similar item providers: {type}",
-  "@adminLibSimilarProvidersFor": {"placeholders": {"type": {"type": "String"}}},
+  "@adminLibSimilarProvidersFor": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
   "adminLibMediaSegmentProviders": "Media segment providers",
   "adminLibEnableLibrary": "Enable the library",
   "adminLibEnableLibraryHelp": "Disabling the library hides it from all user views.",
@@ -8238,7 +8293,13 @@
   "adminLibraryFolderRequired": "Add at least one folder to this library.",
   "adminRenameLibraryWarning": "Renaming a library loses all of its metadata. Proceed with caution.",
   "adminDeleteLibraryConfirm": "Remove the library \"{name}\"? Files on disk are not deleted.",
-  "@adminDeleteLibraryConfirm": {"placeholders": {"name": {"type": "String"}}},
+  "@adminDeleteLibraryConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "adminDeleteLibraryLocations": "These media locations will be removed from the library:",
   "adminRefreshMode": "Refresh mode",
   "adminRefreshModeScan": "Scan for new and updated files",
@@ -8246,7 +8307,16 @@
   "adminReplaceTrickplayImages": "Replace existing trickplay images",
   "adminRefreshDialogHelp": "Metadata is refreshed based on the settings and internet services enabled in the dashboard.",
   "adminActivityCount": "{shown} of {total}",
-  "@adminActivityCount": {"placeholders": {"shown": {"type": "String"}, "total": {"type": "String"}}},
+  "@adminActivityCount": {
+    "placeholders": {
+      "shown": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
   "adminLiveTvTabSources": "Tuners and guide",
   "adminLiveTvTabRecordings": "Recordings",
   "adminLiveTvAddTuner": "Add tuner device",
@@ -8267,7 +8337,13 @@
   "adminLiveTvNoTunerChannels": "No tuner channels found",
   "adminLiveTvXmltvPathHelp": "A path or URL to an XMLTV file. The server reads it and checks it for updates. You are responsible for creating and updating the file.",
   "adminLiveTvSdCreateAccount": "Create an account at {url}",
-  "@adminLiveTvSdCreateAccount": {"placeholders": {"url": {"type": "String"}}},
+  "@adminLiveTvSdCreateAccount": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "adminLiveTvSdSignIn": "Sign in",
   "adminLiveTvSdLineup": "Lineup",
   "adminLiveTvSdSelectLineup": "Select a lineup. If none are listed, check your username, password and postal code.",
@@ -8283,7 +8359,13 @@
   "adminLiveTvSectionDefaultRecording": "Default recording settings",
   "adminLiveTvSectionMetadata": "Recording metadata",
   "adminUserLastActivity": "Last activity {time}",
-  "@adminUserLastActivity": {"placeholders": {"time": {"type": "String"}}},
+  "@adminUserLastActivity": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "adminCurrentPassword": "Current password",
   "adminChannelAccess": "Channel access",
   "adminDeviceAccess": "Device access",
@@ -8305,22 +8387,61 @@
   "adminLogLevelNone": "None",
   "adminActivityAllUsers": "All users",
   "adminTaskLastRan": "Last ran {time}, taking {duration}.",
-  "@adminTaskLastRan": {"placeholders": {"time": {"type": "String"}, "duration": {"type": "String"}}},
+  "@adminTaskLastRan": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
   "adminTaskResultFailed": "Failed",
   "adminTaskResultCancelled": "Cancelled",
   "adminTaskResultAborted": "Aborted by server shutdown",
   "adminDurationSecondsShort": "{seconds}s",
-  "@adminDurationSecondsShort": {"placeholders": {"seconds": {"type": "String"}}},
+  "@adminDurationSecondsShort": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
   "adminDeleteTaskTrigger": "Delete task trigger",
   "adminDeleteTaskTriggerConfirm": "Are you sure you want to delete this task trigger?",
   "adminTaskTriggerEveryMinutes": "Every {minutes} minutes",
-  "@adminTaskTriggerEveryMinutes": {"placeholders": {"minutes": {"type": "String"}}},
+  "@adminTaskTriggerEveryMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
   "adminTaskTriggerEveryHours": "Every {hours} hours",
-  "@adminTaskTriggerEveryHours": {"placeholders": {"hours": {"type": "String"}}},
+  "@adminTaskTriggerEveryHours": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
   "adminTaskMinutesValue": "{minutes} minutes",
-  "@adminTaskMinutesValue": {"placeholders": {"minutes": {"type": "String"}}},
+  "@adminTaskMinutesValue": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
   "adminTaskHoursValue": "{hours} hours",
-  "@adminTaskHoursValue": {"placeholders": {"hours": {"type": "String"}}},
+  "@adminTaskHoursValue": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
   "adminTimeLimitHours": "Time limit (hours)",
   "adminTranscodingDecodingFor": "Enable hardware decoding for",
   "adminTranscodingThreadCountHelp": "The most threads a transcode can use. Fewer threads lower CPU use but may be too slow for smooth playback.",
@@ -8431,7 +8552,6 @@
   "adminLeaveTitle": "Discard unsaved changes?",
   "adminLeaveMessage": "The changes on this page haven't been saved yet.",
   "adminKeepEditing": "Keep editing",
-
   "adminDashboardLoadFailed": "Failed to load dashboard",
   "adminMediaOverview": "Media Overview",
   "adminMediaTotalsError": "Could not load server media totals.",
@@ -8439,22 +8559,27 @@
   "adminPluginUpdatesAvailable": "Plugin updates available: {count}",
   "@adminPluginUpdatesAvailable": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "adminPluginsRequiringRestart": "Plugins requiring restart: {count}",
   "@adminPluginsRequiringRestart": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "adminFailedScheduledTasks": "Failed scheduled tasks: {count}",
   "@adminFailedScheduledTasks": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
-
   "analyticsMediaDistribution": "Media Distribution",
   "analyticsVideoCodecs": "Video Codecs",
   "analyticsAudioCodecs": "Audio Codecs",
@@ -8465,7 +8590,6 @@
   "analyticsRuntimeBuckets": "Runtime Buckets",
   "analyticsFileFormats": "File Formats",
   "analyticsNoData": "No Data Available.",
-
   "adminServerInfo": "Server Info",
   "adminRestartPending": "Restart Pending",
   "adminServerPaths": "Server Paths",
@@ -8476,22 +8600,24 @@
   "errorGeneric": "Error: {error}",
   "@errorGeneric": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminServerRebootInProgress": "Server reboot in progress",
   "adminServerRebootMessage": "Server reboot in progress, please restart Foxfin",
-
   "adminActiveSessions": "Active Sessions",
   "adminSessionsLoadFailed": "Failed to load sessions",
   "adminNoActiveSessions": "No active sessions",
   "adminRecentActivity": "Recent Activity",
   "adminNoRecentActivity": "No recent activity",
-
   "adminCommandFailed": "Command failed: {error}",
   "@adminCommandFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminSendMessage": "Send Message",
@@ -8501,7 +8627,7 @@
   "sessionRewind": "Rewind",
   "sessionForward": "Forward",
   "sessionNext": "Next",
-  "sessionVolumeDown": "Vol \u2013",
+  "sessionVolumeDown": "Vol –",
   "sessionVolumeUp": "Vol +",
   "uhd4k": "4K",
   "nowPlaying": "Now Playing",
@@ -8511,25 +8637,27 @@
   "audioCodec": "Audio Codec",
   "hwAccel": "HW Accel",
   "completion": "Completion",
-
   "adminClearDates": "Clear dates",
   "adminActivitySeverityAll": "All severities",
   "adminActivityDateRange": "Date range",
   "adminActivityLoadFailed": "Failed to load activity log: {error}",
   "@adminActivityLoadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminNoActivityEntries": "No activity entries",
-
   "adminEditDeviceName": "Edit Device Name",
   "adminCustomName": "Custom Name",
   "adminDeviceNameUpdated": "Device name updated",
   "adminDeviceUpdateFailed": "Failed to update device: {error}",
   "@adminDeviceUpdateFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminDeleteDevice": "Delete Device",
@@ -8563,14 +8691,15 @@
   },
   "@adminDeviceDeleteFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminDevicesLoadFailed": "Failed to load devices",
   "adminSearchDevices": "Search devices",
   "adminThisDevice": "This Device",
   "adminEditName": "Edit Name",
-
   "adminLibrariesLoadFailed": "Failed to load libraries",
   "adminNoLibraries": "No libraries configured",
   "adminScanAllLibraries": "Scan All Libraries",
@@ -8578,55 +8707,69 @@
   "adminScanFailed": "Failed to start scan: {error}",
   "@adminScanFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
-
   "adminRenameLibrary": "Rename Library",
   "adminNewName": "New name",
   "adminLibraryRenamed": "Library renamed to \"{name}\"",
   "@adminLibraryRenamed": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminRenameFailed": "Failed to rename: {error}",
   "@adminRenameFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminDeleteLibrary": "Delete Library",
   "adminLibraryDeleted": "Library \"{name}\" deleted",
   "@adminLibraryDeleted": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminLibraryDeleteFailed": "Failed to delete library: {error}",
   "@adminLibraryDeleteFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
-
   "adminAddPathFailed": "Failed to add path: {error}",
   "@adminAddPathFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminRemovePath": "Remove Path",
   "adminRemovePathConfirm": "Remove \"{path}\" from this library?",
   "@adminRemovePathConfirm": {
     "placeholders": {
-      "path": {"type": "String"}
+      "path": {
+        "type": "String"
+      }
     }
   },
   "adminRemovePathFailed": "Failed to remove path: {error}",
   "@adminRemovePathFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminLibraryLoadFailed": "Failed to load library",
@@ -8729,77 +8872,91 @@
   "adminLibLufsScan": "Enable LUFS scan for audio normalization",
   "adminLibPreferNonstandardArtist": "Prefer non-standard artists tag",
   "adminLibAutoAddToCollection": "Automatically add movies to collections",
-
   "adminLibraryNameRequired": "Library name is required",
   "adminLibraryCreateFailed": "Failed to create library: {error}",
   "@adminLibraryCreateFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminLibraryName": "Library Name",
   "adminSelectedPaths": "Selected Paths:",
   "adminCreateLibrary": "Create Library",
   "paths": "Paths:",
-
   "adminDisableUser": "Disable User",
   "adminEnableUser": "Enable User",
   "adminDisableUserConfirm": "Disable {name}? They will not be able to sign in.",
   "@adminDisableUserConfirm": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminEnableUserConfirm": "Enable {name}? They will be able to sign in again.",
   "@adminEnableUserConfirm": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminUserDisabled": "User \"{name}\" disabled",
   "@adminUserDisabled": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminUserEnabled": "User \"{name}\" enabled",
   "@adminUserEnabled": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminUserPolicyUpdateFailed": "Failed to update user policy: {error}",
   "@adminUserPolicyUpdateFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminUsersLoadFailed": "Failed to load users",
   "adminSearchUsers": "Search users",
   "adminEditUser": "Edit User",
   "adminAddUser": "Add User",
-
   "adminUserCreateFailed": "Failed to create user: {error}",
   "@adminUserCreateFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminCreateUser": "Create User",
   "adminPasswordOptional": "Password (optional)",
-
   "adminUsernameRequired": "Username cannot be empty",
   "adminSaveFailed": "Failed to save: {error}",
   "@adminSaveFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminPasswordsMismatch": "Passwords do not match",
   "adminFailed": "Failed: {error}",
   "@adminFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminUserLoadFailed": "Failed to load user",
@@ -8888,26 +9045,30 @@
       }
     }
   },
-
   "adminDeleteUserConfirm": "Are you sure you want to delete {name}?",
   "@adminDeleteUserConfirm": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminUserDeleted": "User \"{name}\" deleted",
   "@adminUserDeleted": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminUserDeleteFailed": "Failed to delete user: {error}",
   "@adminUserDeleteFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
-
   "adminCreateApiKey": "Create API Key",
   "adminAppName": "App name",
   "adminApiKeyCreated": "API Key Created",
@@ -8916,7 +9077,9 @@
   "adminApiKeyCreateFailed": "Failed to create key: {error}",
   "@adminApiKeyCreateFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminKeyTokenMissing": "Key token missing from server response",
@@ -8924,14 +9087,18 @@
   "adminRevokeKeyConfirm": "Revoke key for {name}?",
   "@adminRevokeKeyConfirm": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminApiKeyRevoked": "API key revoked",
   "adminApiKeyRevokeFailed": "Failed to revoke key: {error}",
   "@adminApiKeyRevokeFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminApiKeysLoadFailed": "Failed to load API keys",
@@ -8950,7 +9117,6 @@
       }
     }
   },
-
   "adminBackupOptionsTitle": "Create Backup",
   "adminBackupDatabase": "Database",
   "adminBackupDatabaseAlways": "Always included",
@@ -8962,20 +9128,26 @@
   "adminBackupCreateFailed": "Failed to create backup: {error}",
   "@adminBackupCreateFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminBackupPathMissing": "Backup path missing in server response",
   "adminBackupManifest": "Manifest: {name}",
   "@adminBackupManifest": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminManifestLoadFailed": "Failed to load manifest: {error}",
   "@adminManifestLoadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminConfirmRestore": "Confirm Restore",
@@ -8983,7 +9155,9 @@
   "adminRestoreFailed": "Failed to restore backup: {error}",
   "@adminRestoreFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminBackupsLoadFailed": "Failed to load backups",
@@ -8991,37 +9165,42 @@
   "adminNoBackups": "No backups found",
   "adminViewDetails": "View Details",
   "restore": "Restore",
-
   "adminLogsLoadFailed": "Failed to load server logs",
   "adminNoLogFiles": "No log files found",
-
   "adminLogCopied": "Log copied to clipboard",
   "adminSaveLogFile": "Save log file",
   "adminSavedTo": "Saved to {path}",
   "@adminSavedTo": {
     "placeholders": {
-      "path": {"type": "String"}
+      "path": {
+        "type": "String"
+      }
     }
   },
   "adminFileSaveFailed": "Failed to save file: {error}",
   "@adminFileSaveFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminLogFileLoadFailed": "Failed to load {fileName}",
   "@adminLogFileLoadFailed": {
     "placeholders": {
-      "fileName": {"type": "String"}
+      "fileName": {
+        "type": "String"
+      }
     }
   },
   "adminSearchInLog": "Search in log",
   "adminNoMatchingLines": "No matching lines",
-
   "adminTasksLoadFailed": "Failed to load tasks: {error}",
   "@adminTasksLoadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminNoScheduledTasks": "No scheduled tasks found",
@@ -9029,33 +9208,42 @@
   "adminTaskStartFailed": "Failed to start task: {error}",
   "@adminTaskStartFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminTaskStopFailed": "Failed to stop task: {error}",
   "@adminTaskStopFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
-
   "adminTaskLoadFailed": "Failed to load task: {error}",
   "@adminTaskLoadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminRunNow": "Run Now",
   "adminTriggerRemoveFailed": "Failed to remove trigger: {error}",
   "@adminTriggerRemoveFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminTriggerAddFailed": "Failed to add trigger: {error}",
   "@adminTriggerAddFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminLastExecution": "Last Execution",
@@ -9067,47 +9255,60 @@
   "adminHours": "{hours} hour(s)",
   "@adminHours": {
     "placeholders": {
-      "hours": {"type": "String"}
+      "hours": {
+        "type": "String"
+      }
     }
   },
   "adminDayOfWeek": "Day of week",
-
   "adminSearchPlugins": "Search plugins...",
   "adminPluginToggleFailed": "Failed to toggle plugin: {error}",
   "@adminPluginToggleFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminUninstallPlugin": "Uninstall Plugin",
   "adminUninstallPluginConfirm": "Are you sure you want to uninstall \"{name}\"?",
   "@adminUninstallPluginConfirm": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminPluginUninstallFailed": "Failed to uninstall plugin: {error}",
   "@adminPluginUninstallFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminPackageInstallFailed": "Failed to install package: {error}",
   "@adminPackageInstallFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminPluginUpdateFailed": "Failed to install update: {error}",
   "@adminPluginUpdateFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminPluginsLoadFailed": "Failed to load plugins: {error}",
   "@adminPluginsLoadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminNoPluginsMatchSearch": "No plugins match your search",
@@ -9115,97 +9316,119 @@
   "adminInstallUpdate": "Install update (v{version})",
   "@adminInstallUpdate": {
     "placeholders": {
-      "version": {"type": "String"}
+      "version": {
+        "type": "String"
+      }
     }
   },
   "adminCatalogLoadFailed": "Failed to load catalog: {error}",
   "@adminCatalogLoadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminNoPackagesMatchSearch": "No packages match your search",
   "adminNoPackagesAvailable": "No packages available",
-
   "adminExperimentalIntegration": "Experimental Integration",
   "adminExperimentalWarning": "Plugin settings integration is still experimental. Some settings pages may not render correctly.",
   "continueAction": "Continue",
   "adminPluginRemoveAfterRestart": "\"{name}\" will be removed after server restart",
   "@adminPluginRemoveAfterRestart": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminUninstallFailed": "Failed to uninstall: {error}",
   "@adminUninstallFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminPluginUpdating": "Updating \"{name}\" to v{version}...",
   "@adminPluginUpdating": {
     "placeholders": {
-      "name": {"type": "String"},
-      "version": {"type": "String"}
+      "name": {
+        "type": "String"
+      },
+      "version": {
+        "type": "String"
+      }
     }
   },
   "adminPluginLoadFailed": "Failed to load plugin: {error}",
   "@adminPluginLoadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminPluginNotFound": "Plugin not found",
   "adminPluginVersion": "Version {version}",
   "@adminPluginVersion": {
     "placeholders": {
-      "version": {"type": "String"}
+      "version": {
+        "type": "String"
+      }
     }
   },
   "adminEnablePlugin": "Enable Plugin",
   "adminPluginSettingsPage": "Plugin settings page",
   "adminRevisionHistory": "Revision History",
   "adminNoChangelog": "No changelog available.",
-
   "adminRemoveRepository": "Remove Repository",
   "adminRemoveRepositoryConfirm": "Are you sure you want to remove \"{name}\"?",
   "@adminRemoveRepositoryConfirm": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminRepositoriesSaveFailed": "Failed to save repositories: {error}",
   "@adminRepositoriesSaveFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminRepositoriesLoadFailed": "Failed to load repositories: {error}",
   "@adminRepositoriesLoadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminRepositoryNameHint": "e.g. Jellyfin Stable",
   "adminRepositoryUrl": "Repository URL",
   "adminAddEntry": "Add entry",
-
   "adminInvalidUrl": "Invalid URL",
   "adminPluginSettingsLoadFailed": "Unable to load plugin settings: {error}",
   "@adminPluginSettingsLoadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminCouldNotOpenUrl": "Could not open {uri}",
   "@adminCouldNotOpenUrl": {
     "placeholders": {
-      "uri": {"type": "String"}
+      "uri": {
+        "type": "String"
+      }
     }
   },
   "adminOpenInBrowser": "Open in Browser",
   "adminOpenExternally": "Open externally",
-
   "adminGeneralSettings": "General Settings",
   "adminServerName": "Server name",
   "adminPreferredMetadataCountry": "Preferred metadata country",
@@ -9214,19 +9437,16 @@
   "adminLibraryScanConcurrency": "Library scan concurrency",
   "adminParallelImageEncodingLimit": "Parallel image encoding limit",
   "adminSlowResponseThreshold": "Slow response threshold (ms)",
-
   "adminBrandingLoadFailed": "Failed to load branding settings",
   "adminLoginDisclaimer": "Login disclaimer",
   "adminLoginDisclaimerHint": "HTML displayed below the login form",
   "adminCustomCss": "Custom CSS",
   "adminCustomCssHint": "Custom CSS applied to the web interface",
   "adminEnableSplashScreen": "Enable splash screen",
-
   "adminStreamingLoadFailed": "Failed to load streaming settings",
   "adminStreamingDescription": "Set global streaming bitrate limits for remote connections.",
   "adminRemoteBitrateLimitMbps": "Remote client bitrate limit (Mbps)",
   "adminLeaveEmptyForUnlimited": "Leave empty or 0 for unlimited",
-
   "adminPlaybackLoadFailed": "Failed to load playback settings",
   "adminHardwareAcceleration": "Hardware acceleration",
   "adminVaapiDevice": "VA-API device",
@@ -9240,7 +9460,6 @@
   "adminAllowSegmentDeletion": "Allow segment deletion",
   "adminSegmentKeepSeconds": "Segment keep (seconds)",
   "adminThrottleBuffering": "Throttle buffering",
-
   "adminTrickplayLoadFailed": "Failed to load trickplay settings",
   "adminEnableHardwareAcceleration": "Enable hardware acceleration",
   "adminEnableKeyFrameExtraction": "Enable key frame only extraction",
@@ -9255,7 +9474,6 @@
   "adminTileHeight": "Tile height",
   "adminQualitySubtitle": "Lower values = better quality, larger files",
   "adminProcessThreads": "Process threads",
-
   "adminResumeLoadFailed": "Failed to load resume settings",
   "adminResumeDescription": "Configure when content should be marked as partially played or fully played.",
   "adminMinResumePercentage": "Minimum resume percentage",
@@ -9266,7 +9484,6 @@
   "adminMinResumeDurationSubtitle": "Items shorter than this are not resumable",
   "adminMinAudiobookResume": "Minimum audiobook resume percentage",
   "adminMaxAudiobookResume": "Maximum audiobook resume percentage",
-
   "adminNetworkingLoadFailed": "Failed to load networking settings",
   "adminNetworkingWarning": "Changes to networking settings may require a server restart.",
   "adminEnableRemoteAccess": "Enable remote access",
@@ -9287,11 +9504,12 @@
   "whitelist": "Whitelist",
   "blacklist": "Blacklist",
   "notSet": "Not set",
-
   "adminMetadataLoadFailed": "Failed to load metadata: {error}",
   "@adminMetadataLoadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminRefreshMetadata": "Refresh Metadata",
@@ -9301,7 +9519,9 @@
   "adminMetadataRefreshFailed": "Failed to refresh metadata: {error}",
   "@adminMetadataRefreshFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminNoRemoteMatches": "No remote matches found",
@@ -9310,7 +9530,9 @@
   "adminRemoteSearchFailed": "Remote search failed: {error}",
   "@adminRemoteSearchFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminUpdateContentType": "Update Content Type",
@@ -9319,7 +9541,9 @@
   "adminContentTypeUpdateFailed": "Failed to update content type: {error}",
   "@adminContentTypeUpdateFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminMetadataEditorLoadFailed": "Failed to load metadata editor",
@@ -9328,13 +9552,17 @@
   "adminImageUpdated": "{imageType} image updated",
   "@adminImageUpdated": {
     "placeholders": {
-      "imageType": {"type": "String"}
+      "imageType": {
+        "type": "String"
+      }
     }
   },
   "adminImageDownloadFailed": "Failed to download image: {error}",
   "@adminImageDownloadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminUnsupportedImageFormat": "Unsupported image format",
@@ -9342,40 +9570,51 @@
   "adminImageUploaded": "{imageType} image uploaded",
   "@adminImageUploaded": {
     "placeholders": {
-      "imageType": {"type": "String"}
+      "imageType": {
+        "type": "String"
+      }
     }
   },
   "adminImageUploadFailed": "Failed to upload image: {error}",
   "@adminImageUploadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminDeleteImage": "Delete {imageType} image",
   "@adminDeleteImage": {
     "placeholders": {
-      "imageType": {"type": "String"}
+      "imageType": {
+        "type": "String"
+      }
     }
   },
   "adminImageDeleted": "{imageType} image deleted",
   "@adminImageDeleted": {
     "placeholders": {
-      "imageType": {"type": "String"}
+      "imageType": {
+        "type": "String"
+      }
     }
   },
   "adminImageDeleteFailed": "Failed to delete image: {error}",
   "@adminImageDeleteFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminAllProviders": "All providers",
   "adminNoRemoteImages": "No remote images found",
-
   "adminTunerDiscoveryFailed": "Tuner discovery failed: {error}",
   "@adminTunerDiscoveryFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminTunerTypeM3u": "M3U Tuner",
@@ -9412,13 +9651,17 @@
   "adminTunerRemoveFailed": "Failed to remove tuner: {error}",
   "@adminTunerRemoveFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminProviderRemoveFailed": "Failed to remove provider: {error}",
   "@adminProviderRemoveFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminSeriesRecordingPath": "Series recording path",
@@ -9433,7 +9676,9 @@
   "adminSettingsSaveFailed": "Failed to save settings: {error}",
   "@adminSettingsSaveFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminLiveTvLoadFailed": "Failed to load Live TV administration",
@@ -9443,9 +9688,7 @@
   "adminGuideRefreshStarted": "Guide data refresh started",
   "adminGuideRefreshUnavailable": "Guide refresh task is not available on this server.",
   "adminNoListingProviders": "No listing providers configured",
-
   "adminSettingsSaved": "Settings saved",
-
   "adminBackupsNotAvailable": "Backups are not available on this server build.",
   "adminRestoreWarning1": "Restoring will replace ALL current server data with the backup data.",
   "adminRestoreWarning2": "Current server settings, users, and library data will be overwritten.",
@@ -9453,15 +9696,15 @@
   "adminRestoreConfirmMessage": "Restore backup {name} now?",
   "@adminRestoreConfirmMessage": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminBackupsTitle": "Backups",
   "adminUnknownDate": "Unknown date",
   "adminUnnamedBackup": "Unnamed Backup",
-
   "adminApply": "Apply",
-
   "adminLogsTitle": "Server Logs",
   "adminLogsNewestFirst": "Newest First",
   "adminLogsOldestFirst": "Oldest First",
@@ -9469,36 +9712,44 @@
   "adminLogsMinutesAgo": "{minutes}m ago",
   "@adminLogsMinutesAgo": {
     "placeholders": {
-      "minutes": {"type": "int"}
+      "minutes": {
+        "type": "int"
+      }
     }
   },
   "adminLogsHoursAgo": "{hours}h ago",
   "@adminLogsHoursAgo": {
     "placeholders": {
-      "hours": {"type": "int"}
+      "hours": {
+        "type": "int"
+      }
     }
   },
   "adminLogsDaysAgo": "{days}d ago",
   "@adminLogsDaysAgo": {
     "placeholders": {
-      "days": {"type": "int"}
+      "days": {
+        "type": "int"
+      }
     }
   },
-
   "adminLogViewerLoadFailed": "Failed to load {fileName}",
   "@adminLogViewerLoadFailed": {
     "placeholders": {
-      "fileName": {"type": "String"}
+      "fileName": {
+        "type": "String"
+      }
     }
   },
   "adminLogViewerMatches": "{count} matches",
   "@adminLogViewerMatches": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "adminLogViewerNoMatches": "No matching lines",
-
   "adminMetadataEditorTitle": "Metadata Editor",
   "adminMetadataIdentify": "Identify",
   "adminMetadataType": "Type",
@@ -9595,57 +9846,72 @@
   "adminMetadataImageUpdated": "{imageType} image updated",
   "@adminMetadataImageUpdated": {
     "placeholders": {
-      "imageType": {"type": "String"}
+      "imageType": {
+        "type": "String"
+      }
     }
   },
   "adminMetadataImageUploaded": "{imageType} image uploaded",
   "@adminMetadataImageUploaded": {
     "placeholders": {
-      "imageType": {"type": "String"}
+      "imageType": {
+        "type": "String"
+      }
     }
   },
   "adminMetadataImageDeleted": "{imageType} image deleted",
   "@adminMetadataImageDeleted": {
     "placeholders": {
-      "imageType": {"type": "String"}
+      "imageType": {
+        "type": "String"
+      }
     }
   },
   "adminMetadataImageDownloadFailed": "Failed to download image: {error}",
   "@adminMetadataImageDownloadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminMetadataImageReadFailed": "Failed to read selected image",
   "adminMetadataImageUploadFailed": "Failed to upload image: {error}",
   "@adminMetadataImageUploadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminMetadataDeleteImageTitle": "Delete {imageType} image",
   "@adminMetadataDeleteImageTitle": {
     "placeholders": {
-      "imageType": {"type": "String"}
+      "imageType": {
+        "type": "String"
+      }
     }
   },
   "adminMetadataDeleteImageContent": "This removes the current image from the item.",
   "adminMetadataImageDeleteFailed": "Failed to delete image: {error}",
   "@adminMetadataImageDeleteFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminMetadataChooseImage": "Choose {imageType} image",
   "@adminMetadataChooseImage": {
     "placeholders": {
-      "imageType": {"type": "String"}
+      "imageType": {
+        "type": "String"
+      }
     }
   },
   "adminMetadataUpload": "Upload",
   "adminMetadataUpdate": "Update",
   "adminMetadataRemoteImage": "Remote image",
-
   "adminPluginsInstalled": "Installed",
   "adminPluginsCatalog": "Catalog",
   "adminPluginsActive": "Active",
@@ -9667,7 +9933,9 @@
   "adminPluginsUpdateAvailable": "Update available: v{version}",
   "@adminPluginsUpdateAvailable": {
     "placeholders": {
-      "version": {"type": "String"}
+      "version": {
+        "type": "String"
+      }
     }
   },
   "adminPluginsUpdateAvailableGeneric": "Update available",
@@ -9679,7 +9947,9 @@
   "adminPluginsInstallUpdateVersioned": "Install update (v{version})",
   "@adminPluginsInstallUpdateVersioned": {
     "placeholders": {
-      "version": {"type": "String"}
+      "version": {
+        "type": "String"
+      }
     }
   },
   "adminPluginsCatalogNoSearchResults": "No packages match your search",
@@ -9687,10 +9957,11 @@
   "adminPluginsInstalling": "\"{name}\" is being installed...",
   "@adminPluginsInstalling": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
-
   "adminPluginDetailExperimental": "Experimental Integration",
   "adminPluginDetailExperimentalContent": "Plugin settings integration is still experimental. Some fields or layouts may not render correctly yet.",
   "adminPluginDetailToggle404": "Failed to toggle plugin. The server could not find this plugin version. Try refreshing plugins, then retry.",
@@ -9698,7 +9969,9 @@
   "adminPluginDetailSettingsTitle": "{name} Settings",
   "@adminPluginDetailSettingsTitle": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminPluginDetailDetails": "Details",
@@ -9711,25 +9984,30 @@
   "adminPluginDetailMalfunctioned": "This plugin has malfunctioned and may not work correctly.",
   "adminPluginDetailNotSupported": "This plugin is not supported by the current server version.",
   "adminPluginDetailSuperseded": "This plugin has been superseded by a newer version.",
-
   "adminReposLoadFailed": "Failed to load repositories: {error}",
   "@adminReposLoadFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminReposRemoveTitle": "Remove Repository",
   "adminReposRemoveConfirm": "Are you sure you want to remove \"{name}\"?",
   "@adminReposRemoveConfirm": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "adminReposRemove": "Remove",
   "adminReposSaveFailed": "Failed to save repositories: {error}",
   "@adminReposSaveFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminReposEmpty": "No repositories configured",
@@ -9739,9 +10017,7 @@
   "adminReposAddTitle": "Add Repository",
   "adminReposUrl": "Repository URL",
   "adminReposNameHint": "e.g. Jellyfin Stable",
-
   "adminPluginSettingsInvalidUrl": "Invalid URL",
-
   "adminGeneralSettingsTitle": "General Settings",
   "adminGeneralMetadataLanguage": "Preferred metadata language",
   "adminGeneralMetadataLanguageHint": "e.g. en, de, fr",
@@ -9752,7 +10028,6 @@
   "adminUnknownError": "Unknown error",
   "adminBrowse": "Browse",
   "adminCloseBrowser": "Close browser",
-
   "adminNetworkingTitle": "Networking",
   "adminNetworkingRestartWarning": "Changes to networking settings may require a server restart.",
   "adminNetworkingEnableHttps": "Enable HTTPS",
@@ -9762,7 +10037,6 @@
   "adminNetworkingWhitelist": "Whitelist",
   "adminNetworkingBlacklist": "Blacklist",
   "adminNetworkingAddEntry": "Add entry",
-
   "adminBrandingTitle": "Branding",
   "adminBrandingLoginDisclaimer": "Login disclaimer",
   "adminBrandingLoginDisclaimerHint": "HTML displayed below the login form",
@@ -9774,7 +10048,6 @@
   "adminBrandingSplashUploadFailed": "Failed to upload splashscreen",
   "adminBrandingSplashDeleted": "Splashscreen removed",
   "adminBrandingNoSplash": "No custom splashscreen",
-
   "adminPlaybackHwAccel": "Hardware Acceleration",
   "adminPlaybackHwAccelLabel": "Hardware acceleration",
   "adminPlaybackEnableHwEncoding": "Enable hardware encoding",
@@ -9818,13 +10091,10 @@
   "adminPlaybackFallbackFont": "Enable fallback font",
   "adminPlaybackFallbackFontPath": "Fallback font path",
   "adminPlaybackStreaming": "Streaming",
-
   "adminResumeVideo": "Video",
   "adminResumeAudiobooks": "Audiobooks",
-
   "adminStreamingBitrateLimit": "Remote client bitrate limit (Mbps)",
   "adminStreamingBitrateLimitHint": "Leave empty or 0 for unlimited",
-
   "adminTrickplayHwAccel": "Enable hardware acceleration",
   "adminTrickplayHwEncoding": "Enable hardware encoding",
   "adminTrickplayKeyFrameOnly": "Enable key frame only extraction",
@@ -9845,7 +10115,6 @@
   "adminTrickplayQScaleSubtitle": "Lower values = better quality, larger files",
   "adminTrickplayJpegQuality": "JPEG quality",
   "adminTrickplayProcessing": "Processing",
-
   "adminTasksEmpty": "No scheduled tasks found",
   "adminTasksNoFilterMatch": "No tasks match the current filter",
   "adminTaskCancelling": "Cancelling...",
@@ -9862,14 +10131,20 @@
   "adminTaskTriggerDaily": "Daily at {time}",
   "@adminTaskTriggerDaily": {
     "placeholders": {
-      "time": {"type": "String"}
+      "time": {
+        "type": "String"
+      }
     }
   },
   "adminTaskTriggerWeekly": "Every {day} at {time}",
   "@adminTaskTriggerWeekly": {
     "placeholders": {
-      "day": {"type": "String"},
-      "time": {"type": "String"}
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
     }
   },
   "adminTaskTriggerStartup": "On application startup",
@@ -9881,11 +10156,12 @@
   "adminTaskTriggerHours": "{count, plural, one{1 hour} other{{count} hours}}",
   "@adminTaskTriggerHours": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "adminTaskTriggerTime": "Time",
-
   "adminActivityJustNow": "Just now",
   "adminActivityLastHour": "Last hour",
   "adminActivityToday": "Today",
@@ -9894,50 +10170,64 @@
   "adminActivityDaysAgo": "{days}d ago",
   "@adminActivityDaysAgo": {
     "placeholders": {
-      "days": {"type": "int"}
+      "days": {
+        "type": "int"
+      }
     }
   },
   "adminActivityHoursAgo": "{hours}h ago",
   "@adminActivityHoursAgo": {
     "placeholders": {
-      "hours": {"type": "int"}
+      "hours": {
+        "type": "int"
+      }
     }
   },
   "adminActivityMinutesAgo": "{minutes}m ago",
   "@adminActivityMinutesAgo": {
     "placeholders": {
-      "minutes": {"type": "int"}
+      "minutes": {
+        "type": "int"
+      }
     }
   },
   "adminActivityNow": "now",
   "adminActivityMinutesShort": "{minutes}m",
   "@adminActivityMinutesShort": {
     "placeholders": {
-      "minutes": {"type": "int"}
+      "minutes": {
+        "type": "int"
+      }
     }
   },
   "adminActivityHoursShort": "{hours}h",
   "@adminActivityHoursShort": {
     "placeholders": {
-      "hours": {"type": "int"}
+      "hours": {
+        "type": "int"
+      }
     }
   },
   "adminActivityDaysShort": "{days}d",
   "@adminActivityDaysShort": {
     "placeholders": {
-      "days": {"type": "int"}
+      "days": {
+        "type": "int"
+      }
     }
   },
   "adminActivityDateShort": "{month}/{day}",
   "@adminActivityDateShort": {
     "placeholders": {
-      "month": {"type": "int"},
-      "day": {"type": "int"}
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
     }
   },
-
   "adminTrickplayDescription": "Configure trickplay image generation for seek preview thumbnails.",
-
   "adminNetworkingPublicHttpsPort": "Public HTTPS port",
   "adminNetworkingBaseUrl": "Base URL",
   "adminNetworkingBaseUrlHint": "e.g. /jellyfin",
@@ -9949,7 +10239,6 @@
   "adminNetworkingEnableIpv6": "Enable IPv6",
   "adminNetworkingLocalSubnets": "LAN networks",
   "adminNetworkingRemoteIpFilterLabel": "Remote IP filter",
-
   "adminPlaybackVaapiDevice": "VA-API device",
   "adminPlaybackAutomatic": "0 = automatic",
   "adminPlaybackTranscodeTempPath": "Transcoding temp path",
@@ -9958,30 +10247,28 @@
   "adminPlaybackThrottleBuffering": "Throttle buffering",
   "adminPlaybackThrottleDelay": "Throttle delay (seconds)",
   "adminPlaybackEnableSubtitleExtraction": "Allow subtitle extraction on the fly",
-
   "adminResumeMinPct": "Minimum resume percentage",
   "adminResumeMinPctSubtitle": "Content must be played past this percentage to save progress",
   "adminResumeMaxPct": "Maximum resume percentage",
   "adminResumeMaxPctSubtitle": "Content is considered fully played after this percentage",
   "adminResumeMinDuration": "Minimum resume duration (seconds)",
   "adminResumeMinDurationSubtitle": "Items shorter than this are not resumable",
-
   "adminTrickplayScanBehavior": "Scan behavior",
   "adminTrickplayProcessPriority": "Process priority",
   "adminTrickplayTileWidth": "Tile width",
   "adminTrickplayTileHeight": "Tile height",
   "adminTrickplayProcessThreads": "Process threads",
   "adminTrickplayWidthResolutions": "Width resolutions",
-
   "adminMetadataDefault": "Default",
   "adminMetadataContentTypeUpdated": "Content type updated",
   "adminMetadataContentTypeFailed": "Failed to update content type: {error}",
   "@adminMetadataContentTypeFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
-
   "adminGeneralSlowResponseThreshold": "Slow response threshold (ms)",
   "adminGeneralEnableSlowResponse": "Enable slow response warnings",
   "adminGeneralQuickConnect": "Enable Quick Connect",
@@ -9997,16 +10284,19 @@
   "adminChannelMappingsUpdateFailed": "Failed to update mappings: {error}",
   "@adminChannelMappingsUpdateFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "adminTimeLimitDuration": "Time limit: {duration}",
   "@adminTimeLimitDuration": {
     "placeholders": {
-      "duration": {"type": "String"}
+      "duration": {
+        "type": "String"
+      }
     }
   },
-
   "folders": "Folders",
   "libraries": "Libraries",
   "syncPlay": "SyncPlay",
@@ -10020,7 +10310,9 @@
   "@syncPlayParticipantCount": {
     "description": "Participant count label shown in SyncPlay UI",
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "syncPlayIgnoreWait": "Ignore wait",
@@ -10038,7 +10330,9 @@
   "@syncPlayQueueItemFallback": {
     "description": "Fallback title for SyncPlay queue item when media title is unavailable",
     "placeholders": {
-      "index": {"type": "int"}
+      "index": {
+        "type": "int"
+      }
     }
   },
   "syncPlayPlayNow": "Play now",
@@ -10059,14 +10353,18 @@
   "@syncPlayUserJoinedGroup": {
     "description": "Snackbar message when a user joins a SyncPlay group",
     "placeholders": {
-      "userName": {"type": "String"}
+      "userName": {
+        "type": "String"
+      }
     }
   },
   "syncPlayUserLeftGroup": "{userName} left SyncPlay group",
   "@syncPlayUserLeftGroup": {
     "description": "Snackbar message when a user leaves a SyncPlay group",
     "placeholders": {
-      "userName": {"type": "String"}
+      "userName": {
+        "type": "String"
+      }
     }
   },
   "syncPlayAccessDeniedTitle": "SyncPlay access denied",
@@ -10075,7 +10373,9 @@
   "@syncPlaySyncingPlaybackToGroup": {
     "description": "Snackbar message shown when starting playback in a SyncPlay group",
     "placeholders": {
-      "groupName": {"type": "String"}
+      "groupName": {
+        "type": "String"
+      }
     }
   },
   "voiceSearchUnavailable": "Voice search is unavailable.",
@@ -10091,17 +10391,17 @@
   "@integrationRowsDiscoveredCount": {
     "description": "Plural label for number of rows discovered in integration status",
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "seeAll": "See All",
   "noItems": "No items",
   "switchUser": "Switch User",
   "remoteControl": "Remote Control",
-
   "mediaBarLoading": "Loading media bar...",
   "mediaBarError": "Media bar failed to load",
-
   "offlineServerUnavailable": "Connected to the internet, but the current server is unavailable.",
   "offlineNoInternet": "You are offline. Only downloaded content is available.",
   "offlineFileNotAvailable": "File not available",
@@ -10111,7 +10411,6 @@
   "offlineBannerSubtitle": "Showing your downloads",
   "serverUnreachableBannerTitle": "Can't reach your server",
   "serverUnreachableBannerSubtitle": "Playing from downloads until it's back",
-
   "castGoogleCast": "Google Cast",
   "castAirPlay": "AirPlay",
   "castDlna": "DLNA",
@@ -10119,13 +10418,17 @@
   "castControlFailed": "Cast control failed: {error}",
   "@castControlFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "castKindControls": "{kind} Controls",
   "@castKindControls": {
     "placeholders": {
-      "kind": {"type": "String"}
+      "kind": {
+        "type": "String"
+      }
     }
   },
   "castDeviceVolume": "Device Volume",
@@ -10133,12 +10436,13 @@
   "castStopKind": "Stop {kind}",
   "@castStopKind": {
     "placeholders": {
-      "kind": {"type": "String"}
+      "kind": {
+        "type": "String"
+      }
     }
   },
   "audioLabel": "Audio",
   "subtitlesLabel": "Subtitles",
-
   "pinConfirmTitle": "Confirm PIN",
   "pinSetTitle": "Set PIN",
   "pinEnterTitle": "Enter PIN",
@@ -10146,13 +10450,17 @@
   "pinEnterNDigit": "Enter a {length}-digit PIN",
   "@pinEnterNDigit": {
     "placeholders": {
-      "length": {"type": "int"}
+      "length": {
+        "type": "int"
+      }
     }
   },
   "pinEnterYourNDigit": "Enter your {length}-digit PIN",
   "@pinEnterYourNDigit": {
     "placeholders": {
-      "length": {"type": "int"}
+      "length": {
+        "type": "int"
+      }
     }
   },
   "kidsMode": "Kids Mode",
@@ -10186,7 +10494,6 @@
   "pinForgot": "Forgot PIN?",
   "pinClear": "Clear",
   "pinBackspace": "Backspace",
-
   "quickConnectAuthorized": "Quick Connect request authorized.",
   "quickConnectInvalidOrExpired": "Quick Connect code is invalid or expired.",
   "quickConnectNotSupported": "Quick Connect is not supported on this server.",
@@ -10197,16 +10504,19 @@
   "quickConnectFailedWithMessage": "Quick Connect failed: {message}",
   "@quickConnectFailedWithMessage": {
     "placeholders": {
-      "message": {"type": "String"}
+      "message": {
+        "type": "String"
+      }
     }
   },
   "quickConnectEnterCode": "Enter code",
   "quickConnectAuthorize": "Authorize",
-
   "remoteCommandFailed": "Command failed: {error}",
   "@remoteCommandFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "remoteControlTitle": "Remote Control",
@@ -10216,17 +10526,17 @@
   "unknownUser": "Unknown",
   "unknownItem": "Unknown",
   "remoteNothingPlaying": "Nothing playing on this session",
-
   "castingStarted": "Casting started on selected device",
   "castingFailed": "Failed to start casting: {error}",
   "@castingFailed": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "noRemoteDevices": "No remote playback devices available.",
   "noRemoteDevicesIos": "No remote playback devices available.\n\nOn iOS, AirPlay targets may be unavailable in the simulator.",
-
   "trackActionPlayNext": "Play Next",
   "trackActionViewDetails": "View Details",
   "trackActionAddToQueue": "Add to Queue",
@@ -10242,12 +10552,13 @@
   "trackActionDownloading": "Downloading {name}...",
   "@trackActionDownloading": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "trackActionDeletedFile": "Deleted downloaded file",
   "trackActionDeleteFileFailed": "Could not delete downloaded file",
-
   "shuffleBy": "Shuffle By",
   "shuffleSelectLibrary": "Select Library",
   "shuffleSelectGenre": "Select Genre",
@@ -10255,13 +10566,11 @@
   "shuffleGenre": "Genre",
   "shuffleNoLibraries": "No compatible libraries available.",
   "shuffleNoGenres": "No genres found for this shuffle mode.",
-
   "posterDisplayTitle": "Display",
   "posterImageType": "Image Type",
   "imageTypePoster": "Poster",
   "imageTypeThumbnail": "Thumbnail",
   "imageTypeBanner": "Banner",
-
   "playlistAddFailed": "Failed to add to playlist",
   "playlistCreateFailed": "Failed to create playlist",
   "playlistNew": "New Playlist",
@@ -10269,7 +10578,6 @@
   "playlistCreateNew": "Create New Playlist",
   "playlistNoneFound": "No playlists found",
   "addToPlaylist": "Add to Playlist",
-
   "lyricsNotAvailable": "No lyrics available",
   "upNext": "Up Next",
   "playNext": "Play Next",
@@ -10279,27 +10587,35 @@
   "skipSegment": "Skip {segment}",
   "@skipSegment": {
     "placeholders": {
-      "segment": {"type": "String"}
+      "segment": {
+        "type": "String"
+      }
     }
   },
-
   "liveTv": "Live TV",
   "continueWatchingAndNextUp": "Continue Watching & Next Up",
   "downloadingBatchProgress": "Downloading {current}/{total} — {fileName}",
   "@downloadingBatchProgress": {
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"},
-      "fileName": {"type": "String"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "fileName": {
+        "type": "String"
+      }
     }
   },
   "downloadingFile": "Downloading {fileName}",
   "@downloadingFile": {
     "placeholders": {
-      "fileName": {"type": "String"}
+      "fileName": {
+        "type": "String"
+      }
     }
   },
-
   "nextEpisode": "Next Episode",
   "moreFromThisSeason": "More From This Season",
   "playerTooltipPlaybackSpeed": "Playback speed",
@@ -10398,8 +10714,12 @@
   "@removeFromCollectionConfirm": {
     "description": "Confirmation shown before removing an item from a collection",
     "placeholders": {
-      "item": {"type": "String"},
-      "collection": {"type": "String"}
+      "item": {
+        "type": "String"
+      },
+      "collection": {
+        "type": "String"
+      }
     }
   },
   "removeFromCollectionFailed": "Failed to remove from collection",
@@ -10710,7 +11030,11 @@
   "settingsDisplayIsSdrDescription": "Stop advertising HDR support for this display. Use this only if detection keeps reporting HDR your TV can't actually show.",
   "settingsDisplayRedetected": "Display re-detected: {formats}",
   "@settingsDisplayRedetected": {
-    "placeholders": { "formats": { "type": "String" } }
+    "placeholders": {
+      "formats": {
+        "type": "String"
+      }
+    }
   },
   "settingsDisplayNoHdrDetected": "No HDR formats detected",
   "settingsDisplayMarkedSdr": "Display saved as SDR",
@@ -10819,7 +11143,6 @@
   "@autoplayNextEpisodeSubtitle": {
     "description": "Setting subtitle for autoplay next episode"
   },
-
   "skipSilenceTitle": "Skip Silence",
   "@skipSilenceTitle": {
     "description": "Setting title: skip silent audio segments during playback"
@@ -10828,7 +11151,6 @@
   "@skipSilenceSubtitle": {
     "description": "Setting subtitle for skip silence"
   },
-
   "allowExternalAudioEffectsTitle": "Allow External Audio Effects",
   "@allowExternalAudioEffectsTitle": {
     "description": "Setting title: allow equalizer apps to attach to Media3"
@@ -10837,7 +11159,6 @@
   "@allowExternalAudioEffectsSubtitle": {
     "description": "Setting subtitle for external audio effects"
   },
-
   "disableTunnelingTitle": "Disable tunneling",
   "@disableTunnelingTitle": {
     "description": "Setting title: force non-tunneled video playback"
@@ -10846,7 +11167,6 @@
   "@disableTunnelingSubtitle": {
     "description": "Setting subtitle for disable tunneling"
   },
-
   "enableTunnelingTitle": "Enable Tunneling",
   "@enableTunnelingTitle": {
     "description": "Setting title: enable tunneled video playback (advanced)"
@@ -10855,7 +11175,6 @@
   "@enableTunnelingSubtitle": {
     "description": "Setting subtitle for enable tunneling"
   },
-
   "mapDolbyVisionP7Title": "Always Play Dolby Vision Profile 7 as HDR10",
   "@mapDolbyVisionP7Title": {
     "description": "Setting title: force DV P7 streams to the HDR10 strip path"
@@ -10864,7 +11183,6 @@
   "@mapDolbyVisionP7Subtitle": {
     "description": "Setting subtitle for forcing the DV P7 strip path"
   },
-
   "subtitlesUseEmbeddedStyles": "Use Embedded Subtitle Styles",
   "@subtitlesUseEmbeddedStyles": {
     "description": "Setting title: apply colours/positioning from the subtitle track"
@@ -10873,7 +11191,6 @@
   "@subtitlesUseEmbeddedStylesSubtitle": {
     "description": "Setting subtitle for embedded styles toggle"
   },
-
   "subtitlesUseEmbeddedFontSizes": "Use Embedded Subtitle Font Sizes",
   "@subtitlesUseEmbeddedFontSizes": {
     "description": "Setting title: apply font sizes from the subtitle track"
@@ -11587,7 +11904,7 @@
   "@achievementsShopSubtitle": {
     "description": "Subtitle on the row that opens the shop"
   },
-  "achievementsShopPack": "{name} \u00d7{count}",
+  "achievementsShopPack": "{name} ×{count}",
   "@achievementsShopPack": {
     "description": "A shop item that grants more than one of a power-up",
     "placeholders": {
@@ -12397,11 +12714,19 @@
   "audiobookExportAll": "Export All",
   "audiobookExportSuccess": "Exported to {path}",
   "@audiobookExportSuccess": {
-    "placeholders": {"path": {"type": "String"}}
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
   },
   "audiobookExportFailed": "Export failed: {error}",
   "@audiobookExportFailed": {
-    "placeholders": {"error": {"type": "String"}}
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   },
   "audiobookLyrics": "Lyrics",
   "audiobookAddBookmark": "Add bookmark",
@@ -12414,30 +12739,50 @@
   "audiobookSleepCustom": "Custom",
   "audiobookSleepRemaining": "{remaining} left",
   "@audiobookSleepRemaining": {
-    "placeholders": {"remaining": {"type": "String"}}
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      }
+    }
   },
   "audiobookSleepMinutes": "{count, plural, =1{1 min} other{{count} min}}",
   "@audiobookSleepMinutes": {
-    "placeholders": {"count": {"type": "int"}}
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "audiobookPlaybackSpeed": "Playback speed",
   "audiobookRemainingTime": "Remaining",
   "audiobookElapsedTime": "Elapsed",
   "audiobookSkipBackSeconds": "Back {seconds}s",
   "@audiobookSkipBackSeconds": {
-    "placeholders": {"seconds": {"type": "int"}}
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "audiobookSkipForwardSeconds": "Forward {seconds}s",
   "@audiobookSkipForwardSeconds": {
-    "placeholders": {"seconds": {"type": "int"}}
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "audiobookPreviousChapter": "Previous chapter",
   "audiobookNextChapter": "Next chapter",
   "audiobookChapterIndicator": "Chapter {current} of {total}",
   "@audiobookChapterIndicator": {
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "audiobookNoChapters": "No chapters",
@@ -12445,12 +12790,20 @@
   "audiobookNoNotes": "No notes yet",
   "audiobookBookmarkAdded": "Bookmark added at {position}",
   "@audiobookBookmarkAdded": {
-    "placeholders": {"position": {"type": "String"}}
+    "placeholders": {
+      "position": {
+        "type": "String"
+      }
+    }
   },
   "audiobookSpeedReset": "Reset to 1.0x",
   "audiobookSpeedCustomLabel": "{value}x",
   "@audiobookSpeedCustomLabel": {
-    "placeholders": {"value": {"type": "String"}}
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
   },
   "audiobookSave": "Save",
   "audiobookCancel": "Cancel",
@@ -12519,19 +12872,32 @@
   "fileInformation": "File Information",
   "fileSizeFormat": "Size: {size}  •  Format: {format}",
   "@fileSizeFormat": {
-    "placeholders": { "size": {}, "format": {} }
+    "placeholders": {
+      "size": {},
+      "format": {}
+    }
   },
   "dateCreatedFormat": "Date Added: {date}",
   "@dateCreatedFormat": {
-    "placeholders": { "date": {} }
+    "placeholders": {
+      "date": {}
+    }
   },
   "showAllAudioTracks": "Show All ({count}) Audio Tracks",
   "@showAllAudioTracks": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "showAllSubtitleTracks": "Show All ({count}) Subtitle Tracks",
   "@showAllSubtitleTracks": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "checkingDirectPlay": "Checking Direct Play capability...",
   "directPlayCapabilityLabel": "Direct Play Capability: ",
@@ -12552,15 +12918,27 @@
   "transcodeAudioChannelsNotSupported": "Number of audio channels is not supported.",
   "transcodeAudioCodecWithCodec": "Audio codec ({codec}) is not supported directly.",
   "@transcodeAudioCodecWithCodec": {
-    "placeholders": { "codec": { "type": "String" } }
+    "placeholders": {
+      "codec": {
+        "type": "String"
+      }
+    }
   },
   "transcodeAudioCodecHintPassthrough": "Tip: If your audio receiver or soundbar supports {codec}, enable Audio Passthrough in Audio settings.",
   "@transcodeAudioCodecHintPassthrough": {
-    "placeholders": { "codec": { "type": "String" } }
+    "placeholders": {
+      "codec": {
+        "type": "String"
+      }
+    }
   },
   "transcodeAudioChannelsExceeded": "Audio channel count ({channels}ch) exceeds the player limit.",
   "@transcodeAudioChannelsExceeded": {
-    "placeholders": { "channels": { "type": "int" } }
+    "placeholders": {
+      "channels": {
+        "type": "int"
+      }
+    }
   },
   "transcodeAudioChannelsHint": "Tip: Adjust 'Max Audio Channels' or multichannel downmixing in Audio settings.",
   "transcodeSubtitleBurnInAssDisabled": "ASS/SSA subtitles require transcoding because direct play is turned off.",
@@ -12569,11 +12947,22 @@
   "transcodeSubtitleBurnInPgsHint": "Tip: Enable 'PGS Direct Play' in Playback settings to play directly without transcoding.",
   "transcodeSubtitleNotSupportedWithCodec": "Subtitle format ({codec}) is not supported directly and must be burned in.",
   "@transcodeSubtitleNotSupportedWithCodec": {
-    "placeholders": { "codec": { "type": "String" } }
+    "placeholders": {
+      "codec": {
+        "type": "String"
+      }
+    }
   },
   "transcodeBitrateExceededWithValues": "File bitrate ({fileBitrate}) exceeds the configured streaming limit ({maxBitrate}).",
   "@transcodeBitrateExceededWithValues": {
-    "placeholders": { "fileBitrate": { "type": "String" }, "maxBitrate": { "type": "String" } }
+    "placeholders": {
+      "fileBitrate": {
+        "type": "String"
+      },
+      "maxBitrate": {
+        "type": "String"
+      }
+    }
   },
   "transcodeBitrateHint": "Tip: Increase 'Maximum Bitrate' in Playback settings to allow direct streaming.",
   "transcodeResolutionHint": "Tip: Increase 'Maximum Resolution' in Playback settings to allow direct streaming.",
@@ -12599,7 +12988,14 @@
   "resetSort": "Reset Sort",
   "rewatchSeasonEpisode": "Rewatch S{season}:E{episode}",
   "@rewatchSeasonEpisode": {
-    "placeholders": { "season": { "type": "int" }, "episode": { "type": "int" } }
+    "placeholders": {
+      "season": {
+        "type": "int"
+      },
+      "episode": {
+        "type": "int"
+      }
+    }
   },
   "rewatchPlaylist": "Rewatch Playlist",
   "noSubtitlesFound": "No subtitles found.",
@@ -12913,12 +13309,20 @@
   "personalRatingOutOfTen": "{rating} / 10",
   "@personalRatingOutOfTen": {
     "description": "Numeric personal rating displayed on a scale out of ten.",
-    "placeholders": { "rating": { "type": "String" } }
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      }
+    }
   },
   "personalRatingOutOfFive": "{rating} / 5",
   "@personalRatingOutOfFive": {
     "description": "Personal rating displayed on a five-star scale.",
-    "placeholders": { "rating": { "type": "String" } }
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      }
+    }
   },
   "filterInProgress": "In Progress",
   "@filterInProgress": {
@@ -13977,5 +14381,15 @@
   "librarySortLength": "Length",
   "@librarySortLength": {
     "description": "Sort option for music: by track or album length"
+  },
+  "foxHideItem": "Hide on this device",
+  "foxSleepTimer": "Sleep timer",
+  "foxSleepTimerEnds": "Sleep timer: ends {time}",
+  "@foxSleepTimerEnds": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   }
 }

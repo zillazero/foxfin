@@ -12,6 +12,7 @@ class FoxFocusGuard {
   static FocusNode? _last;
   static bool _scheduled = false;
   static bool _installed = false;
+  static void Function()? onVoiceKey;
 
   static void install() {
     if (_installed) return;
@@ -42,6 +43,13 @@ class FoxFocusGuard {
 
   static bool _onKey(KeyEvent e) {
     if (e is! KeyDownEvent) return false;
+    // Foxfin 2.9.0: Mikrofon-/Suchtaste der Fernbedienung -> Sprachsuche.
+    if (e.logicalKey == LogicalKeyboardKey.browserSearch ||
+        e.logicalKey == LogicalKeyboardKey.find ||
+        e.logicalKey == LogicalKeyboardKey.speechInputToggle) {
+      onVoiceKey?.call();
+      return onVoiceKey != null;
+    }
     final arrows = {
       LogicalKeyboardKey.arrowUp,
       LogicalKeyboardKey.arrowDown,

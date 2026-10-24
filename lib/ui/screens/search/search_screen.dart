@@ -48,8 +48,11 @@ class SearchScreen extends StatefulWidget {
   final String? initialQuery;
   final String? scopedLibraryId;
   final RemoteSearchSession? remoteSearch;
+  // Foxfin 2.9.0: Spracheingabe direkt starten (Mikrofon-Taste, TV-Suche).
+  final bool startVoice;
 
   const SearchScreen({
+    this.startVoice = false,
     super.key,
     this.initialQuery,
     this.scopedLibraryId,
@@ -137,6 +140,11 @@ class _SearchScreenState extends State<SearchScreen>
     _searchFocus.addListener(_onFocusChanged);
     _searchInputFocus.addListener(_onFocusChanged);
     _voiceController.addListener(_onVoiceControllerChanged);
+    if (widget.startVoice) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) unawaited(_toggleVoiceSearch());
+      });
+    }
 
     if (widget.remoteSearch != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

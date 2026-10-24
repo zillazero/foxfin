@@ -110,6 +110,7 @@ class SearchRepository {
     List<String>? includeItemTypes,
     String? parentId,
     int? limit,
+    List<String>? genres,
   }) async {
     final isStudioQuery = query.toLowerCase().startsWith('studio:');
     final searchTerm = isStudioQuery ? null : query;
@@ -123,6 +124,7 @@ class SearchRepository {
       recursive: true,
       fields: _searchFields,
       studios: studios,
+      genres: genres,
     );
 
     final items = response['Items'] as List? ?? [];

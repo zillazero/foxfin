@@ -73,7 +73,31 @@ class CrashReportService {
       reports.removeAt(0);
     }
     await _save(reports);
+    await _foxKeepLocal(text);
   }
+
+  // Foxfin 2.9.0: lokale Absturzberichte (bleiben auf dem Gerät, max. 10),
+  // exportierbar in den FOX-Einstellungen. Unabhängig vom Upload-Schalter.
+  static const String foxLocalKey = 'fox_local_crash_reports_v1';
+
+  Future<void> _foxKeepLocal(String text) async {
+    try {
+      final sp = await SharedPreferences.getInstance();
+      final list = sp.getStringList(foxLocalKey) ?? <String>[];
+      list.add('=== ${DateTime.now().toIso8601String()} ===\n${foxRedact(text)}');
+      while (list.length > 10) {
+        list.removeAt(0);
+      }
+      await sp.setStringList(foxLocalKey, list);
+    } catch (_) {}
+  }
+
+  static String foxRedact(String t) => t
+      .replaceAllMapped(
+          RegExp(r'(api_key|apikey|token|access_token|X-Emby-Token|X-MediaBrowser-Token|Authorization|password|pw)([=:"\s]+)[^&\s",]+',
+              caseSensitive: false),
+          (m) => '${m[1]}${m[2]}***')
+      .replaceAll(RegExp(r'https?://[^\s/]+'), 'https://<server>');
 
   /// Uploads every pending report to the active server, removing each one
   /// only after its upload succeeds. Quietly does nothing when uploads are

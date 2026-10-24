@@ -63,3 +63,6 @@ Changes in Foxfin 2.8.4 (2026-10-24):
 
 Foxfin 2.8.5: Video-Sleep-Timer, Einstellungs-Sicherung (ohne Geheimnisse),
 "Im FOX-Player öffnen" (Fallback FOX Store), FOX-Zeilenköpfe und Akzent-Fokus-Glow.
+
+Foxfin 2.9.0: lokales Ausblenden von Titeln, FFmpeg/Tunneling in FOX-Einstellungen,
+Logo A (Foxhole). Funktionen eigenständig implementiert, kein Fremdcode übernommen.

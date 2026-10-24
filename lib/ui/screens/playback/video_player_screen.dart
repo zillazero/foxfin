@@ -6085,8 +6085,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
               size: secondaryIconSize,
               extent: secondaryExtent,
               tooltip: _foxSleepTimer != null
-                  ? 'Sleep-Timer: endet ${TimeOfDay.fromDateTime(_foxSleepEnd!).format(context)}'
-                  : 'Sleep-Timer',
+                  ? AppLocalizations.of(context).foxSleepTimerEnds(
+                      TimeOfDay.fromDateTime(_foxSleepEnd!).format(context))
+                  : AppLocalizations.of(context).foxSleepTimer,
             ),
           if (shows(OsdButton.info))
             OsdButton.info: _controlButton(
@@ -8219,7 +8220,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     final picked = await showDialog<int>(
       context: context,
       builder: (ctx) => SimpleDialog(
-        title: const Text('Sleep-Timer'),
+        title: Text(AppLocalizations.of(context).foxSleepTimer),
         children: [
           for (var i = 0; i < options.length; i++)
             SimpleDialogOption(

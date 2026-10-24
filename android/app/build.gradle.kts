@@ -85,12 +85,15 @@ android {
         val testIdSuffix = System.getenv("MOONFIN_TEST_ID_SUFFIX").orEmpty()
         val mobileAbis = listOf("arm64-v8a", "armeabi-v7a") // FOX: x86_64 dropped (emulator-only, ~60 MB)
         val tvAbis = listOf("arm64-v8a", "armeabi-v7a")
+        // FOX 2.9.0: with --split-per-abi the splits block selects the ABIs,
+        // and AGP refuses ndk abiFilters at the same time.
+        val foxSplit = project.hasProperty("split-per-abi")
         create("mobile") {
             dimension = "device"
             applicationId = baseAppId
             versionCode = flutter.versionCode
             versionName = flutter.versionName
-            ndk { abiFilters += mobileAbis }
+            if (!foxSplit) ndk { abiFilters += mobileAbis }
             manifestPlaceholders["appName"] = baseAppName
         }
         create("mobile-beta") {
@@ -98,7 +101,7 @@ android {
             applicationId = "$baseAppId.beta"
             versionCode = flutter.versionCode
             versionName = flutter.versionName
-            ndk { abiFilters += mobileAbis }
+            if (!foxSplit) ndk { abiFilters += mobileAbis }
             manifestPlaceholders["appName"] = "$baseAppName Beta"
         }
         create("androidTv") {
@@ -106,7 +109,7 @@ android {
             applicationId = baseAppId + testIdSuffix
             versionCode = androidTvVersionCode
             versionName = androidTvVersionName
-            ndk { abiFilters += tvAbis }
+            if (!foxSplit) ndk { abiFilters += tvAbis }
             manifestPlaceholders["appName"] =
                 if (testIdSuffix.isEmpty()) baseAppName else "$baseAppName Test"
             // Impeller off by default on TV: the GLES fallback stutters on
@@ -119,7 +122,7 @@ android {
             applicationId = "$baseAppId.beta"
             versionCode = androidTvVersionCode
             versionName = androidTvVersionName
-            ndk { abiFilters += tvAbis }
+            if (!foxSplit) ndk { abiFilters += tvAbis }
             manifestPlaceholders["appName"] = "$baseAppName Beta"
             manifestPlaceholders["enableImpeller"] = "false"
         }

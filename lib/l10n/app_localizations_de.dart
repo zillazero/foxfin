@@ -15423,4 +15423,15 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get librarySortLength => 'Length';
+
+  @override
+  String get foxHideItem => 'Auf diesem Gerät ausblenden';
+
+  @override
+  String get foxSleepTimer => 'Sleep-Timer';
+
+  @override
+  String foxSleepTimerEnds(String time) {
+    return 'Sleep-Timer: endet $time';
+  }
 }

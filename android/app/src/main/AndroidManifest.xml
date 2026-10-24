@@ -57,6 +57,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
             </intent-filter>
+            <!-- Foxfin 2.9.0: Android-TV-/Google-Suche -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="com.google.android.gms.actions.SEARCH_ACTION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
             <!-- moonfin://item?id=... / moonfin://play?id=... deep links,
                  delivered to Dart by app_links. -->
             <intent-filter>

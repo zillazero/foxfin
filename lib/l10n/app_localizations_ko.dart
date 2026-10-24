@@ -14763,4 +14763,15 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get librarySortLength => '길이';
+
+  @override
+  String get foxHideItem => 'Hide on this device';
+
+  @override
+  String get foxSleepTimer => 'Sleep timer';
+
+  @override
+  String foxSleepTimerEnds(String time) {
+    return 'Sleep timer: ends $time';
+  }
 }

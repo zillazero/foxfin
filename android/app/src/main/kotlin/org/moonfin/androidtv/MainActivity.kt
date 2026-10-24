@@ -324,6 +324,16 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
     }
 
     private fun deepLinkFrom(intent: Intent?): String? {
+        // Foxfin 2.9.0: global search / assistant / voice key.
+        when (intent?.action) {
+            Intent.ACTION_SEARCH, "com.google.android.gms.actions.SEARCH_ACTION" -> {
+                val q = intent.getStringExtra(android.app.SearchManager.QUERY).orEmpty()
+                return if (q.isBlank()) "moonfin://search?voice=1"
+                else "moonfin://search?query=${Uri.encode(q)}"
+            }
+            Intent.ACTION_SEARCH_LONG_PRESS, Intent.ACTION_ASSIST,
+            Intent.ACTION_VOICE_COMMAND -> return "moonfin://search?voice=1"
+        }
         val itemId = intent?.getStringExtra(WatchNextPublisher.EXTRA_ITEM_ID) ?: return null
         val serverId = intent.getStringExtra(WatchNextPublisher.EXTRA_SERVER_ID)
         val query = if (serverId.isNullOrEmpty()) {

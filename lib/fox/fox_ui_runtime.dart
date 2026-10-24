@@ -37,7 +37,10 @@ void _foxSeedNavbar(UserPreferences p) {
 
 void foxUiLoad(UserPreferences p) {
   _foxSeedNavbar(p);
-  final weak = p.resolveDevicePerformanceTier() == DevicePerformanceTier.reduced;
+  // Foxfin 2.9.0: Variante "klein" (Stick) erzwingt das sparsame Profil.
+  const foxKlein = bool.fromEnvironment('FOX_KLEIN');
+  final weak = foxKlein ||
+      p.resolveDevicePerformanceTier() == DevicePerformanceTier.reduced;
   FoxUi.lowMemoryDevice = weak;
   final size = p.get(FoxUiPrefs.imageSize);
   final anim = p.get(FoxUiPrefs.animationLevel);

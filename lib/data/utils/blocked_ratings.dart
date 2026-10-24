@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import '../../preference/user_preferences.dart';
 import '../../util/parental_filter.dart';
 import '../models/aggregated_item.dart';
+import '../../fox/fox_hidden_items.dart';
 
 String? _cachedCsv;
 ParentalFilter _cachedFilter = ParentalFilter.none;
@@ -55,6 +56,7 @@ List<AggregatedItem> withoutBlockedItems(
   String? fallbackRating,
 }) {
   final filter = activeParentalFilter;
+  if (!FoxHidden.isEmpty) items = _foxWithoutHidden(items);
   if (!filter.isActive) return items;
   return items
       .where((item) => !_isItemBlocked(item, fallbackRating: fallbackRating))
@@ -68,6 +70,7 @@ List<AggregatedItem> withoutBlockedItems(
 /// rating, a title whose rating is unknown stays out.
 List<AggregatedItem> withoutUnratedOrBlockedItems(List<AggregatedItem> items) {
   final filter = activeParentalFilter;
+  if (!FoxHidden.isEmpty) items = _foxWithoutHidden(items);
   if (!filter.isActive) return items;
   return items.where((item) {
     final rating = item.officialRating?.trim();
@@ -76,3 +79,8 @@ List<AggregatedItem> withoutUnratedOrBlockedItems(List<AggregatedItem> items) {
         !filter.isBlockedRating(rating);
   }).toList();
 }
+
+// Foxfin 2.9.0: lokal ausgeblendete Titel (auch Folgen einer ausgeblendeten Serie).
+List<AggregatedItem> _foxWithoutHidden(List<AggregatedItem> items) => items
+    .where((i) => !FoxHidden.isHidden(i.id) && !FoxHidden.isHidden(i.seriesId))
+    .toList();

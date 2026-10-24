@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
 
+import '../../../fox/fox_hidden_items.dart';
 import '../../../fox/fox_settings_backup.dart';
+import '../../../util/platform_detection.dart';
 import '../../../fox/fox_ui_runtime.dart';
 import '../../../preference/fox_ui_prefs.dart';
 import '../../../preference/preference_constants.dart';
@@ -36,7 +38,10 @@ class _FoxUiSettingsScreenState extends State<FoxUiSettingsScreen> {
     _measure();
   }
 
+  int _crashCount = 0;
+
   Future<void> _measure() async {
+    _crashCount = await foxCrashReportCount();
     final b = await imageDiskCacheBytes();
     if (mounted) setState(() => _cacheBytes = b);
   }
@@ -249,7 +254,55 @@ class _FoxUiSettingsScreenState extends State<FoxUiSettingsScreen> {
                     '${limit > 0 ? ' von ${limit >= 1024 ? '${limit ~/ 1024} GB' : '$limit MB'}' : ''}'),
             onTap: _clearing ? null : _clearCache,
           ),
+          const SettingsSectionHeader('Wiedergabe'),
+          if (PlatformDetection.isAndroid)
+            DpadSwitchListTile(
+              useSettingsIconShell: true,
+              secondary: const Icon(Icons.graphic_eq_rounded),
+              title: const Text('FFmpeg-Audiodecoder bevorzugen'),
+              subtitle: const Text('Software-Decoder für Formate, die das Gerät nicht kann (z. B. DTS/TrueHD ohne Passthrough)'),
+              value: p.get(UserPreferences.preferExoPlayerFfmpeg),
+              onChanged: (v) async => _set(UserPreferences.preferExoPlayerFfmpeg, v),
+            ),
+          if (PlatformDetection.isAndroid && PlatformDetection.isTV)
+            DpadSwitchListTile(
+              useSettingsIconShell: true,
+              secondary: const Icon(Icons.settings_input_hdmi_rounded),
+              title: const Text('Tunneling'),
+              subtitle: const Text('Audio/Video-Tunnel des TV-Geräts – flüssiger auf manchen Boxen, bei Problemen ausschalten'),
+              value: !p.get(UserPreferences.media3TunnelingDisabled),
+              onChanged: (v) async => _set(UserPreferences.media3TunnelingDisabled, !v),
+            ),
+          DpadListTile(
+            useSettingsIconShell: true,
+            leading: const Icon(Icons.hide_source_rounded),
+            title: const Text('Ausgeblendete Titel'),
+            subtitle: Text(FoxHidden.isEmpty
+                ? 'Keine – über das Kontextmenü eines Titels ausblenden'
+                : '${FoxHidden.items.length} ausgeblendet – zum Wiederherstellen öffnen'),
+            onTap: FoxHidden.isEmpty ? null : _showHidden,
+          ),
           const SettingsSectionHeader('FOX-Apps'),
+          DpadListTile(
+            useSettingsIconShell: true,
+            leading: const Icon(Icons.bug_report_outlined),
+            title: const Text('Absturzberichte (lokal)'),
+            subtitle: Text(_crashCount == 0
+                ? 'Keine gespeichert – Berichte bleiben auf dem Gerät'
+                : '$_crashCount gespeichert – exportieren (Server-Adressen und Tokens entfernt)'),
+            onTap: _crashCount == 0
+                ? null
+                : () async {
+                    final r = await foxExportCrashReports();
+                    if (!mounted) return;
+                    if (r == 'saved') {
+                      _foxSnack('Absturzberichte exportiert.');
+                      await foxClearCrashReports();
+                      _crashCount = 0;
+                      setState(() {});
+                    }
+                  },
+          ),
           DpadListTile(
             useSettingsIconShell: true,
             leading: const Icon(Icons.live_tv_rounded),
@@ -300,6 +353,40 @@ class _FoxUiSettingsScreenState extends State<FoxUiSettingsScreen> {
         ]),
       ),
     );
+  }
+
+  Future<void> _showHidden() async {
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setD) => SimpleDialog(
+          title: const Text('Ausgeblendete Titel'),
+          children: [
+            for (final e in FoxHidden.items.entries)
+              SimpleDialogOption(
+                onPressed: () async {
+                  await FoxHidden.unhide(e.key);
+                  setD(() {});
+                  if (FoxHidden.isEmpty && ctx.mounted) Navigator.of(ctx).pop();
+                },
+                child: Row(children: [
+                  const Icon(Icons.undo_rounded, size: 18),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text(e.value.isEmpty ? e.key : e.value)),
+                ]),
+              ),
+            SimpleDialogOption(
+              onPressed: () async {
+                await FoxHidden.clear();
+                if (ctx.mounted) Navigator.of(ctx).pop();
+              },
+              child: const Text('Alle wieder anzeigen'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (mounted) setState(() {});
   }
 
   void _foxSnack(String t) =>

@@ -62,6 +62,7 @@ import 'ui/widgets/reader/epub_js_view.dart';
 import 'util/platform_detection.dart';
 import 'util/process_exit_reporter.dart';
 import 'util/system_ui.dart';
+import 'fox/fox_hidden_items.dart';
 import 'util/tv_image_cache_stub.dart'
     if (dart.library.io) 'util/tv_image_cache_io.dart';
 
@@ -978,6 +979,7 @@ void main() async {
   WidgetsBinding.instance.addObserver(_AutoDownloadResumeObserver());
   WidgetsBinding.instance.addPostFrameCallback((_) => _sweepImageCache(prefs));
   foxUiLoad(prefs);
+  await FoxHidden.load();
   foxStartCacheJanitor(prefs);
 
   GetIt.instance<PlaybackManager>().queueService.queueChangedStream.listen((_) {

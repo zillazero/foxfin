@@ -52,6 +52,15 @@ class DeepLinkService {
       return _routeForShopWebUrl(uri);
     }
     if (uri.scheme != 'moonfin') return null;
+    // Foxfin 2.9.0: Android-TV-Suche / Assistant / Mikrofon-Taste.
+    if (uri.host == 'search') {
+      final q = uri.queryParameters['query'] ?? '';
+      final voice = uri.queryParameters['voice'] == '1';
+      return Uri(path: '/search', queryParameters: {
+        if (q.isNotEmpty) 'query': q,
+        if (voice && q.isEmpty) 'voice': '1',
+      }).toString();
+    }
     final id = uri.queryParameters['id'];
     if (id == null || id.isEmpty) return null;
     final serverId = uri.queryParameters['serverId'];
