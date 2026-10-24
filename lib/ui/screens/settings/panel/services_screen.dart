@@ -83,6 +83,12 @@ class _ServicesScreenState extends State<_ServicesScreen> {
                 onTap: () =>
                     context.pushSettingsScreen(const FoxAccountScreen()),
               ),
+            _TvSettingsListTile(
+              leading: const Icon(Icons.key),
+              title: const Text('Eigene API-Schlüssel'),
+              subtitle: const Text('Trakt, Simkl, TMDB – optional, verschlüsselt gespeichert'),
+              onTap: () => context.pushSettingsScreen(const ApiKeysScreen()),
+            ),
             if (TrackingConfig.anyTrackerAvailable)
               _TvSettingsListTile(
                 leading: const Icon(Icons.track_changes),

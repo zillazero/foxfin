@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Klartext (http) NUR fuer eigene Server, sonst nur HTTPS.
+     Android erlaubt hier keine IP-Bereiche (CIDR): private LAN-Netze und vom Nutzer
+     eingetragene Server koennen statisch nicht freigegeben werden. -->
 <network-security-config>
-    <base-config cleartextTrafficPermitted="true">
+    <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
     </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">152.53.131.72</domain>
+        <domain includeSubdomains="true">pk187.site</domain>
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">127.0.0.1</domain>
+    </domain-config>
 </network-security-config>

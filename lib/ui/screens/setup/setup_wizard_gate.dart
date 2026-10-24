@@ -15,12 +15,12 @@ import '../../widgets/navigation_layout.dart';
 /// [visibleSetupSteps]. [tour] is never suppressed, since it asks nothing
 /// that could already have been answered.
 enum SetupStep {
-  foxTheme, foxAccount, foxServer,
+  foxIntro, foxTheme, foxAccount, foxServer,
   navbar, navbarStyle, mediaBar, homeRows, detailStyle,
   foxSeerr, foxServices, tour, foxSummary,
 }
 
-const _foxFront = [SetupStep.foxTheme, SetupStep.foxAccount, SetupStep.foxServer];
+const _foxFront = [SetupStep.foxIntro, SetupStep.foxTheme, SetupStep.foxAccount, SetupStep.foxServer];
 const _foxBack = [SetupStep.foxSeerr, SetupStep.foxServices];
 
 /// [steps] as the user sees them, given the navbar position in effect. The

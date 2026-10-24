@@ -57,6 +57,41 @@ Widget _foxStatus(String label, bool ok, String detail) => Padding(
       ]),
     );
 
+// ---------------------------------------------------------------- 0 Einführung (Foxfin 2.10.0)
+/// 4 Seiten mit Logo A, D-Pad + Touch, „Überspringen“ springt ans Ende; „Weiter“ des
+/// Assistenten geht danach zum Theme. Erneut aufrufbar über „Einrichtung erneut starten“.
+class _FoxIntroStep extends StatefulWidget {
+  const _FoxIntroStep();
+  @override
+  State<_FoxIntroStep> createState() => _FoxIntroStepState();
+}
+
+class _FoxIntroStepState extends State<_FoxIntroStep> {
+  static const _pages = [
+    ('FOX-Design', 'Foxfin ist dein Jellyfin im FOX-Look – mit fünf Themes, großen Kacheln und klarer Schrift.'),
+    ('Fernbedienung oder Touch', 'Steuerkreuz bewegt den Fokus, OK wählt aus, Zurück geht einen Schritt zurück. Auf Handy und Tablet einfach tippen.'),
+    ('Alles an einem Ort', 'Filme, Serien, Live-TV-Aufnahmen aus dem FOX-Player, Musik und Bücher – mit optionalem Trakt-, Simkl- und TMDB-Abgleich.'),
+    ('Gleich geht’s los', 'Jetzt noch Theme, Konto, Sprache/Untertitel und optionale Dienste einrichten. Alles lässt sich später ändern.'),
+  ];
+  int _p = 0;
+  @override
+  Widget build(BuildContext context) => Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+        Center(child: SvgPicture.asset('assets/images/foxfin_logo_a.svg', height: 120, semanticsLabel: 'Foxfin Logo')),
+        const SizedBox(height: 16),
+        Semantics(header: true, child: _foxText(_pages[_p].$1, bold: true, size: AppTypography.fontSizeLg)),
+        const SizedBox(height: 8),
+        _foxText(_pages[_p].$2, muted: true),
+        const SizedBox(height: 8),
+        _foxText('Seite ${_p + 1} von ${_pages.length}', muted: true),
+        const SizedBox(height: 16),
+        Wrap(spacing: 12, runSpacing: 8, children: [
+          if (_p > 0) _FoxCard(order: 1, onPressed: () => setState(() => _p--), child: _foxText('Zurück', bold: true)),
+          if (_p < _pages.length - 1) _FoxCard(order: 2, autofocus: true, onPressed: () => setState(() => _p++), child: _foxText('Nächste Seite', bold: true)),
+          if (_p < _pages.length - 1) _FoxCard(order: 3, onPressed: () => setState(() => _p = _pages.length - 1), child: _foxText('Überspringen', bold: true)),
+        ]),
+      ]);
+}
+
 // ---------------------------------------------------------------- 1 Theme
 class _FoxThemeStep extends StatelessWidget {
   const _FoxThemeStep({required this.prefs});
@@ -197,10 +232,14 @@ class _FoxServicesStepState extends State<_FoxServicesStep> {
   Widget build(BuildContext context) => Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
         _foxText('Optional: Trakt und Simkl koppeln (Code am Handy eingeben) für Merkliste, Gesehen-Abgleich und Scrobble. TMDB liefert deutsche Beschreibungen und Bewertungen.', muted: true),
         const SizedBox(height: 12),
-        _foxStatus('Trakt', _svc.isLinked('trakt'), TrackingConfig.traktAvailable ? (_svc.isLinked('trakt') ? 'gekoppelt' : 'nicht gekoppelt') : 'in diesem Build nicht verfügbar'),
-        _foxStatus('Simkl', _svc.isLinked('simkl'), TrackingConfig.simklAvailable ? (_svc.isLinked('simkl') ? 'gekoppelt' : 'nicht gekoppelt') : 'in diesem Build nicht verfügbar'),
-        _foxStatus('TMDB', TrackingConfig.tmdbAvailable, TrackingConfig.tmdbAvailable ? 'aktiv (de-DE)' : 'in diesem Build nicht verfügbar'),
+        _foxStatus('Trakt', _svc.isLinked('trakt'), TrackingConfig.traktAvailable ? (_svc.isLinked('trakt') ? 'gekoppelt' : 'nicht gekoppelt') : 'kein Schlüssel – aus'),
+        _foxStatus('Simkl', _svc.isLinked('simkl'), TrackingConfig.simklAvailable ? (_svc.isLinked('simkl') ? 'gekoppelt' : 'nicht gekoppelt') : 'kein Schlüssel – aus'),
+        _foxStatus('TMDB', TrackingConfig.tmdbAvailable, TrackingConfig.tmdbAvailable ? 'aktiv (de-DE)' : 'kein Schlüssel – aus'),
         const SizedBox(height: 12),
+        _FoxCard(order: 0, onPressed: () async {
+          await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ApiKeysScreen()));
+          if (mounted) setState(() {});
+        }, child: _foxText('Eigene API-Schlüssel eingeben (optional)', bold: true)),
         if (TrackingConfig.traktAvailable || TrackingConfig.simklAvailable)
           _FoxCard(order: 1, autofocus: true, onPressed: () async {
             await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const TrackingScreen()));
@@ -228,7 +267,7 @@ class _FoxSummaryStep extends StatelessWidget {
       _foxStatus('Jellyseerr', seerr, seerr ? 'eingerichtet' : 'übersprungen'),
       _foxStatus('Trakt', t.isLinked('trakt'), t.isLinked('trakt') ? 'gekoppelt' : 'übersprungen'),
       _foxStatus('Simkl', t.isLinked('simkl'), t.isLinked('simkl') ? 'gekoppelt' : 'übersprungen'),
-      _foxStatus('TMDB', TrackingConfig.tmdbAvailable, TrackingConfig.tmdbAvailable ? 'aktiv' : 'nicht verfügbar'),
+      _foxStatus('TMDB', TrackingConfig.tmdbAvailable, TrackingConfig.tmdbAvailable ? 'aktiv' : 'aus'),
       const SizedBox(height: 12),
       _foxText('Alles änderbar unter Einstellungen. „Einrichtung erneut starten“ findest du unter Einstellungen › Über.', muted: true),
     ]);

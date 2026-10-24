@@ -80,6 +80,21 @@ class TrackingService extends ChangeNotifier {
     if (TrackingConfig.simklAvailable) 'simkl': SimklTracker(),
   };
 
+  /// Foxfin 2.10.0: nach Änderung der eigenen API-Schlüssel Dienste ein-/ausblenden.
+  void refreshTrackers() {
+    if (TrackingConfig.traktAvailable) {
+      trackers.putIfAbsent('trakt', TraktTracker.new);
+    } else {
+      trackers.remove('trakt');
+    }
+    if (TrackingConfig.simklAvailable) {
+      trackers.putIfAbsent('simkl', SimklTracker.new);
+    } else {
+      trackers.remove('simkl');
+    }
+    notifyListeners();
+  }
+
   final Map<String, Map<String, dynamic>?> _tokens = {};
   final Map<String, TrackerSettings> _settings = {};
   String? _loadedFor;

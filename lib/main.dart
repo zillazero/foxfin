@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'fox/fox_seerr.dart';
+import 'integrations/tracking/tracking_config.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -941,6 +942,7 @@ void main() async {
 
   await _applyInterfaceLayoutOverride();
   await _readPerformanceModeOverride();
+  await TrackingConfig.load();
   await _detectAndSetTvMode();
   await _seedCapabilitiesFromCache();
   await Future.wait([

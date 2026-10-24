@@ -29,6 +29,7 @@ import '../screens/browse/collection_screen.dart';
 import '../screens/browse/favorites_screen.dart';
 import '../screens/browse/folder_browse_screen.dart';
 import '../screens/browse/library_browse_screen.dart';
+import '../screens/browse/fox_library_by_name_screen.dart';
 import '../screens/browse/library_genres_screen.dart';
 import '../screens/browse/library_letters_screen.dart';
 import '../screens/browse/library_suggestions_screen.dart';
@@ -288,6 +289,13 @@ final appRouter = GoRouter(
         scopedLibraryId: state.uri.queryParameters['libraryId'],
         startVoice: state.uri.queryParameters['voice'] == '1',
       ),
+    ),
+
+    // Foxfin 2.10.0: Bibliothek per Name (Deep-Link foxfin://library/aufnahmen)
+    GoRoute(
+      path: '/fox-library/:name',
+      builder: (context, state) =>
+          FoxLibraryByNameScreen(name: state.pathParameters['name'] ?? ''),
     ),
 
     // Browsing

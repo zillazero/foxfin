@@ -52,6 +52,12 @@ class DeepLinkService {
     if (uri.scheme == 'https' && uri.host == 'watch.pk187.site') {
       return _routeForShopWebUrl(uri);
     }
+    // Foxfin 2.10.0: foxfin://library/aufnahmen (aus dem FOX-Player).
+    // Nur bekannte Bibliotheksnamen (Allowlist), keine freien Pfade/IDs.
+    if ((uri.scheme == 'foxfin' || uri.scheme == 'moonfin') &&
+        uri.host == 'library') {
+      return routeForLibraryLink(uri);
+    }
     if (uri.scheme != 'moonfin') return null;
     // Foxfin 2.9.0: Android-TV-Suche / Assistant / Mikrofon-Taste.
     if (uri.host == 'search') {
@@ -75,6 +81,20 @@ class DeepLinkService {
         .map((e) => '${e.key}=${Uri.encodeQueryComponent(e.value)}')
         .join('&');
     return query.isEmpty ? '/item/$id' : '/item/$id?$query';
+  }
+
+  /// Erlaubte Bibliotheks-Deep-Links: Pfadsegment -> Bibliotheksname in Jellyfin.
+  static const libraryLinks = {'aufnahmen': 'Aufnahmen'};
+
+  static String? routeForLibraryLink(Uri uri) {
+    if (uri.pathSegments.length != 1 || uri.hasQuery || uri.hasFragment) {
+      return null;
+    }
+    final key = uri.pathSegments.first.toLowerCase();
+    if (!RegExp(r'^[a-z]{1,32}$').hasMatch(key)) return null;
+    final name = libraryLinks[key];
+    if (name == null) return null;
+    return '/fox-library/${Uri.encodeComponent(name)}';
   }
 
   static const shopServerId = '37f9a5dd4a4e49fba3dc493068b2397d';

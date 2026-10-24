@@ -71,6 +71,13 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="moonfin"/>
             </intent-filter>
+            <!-- Foxfin 2.10.0: foxfin://library/aufnahmen aus dem FOX-Player (Allowlist in DeepLinkService). -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="foxfin" android:host="library"/>
+            </intent-filter>
             <!-- Foxfin: "Filme ansehen" from the FOX Store (Jellyfin web URLs of the shop server) -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>

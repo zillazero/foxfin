@@ -21,6 +21,8 @@ import '../../widgets/navigation_layout.dart';
 import '../../widgets/settings/preference_tiles.dart';
 import '../../../integrations/fox_sso/fox_sync_service.dart';
 import '../../../integrations/tracking/tracking_config.dart';
+import '../../../integrations/tracking/api_keys_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../integrations/tracking/tracking_screen.dart';
 import '../../../integrations/tracking/tracking_service.dart';
 import '../settings/seerr_config_screen.dart';
@@ -437,7 +439,8 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
   }
 
   String _questionFor(SetupStep step, AppLocalizations l10n) => switch (step) {
-    SetupStep.foxTheme => 'Willkommen bei Foxfin – wähle dein FOX-Theme',
+    SetupStep.foxIntro => 'Willkommen bei Foxfin',
+    SetupStep.foxTheme => 'Wähle dein FOX-Theme',
     SetupStep.foxAccount => 'FOX-Konto verbinden',
     SetupStep.foxServer => 'Jellyfin-Server',
     SetupStep.foxSeerr => 'Jellyseerr verbinden',
@@ -456,6 +459,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     SetupStep step,
     AppLocalizations l10n,
   ) => switch (step) {
+    SetupStep.foxIntro => const _FoxIntroStep(),
     SetupStep.foxTheme => _FoxThemeStep(prefs: _prefs),
     SetupStep.foxAccount => const _FoxAccountStep(),
     SetupStep.foxServer => _FoxServerStep(client: _client),
