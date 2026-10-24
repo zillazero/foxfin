@@ -64,6 +64,7 @@ import 'util/platform_detection.dart';
 import 'util/process_exit_reporter.dart';
 import 'util/system_ui.dart';
 import 'fox/fox_hidden_items.dart';
+import 'util/cert_pin_store.dart';
 import 'util/tv_image_cache_stub.dart'
     if (dart.library.io) 'util/tv_image_cache_io.dart';
 
@@ -952,6 +953,7 @@ void main() async {
   }
 
   await configureDependencies();
+  await CertPinStore.init();
   _installCrashHandlers();
   if (PlatformDetection.isAndroid) _startProcessExitReporter();
   // When the system runs the auto-download refresh task against this

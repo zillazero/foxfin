@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'client_certificate_material.dart';
-import 'insecure_certificates.dart';
+import 'cert_pins_io.dart';
 
 final _contexts = Expando<SecurityContext>();
 
@@ -26,7 +26,8 @@ void applyClientCertificates(HttpClient client, {SecurityContext? fallback}) {
       context: certificate == null
           ? fallback
           : _contexts[certificate] ??= _contextFor(certificate),
-      onBadCertificate: (_) => gAllowSelfSignedCertificates,
+      onBadCertificate: (cert) =>
+          certPinBadCertificateCallback(cert, uri.host, port),
     );
   };
 }

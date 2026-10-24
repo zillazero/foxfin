@@ -6,6 +6,8 @@ import 'package:package_info_plus/package_info_plus.dart' as pkg;
 import 'package:server_core/server_core.dart';
 import 'package:uuid/uuid.dart';
 
+import '../util/cert_pin_store.dart';
+
 import '../auth/store/authentication_store.dart';
 import '../auth/store/client_certificate_store.dart';
 import '../data/database/database_connection.dart';
@@ -419,6 +421,7 @@ Future<void> configureBackgroundDependencies({bool offline = false}) async {
   if (getIt.isRegistered<DeviceInfo>()) return;
 
   configureHttpOverrides();
+  await CertPinStore.init();
   final preferenceStore = PreferenceStore();
   await preferenceStore.init();
 

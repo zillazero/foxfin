@@ -302,9 +302,24 @@ object Media3Bridge {
             return
         }
 
+        if (call.method == "setPinnedCertificates") {
+            val raw = (call.arguments as? Map<*, *>)?.get("pins") as? Map<*, *>
+            val pins = raw?.entries
+                ?.mapNotNull { (k, v) -> if (k is String && v is String) k to v else null }
+                ?.toMap() ?: emptyMap()
+            if (TlsPolicy.setPins(pins)) {
+                try {
+                    TlsPolicy.savePins(appContext, pins)
+                } catch (_: Exception) {
+                    // They still apply until the process ends.
+                }
+            }
+            result.success(null)
+            return
+        }
+
         if (call.method == "setAllowUntrustedTls") {
-            val args = call.arguments as? Map<*, *>
-            TlsPolicy.setAllowUntrusted(args?.get("enabled") as? Boolean ?: false)
+            // Foxfin 2.9.2: the global trust-all switch is gone; pins decide.
             result.success(null)
             return
         }

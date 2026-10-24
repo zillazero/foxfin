@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'preference/fox_ui_prefs.dart';
 import 'fox/fox_focus_guard.dart';
 import 'fox/fox_start_splash.dart';
@@ -72,11 +73,16 @@ import 'util/idiom/glass_capability.dart';
 import 'util/platform_detection.dart';
 import 'util/tv_ui_scale.dart';
 import 'ui/widgets/overlay_sheet.dart';
+
 import 'package:moonfin_design/moonfin_design.dart';
+
 import 'util/focus/key_event_utils.dart';
 import 'util/focus/gamepad/gamepad_navigation_scope.dart';
 import 'util/focus/gamepad/gamepad_key_synthesizer.dart';
 import 'util/focus/open_popup.dart';
+import 'util/insecure_certificates.dart';
+import 'ui/widgets/allow_self_signed_dialog.dart';
+
 import 'package:custom_tv_text_field/custom_tv_text_field.dart';
 
 class MoonfinApp extends StatefulWidget {
@@ -91,10 +97,28 @@ class _MoonfinAppState extends State<MoonfinApp> {
   late final AppThemeController _themeController;
   final DeepLinkService _deepLinks = DeepLinkService();
   Locale? _lastResolvedLocale;
+  StreamSubscription<CertPinChallenge>? _certPinSub;
+  final Set<String> _certPinPrompting = {};
+
+  /// A pinned server now presents a different certificate: the connection
+  /// was blocked, so warn and offer to re-confirm (Foxfin 2.9.2).
+  Future<void> _onPinnedCertificateChanged(CertPinChallenge challenge) async {
+    if (!_certPinPrompting.add(challenge.key)) return;
+    try {
+      final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
+      if (ctx == null || !ctx.mounted) return;
+      await showCertPinDialog(ctx, challenge);
+    } finally {
+      _certPinPrompting.remove(challenge.key);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    _certPinSub = CertPinRegistry.instance.challenges
+        .where((c) => c.isChange)
+        .listen((c) => unawaited(_onPinnedCertificateChanged(c)));
     if (PlatformDetection.isTV) {
       FoxFocusGuard.install();
       FoxFocusGuard.onVoiceKey = () => appRouter.push('/search?voice=1');
@@ -229,6 +253,7 @@ class _MoonfinAppState extends State<MoonfinApp> {
 
   @override
   void dispose() {
+    _certPinSub?.cancel();
     _prefs.removeListener(_syncThemeFromPrefs);
     _prefs.removeListener(_syncLocaleFromPrefs);
     _prefs.removeListener(_syncIdiomFromPrefs);
@@ -305,7 +330,9 @@ class _MoonfinAppState extends State<MoonfinApp> {
                                       ],
                                     ),
                                   ),
-                                  const Positioned.fill(child: FoxStartSplash()),
+                                  const Positioned.fill(
+                                    child: FoxStartSplash(),
+                                  ),
                                 ],
                               ),
                             ),
@@ -377,12 +404,14 @@ class _MoonfinAppState extends State<MoonfinApp> {
                                 t.platform != TargetPlatform.iOS) {
                               w = Theme(
                                 data: t.copyWith(
-                                  pageTransitionsTheme: noTransitions ||
-                                          mq.disableAnimations
+                                  pageTransitionsTheme:
+                                      noTransitions || mq.disableAnimations
                                       ? const _FoxNoPageTransitions()
                                       : _FoxPageTransitions(
-                                          subtle: FoxUi.animations ==
-                                              FoxAnimationLevel.reduziert),
+                                          subtle:
+                                              FoxUi.animations ==
+                                              FoxAnimationLevel.reduziert,
+                                        ),
                                 ),
                                 child: w,
                               );
@@ -427,9 +456,8 @@ class _MoonfinAppState extends State<MoonfinApp> {
                     final scale = _prefs
                         .get(UserPreferences.desktopUiScale)
                         .scaleFactor;
-                    final systemScale = MediaQuery.textScalerOf(
-                      context,
-                    ).scale(1.0);
+                    final systemScale = MediaQuery.textScalerOf(context)
+                        .scale(1.0);
                     // The pixel font renders far larger and wider than a normal
                     // face at a given size, so shrink all text to keep dense
                     // layouts from overflowing.
@@ -876,11 +904,13 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
       return true;
     }
 
-    final altPressed = keys.contains(LogicalKeyboardKey.altLeft) ||
+    final altPressed =
+        keys.contains(LogicalKeyboardKey.altLeft) ||
         keys.contains(LogicalKeyboardKey.altRight);
 
     if (PlatformDetection.useDesktopUi &&
-        (key == LogicalKeyboardKey.f11 || (key == LogicalKeyboardKey.enter && altPressed))) {
+        (key == LogicalKeyboardKey.f11 ||
+            (key == LogicalKeyboardKey.enter && altPressed))) {
       unawaited(FullscreenHelper.toggle());
       return true;
     }
@@ -1061,10 +1091,12 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
 
     final key = event.logicalKey;
     final keys = HardwareKeyboard.instance.logicalKeysPressed;
-    final altPressed = keys.contains(LogicalKeyboardKey.altLeft) ||
+    final altPressed =
+        keys.contains(LogicalKeyboardKey.altLeft) ||
         keys.contains(LogicalKeyboardKey.altRight);
 
-    if ((key == LogicalKeyboardKey.enter || key == LogicalKeyboardKey.select) && !altPressed) {
+    if ((key == LogicalKeyboardKey.enter || key == LogicalKeyboardKey.select) &&
+        !altPressed) {
       return activateFocusedTarget(context);
     }
 
@@ -1374,7 +1406,6 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
     return widget.child;
   }
 }
-
 
 /// Foxfin 2.8.2: page transitions switched off in "Oberfläche".
 class _FoxNoPageTransitions extends PageTransitionsTheme {

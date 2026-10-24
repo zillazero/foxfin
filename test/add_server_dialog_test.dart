@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:moonfin/auth/models/server_addition_state.dart';
 import 'package:moonfin/auth/repositories/server_repository.dart';
 import 'package:moonfin/util/insecure_certificates.dart';
+import 'package:moonfin/ui/widgets/allow_self_signed_dialog.dart';
 
 class _MockServerRepository extends Mock implements ServerRepository {}
 
@@ -32,7 +33,7 @@ void main() {
 
   tearDown(() async {
     await GetIt.instance.reset();
-    gAllowSelfSignedCertificates = false;
+    CertPinRegistry.instance.resetForTest();
   });
 
   Future<({TextEditingController controller, Future<void> closed})> openDialog(
@@ -100,9 +101,7 @@ void main() {
     // Move focus off the field onto the Cancel button: backspace is now
     // "back", not text editing.
     tester
-        .widget<OutlinedButton>(
-          find.widgetWithText(OutlinedButton, 'Cancel'),
-        )
+        .widget<OutlinedButton>(find.widgetWithText(OutlinedButton, 'Cancel'))
         .focusNode
         ?.requestFocus();
     await tester.pump();
@@ -114,7 +113,7 @@ void main() {
     expect(controller.text, 'http://localhos');
   });
 
-  testWidgets('an untrusted certificate offers to allow self-signed ones', (
+  testWidgets('an untrusted certificate offers to pin its fingerprint', (
     tester,
   ) async {
     final repo = _MockServerRepository();
@@ -125,6 +124,8 @@ void main() {
         untrustedCandidate: 'https://localhos',
       ),
     );
+    // What the failed handshake would have recorded.
+    CertPinRegistry.instance.check([1, 2, 3], 'localhos', 443);
     await openDialog(tester, serverRepo: repo);
 
     await tester.tap(find.widgetWithText(OutlinedButton, 'Connect'));
@@ -134,19 +135,16 @@ void main() {
     expect(find.text(l10n.untrustedServerCertificate), findsOneWidget);
 
     await tester.tap(
-      find.widgetWithText(OutlinedButton, l10n.settingsAllowSelfSignedCerts),
+      find.widgetWithText(OutlinedButton, CertPinTexts.checkCertificate),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.text(l10n.enable));
+    expect(find.text(CertPinTexts.title), findsOneWidget);
+    await tester.tap(find.text(CertPinTexts.trust));
     await tester.pumpAndSettle();
 
-    expect(gAllowSelfSignedCertificates, isTrue);
-    expect(
-      GetIt.instance<UserPreferences>().get(
-        UserPreferences.allowSelfSignedCerts,
-      ),
-      isTrue,
-    );
+    expect(CertPinRegistry.instance.pinFor('localhos', 443), isNotNull);
+    expect(CertPinRegistry.instance.check([1, 2, 3], 'localhos', 443), isTrue);
+    expect(CertPinRegistry.instance.check([1, 2, 3], 'other', 443), isFalse);
     verify(() => repo.addServer('https://localhos')).called(1);
   });
 }

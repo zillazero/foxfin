@@ -257,9 +257,7 @@ class AppleTvBackend implements PlayerBackend {
   /// callback, so without this a self signed server browses fine and fails
   /// every playback.
   void _syncAllowUntrustedTls() {
-    final trust = EngineTrust.current(
-      _prefs.get(UserPreferences.allowSelfSignedCerts),
-    );
+    final trust = EngineTrust.current();
     if (trust.matches(_trust)) return;
     _trust = trust;
     _invoke<void>('setAllowUntrustedTls', trust.toChannelArguments());

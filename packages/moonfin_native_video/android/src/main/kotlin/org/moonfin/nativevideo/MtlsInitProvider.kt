@@ -2,7 +2,6 @@ package org.moonfin.nativevideo
 
 import android.content.ContentProvider
 import android.content.ContentValues
-import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 
@@ -14,11 +13,7 @@ import android.net.Uri
 class MtlsInitProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         val context = context ?: return true
-        TlsPolicy.setAllowUntrusted(
-            context
-                .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
-                .getBoolean("flutter.pref_allow_self_signed_certs", false),
-        )
+        TlsPolicy.setPins(TlsPolicy.loadPins(context))
         TlsPolicy.setClientCertificates(ClientCertificateVault.load(context))
         return true
     }

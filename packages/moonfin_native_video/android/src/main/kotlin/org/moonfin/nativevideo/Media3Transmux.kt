@@ -155,9 +155,8 @@ object Media3Transmux {
             return
         }
 
-        // Transformer opens the stream itself, so the trust setting has to be
-        // armed here. Playback may not have pushed it yet this session.
-        TlsPolicy.setAllowUntrusted(args.allowUntrustedTls)
+        // Transformer opens the stream itself; the pinned certificates are
+        // armed process-wide by MtlsInitProvider and setPinnedCertificates.
 
         val outputFile = File(args.outputPath)
         val httpFactory = DefaultHttpDataSource.Factory()

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -84,8 +85,14 @@ void main() {
       presented.add(request.certificate?.subject);
       request.response.close();
     });
-    // The server's certificate comes from the test CA.
-    gAllowSelfSignedCertificates = true;
+    // The server's certificate comes from the test CA, so pin it for every
+    // host the tests reach it by.
+    final fingerprint = certFingerprint(_derOf(_serverPem));
+    for (final host in ['localhost', '127.0.0.1']) {
+      await CertPinRegistry.instance.pin(
+        CertPin(host: host, port: server.port, sha256: fingerprint),
+      );
+    }
     setClientCertificates(const [
       ClientCertificateMaterial(
         host: 'LocalHost.',
@@ -97,7 +104,7 @@ void main() {
 
   tearDown(() async {
     setClientCertificates(const []);
-    gAllowSelfSignedCertificates = false;
+    CertPinRegistry.instance.resetForTest();
     await server.close(force: true);
   });
 
@@ -127,3 +134,7 @@ void main() {
     expect(presented, [null]);
   });
 }
+
+List<int> _derOf(String pem) => base64Decode(
+  pem.split('\n').where((l) => l.isNotEmpty && !l.startsWith('-----')).join(),
+);

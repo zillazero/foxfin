@@ -10,29 +10,21 @@ void main() {
 
   tearDown(() async {
     await GetIt.instance.reset();
-    gAllowSelfSignedCertificates = false;
+    CertPinRegistry.instance.resetForTest();
   });
 
-  Future<void> registerWith(Map<String, Object> stored) async {
-    SharedPreferences.setMockInitialValues(stored);
+  test('an old global opt-in no longer trusts any certificate', () async {
+    SharedPreferences.setMockInitialValues({
+      'pref_allow_self_signed_certs': true,
+    });
     final store = PreferenceStore();
     await store.init();
     registerPreferenceModule(store);
-  }
 
-  test(
-    'a stored opt-in is in place before anything reaches a server',
-    () async {
-      await registerWith({'pref_allow_self_signed_certs': true});
-
-      expect(gAllowSelfSignedCertificates, isTrue);
-    },
-  );
-
-  test('certificates stay checked when the user never opted in', () async {
-    gAllowSelfSignedCertificates = true;
-    await registerWith({});
-
-    expect(gAllowSelfSignedCertificates, isFalse);
+    expect(CertPinRegistry.instance.pins, isEmpty);
+    expect(
+      CertPinRegistry.instance.check([1, 2, 3], 'server.lan', 8920),
+      isFalse,
+    );
   });
 }

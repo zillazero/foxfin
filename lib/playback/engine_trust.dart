@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
-
-import '../auth/repositories/server_repository.dart';
+import 'package:server_core/server_core.dart';
 
 /// What the engine is told about certificates the system will not vouch for.
 ///
@@ -15,20 +13,16 @@ class EngineTrust {
   final bool enabled;
   final List<String> hosts;
 
-  /// Reads the preference and the servers this install is configured for.
-  ///
-  /// The list is empty before the servers have loaded, which the native side
-  /// reads as "no list yet" rather than as "trust nothing", so opting in never
-  /// costs playback.
-  factory EngineTrust.current(bool enabled) {
-    if (!enabled) return const EngineTrust(enabled: false, hosts: []);
-    final hosts = <String>{};
-    if (GetIt.instance.isRegistered<ServerRepository>()) {
-      for (final server in GetIt.instance<ServerRepository>().servers) {
-        final host = Uri.tryParse(server.address)?.host ?? '';
-        if (host.isNotEmpty) hosts.add(host.toLowerCase());
-      }
-    }
+  /// Foxfin 2.9.2: derived from the pinned certificates (Trust on First
+  /// Use). Only hosts with a pinned certificate are relaxed for the engine,
+  /// and only while at least one pin exists. These engines can't check a
+  /// fingerprint themselves, so the Dart side still enforces the exact pin
+  /// for everything that goes through it.
+  factory EngineTrust.current() {
+    final hosts = <String>{
+      for (final pin in CertPinRegistry.instance.pins) pin.host,
+    };
+    if (hosts.isEmpty) return const EngineTrust(enabled: false, hosts: []);
     return EngineTrust(enabled: true, hosts: hosts.toList()..sort());
   }
 

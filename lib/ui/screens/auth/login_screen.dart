@@ -169,9 +169,9 @@ class _LoginScreenState extends State<LoginScreen> {
   /// Names that signed in on this server before, freshest first, offered as
   /// keyboard chips so a returning user never types theirs again.
   void _loadRecentUsernames() {
-    final users = GetIt.instance<AuthenticationStore>()
-        .getUsers(widget.serverId)
-      ..sort((a, b) => b.lastUsed.compareTo(a.lastUsed));
+    final users = GetIt.instance<AuthenticationStore>().getUsers(
+      widget.serverId,
+    )..sort((a, b) => b.lastUsed.compareTo(a.lastUsed));
     _recentUsernames = [for (final user in users) user.name];
   }
 
@@ -407,7 +407,8 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
       final l10n = AppLocalizations.of(context);
-      final isQcDisabled = status == 401 ||
+      final isQcDisabled =
+          status == 401 ||
           detail.toLowerCase().contains('disabled') ||
           detail.toLowerCase().contains('quickconnect is disabled') ||
           detail.toLowerCase().contains('quick connect is disabled');
@@ -416,11 +417,11 @@ class _LoginScreenState extends State<LoginScreen> {
         _errorMessage = isQcDisabled
             ? 'QuickConnect is disabled'
             : (status == null
-                ? l10n.quickConnectUnavailableWithStatus(e.type.name, detail)
-                : l10n.quickConnectUnavailableWithStatus(
-                    '$status, ${e.type.name}',
-                    detail,
-                  ));
+                  ? l10n.quickConnectUnavailableWithStatus(e.type.name, detail)
+                  : l10n.quickConnectUnavailableWithStatus(
+                      '$status, ${e.type.name}',
+                      detail,
+                    ));
       });
 
       if (isQcDisabled && isInitial) {
@@ -430,8 +431,9 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       final l10n = AppLocalizations.of(context);
       setState(
-        () => _errorMessage =
-            l10n.quickConnectUnavailable(describeError(e, l10n)),
+        () => _errorMessage = l10n.quickConnectUnavailable(
+          describeError(e, l10n),
+        ),
       );
     }
   }
@@ -471,7 +473,8 @@ class _LoginScreenState extends State<LoginScreen> {
               }
               // A failed PIN goes back to sign in, where another account or
               // method can be tried.
-              if (mounted) context.go('${Destinations.login}?serverId=${_server!.id}');
+              if (mounted)
+                context.go('${Destinations.login}?serverId=${_server!.id}');
               return;
             }
 
@@ -514,7 +517,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _allowSelfSignedAndRetry() async {
-    if (!await confirmAllowSelfSignedCertificates(context) || !mounted) return;
+    if (!await confirmAllowSelfSignedCertificates(context, _server?.address) ||
+        !mounted)
+      return;
     await _retrySignIn();
   }
 
@@ -542,9 +547,8 @@ class _LoginScreenState extends State<LoginScreen> {
       _clientCertificateRequired = true;
       _errorMessage = expired
           ? l10n.clientCertExpired(
-              MaterialLocalizations.of(
-                context,
-              ).formatMediumDate(stored.notAfter.toLocal()),
+              MaterialLocalizations.of(context)
+                  .formatMediumDate(stored.notAfter.toLocal()),
             )
           : l10n.clientCertRequired;
     });
@@ -765,16 +769,14 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Text(
                 l10n.signIn,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 4),
               Text(
                 l10n.connectingToServer(_server!.name),
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: _loginForeground(0.5)),
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(color: _loginForeground(0.5)),
               ),
               const SizedBox(height: 24),
               if (_supportsQuickConnect) ...[
@@ -957,9 +959,8 @@ class _LoginScreenState extends State<LoginScreen> {
             tappable
                 ? l10n.quickConnectTapOrScanHint
                 : l10n.quickConnectScanHint,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: _loginForeground(0.5)),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: _loginForeground(0.5)),
             textAlign: TextAlign.center,
           ),
         ),
@@ -976,9 +977,8 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         Text(
           l10n.quickConnectInstruction,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: _loginForeground(0.7)),
+          style: Theme.of(context).textTheme.bodyMedium
+              ?.copyWith(color: _loginForeground(0.7)),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 20),
@@ -1014,13 +1014,11 @@ class _LoginScreenState extends State<LoginScreen> {
           const SizedBox(height: 12),
           Text(
             l10n.waitingForAuthorization,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: _loginForeground(0.5)),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: _loginForeground(0.5)),
           ),
         ] else ...[
-          if (_errorMessage == null)
-            const CircularProgressIndicator(),
+          if (_errorMessage == null) const CircularProgressIndicator(),
         ],
         if (_errorMessage != null) ...[
           const SizedBox(height: 16),
@@ -1029,7 +1027,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (_untrustedCertificate) ...[
           const SizedBox(height: 12),
           _buildActionButton(
-            label: l10n.settingsAllowSelfSignedCerts,
+            label: CertPinTexts.checkCertificate,
             focusNode: _allowCertFocus,
             onPressed: _allowSelfSignedAndRetry,
           ),
@@ -1089,7 +1087,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (_untrustedCertificate) ...[
           const SizedBox(height: 12),
           _buildActionButton(
-            label: l10n.settingsAllowSelfSignedCerts,
+            label: CertPinTexts.checkCertificate,
             focusNode: _allowCertFocus,
             onPressed: _allowSelfSignedAndRetry,
           ),

@@ -1776,8 +1776,8 @@ class UserPreferences extends ChangeNotifier {
     defaultValue: false,
   );
 
-  // Opt-in: trust self-signed / private-CA TLS certificates. Off by default so
-  // certificate validation stays on for everyone who doesn't need it.
+  // Foxfin 2.9.2: no longer read. Replaced by per-host certificate pinning
+  // (CertPinRegistry); kept so old stored values don't trip anything.
   static final allowSelfSignedCerts = Preference(
     key: 'pref_allow_self_signed_certs',
     defaultValue: false,

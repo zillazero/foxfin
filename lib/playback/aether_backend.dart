@@ -243,9 +243,7 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
   /// every playback. The preference notifies on every change, so the guard
   /// keeps anything but a real change off the channel.
   void _syncAllowUntrustedTls() {
-    final trust = EngineTrust.current(
-      _prefs.get(UserPreferences.allowSelfSignedCerts),
-    );
+    final trust = EngineTrust.current();
     if (trust.matches(_trust)) return;
     _trust = trust;
     _invoke<void>('setAllowUntrustedTls', trust.toChannelArguments());

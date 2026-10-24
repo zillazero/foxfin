@@ -98,12 +98,11 @@ class _AccountScreen extends StatelessWidget {
                     UserSortBy.alphabetical => l10n.settingsAlphabetical,
                   },
                 ),
-                SwitchPreferenceTile(
-                  preference: UserPreferences.allowSelfSignedCerts,
-                  title: l10n.settingsAllowSelfSignedCerts,
-                  subtitle: l10n.settingsAllowSelfSignedCertsSubtitle,
-                  icon: Icons.gpp_maybe,
-                  onChangedValue: (v) => gAllowSelfSignedCertificates = v,
+                _TvSettingsListTile(
+                  leading: const Icon(Icons.gpp_maybe),
+                  title: const Text(CertPinTexts.settingsTitle),
+                  subtitle: const Text(CertPinTexts.settingsSubtitle),
+                  onTap: () => showCertPinManager(context),
                 ),
                 _TvSettingsListTile(
                   leading: const Icon(Icons.verified_user),

@@ -5,13 +5,14 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:server_core/server_core.dart';
+import 'package:server_core/src/network/cert_pins_io.dart';
 
 Future<void> _downloadIsolateMain(Map<String, Object?> args) async {
   final sendPort = args['sendPort'] as SendPort;
   final url = args['url'] as String;
   final savePath = args['savePath'] as String;
   final headers = (args['headers'] as Map).cast<String, String>();
-  final allowSelfSigned = args['allowSelfSigned'] == true;
+  final pins = (args['certPins'] as Map? ?? const {}).cast<String, String>();
   final clientCertificate =
       args['clientCertificate'] as ClientCertificateMaterial?;
 
@@ -25,14 +26,14 @@ Future<void> _downloadIsolateMain(Map<String, Object?> args) async {
   RandomAccessFile? raf;
   try {
     client = HttpClient();
-    // The isolate gets its own globals, so the preference has to travel with
-    // the arguments rather than being read here.
-    client.badCertificateCallback = (_, _, _) => allowSelfSigned;
+    // The isolate gets its own globals, so the pins travel with the
+    // arguments rather than being read here.
+    CertPinRegistry.instance.loadIsolateMap(pins);
+    client.badCertificateCallback = certPinBadCertificateCallback;
     client.idleTimeout = const Duration(seconds: 120);
     if (clientCertificate != null) {
       // The connection factory reads both of these, and they start out empty
       // in a new isolate.
-      gAllowSelfSignedCertificates = allowSelfSigned;
       setClientCertificates([clientCertificate]);
       applyClientCertificates(client);
     }
@@ -144,7 +145,7 @@ class LegacyDownloadEngine {
           (k, v) => MapEntry(k.toString(), v?.toString() ?? ''),
         ),
       ),
-      'allowSelfSigned': gAllowSelfSignedCertificates,
+      'certPins': CertPinRegistry.instance.toIsolateMap(),
       'clientCertificate': clientCertificate,
     });
 

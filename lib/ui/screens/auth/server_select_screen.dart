@@ -232,8 +232,9 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
 
     try {
       final currentUser = await client.usersApi.getCurrentUser();
-      final resolvedUserId =
-          currentUser.id.trim().isNotEmpty ? currentUser.id : credentials.userId;
+      final resolvedUserId = currentUser.id.trim().isNotEmpty
+          ? currentUser.id
+          : credentials.userId;
       if (resolvedUserId.trim().isEmpty) {
         return false;
       }
@@ -248,10 +249,10 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
         imageTag: currentUser.primaryImageTag,
         isAdministrator: currentUser.policy?.isAdministrator ?? false,
         canDownload: currentUser.policy?.enableContentDownloading ?? false,
-        canManageSubtitles: currentUser.policy?.canFetchRemoteSubtitles ??
-            false,
+        canManageSubtitles:
+            currentUser.policy?.canFetchRemoteSubtitles ?? false,
         canManageCollections:
-          currentUser.policy?.enableCollectionManagement ?? false,
+            currentUser.policy?.enableCollectionManagement ?? false,
       );
 
       await _authStore.putUser(user);
@@ -389,7 +390,8 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
 
   Future<void> _allowSelfSignedAndRetry() async {
     final address = _untrustedAddress;
-    if (address == null || !await confirmAllowSelfSignedCertificates(context)) {
+    if (address == null ||
+        !await confirmAllowSelfSignedCertificates(context, address)) {
       return;
     }
     if (!mounted) return;
@@ -433,8 +435,15 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
         title: Text(l10n.removeServer),
         content: Text(l10n.removeServerConfirmation(server.name)),
         actions: [
-          adaptiveDialogAction(onPressed: () => ctx.pop(false), child: Text(l10n.cancel)),
-          adaptiveDialogAction(onPressed: () => ctx.pop(true), isDestructive: true, child: Text(l10n.remove)),
+          adaptiveDialogAction(
+            onPressed: () => ctx.pop(false),
+            child: Text(l10n.cancel),
+          ),
+          adaptiveDialogAction(
+            onPressed: () => ctx.pop(true),
+            isDestructive: true,
+            child: Text(l10n.remove),
+          ),
         ],
       ),
     );
@@ -495,9 +504,8 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
         padding: const EdgeInsets.only(top: 16),
         child: Text(
           l10n.appVersionFooter(AppBeta.label(_deviceInfo.appVersion)),
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: _loginForeground(0.4)),
+          style: Theme.of(context).textTheme.bodySmall
+              ?.copyWith(color: _loginForeground(0.4)),
           textAlign: TextAlign.center,
         ),
       ),
@@ -508,9 +516,8 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
           if (servers.isNotEmpty) ...[
             Text(
               l10n.savedServers,
-              style: Theme.of(
-                context,
-              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleSmall
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             ...servers.map((server) => _buildSavedServerTile(server)),
@@ -518,9 +525,8 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
           ],
           Text(
             l10n.discoveredServers,
-            style: Theme.of(
-              context,
-            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.titleSmall
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           if (_discoveredServers.isNotEmpty)
@@ -576,7 +582,7 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
                   _buildFooterActionButton(
                     onPressed: _isConnecting ? null : _allowSelfSignedAndRetry,
                     icon: const Icon(Icons.gpp_maybe_outlined, size: 16),
-                    label: l10n.settingsAllowSelfSignedCerts,
+                    label: CertPinTexts.checkCertificate,
                   ),
                 );
               }
@@ -1026,7 +1032,8 @@ class _AddServerDialogState extends State<AddServerDialog> {
 
   Future<void> _allowSelfSignedAndRetry() async {
     final address = _untrustedAddress;
-    if (address == null || !await confirmAllowSelfSignedCertificates(context)) {
+    if (address == null ||
+        !await confirmAllowSelfSignedCertificates(context, address)) {
       return;
     }
     if (mounted) await _connect(address);
@@ -1261,7 +1268,7 @@ class _AddServerDialogState extends State<AddServerDialog> {
                 focusNode: _allowFocus,
                 onPressed: _isConnecting ? null : _allowSelfSignedAndRetry,
                 style: _actionStyle(),
-                child: Text(widget.l10n.settingsAllowSelfSignedCerts),
+                child: Text(CertPinTexts.checkCertificate),
               ),
             ],
             if (_clientCertAddress != null) ...[

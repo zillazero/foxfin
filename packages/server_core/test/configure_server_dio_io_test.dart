@@ -412,7 +412,7 @@ void main() {
     });
 
     tearDown(() async {
-      gAllowSelfSignedCertificates = false;
+      CertPinRegistry.instance.resetForTest();
       await server.close(force: true);
     });
 
@@ -446,12 +446,60 @@ void main() {
       },
     );
 
-    test('is accepted once the user allows self-signed ones', () async {
-      gAllowSelfSignedCertificates = true;
+    test('is accepted once the user pinned its fingerprint', () async {
       final dio = Dio();
       configureServerDio(dio);
+      await expectLater(statusOf(dio), throwsA(isA<DioException>()));
 
-      expect(await statusOf(dio), HttpStatus.noContent);
+      final challenge = CertPinRegistry.instance.lastRejection(
+        '127.0.0.1',
+        server.port,
+      );
+      expect(challenge, isNotNull);
+      expect(challenge!.isChange, isFalse);
+      await CertPinRegistry.instance.confirm(challenge);
+
+      final again = Dio();
+      configureServerDio(again);
+      expect(await statusOf(again), HttpStatus.noContent);
+    });
+
+    test('is refused when a different certificate was pinned', () async {
+      await CertPinRegistry.instance.pin(
+        CertPin(
+          host: '127.0.0.1',
+          port: server.port,
+          sha256: normalizeFingerprint('00' * 32),
+        ),
+      );
+      final dio = Dio();
+      configureServerDio(dio);
+      await expectLater(statusOf(dio), throwsA(isA<DioException>()));
+      final challenge = CertPinRegistry.instance.lastRejection(
+        '127.0.0.1',
+        server.port,
+      );
+      expect(challenge!.isChange, isTrue);
+    });
+
+    test('a pin for another port does not apply', () async {
+      final dio = Dio();
+      configureServerDio(dio);
+      await expectLater(statusOf(dio), throwsA(isA<DioException>()));
+      final challenge = CertPinRegistry.instance.lastRejection(
+        '127.0.0.1',
+        server.port,
+      )!;
+      await CertPinRegistry.instance.pin(
+        CertPin(
+          host: '127.0.0.1',
+          port: server.port + 1,
+          sha256: challenge.sha256,
+        ),
+      );
+      final again = Dio();
+      configureServerDio(again);
+      await expectLater(statusOf(again), throwsA(isA<DioException>()));
     });
 
     test('is the only failure read as one', () {

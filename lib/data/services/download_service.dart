@@ -1422,7 +1422,7 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
         url: url,
         headers: headers,
         outputPath: savePath,
-        allowUntrustedTls: _prefs.get(UserPreferences.allowSelfSignedCerts),
+        allowUntrustedTls: CertPinRegistry.instance.pins.isNotEmpty,
         onBytesWritten: (bytes) => onReceiveProgress(bytes, -1),
       );
       if (result.wasReEncoded) {

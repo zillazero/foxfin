@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:server_core/server_core.dart';
+import 'package:server_core/src/network/cert_pins_io.dart';
 
 void configureHttpOverrides() {
   // Some strict or older Nginx reverse proxies on 443 abort the handshake unless
@@ -23,10 +24,10 @@ class _MoonfinHttpOverrides extends HttpOverrides {
     } catch (_) {}
     final client = super.createHttpClient(secContext);
     client.maxConnectionsPerHost = 12;
-    // Only bypass certificate validation when the user has explicitly opted in
-    // (self-signed / private-CA servers). The flag is read on every failed
-    // handshake, so the toggle applies live without reinstalling the override.
-    client.badCertificateCallback = (_, _, _) => gAllowSelfSignedCertificates;
+    // Certificates the system rejects are accepted only when the user pinned
+    // exactly this certificate for exactly this host:port (Trust on First
+    // Use). Read on every failed handshake, so new pins apply immediately.
+    client.badCertificateCallback = certPinBadCertificateCallback;
     applyClientCertificates(client, fallback: secContext);
     return client;
   }
