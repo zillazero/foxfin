@@ -8,7 +8,7 @@ class EmbyImageApi implements ImageApi {
 
   /// Left out, the server encodes artwork at quality 100, three times the
   /// bytes of 90 for no difference at the sizes the app paints.
-  static const _artworkQuality = '90';
+  // Foxfin: see artworkQualityParam in server_core.
 
   String _buildQuery(Map<String, String> params) {
     final apiKey = _getApiKey();
@@ -27,7 +27,7 @@ class EmbyImageApi implements ImageApi {
     final query = _buildQuery({
       if (maxWidth != null) 'maxWidth': maxWidth.toString(),
       if (maxHeight != null) 'maxHeight': maxHeight.toString(),
-      'quality': _artworkQuality,
+      'quality': artworkQualityParam,
       'tag': ?tag,
     });
     return '${_getBaseUrl()}/Items/$itemId/Images/Primary$query';
@@ -43,7 +43,7 @@ class EmbyImageApi implements ImageApi {
     final idx = index ?? 0;
     final query = _buildQuery({
       if (maxWidth != null) 'maxWidth': maxWidth.toString(),
-      'quality': _artworkQuality,
+      'quality': artworkQualityParam,
       'tag': ?tag,
     });
     return '${_getBaseUrl()}/Items/$itemId/Images/Backdrop/$idx$query';
@@ -83,7 +83,7 @@ class EmbyImageApi implements ImageApi {
   }) {
     final query = _buildQuery({
       if (maxWidth != null) 'maxWidth': maxWidth.toString(),
-      'quality': _artworkQuality,
+      'quality': artworkQualityParam,
       'tag': ?tag,
     });
     return '${_getBaseUrl()}/Items/$itemId/Images/Thumb$query';

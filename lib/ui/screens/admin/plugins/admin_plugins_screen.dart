@@ -835,6 +835,22 @@ class _CatalogPackageTile extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                        if (package.versions.isNotEmpty &&
+                            package.versions.first.repositoryName.isNotEmpty) ...[
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                            decoration: BoxDecoration(
+                              color: AppColorScheme.accent.withValues(alpha: 0.16),
+                              border: Border.all(color: AppColorScheme.accent.withValues(alpha: 0.5)),
+                              borderRadius: AppRadius.circular(999),
+                            ),
+                            child: Text(
+                              package.versions.first.repositoryName,
+                              style: TextStyle(fontSize: 10, color: AppColorScheme.accent),
+                            ),
+                          ),
+                        ],
                         if (package.category.isNotEmpty) ...[
                           const SizedBox(width: 6),
                           Container(

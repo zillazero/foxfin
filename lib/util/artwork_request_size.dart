@@ -8,6 +8,8 @@
 /// points under a different layout still hits the file already on disk.
 library;
 
+import '../preference/fox_ui_prefs.dart';
+
 /// Server requests and decodes both stop scaling here, so a phone that
 /// reports 3 asks for and decodes the same 2x image.
 const maxArtworkDevicePixelRatio = 2.0;
@@ -48,7 +50,10 @@ int artworkRequestWidth(
   double devicePixelRatio,
   ArtworkShape shape,
 ) {
-  final pixels = artworkPhysicalPixels(logicalWidth, devicePixelRatio);
+  // Foxfin 2.8.2: user-selected image size (Klein/Mittel/Groß/Original).
+  final pixels =
+      (artworkPhysicalPixels(logicalWidth, devicePixelRatio) * FoxUi.imageSize.scale)
+          .ceil();
   if (pixels <= 0) return shape.step;
   return ((pixels + shape.step - 1) ~/ shape.step) * shape.step;
 }

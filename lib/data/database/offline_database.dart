@@ -76,6 +76,22 @@ class OfflineDatabase extends _$OfflineDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
+    // Foxfin 2.8.2: WAL + indexes for the lookups the download screens run
+    // (by status, by series/season). IF NOT EXISTS keeps this idempotent.
+    beforeOpen: (details) async {
+      try {
+        await customStatement('PRAGMA journal_mode=WAL');
+        await customStatement('PRAGMA synchronous=NORMAL');
+        await customStatement('PRAGMA temp_store=MEMORY');
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_dl_status ON downloaded_items (download_status)',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_dl_series ON downloaded_items (server_id, series_id, season_id)',
+        );
+        await customStatement('PRAGMA optimize');
+      } catch (_) {}
+    },
     onCreate: (m) => m.createAll(),
     onUpgrade: (m, from, to) async {
       if (from < 2) {

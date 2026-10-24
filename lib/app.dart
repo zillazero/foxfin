@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'preference/fox_ui_prefs.dart';
 import 'integrations/fox_sso/fox_sync_service.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -349,6 +350,35 @@ class _MoonfinAppState extends State<MoonfinApp> {
                         // resolve, above the router so every route is covered,
                         // and inside the Overlay so dialogs and sheets share
                         // the same focus subtree.
+                        // Foxfin 2.8.2: Oberfläche – Animationen/Übergänge.
+                        final foxInner = content;
+                        content = ValueListenableBuilder<int>(
+                          valueListenable: FoxUi.changes,
+                          builder: (ctx, _, _) {
+                            final mq = MediaQuery.of(ctx);
+                            final noAnim =
+                                FoxUi.animations != FoxAnimationLevel.normal ||
+                                mq.disableAnimations;
+                            final noTransitions =
+                                !FoxUi.pageTransitions ||
+                                FoxUi.animations == FoxAnimationLevel.aus;
+                            Widget w = foxInner;
+                            if (noTransitions) {
+                              final t = Theme.of(ctx);
+                              w = Theme(
+                                data: t.copyWith(
+                                  pageTransitionsTheme:
+                                      const _FoxNoPageTransitions(),
+                                ),
+                                child: w,
+                              );
+                            }
+                            return MediaQuery(
+                              data: mq.copyWith(disableAnimations: noAnim),
+                              child: w,
+                            );
+                          },
+                        );
                         return GamepadNavigationScope(
                           child: InputModeTracker(
                             child: _GlobalShortcutScope(
@@ -1329,4 +1359,19 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
 
     return widget.child;
   }
+}
+
+
+/// Foxfin 2.8.2: page transitions switched off in "Oberfläche".
+class _FoxNoPageTransitions extends PageTransitionsTheme {
+  const _FoxNoPageTransitions();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) => child;
 }

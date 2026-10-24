@@ -46,6 +46,7 @@ import '../../../util/app_distribution.dart';
 import '../../../util/pin_code_util.dart';
 import '../../widgets/pin_entry_dialog.dart';
 import '../../widgets/app_update_dialog.dart';
+import 'fox_ui_settings_screen.dart';
 
 import '../../../auth/store/authentication_preferences.dart';
 import '../../../auth/store/client_certificate_store.dart';
@@ -357,6 +358,12 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
               title: l10n.appearance,
               subtitle: l10n.settingsAppearanceSubtitle,
               onTap: () => context.pushSettingsScreen(const _AppearanceScreen()),
+            ),
+            _PanelEntry(
+              icon: Icons.tune,
+              title: 'Oberfläche & Leistung',
+              subtitle: 'Effekte, Animationen, Bildgröße, Cache',
+              onTap: () => context.pushSettingsScreen(const FoxUiSettingsScreen()),
             ),
             _PanelEntry(
               icon: Icons.play_circle,

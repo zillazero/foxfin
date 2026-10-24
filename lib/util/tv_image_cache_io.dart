@@ -455,3 +455,40 @@ class _ServerUserAgentHttpClient extends http.BaseClient {
     return _inner.send(request);
   }
 }
+
+/// Foxfin 2.8.2: current size of the artwork disk cache in bytes.
+Future<int> imageDiskCacheBytes() async {
+  var total = 0;
+  try {
+    final temp = await getTemporaryDirectory();
+    final dir = Directory('${temp.path}/${DefaultCacheManager.key}');
+    if (!await dir.exists()) return 0;
+    await for (final e in dir.list(followLinks: false)) {
+      if (e is File) {
+        try {
+          total += await e.length();
+        } catch (_) {}
+      }
+    }
+  } catch (_) {}
+  return total;
+}
+
+/// Foxfin 2.8.2: drops artwork files not touched for [maxAge].
+Future<void> purgeOldImageCacheEntries(Duration maxAge) async {
+  try {
+    final temp = await getTemporaryDirectory();
+    final dir = Directory('${temp.path}/${DefaultCacheManager.key}');
+    if (!await dir.exists()) return;
+    final cutoff = DateTime.now().subtract(maxAge);
+    await for (final e in dir.list(followLinks: false)) {
+      if (e is! File) continue;
+      if (ImageCacheIndex.isIndexFileName(_fileName(e))) continue;
+      try {
+        final st = await e.stat();
+        final last = st.accessed.isAfter(st.modified) ? st.accessed : st.modified;
+        if (last.isBefore(cutoff)) await e.delete();
+      } catch (_) {}
+    }
+  } catch (_) {}
+}

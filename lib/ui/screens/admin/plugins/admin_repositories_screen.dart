@@ -181,6 +181,7 @@ class _AdminRepositoriesScreenState
                 subtitle: l10n.adminReposEmptySubtitle,
                 icon: Icons.source_outlined,
               ),
+              _foxFeaturedRepo(context, repos),
               const SizedBox(height: AppSpacing.spaceXl),
               Center(
                 child: Icon(
@@ -200,6 +201,7 @@ class _AdminRepositoriesScreenState
                 title: l10n.adminDrawerRepositories,
                 icon: Icons.source_outlined,
               ),
+              _foxFeaturedRepo(context, repos),
               _buildSortDropdown(),
               adminGlassGroup(
                 context,
@@ -226,6 +228,50 @@ class _AdminRepositoriesScreenState
         ),
       ],
     );
+  }
+
+  // Foxfin 2.8.2: built-in, opt-in plugin sources (FOX + official Jellyfin).
+  static const _builtInRepos = <(String, String, String)>[
+    ('FOX', 'FOX-Pluginquelle (empfohlen)', 'https://apps.pk187.site/jellyfin/manifest.json'),
+    ('Offizielle Jellyfin-Plugins', 'Offizielle Jellyfin-Plugins', 'https://repo.jellyfin.org/files/plugin/manifest.json'),
+  ];
+
+  Widget _foxFeaturedRepo(BuildContext context, List<RepositoryInfo> repos) {
+    final accent = AppColorScheme.accent;
+    return Column(children: [
+      for (final (name, title, url) in _builtInRepos)
+        Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.spaceMd),
+          child: Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: accent.withValues(alpha: 0.08),
+              borderRadius: AppRadius.circular(14),
+              border: Border.all(color: accent.withValues(alpha: 0.45)),
+            ),
+            child: Row(children: [
+              Icon(name == 'FOX' ? Icons.star_rounded : Icons.verified_outlined, color: accent),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 2),
+                  Text(url, style: const TextStyle(fontSize: 12)),
+                ]),
+              ),
+              const SizedBox(width: 12),
+              repos.any((r) => r.url.trim() == url)
+                  ? Text('Aktiv', style: TextStyle(color: accent))
+                  : FilledButton(
+                      onPressed: _saving
+                          ? null
+                          : () => _saveRepos([...repos, RepositoryInfo(name: name, url: url)]),
+                      child: const Text('Hinzufügen'),
+                    ),
+            ]),
+          ),
+        ),
+    ]);
   }
 
   int _compareAlphabetical(RepositoryInfo a, RepositoryInfo b) {

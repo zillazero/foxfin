@@ -47,3 +47,7 @@ abstract class ImageApi {
     String? mediaSourceId,
   });
 }
+
+/// Foxfin 2.8.2: JPEG quality the app asks the server for (set from the
+/// "Bildgröße" setting). Kept a string so it drops straight into a query.
+String artworkQualityParam = '90';

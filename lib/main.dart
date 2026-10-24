@@ -14,6 +14,7 @@ import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'app.dart';
+import 'fox/fox_ui_runtime.dart';
 import 'data/models/aggregated_item.dart';
 import 'background/watch_next_background.dart' as watch_next_bg;
 import 'data/services/carplay_service.dart';
@@ -976,6 +977,8 @@ void main() async {
   WidgetsBinding.instance.addObserver(_CapabilityRefreshObserver());
   WidgetsBinding.instance.addObserver(_AutoDownloadResumeObserver());
   WidgetsBinding.instance.addPostFrameCallback((_) => _sweepImageCache(prefs));
+  foxUiLoad(prefs);
+  foxStartCacheJanitor(prefs);
 
   GetIt.instance<PlaybackManager>().queueService.queueChangedStream.listen((_) {
     final activeItem = GetIt.instance<PlaybackManager>().queueService.currentItem;

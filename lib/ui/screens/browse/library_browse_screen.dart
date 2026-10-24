@@ -20,6 +20,7 @@ import '../../../data/viewmodels/library_browse_view_model.dart';
 import '../../../preference/preference_constants.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../ui/mixins/focus_state_mixin.dart';
+import '../../../preference/fox_ui_prefs.dart';
 import '../../../util/accent_folding.dart';
 import '../../../util/artwork_request_size.dart';
 import '../home/home_row_prefetch.dart';
@@ -52,7 +53,8 @@ Color get _jellyfinBlue => AppColorScheme.accent;
 const _horizontalPadding = 60.0;
 const _kCompactBreakpoint = 600.0;
 
-const _kLoadMoreExtent = 400.0;
+// Foxfin 2.8.2: page earlier so the next page is there before the user is.
+double get _kLoadMoreExtent => FoxUi.preload ? 1600.0 : 400.0;
 
 /// Grouped rows run tighter than the flat grid so a row of posters and its
 /// category heading both fit.

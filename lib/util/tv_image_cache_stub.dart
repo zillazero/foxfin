@@ -35,3 +35,7 @@ void releaseGameArtworkCacheScope(String scope) {}
 Future<void> clearImageDiskCache() async {}
 
 Future<void> flushImageCacheIndex() async {}
+
+Future<int> imageDiskCacheBytes() async => 0;
+
+Future<void> purgeOldImageCacheEntries(Duration maxAge) async {}
