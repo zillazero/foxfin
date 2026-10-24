@@ -81,7 +81,7 @@ class _FoxStartSplashState extends State<FoxStartSplash>
                   ),
                   child: Transform.scale(
                     scale: zoom * (1.0 + 0.05 * pulse),
-                    child: SvgPicture.asset('assets/images/foxfin_logo_a.svg',
+                    child: SvgPicture.asset('assets/images/foxfin_logo_a.svg', semanticsLabel: 'Foxfin',
                         width: 144, height: 144,
                         semanticsLabel: 'Foxfin'),
                   ),
