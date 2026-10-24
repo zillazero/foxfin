@@ -1,5 +1,6 @@
 // Foxfin 2.8.2: bindet FoxUiPrefs an die Laufzeit. GPL-3.0, see NOTICE.
 import 'dart:async';
+import 'package:moonfin_design/moonfin_design.dart' show ThemeRegistry;
 
 import '../preference/fox_ui_prefs.dart';
 import '../preference/user_preferences.dart';
@@ -54,6 +55,10 @@ void foxUiLoad(UserPreferences p) {
       cacheMaxAgeDays: p.get(FoxUiPrefs.cacheMaxAgeDays),
       upscaler: weak ? 'aus' : p.get(FoxUiPrefs.upscaler),
     );
+  // Foxfin 2.9.1: Theme-Feinschliff.
+  FoxUi.compact = p.get(FoxUiPrefs.compact);
+  final r = p.get(FoxUiPrefs.cardRadius);
+  ThemeRegistry.setFoxCardRadius(r < 0 ? null : r.toDouble());
 }
 
 Timer? _foxCacheTimer;

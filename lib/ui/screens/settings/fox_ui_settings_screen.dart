@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
 
 import '../../../fox/fox_hidden_items.dart';
+import '../../../fox/fox_seerr.dart';
 import '../../../fox/fox_settings_backup.dart';
 import '../../../util/platform_detection.dart';
 import '../../../fox/fox_ui_runtime.dart';
@@ -174,6 +175,78 @@ class _FoxUiSettingsScreenState extends State<FoxUiSettingsScreen> {
             subtitle: const Text('Nächste Seiten und Bilder im Voraus laden, damit Umschalten sofort geht'),
             value: FoxUi.preload,
             onChanged: (v) => _set(FoxUiPrefs.preload, v),
+          ),
+          const SettingsSectionHeader('Design-Feinschliff'),
+          DpadListTile(
+            useSettingsIconShell: true,
+            leading: const Icon(Icons.rounded_corner),
+            title: const Text('Eckenradius der Karten'),
+            subtitle: Text(switch (p.get(FoxUiPrefs.cardRadius)) {
+              < 0 => 'Theme-Standard',
+              0 => 'Eckig',
+              final v => '$v px',
+            }),
+            onTap: () => _pick<int>('Eckenradius', const [
+              (-1, 'Theme-Standard', null), (0, 'Eckig', null), (3, '3 px', 'FOX'),
+              (8, '8 px', null), (14, '14 px', 'Rund'),
+            ], p.get(FoxUiPrefs.cardRadius), (v) => _set(FoxUiPrefs.cardRadius, v)),
+          ),
+          DpadListTile(
+            useSettingsIconShell: true,
+            leading: const Icon(Icons.photo_size_select_actual_outlined),
+            title: const Text('Kartengröße'),
+            subtitle: Text(_sizeLabel(p.get(UserPreferences.posterSize))),
+            onTap: () => _pick<PosterSize>('Kartengröße (Startseite und Bibliotheken)', [
+              for (final v in PosterSize.gridValues) (v, _sizeLabel(v), null),
+            ], p.get(UserPreferences.posterSize).upToExtraLarge, (v) async {
+              await p.set(UserPreferences.libraryPosterSize, v);
+              await _set(UserPreferences.posterSize, v);
+            }),
+          ),
+          DpadListTile(
+            useSettingsIconShell: true,
+            leading: const Icon(Icons.blur_on),
+            title: const Text('Hintergrund-Unschärfe'),
+            subtitle: Text(p.get(UserPreferences.browsingBackgroundBlurAmount) == 0
+                ? 'Aus'
+                : 'Stärke ${p.get(UserPreferences.browsingBackgroundBlurAmount)}'),
+            onTap: () => _pick<int>('Hintergrund-Unschärfe (Details und Übersicht)', const [
+              (0, 'Aus', 'Am sparsamsten'), (5, 'Leicht', null), (10, 'Mittel', 'Standard'), (20, 'Stark', null),
+            ], p.get(UserPreferences.browsingBackgroundBlurAmount), (v) async {
+              await p.set(UserPreferences.detailsBackgroundBlurAmount, v);
+              await _set(UserPreferences.browsingBackgroundBlurAmount, v);
+            }),
+          ),
+          DpadSwitchListTile(
+            useSettingsIconShell: true,
+            secondary: const Icon(Icons.view_compact_outlined),
+            title: const Text('Kompaktmodus'),
+            subtitle: const Text('Kleine Karten und engere Raster – mehr Titel auf einen Blick'),
+            value: p.get(FoxUiPrefs.compact),
+            onChanged: (v) async {
+              final size = v ? PosterSize.small : PosterSize.medium;
+              await p.set(UserPreferences.libraryPosterSize, size);
+              await p.set(UserPreferences.posterSize, size);
+              await _set(FoxUiPrefs.compact, v);
+            },
+          ),
+          const SettingsSectionHeader('Anfragen (Seerr)'),
+          DpadSwitchListTile(
+            useSettingsIconShell: true,
+            secondary: const Icon(Icons.explore_outlined),
+            title: const Text('Bereich „Anfragen“ in der Navigation'),
+            subtitle: const Text('Entdecken, Meine Anfragen und Freigaben (Admin)'),
+            value: p.get(UserPreferences.showSeerrButton),
+            onChanged: (v) => _set(UserPreferences.showSeerrButton, v),
+          ),
+          DpadListTile(
+            useSettingsIconShell: true,
+            leading: const Icon(Icons.video_library_outlined),
+            title: const Text('Seerr-Titel in Bibliotheken'),
+            subtitle: Text(FoxSeerrLib.disabled.isEmpty
+                ? 'In allen Film-, Serien- und Anime-Bibliotheken an – pro Bibliothek über „Ausblenden“ abschaltbar'
+                : 'Ausgeblendet in: ${FoxSeerrLib.disabled.values.where((n) => n.isNotEmpty).join(', ')} – zum Einschalten öffnen'),
+            onTap: FoxSeerrLib.disabled.isEmpty ? null : _showSeerrLibs,
           ),
           const SettingsSectionHeader('Bilder'),
           DpadListTile(
@@ -382,6 +455,40 @@ class _FoxUiSettingsScreenState extends State<FoxUiSettingsScreen> {
               },
               child: const Text('Alle wieder anzeigen'),
             ),
+          ],
+        ),
+      ),
+    );
+    if (mounted) setState(() {});
+  }
+
+  static String _sizeLabel(PosterSize s) => switch (s) {
+        PosterSize.small => 'Klein',
+        PosterSize.medium => 'Mittel',
+        PosterSize.large => 'Groß',
+        _ => 'Sehr groß',
+      };
+
+  Future<void> _showSeerrLibs() async {
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setD) => SimpleDialog(
+          title: const Text('Seerr-Titel wieder anzeigen'),
+          children: [
+            for (final e in FoxSeerrLib.disabled.entries)
+              SimpleDialogOption(
+                onPressed: () async {
+                  await FoxSeerrLib.setEnabled(e.key, true);
+                  setD(() {});
+                  if (FoxSeerrLib.disabled.isEmpty && ctx.mounted) Navigator.of(ctx).pop();
+                },
+                child: Row(children: [
+                  const Icon(Icons.visibility_outlined, size: 18),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text(e.value.isEmpty ? e.key : e.value)),
+                ]),
+              ),
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../fox/fox_seerr.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -1141,12 +1142,12 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                     showLabel: _showLabels,
                     onPressed: () {
                       _onNavigate();
-                      if (_isActive(Destinations.seerrDiscover)) {
+                      if (_isActive(FoxSeerrHubScreen.path)) {
                         _exitSidebarToContent();
                         return;
                       }
                       _markNavigationAwayFromSidebar();
-                      context.navigateTopLevel(Destinations.seerrDiscover);
+                      context.navigateTopLevel(FoxSeerrHubScreen.path);
                     },
                   ),
                 if (showLibraries && navLibraries.isNotEmpty) ...[

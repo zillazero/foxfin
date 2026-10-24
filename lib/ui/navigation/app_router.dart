@@ -46,6 +46,7 @@ import '../screens/home/home_screen.dart';
 import '../screens/seerr/seerr_browse_screen.dart';
 import '../screens/seerr/seerr_collection_screen.dart';
 import '../screens/seerr/seerr_discover_screen.dart';
+import '../../fox/fox_seerr.dart';
 import '../screens/seerr/seerr_person_screen.dart';
 import '../screens/seerr/seerr_requests_screen.dart';
 import '../screens/livetv/live_tv_channel_player_loader.dart';
@@ -642,6 +643,10 @@ final appRouter = GoRouter(
 
     // Seerr
     GoRoute(
+      path: FoxSeerrHubScreen.path,
+      builder: (context, state) => const FoxSeerrHubScreen(),
+    ),
+    GoRoute(
       path: Destinations.seerrDiscover,
       builder: (context, state) => const SeerrDiscoverScreen(),
     ),
@@ -649,6 +654,7 @@ final appRouter = GoRouter(
       path: Destinations.seerrRequests,
       builder: (context, state) => SeerrRequestsScreen(
         initialTab: state.uri.queryParameters['tab'] == 'issues' ? 1 : 0,
+        foxPendingOnly: state.uri.queryParameters['tab'] == 'pending',
       ),
     ),
     GoRoute(

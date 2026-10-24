@@ -89,7 +89,15 @@ class ThemeRegistry {
     _recompute();
   }
 
-  static void _recompute() => _active = applyOled(_base, _oled);
+  /// Foxfin 2.9.1: eigener Karten-Eckenradius (null = Theme-Standard).
+  static double? foxCardRadius;
+  static void setFoxCardRadius(double? r) {
+    foxCardRadius = r;
+    _recompute();
+  }
+
+  static void _recompute() =>
+      _active = applyOled(_base, _oled).withFoxRadius(foxCardRadius);
 
   static ThemeSpec resolveById(String id) {
     return availableThemes[id] ?? foxFoxholeThemeSpec;

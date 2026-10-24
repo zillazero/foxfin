@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../fox/fox_seerr.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 
@@ -1480,6 +1481,18 @@ class _LibraryBrowseScreenState extends State<LibraryBrowseScreen>
     );
   }
 
+  /// Foxfin 2.9.1: Seerr-Reihe nur in normalen Film-/Serien-/Anime-Bibliotheken.
+  FoxSeerrKind? get _foxSeerrKind {
+    if (!FoxSeerrLib.seerrReady ||
+        !FoxSeerrLib.enabledFor(widget.libraryId) ||
+        _vm.isFilterBrowse ||
+        _vm.isPlaylistBrowse ||
+        widget.genreId != null) {
+      return null;
+    }
+    return foxSeerrKindFor(_vm.collectionType, _vm.libraryName);
+  }
+
   Widget _buildGrid() {
     if (_vm.items.isEmpty) {
       return Center(
@@ -1511,7 +1524,7 @@ class _LibraryBrowseScreenState extends State<LibraryBrowseScreen>
         final gridPadding = isMobile ? 16.0 : _horizontalPadding;
         final spacing = cardFocusExpansion && !isMobile
             ? MediaCard.focusGap(cardWidth)
-            : 12.0;
+            : (FoxUi.compact ? 6.0 : 12.0);
         final minClamp = _vm.imageType == ImageType.banner
             ? (constraints.maxWidth < 600 ? 1 : 2)
             : 2;
@@ -1538,7 +1551,7 @@ class _LibraryBrowseScreenState extends State<LibraryBrowseScreen>
         final upwardGrowth = cardFocusExpansion && !isMobile
             ? (imageHeight * (MediaCard.focusScale - 1))
             : 0.0;
-        final baseRowSpacing = 16.0;
+        final baseRowSpacing = FoxUi.compact ? 6.0 : 16.0;
         final rowSpacing = baseRowSpacing + upwardGrowth;
         final baseTopPadding = 18.0;
         final topPadding = baseTopPadding + upwardGrowth;
@@ -1736,6 +1749,17 @@ class _LibraryBrowseScreenState extends State<LibraryBrowseScreen>
                   child: Center(
                     child: CircularProgressIndicator(color: _jellyfinBlue),
                   ),
+                ),
+              ),
+            if (_foxSeerrKind != null && !_vm.hasMore && !_vm.isGrouping)
+              SliverToBoxAdapter(
+                child: FoxSeerrLibraryRow(
+                  key: ValueKey('fox-seerr-${widget.libraryId}'),
+                  libraryId: widget.libraryId,
+                  libraryName: _vm.libraryName,
+                  kind: _foxSeerrKind!,
+                  cardWidth: math.min(cardWidth, 150),
+                  padding: EdgeInsets.symmetric(horizontal: gridPadding),
                 ),
               ),
           ],

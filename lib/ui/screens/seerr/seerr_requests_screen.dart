@@ -93,8 +93,10 @@ Color _onStatusColor(Color background) =>
 
 class SeerrRequestsScreen extends StatefulWidget {
   final int initialTab;
+  /// Foxfin 2.9.1: Bereich "Freigaben" öffnet direkt die offenen Anfragen.
+  final bool foxPendingOnly;
 
-  const SeerrRequestsScreen({super.key, this.initialTab = 0});
+  const SeerrRequestsScreen({super.key, this.initialTab = 0, this.foxPendingOnly = false});
 
   @override
   State<SeerrRequestsScreen> createState() => _SeerrRequestsScreenState();
@@ -146,7 +148,12 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
       _initializing = false;
     });
 
-    requestsVm.load();
+    if (widget.foxPendingOnly &&
+        requestsVm.state.filter != SeerrRequestFilter.pending) {
+      requestsVm.setFilter(SeerrRequestFilter.pending);
+    } else {
+      requestsVm.load();
+    }
     if (_issuesLoaded) {
       issuesVm.load();
     } else {

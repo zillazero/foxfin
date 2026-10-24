@@ -13,6 +13,10 @@ class FoxFocusGuard {
   static bool _scheduled = false;
   static bool _installed = false;
   static void Function()? onVoiceKey;
+  // Foxfin 2.9.1: letzter Fokus pro Bildschirm (Route). Nach "Zurück"
+  // landet der Fokus wieder auf der Karte/Zeile, von der man kam –
+  // gilt für Home, Bibliothek, Details, Einstellungen, Seerr und Player.
+  static final Map<Route<dynamic>, FocusNode> _perRoute = {};
 
   static void install() {
     if (_installed) return;
@@ -28,6 +32,15 @@ class FoxFocusGuard {
     final f = FocusManager.instance.primaryFocus;
     if (!_lost(f)) {
       _last = f;
+      final ctx = f!.context;
+      if (ctx != null) {
+        final r = ModalRoute.of(ctx);
+        if (r != null) {
+          _perRoute.remove(r);
+          _perRoute[r] = f;
+          if (_perRoute.length > 12) _perRoute.remove(_perRoute.keys.first);
+        }
+      }
       return;
     }
     if (_scheduled) return;
@@ -63,6 +76,14 @@ class FoxFocusGuard {
 
   static bool _restore() {
     try {
+      // Erst den gemerkten Fokus des jetzt sichtbaren Bildschirms.
+      _perRoute.removeWhere((r, n) => !r.isActive || n.context == null);
+      for (final e in _perRoute.entries.toList().reversed) {
+        if (e.key.isCurrent && e.value.canRequestFocus && !e.value.skipTraversal) {
+          e.value.requestFocus();
+          return true;
+        }
+      }
       final last = _last;
       if (last != null &&
           last.context != null &&

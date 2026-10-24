@@ -142,6 +142,7 @@ class LibraryBrowseViewModel extends ChangeNotifier {
   String get libraryName => _libraryName;
 
   String? _collectionType;
+  String? get collectionType => _collectionType;
   bool _initialLibraryFilterSet = false;
   bool _imageTypeSynced = false;
   bool _libraryMetaResolved = false;

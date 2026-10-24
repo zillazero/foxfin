@@ -505,6 +505,37 @@ class ThemeSpec {
 
   /// Same spec with a different colour palette. Used by the OLED Mode
   /// derivation, which only ever rewrites [colors].
+  /// Foxfin 2.9.1: Eckenradius-Feinschliff (null = Theme-Standard).
+  ThemeSpec withFoxRadius(double? card) {
+    if (card == null || isPixel) return this;
+    final r = BorderRadius.all(Radius.circular(card));
+    final b = ThemeBorderTokens(
+      cardBorder: borders.cardBorder,
+      chipBorder: borders.chipBorder,
+      focusBorder: borders.focusBorder,
+      cardRadius: r,
+      chipRadius: BorderRadius.all(Radius.circular(card * 0.6)),
+      chipBackground: borders.chipBackground,
+      focusGlow: borders.focusGlow,
+      navBorder: borders.navBorder,
+    );
+    return ThemeSpec(
+        id: id,
+        displayName: displayName,
+        description: description,
+        colors: colors,
+        borders: b,
+        semantic: semantic,
+        book: book,
+        fontFamily: fontFamily,
+        textGlow: textGlow,
+        navColorCycle: navColorCycle,
+        transparentNavbarSurface: transparentNavbarSurface,
+        isGlass: isGlass,
+        isPixel: isPixel,
+      );
+  }
+
   ThemeSpec withColors(ThemeColorTokens colors) => ThemeSpec(
         id: id,
         displayName: displayName,

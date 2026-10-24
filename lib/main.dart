@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'fox/fox_seerr.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -980,6 +981,7 @@ void main() async {
   WidgetsBinding.instance.addPostFrameCallback((_) => _sweepImageCache(prefs));
   foxUiLoad(prefs);
   await FoxHidden.load();
+  await FoxSeerrLib.load();
   foxStartCacheJanitor(prefs);
 
   GetIt.instance<PlaybackManager>().queueService.queueChangedStream.listen((_) {

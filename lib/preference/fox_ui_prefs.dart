@@ -48,6 +48,10 @@ class FoxUiPrefs {
   static final preload = Preference(key: 'fox_preload', defaultValue: true);
   /// mpv-Upscaler: 'aus', 'fsr', 'anime4k'. Auf schwachen Geräten immer aus.
   static final upscaler = Preference(key: 'fox_upscaler', defaultValue: 'aus');
+  /// Foxfin 2.9.1: Karten-Eckenradius in px, -1 = Theme-Standard.
+  static final cardRadius = Preference(key: 'fox_card_radius', defaultValue: -1);
+  /// Foxfin 2.9.1: Kompaktmodus (engere Raster, kleinere Karten).
+  static final compact = Preference(key: 'fox_compact', defaultValue: false);
 }
 
 /// Laufzeitwerte, die ohne Kontext gelesen werden (z. B. in der Bildgrößen-Berechnung).
@@ -61,6 +65,7 @@ class FoxUi {
   static int apiCacheMinutes = 4320;
   static String upscaler = 'aus';
   static int cacheMaxAgeDays = 30;
+  static bool compact = false;
   static final changes = ValueNotifier<int>(0);
 
   static T _enum<T extends Enum>(List<T> values, String name, T fallback) =>

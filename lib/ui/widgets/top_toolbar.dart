@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../fox/fox_seerr.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 
@@ -1188,8 +1189,8 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
                         : SeerrIcon(size: size, color: color),
                     label: seerrNavLabel,
                     onPressed: () {
-                      if (_isActive(Destinations.seerrDiscover)) return;
-                      context.navigateTopLevel(Destinations.seerrDiscover);
+                      if (_isActive(FoxSeerrHubScreen.path)) return;
+                      context.navigateTopLevel(FoxSeerrHubScreen.path);
                     },
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../../fox/fox_seerr.dart';
 import 'package:custom_tv_text_field/custom_tv_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -1344,7 +1345,7 @@ class _SearchScreenState extends State<SearchScreen>
       rows.add(
         LibraryRow(
           key: _allRowKey(seerrRow),
-          title: seerrLabel,
+          title: '$seerrLabel – nicht vorhanden? Anfragen',
           rowHeight: cardWidth / (2 / 3) + 56,
           children: [
             for (var c = 0; c < _vm.seerrResults.length; c++)
@@ -1547,12 +1548,59 @@ class _SearchScreenState extends State<SearchScreen>
     final yearStr = (year != null && year.length >= 4)
         ? year.substring(0, 4)
         : null;
+    // Foxfin 2.9.1: deutlicher Anfragen-Knopf für fehlende Titel.
+    final foxBadge = (item.mediaType == 'movie' || item.mediaType == 'tv')
+        ? foxSeerrBadge(item)
+        : null;
+    final accent = Theme.of(context).colorScheme.primary;
     return MediaCard(
       title: item.displayTitle,
       subtitle: yearStr,
       imageUrl: item.posterPath != null
           ? '$_tmdbPosterBase${item.posterPath}'
           : null,
+      imageOverlays: [
+        if (foxBadge != null) ...[
+          const Positioned.fill(
+            child: IgnorePointer(child: ColoredBox(color: Color(0x66000000))),
+          ),
+          Positioned(
+            left: 6,
+            right: 6,
+            bottom: 6,
+            child: IgnorePointer(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                decoration: BoxDecoration(
+                  color: foxBadge == 'Anfragen' ? accent : Colors.black87,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      foxBadge == 'Anfragen'
+                          ? Icons.add_rounded
+                          : Icons.schedule_rounded,
+                      size: 14,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      foxBadge,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
       width: width,
       aspectRatio: 2 / 3,
       itemType: item.mediaType == 'tv' ? 'Series' : 'Movie',
