@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'preference/fox_ui_prefs.dart';
+import 'fox/fox_focus_guard.dart';
+import 'fox/fox_focus_guard.dart';
 import 'integrations/fox_sso/fox_sync_service.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -92,6 +94,7 @@ class _MoonfinAppState extends State<MoonfinApp> {
   @override
   void initState() {
     super.initState();
+    if (PlatformDetection.isTV) FoxFocusGuard.install();
     _prefs = GetIt.instance<UserPreferences>();
     _themeController = AppThemeController.fromPreferences(_prefs);
     // Foxfin: theme sync with the FOX account.
@@ -357,18 +360,24 @@ class _MoonfinAppState extends State<MoonfinApp> {
                           builder: (ctx, _, _) {
                             final mq = MediaQuery.of(ctx);
                             final noAnim =
-                                FoxUi.animations != FoxAnimationLevel.normal ||
+                                FoxUi.animations == FoxAnimationLevel.aus ||
                                 mq.disableAnimations;
                             final noTransitions =
                                 !FoxUi.pageTransitions ||
                                 FoxUi.animations == FoxAnimationLevel.aus;
                             Widget w = foxInner;
-                            if (noTransitions) {
-                              final t = Theme.of(ctx);
+                            final t = Theme.of(ctx);
+                            if (noTransitions ||
+                                mq.disableAnimations ||
+                                t.platform != TargetPlatform.iOS) {
                               w = Theme(
                                 data: t.copyWith(
-                                  pageTransitionsTheme:
-                                      const _FoxNoPageTransitions(),
+                                  pageTransitionsTheme: noTransitions ||
+                                          mq.disableAnimations
+                                      ? const _FoxNoPageTransitions()
+                                      : _FoxPageTransitions(
+                                          subtle: FoxUi.animations ==
+                                              FoxAnimationLevel.reduziert),
                                 ),
                                 child: w,
                               );
@@ -1374,4 +1383,40 @@ class _FoxNoPageTransitions extends PageTransitionsTheme {
     Animation<double> secondaryAnimation,
     Widget child,
   ) => child;
+}
+
+/// Foxfin 2.8.3: FOX-Seitenübergang. Normal: Einblenden + leichtes Gleiten
+/// und Skalieren; Reduziert: nur kurzes Einblenden.
+class _FoxPageTransitions extends PageTransitionsTheme {
+  const _FoxPageTransitions({required this.subtle});
+  final bool subtle;
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    final curved = CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    );
+    if (subtle) return FadeTransition(opacity: curved, child: child);
+    return FadeTransition(
+      opacity: curved,
+      child: SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0.04, 0),
+          end: Offset.zero,
+        ).animate(curved),
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.985, end: 1).animate(curved),
+          child: child,
+        ),
+      ),
+    );
+  }
 }

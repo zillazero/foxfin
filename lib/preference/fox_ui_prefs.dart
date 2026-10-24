@@ -1,5 +1,6 @@
 // Foxfin 2.8.2: Oberfläche-, Bild- und Cache-Einstellungen. GPL-3.0, see NOTICE.
 import 'package:flutter/foundation.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:jellyfin_preference/jellyfin_preference.dart';
 import 'package:server_core/server_core.dart' as sc;
 
@@ -39,12 +40,14 @@ enum FoxAnimationLevel { normal, reduziert, aus }
 
 class FoxUiPrefs {
   static final imageSize = Preference(key: 'fox_image_size', defaultValue: 'auto');
-  static final apiCacheMinutes = Preference(key: 'fox_api_cache_minutes', defaultValue: 30);
+  static final apiCacheMinutes = Preference(key: 'fox_api_cache_minutes', defaultValue: 4320);
   static final cacheMaxAgeDays = Preference(key: 'fox_cache_max_age_days', defaultValue: 30);
   static final hideEffects = Preference(key: 'fox_hide_effects', defaultValue: false);
   static final animationLevel = Preference(key: 'fox_animation_level', defaultValue: 'auto');
   static final pageTransitions = Preference(key: 'fox_page_transitions', defaultValue: true);
   static final preload = Preference(key: 'fox_preload', defaultValue: true);
+  /// mpv-Upscaler: 'aus', 'fsr', 'anime4k'. Auf schwachen Geräten immer aus.
+  static final upscaler = Preference(key: 'fox_upscaler', defaultValue: 'aus');
 }
 
 /// Laufzeitwerte, die ohne Kontext gelesen werden (z. B. in der Bildgrößen-Berechnung).
@@ -55,7 +58,8 @@ class FoxUi {
   static FoxAnimationLevel animations = FoxAnimationLevel.normal;
   static bool pageTransitions = true;
   static bool preload = true;
-  static int apiCacheMinutes = 30;
+  static int apiCacheMinutes = 4320;
+  static String upscaler = 'aus';
   static int cacheMaxAgeDays = 30;
   static final changes = ValueNotifier<int>(0);
 
@@ -70,7 +74,9 @@ class FoxUi {
     required bool preload,
     required int apiCacheMinutes,
     required int cacheMaxAgeDays,
+    String upscaler = 'aus',
   }) {
+    FoxUi.upscaler = upscaler;
     imageSize = _enum(FoxImageSize.values, imageSizeName, FoxImageSize.mittel);
     FoxUi.hideEffects = hideEffects;
     animations = _enum(FoxAnimationLevel.values, animationName, FoxAnimationLevel.normal);
@@ -79,6 +85,9 @@ class FoxUi {
     FoxUi.apiCacheMinutes = apiCacheMinutes;
     FoxUi.cacheMaxAgeDays = cacheMaxAgeDays;
     sc.artworkQualityParam = imageSize.quality.toString();
+    // "Reduziert" = kurze, schnelle Animationen (doppeltes Tempo),
+    // "Aus" = keine Animationen (MediaQuery.disableAnimations im App-Builder).
+    timeDilation = animations == FoxAnimationLevel.reduziert ? 0.5 : 1.0;
     changes.value++;
   }
 }

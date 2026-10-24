@@ -9,6 +9,7 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:playback_core/playback_core.dart';
 
+import '../fox/fox_upscaler.dart';
 import '../preference/preference_constants.dart';
 import '../preference/user_preferences.dart';
 import '../util/auto_hdr_switcher.dart';
@@ -808,6 +809,12 @@ class MediaKitPlayerBackend extends PlayerBackend
         _player.platform is NativePlayer) {
       _desktopRenderQualityApplied = true;
       await _applyDesktopRenderQuality(_player.platform as NativePlayer);
+    }
+    if (_player.platform is NativePlayer) {
+      // Foxfin: GPU-Upscaling; vor mpv.conf, damit eigene Werte gewinnen.
+      final shaders = await foxUpscalerShaderList();
+      await _nativeSetProperty(
+          _player.platform as NativePlayer, 'glsl-shaders', shaders);
     }
     await _applyCustomMpvConfIfEnabled();
     await _applyAssOverrideMode();

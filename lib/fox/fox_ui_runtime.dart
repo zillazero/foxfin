@@ -23,10 +23,18 @@ void foxUiLoad(UserPreferences p) {
       preload: p.get(FoxUiPrefs.preload),
       apiCacheMinutes: p.get(FoxUiPrefs.apiCacheMinutes),
       cacheMaxAgeDays: p.get(FoxUiPrefs.cacheMaxAgeDays),
+      upscaler: weak ? 'aus' : p.get(FoxUiPrefs.upscaler),
     );
 }
 
 Timer? _foxCacheTimer;
+
+/// Auf schwachen Geräten (waipu.tv Stick) gilt statt des Standards 350 MB
+/// ein kleineres Limit von 150 MB, solange der Nutzer nichts anderes wählt.
+int foxEffectiveCacheMb(UserPreferences p) {
+  final mb = p.get(UserPreferences.imageCacheLimitMb);
+  return (FoxUi.lowMemoryDevice && mb == 350) ? 150 : mb;
+}
 
 /// Automatische Cache-Bereinigung: beim Start und alle 20 Minuten werden
 /// alte Einträge (älter als cacheMaxAgeDays) entfernt und danach das
@@ -34,7 +42,7 @@ Timer? _foxCacheTimer;
 void foxStartCacheJanitor(UserPreferences p) {
   Future<void> run() async {
     await purgeOldImageCacheEntries(Duration(days: FoxUi.cacheMaxAgeDays));
-    final mb = p.get(UserPreferences.imageCacheLimitMb);
+    final mb = foxEffectiveCacheMb(p);
     await enforceImageCacheBudget(mb * 1024 * 1024);
   }
 

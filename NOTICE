@@ -43,3 +43,13 @@ Changes in Foxfin 2.7.2 (2026-10-13):
   private servers are never uploaded) and Trakt/Simkl link status (no tokens).
 - Accepts "Filme ansehen" links from the FOX Store (https://watch.pk187.site/...).
 - android:allowBackup="false" so tokens never land in backups.
+
+Changes in Foxfin 2.8.3 (2026-10-24):
+- D-Pad focus guard (lib/fox/fox_focus_guard.dart), FOX page transitions,
+  distinct "Reduziert" animation level, stick cache default 150 MB,
+  configurable home metadata cache duration, mpv GPU upscaling.
+- Bundled third-party shaders (assets/shaders/), both MIT licensed:
+  * AMD FidelityFX Super Resolution 1.0 (FSR.glsl), mpv port by agyild,
+    Copyright (c) 2021 Advanced Micro Devices, Inc. – MIT License.
+  * Anime4K by bloc97 (Anime4K_*.glsl), Copyright (c) 2019 bloc97 – MIT
+    License, see assets/shaders/LICENSE-Anime4K.txt.

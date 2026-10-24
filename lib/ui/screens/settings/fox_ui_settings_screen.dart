@@ -95,7 +95,7 @@ class _FoxUiSettingsScreenState extends State<FoxUiSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final p = _prefs;
-    final limit = p.get(UserPreferences.imageCacheLimitMb);
+    final limit = foxEffectiveCacheMb(p);
     final size = FoxUi.imageSize;
     final anim = FoxUi.animations;
     final age = p.get(FoxUiPrefs.cacheMaxAgeDays);
@@ -182,7 +182,36 @@ class _FoxUiSettingsScreenState extends State<FoxUiSettingsScreen> {
               PaintingBinding.instance.imageCache.clear();
             }),
           ),
+          DpadListTile(
+            useSettingsIconShell: true,
+            leading: const Icon(Icons.auto_awesome),
+            title: const Text('GPU-Upscaling (mpv)'),
+            subtitle: Text(FoxUi.lowMemoryDevice
+                ? 'Auf diesem Gerät automatisch aus (zu schwache GPU)'
+                : switch (p.get(FoxUiPrefs.upscaler)) {
+                    'fsr' => 'AMD FSR – schärfere Hochskalierung für Filme/Serien',
+                    'anime4k' => 'Anime4K – optimiert für Anime',
+                    _ => 'Aus',
+                  }),
+            onTap: FoxUi.lowMemoryDevice
+                ? null
+                : () => _pick<String>('GPU-Upscaling (nur mpv-Player)', const [
+                      ('aus', 'Aus', null),
+                      ('fsr', 'AMD FSR 1.0', 'Für Realfilm, wenig GPU-Last'),
+                      ('anime4k', 'Anime4K (Mode A, schnell)', 'Für Anime, höhere GPU-Last'),
+                    ], p.get(FoxUiPrefs.upscaler), (v) => _set(FoxUiPrefs.upscaler, v)),
+          ),
           const SettingsSectionHeader('Cache'),
+          DpadListTile(
+            useSettingsIconShell: true,
+            leading: const Icon(Icons.schedule),
+            title: const Text('Metadaten-Cache (Startseite)'),
+            subtitle: Text('Gespeicherte Startseiten-Reihen bis zu ${_dur(p.get(FoxUiPrefs.apiCacheMinutes))} anzeigen, danach neu laden'),
+            onTap: () => _pick<int>('Metadaten-Cache-Dauer', const [
+              (60, '1 Stunde', null), (1440, '1 Tag', null),
+              (4320, '3 Tage', 'Standard'), (10080, '7 Tage', null),
+            ], p.get(FoxUiPrefs.apiCacheMinutes), (v) => _set(FoxUiPrefs.apiCacheMinutes, v)),
+          ),
           DpadListTile(
             useSettingsIconShell: true,
             leading: const Icon(Icons.storage),
@@ -224,4 +253,6 @@ class _FoxUiSettingsScreenState extends State<FoxUiSettingsScreen> {
       ),
     );
   }
+
+  static String _dur(int m) => m < 1440 ? '${m ~/ 60} Std.' : '${m ~/ 1440} Tage';
 }

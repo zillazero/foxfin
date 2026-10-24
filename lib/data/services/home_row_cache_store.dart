@@ -4,6 +4,7 @@ import 'dart:isolate';
 
 import 'package:path_provider/path_provider.dart';
 
+import '../../preference/fox_ui_prefs.dart';
 import '../../util/platform_detection.dart';
 import '../models/aggregated_item.dart';
 import '../models/home_row.dart';
@@ -17,7 +18,8 @@ import '../models/home_row.dart';
 class HomeRowCacheStore {
   static const _fileName = 'home_rows_cache.json';
 
-  static const _maxAge = Duration(days: 3);
+  // Foxfin: per Einstellung "Metadaten-Cache" steuerbar.
+  static Duration get _maxAge => Duration(minutes: FoxUi.apiCacheMinutes);
 
   /// Rows whose items are only true for the minutes they describe. Replaying
   /// them from disk paints programs that already ended.
